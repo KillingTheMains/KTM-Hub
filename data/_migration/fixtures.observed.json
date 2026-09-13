@@ -1,0 +1,2883 @@
+{
+ "_note": "OBSERVED INVENTORY \u2014 NOT fixtures.json. These are the values the four shipped tools currently assert. No provenance has been attached: every 'provenance' is null and must be backfilled by a researcher against a primary source before this becomes canonical.",
+ "generated": "2026-09-09",
+ "sources": {
+  "distro": "https://claude.ai/code/artifact/ee876806-7765-4b3a-b54e-3e176a44cc8b",
+  "patch": "https://claude.ai/code/artifact/7b2cd2cc-8d52-4fab-9e68-1ca89e408461",
+  "truss": "https://claude.ai/code/artifact/72ae7766-e6d2-4192-8bd0-d6f584b21308",
+  "pull": "https://claude.ai/code/artifact/d1648d1c-9a60-44c8-9aa4-8c24720d0d4d"
+ },
+ "fixtures": [
+  {
+   "brand": "Ayrton",
+   "name": "Diablo-S",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 550,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Standard",
+       36
+      ],
+      [
+       "Basic",
+       34
+      ],
+      [
+       "Extended",
+       56
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5+crmx",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 48.5,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 36,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "dual",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Ayrton",
+   "name": "Khamsin-S",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 1150,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Standard",
+       42
+      ],
+      [
+       "Basic",
+       40
+      ],
+      [
+       "Extended",
+       64
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5+net+crmx",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 87.7,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 42,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "tall",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "CM",
+   "name": "Lodestar 1-ton hoist",
+   "aliases": [],
+   "category": "Control & rigging",
+   "attributes": {
+    "va": {
+     "value": 1450,
+     "assertedBy": [
+      "distro"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "motor": {
+     "value": true,
+     "assertedBy": [
+      "distro"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "mode": {
+     "value": "3ph",
+     "assertedBy": [
+      "distro"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro"
+   ]
+  },
+  {
+   "brand": "Chauvet",
+   "name": "Maverick Force S Profile",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 563,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "47 ch",
+       47
+      ],
+      [
+       "31 ch",
+       31
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "3+5+net+wdmx",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 52.9,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 47,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "dual",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Chauvet",
+   "name": "Rogue R2 Wash",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 339,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "22 ch",
+       22
+      ],
+      [
+       "15 ch",
+       15
+      ],
+      [
+       "17 ch",
+       17
+      ],
+      [
+       "33 ch",
+       33
+      ],
+      [
+       "54 ch",
+       54
+      ],
+      [
+       "56 ch \u00b7 pixel",
+       56
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "3+5",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": false,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 20.4,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 22,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "r4",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 4,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Claypaky",
+   "name": "Mythos 2",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 700,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Standard",
+       30
+      ],
+      [
+       "Vector",
+       34
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 70.5,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 30,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "tall",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Claypaky",
+   "name": "Scenius Unico",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 1800,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Standard",
+       40
+      ],
+      [
+       "Vector",
+       44
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 92.6,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 40,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "tall",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Claypaky",
+   "name": "Sharpy",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 440,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Standard",
+       16
+      ],
+      [
+       "Vector",
+       20
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "3+5",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 41.8,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 16,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "std",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 3,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "ETC",
+   "name": "ColorSource PAR",
+   "aliases": [],
+   "category": "Conventional",
+   "attributes": {
+    "va": {
+     "value": 90,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "5 ch",
+       5
+      ],
+      [
+       "Direct",
+       6
+      ],
+      [
+       "RGB",
+       3
+      ],
+      [
+       "1 ch",
+       1
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 8.3,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "clamp",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 5,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "std",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 8,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ln": {
+     "value": true,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "ETC",
+   "name": "Source Four 750 W",
+   "aliases": [],
+   "category": "Conventional",
+   "attributes": {
+    "va": {
+     "value": 750,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Dimmer",
+       1
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "dim",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": false,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 14.0,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "incl",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 1,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "tall",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 8,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ln": {
+     "value": true,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "ETC",
+   "name": "Source Four LED S3 Lustr",
+   "aliases": [],
+   "category": "Conventional",
+   "attributes": {
+    "va": {
+     "value": 307,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Direct",
+       12
+      ],
+      [
+       "Expanded",
+       11
+      ],
+      [
+       "Studio",
+       7
+      ],
+      [
+       "RGB",
+       3
+      ],
+      [
+       "1 ch",
+       1
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5+mv",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 19.6,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "incl",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 12,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "tall",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 8,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ln": {
+     "value": true,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Elation",
+   "name": "Proteus Maximus",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 1400,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Extended",
+       61
+      ],
+      [
+       "Standard",
+       37
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 117,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 61,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "tall",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "GLP",
+   "name": "JDC1",
+   "aliases": [],
+   "category": "Wash / bar / strobe",
+   "attributes": {
+    "va": {
+     "value": 1200,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "SPix Pro",
+       62
+      ],
+      [
+       "Normal",
+       23
+      ],
+      [
+       "Compressed Pro",
+       14
+      ],
+      [
+       "SPix",
+       68
+      ],
+      [
+       "1Pix Pro",
+       17
+      ],
+      [
+       "Easy",
+       11
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 25.6,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 62,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "std",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 6,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "GLP",
+   "name": "impression X4 Bar 20",
+   "aliases": [],
+   "category": "Wash / bar / strobe",
+   "attributes": {
+    "va": {
+     "value": 400,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Single Pixel",
+       88
+      ],
+      [
+       "Normal",
+       34
+      ],
+      [
+       "Compressed",
+       20
+      ],
+      [
+       "HiRes",
+       35
+      ],
+      [
+       "Dual Pixel",
+       48
+      ],
+      [
+       "Single Pixel HiRes",
+       89
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 35.3,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 88,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "std",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 4,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Look",
+   "name": "Viper NT fogger",
+   "aliases": [
+    "Viper NT fogger (full)"
+   ],
+   "category": "Atmospherics",
+   "attributes": {
+    "va": {
+     "value": 1300,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Output",
+       1
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": false,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 30.0,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "clamp",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 1,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "half",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ln": {
+     "value": true,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "haze": {
+     "value": true,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "MA Lighting",
+   "name": "grandMA3 full-size",
+   "aliases": [],
+   "category": "Control & rigging",
+   "attributes": {
+    "va": {
+     "value": 300,
+     "assertedBy": [
+      "distro"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro"
+   ]
+  },
+  {
+   "brand": "MDG",
+   "name": "theONE hazer",
+   "aliases": [
+    "theONE hazer (cradle, dry)"
+   ],
+   "category": "Atmospherics",
+   "attributes": {
+    "va": {
+     "value": 1480,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Standard",
+       5
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 74.0,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 5,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "cradle",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 1,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ln": {
+     "value": true,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "haze": {
+     "value": true,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Martin",
+   "name": "JEM ZR45 fogger",
+   "aliases": [
+    "JEM ZR45 fogger (full)"
+   ],
+   "category": "Atmospherics",
+   "attributes": {
+    "va": {
+     "value": 1800,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "1C",
+       1
+      ],
+      [
+       "2C",
+       2
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 50.0,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "clamp",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 1,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "std",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ln": {
+     "value": true,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "haze": {
+     "value": true,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Martin",
+   "name": "MAC Aura PXL",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 500,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Extended",
+       89
+      ],
+      [
+       "Basic",
+       32
+      ],
+      [
+       "Compact",
+       17
+      ],
+      [
+       "Ludicrous",
+       512
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 34.4,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 89,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "std",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 5,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Martin",
+   "name": "MAC Aura XB",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 400,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Extended",
+       25
+      ],
+      [
+       "Standard",
+       14
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 14.4,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "clamp",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 25,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "std",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 6,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Martin",
+   "name": "MAC Encore Performance",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 600,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Standard \u00b7 fw \u22651.6",
+       38
+      ],
+      [
+       "Legacy fw",
+       33
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 68.4,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 38,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "tall",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Martin",
+   "name": "MAC Ultra Performance",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 1450,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Basic",
+       48
+      ],
+      [
+       "Extended",
+       58
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 97.0,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 48,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "tall",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Martin",
+   "name": "MAC Viper Profile",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 1225,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Extended 16-bit",
+       34
+      ],
+      [
+       "Basic 16-bit",
+       26
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 82.0,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 34,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "tall",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Robe",
+   "name": "BMFL Blade",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 2000,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Mode 1",
+       49
+      ],
+      [
+       "Mode 2",
+       42
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "3+5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 83.6,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 49,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "tall",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Robe",
+   "name": "MegaPointe",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 670,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Mode 1",
+       39
+      ],
+      [
+       "Mode 2",
+       34
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "3+5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 48.5,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 39,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "dual",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Robe",
+   "name": "Pointe",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 470,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Mode 1",
+       24
+      ],
+      [
+       "Mode 2",
+       16
+      ],
+      [
+       "Mode 3",
+       30
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "3+5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 33.0,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 24,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "quad",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 4,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Robe",
+   "name": "Spiider",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 660,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Mode 1 \u00b7 zones",
+       49
+      ],
+      [
+       "Mode 2",
+       27
+      ],
+      [
+       "Mode 3",
+       33
+      ],
+      [
+       "Mode 4 \u00b7 pixel RGB",
+       90
+      ],
+      [
+       "Mode 7 \u00b7 pixel RGB",
+       91
+      ],
+      [
+       "Mode 8 \u00b7 pixel RGBW",
+       110
+      ],
+      [
+       "Mode 10 \u00b7 pattern+RGBW",
+       123
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "3+5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 29.2,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 49,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "quad",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 4,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "Robe",
+   "name": "T1 Profile",
+   "aliases": [],
+   "category": "Moving light",
+   "attributes": {
+    "va": {
+     "value": 650,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "Mode 1 \u00b7 CMY",
+       49
+      ],
+      [
+       "Mode 2 \u00b7 reduced",
+       33
+      ],
+      [
+       "Mode 3 \u00b7 five colour",
+       53
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "3+5+net",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 54.0,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 49,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "dual",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 2,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  },
+  {
+   "brand": "SGM",
+   "name": "Q-7",
+   "aliases": [],
+   "category": "Wash / bar / strobe",
+   "attributes": {
+    "va": {
+     "value": 465,
+     "assertedBy": [
+      "distro",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "m": {
+     "value": [
+      [
+       "6 ch \u00b7 CTC",
+       6
+      ],
+      [
+       "3 ch",
+       3
+      ],
+      [
+       "4 ch RAW",
+       4
+      ],
+      [
+       "6 ch RAW",
+       6
+      ],
+      [
+       "8 ch \u00b7 XC-5",
+       8
+      ]
+     ],
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "d": {
+     "value": "5+crmx",
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "rdm": {
+     "value": true,
+     "assertedBy": [
+      "patch"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "lb": {
+     "value": 17.9,
+     "assertedBy": [
+      "truss",
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "hw": {
+     "value": "omega",
+     "assertedBy": [
+      "truss"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ch": {
+     "value": 6,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "cs": {
+     "value": "sgm4",
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "per": {
+     "value": 4,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    },
+    "ln": {
+     "value": true,
+     "assertedBy": [
+      "pull"
+     ],
+     "agreement": "unanimous",
+     "provenance": null
+    }
+   },
+   "assertedBy": [
+    "distro",
+    "patch",
+    "truss",
+    "pull"
+   ]
+  }
+ ]
+}

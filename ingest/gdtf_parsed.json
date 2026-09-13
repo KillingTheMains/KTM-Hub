@@ -1,0 +1,1100 @@
+[
+ {
+  "manufacturer": "ACME",
+  "name": "ACME SANA PROFILE (XA 300 BSWF IP)",
+  "longName": "SANA PROFILE (XA 300 BSWF IP)",
+  "shortName": "(XA 300 BSWF IP)",
+  "fixtureTypeID": "C6EBF088-74F2-4818-9506-E459FA3295A0",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 12.3,
+  "weightKg": 5.6,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.243,
+   "widthM": 0.23,
+   "heightM": 0.42
+  },
+  "file": "ACME@ACME_SANA_PROFILE_(XA_300_BSWF_IP)@_ACME_SANA_PROFILE_(XA_300_BSWF_IP).gdtf",
+  "modes": [
+   [
+    "Mode 3 27CH (Wash)",
+    27
+   ],
+   [
+    "Mode 2 36CH (F-Wash)",
+    36
+   ],
+   [
+    "Mode 4 36CH (Spot)",
+    36
+   ],
+   [
+    "Mode 1 45CH (Framing)",
+    45
+   ]
+  ],
+  "revisions": "2026-03-11T02:33:42"
+ },
+ {
+  "manufacturer": "Ayrton",
+  "name": "Diablo",
+  "longName": "Diablo",
+  "shortName": "Diablo",
+  "fixtureTypeID": "DCE7AA4F-2147-4B6A-9607-15A09D692A6F",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 48.1,
+  "weightKg": 21.8,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.248,
+   "widthM": 0.228,
+   "heightM": 0.417
+  },
+  "file": "Ayrton@Diablo@V2.61_Add_Emitter_Dimmer.gdtf",
+  "modes": [
+   [
+    "Basic_540_S",
+    34
+   ],
+   [
+    "Standard_540_S",
+    36
+   ],
+   [
+    "Extended_540_S",
+    56
+   ]
+  ],
+  "revisions": "2026-09-08T07:35:47"
+ },
+ {
+  "manufacturer": "Ayrton",
+  "name": "Khamsin",
+  "longName": "Khamsin",
+  "shortName": "Khamsin",
+  "fixtureTypeID": "4B9CC2AC-8EEC-45A6-AF75-928E745744A7",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 87.7,
+  "weightKg": 39.8,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.325,
+   "widthM": 0.276,
+   "heightM": 0.584
+  },
+  "file": "Ayrton@Khamsin@V12.3_Add_RDM_Personality.gdtf",
+  "modes": [
+   [
+    "Basic_540",
+    40
+   ],
+   [
+    "Standard_540",
+    42
+   ],
+   [
+    "Extended_540",
+    64
+   ]
+  ],
+  "revisions": "2026-07-07T12:32:09"
+ },
+ {
+  "manufacturer": "Ayrton",
+  "name": "Rivale Profile",
+  "longName": "Rivale Profile",
+  "shortName": "Rivale",
+  "fixtureTypeID": "159972D3-4E9C-48B2-9840-B912F7547FB9",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 62.8,
+  "weightKg": 28.5,
+  "dimensions": {
+   "model": "HEAD",
+   "lengthM": 0.275,
+   "widthM": 0.225,
+   "heightM": 0.506
+  },
+  "file": "Ayrton@Rivale_Profile@V1.71_Add_Emitter_Dimmer.gdtf",
+  "modes": [
+   [
+    "Standard_540",
+    42
+   ],
+   [
+    "Extended_540",
+    65
+   ]
+  ],
+  "revisions": "2026-09-08T07:13:06"
+ },
+ {
+  "manufacturer": "Ayrton",
+  "name": "Zonda 9 FX",
+  "longName": "Zonda 9 FX",
+  "shortName": "ZX9",
+  "fixtureTypeID": "BF8D15A6-0127-4EFA-987E-8C47CB47E2A7",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 64.4,
+  "weightKg": 29.2,
+  "dimensions": {
+   "model": "HEAD",
+   "lengthM": 0.436,
+   "widthM": 0.44,
+   "heightM": 0.211
+  },
+  "file": "Ayrton@Zonda_9_FX@V1.7_Add_RDM_Personality.gdtf",
+  "modes": [
+   [
+    "Basic",
+    26
+   ],
+   [
+    "Standard",
+    50
+   ],
+   [
+    "Extended Ring",
+    54
+   ],
+   [
+    "Extended Pixel 2 ",
+    80
+   ],
+   [
+    "Extended Pixel 2 + Liquid",
+    80
+   ],
+   [
+    "Extended Pixel 1",
+    131
+   ],
+   [
+    "Extended Pixel 1 + Liquid",
+    131
+   ]
+  ],
+  "revisions": "2026-07-07T13:16:20"
+ },
+ {
+  "manufacturer": "Chauvet Professional",
+  "name": "Maverick Force S Profile",
+  "longName": "Maverick Force S Profile",
+  "shortName": "MavForceSProf",
+  "fixtureTypeID": "A78A2D0F-DCF1-427F-82E3-6390521A77F7",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 52.9,
+  "weightKg": 24.0,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.269,
+   "widthM": 0.226,
+   "heightM": 0.427
+  },
+  "file": "Chauvet_Professional@Maverick_Force_S_Profile@Beta_1.0.1.gdtf",
+  "modes": [
+   [
+    "31Ch Mode",
+    31
+   ],
+   [
+    "47Ch Mode",
+    47
+   ]
+  ],
+  "revisions": "2025-07-08T13:29:32"
+ },
+ {
+  "manufacturer": "Chauvet Professional",
+  "name": "Rogue R2 Wash",
+  "longName": "Rogue R2 Wash",
+  "shortName": "RogueR2Wash",
+  "fixtureTypeID": "68807CD8-77CC-4DC1-A575-FE7E0A50EDB4",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 50.3,
+  "weightKg": 22.8,
+  "dimensions": {
+   "model": "Head ",
+   "lengthM": 0.229,
+   "widthM": 0.219,
+   "heightM": 0.18
+  },
+  "file": "Chauvet_Professional@Rogue_R2_Wash@R2V1.gdtf",
+  "modes": [
+   [
+    "15Ch",
+    15
+   ],
+   [
+    "17Ch",
+    17
+   ],
+   [
+    "22Ch",
+    22
+   ],
+   [
+    "33Ch Mode",
+    33
+   ],
+   [
+    "33Ch MS",
+    33
+   ],
+   [
+    "54Ch Mode",
+    54
+   ],
+   [
+    "54Ch MS",
+    54
+   ],
+   [
+    "56Ch Mode",
+    56
+   ]
+  ],
+  "revisions": "2026-09-08T18:28:10"
+ },
+ {
+  "manufacturer": "Clay Paky",
+  "name": "Scenius Unico",
+  "longName": "Scenius Unico",
+  "shortName": "Unico",
+  "fixtureTypeID": "8CE69690-CDFB-4CEB-85D7-05EC98E36D6E",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 100.5,
+  "weightKg": 45.6,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.33,
+   "widthM": 0.35,
+   "heightM": 0.61
+  },
+  "file": "Clay_Paky@Scenius_Unico@fixed_shaper_rot_and_grandmaster_-_still_needs_colorwheelfix.gdtf",
+  "modes": [
+   [
+    "Standard",
+    40
+   ],
+   [
+    "Vector",
+    44
+   ]
+  ],
+  "revisions": "2026-02-13T14:11:54"
+ },
+ {
+  "manufacturer": "Clay Paky",
+  "name": "Sharpy",
+  "longName": "Sharpy",
+  "shortName": "Sharpy",
+  "fixtureTypeID": "FB81889F-1992-4A7B-9CCB-414BE4A033B5",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 41.9,
+  "weightKg": 19.0,
+  "dimensions": {
+   "model": "Base",
+   "lengthM": 0.405,
+   "widthM": 0.33,
+   "heightM": 0.096
+  },
+  "file": "Clay_Paky@Sharpy@ClayPaky_Official_File_Fw_Ver_2_25_006.gdtf",
+  "modes": [
+   [
+    "Standard",
+    16
+   ],
+   [
+    "Vector",
+    20
+   ]
+  ],
+  "revisions": "2024-10-10T13:55:12"
+ },
+ {
+  "manufacturer": "ETC",
+  "name": "Colorsource PAR",
+  "longName": "Colorsource PAR Deep Blue",
+  "shortName": "CS PAR Direct",
+  "fixtureTypeID": "B5C104A0-C099-4C1B-BBA0-32D4D798021D",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 8.4,
+  "weightKg": 3.8,
+  "dimensions": {
+   "model": "Body",
+   "lengthM": 0.24,
+   "widthM": 0.203,
+   "heightM": 0.31
+  },
+  "file": "ETC@ColorSource_Par@added_photo-public.gdtf",
+  "modes": [
+   [
+    "1ch",
+    1
+   ],
+   [
+    "3ch(RGB)",
+    3
+   ],
+   [
+    "5ch(Default)",
+    5
+   ],
+   [
+    "6ch (Direct)",
+    6
+   ]
+  ],
+  "revisions": "2026-08-20T20:55:17"
+ },
+ {
+  "manufacturer": "ETC",
+  "name": "S4 Series 3 Lustr X8 36Deg",
+  "longName": "Source Four LED Series 3 Lustr X8 36 Degree",
+  "shortName": "S4 Lustr X8 36Deg",
+  "fixtureTypeID": "3A80C0B2-5315-4976-95EE-87039A3C231C",
+  "dataVersion": "1.2",
+  "official": true,
+  "provenanceStatus": "verified",
+  "weightLb": 19.6,
+  "weightKg": 8.87,
+  "dimensions": {
+   "model": "S4_Head",
+   "lengthM": 0.199,
+   "widthM": 0.39,
+   "heightM": 0.713
+  },
+  "file": "ETC@S4_Series_3_Lustr_X8_36Deg@v1.3.0.gdtf",
+  "modes": [
+   [
+    "1ch",
+    1
+   ],
+   [
+    "3ch RGB",
+    3
+   ],
+   [
+    "Studio",
+    7
+   ],
+   [
+    "HSIC",
+    8
+   ],
+   [
+    "Expanded",
+    11
+   ],
+   [
+    "Direct",
+    12
+   ]
+  ],
+  "revisions": "2024-04-16T19:14:39"
+ },
+ {
+  "manufacturer": "Elation",
+  "name": "Proteus Maximus",
+  "longName": "Proteus Maximus",
+  "shortName": "ProMax",
+  "fixtureTypeID": "71600142-47A4-46BF-A4AD-E3536D8F67E4",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 116.8,
+  "weightKg": 53.0,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.349,
+   "widthM": 0.287,
+   "heightM": 0.591
+  },
+  "file": "Elation@Proteus_Maximus@2023-26-12_Release.gdtf",
+  "modes": [
+   [
+    "Standard 540deg",
+    37
+   ],
+   [
+    "Standard 630deg",
+    37
+   ],
+   [
+    "Extended 540deg",
+    61
+   ],
+   [
+    "Extended 630deg",
+    61
+   ]
+  ],
+  "revisions": "2023-12-26T19:57:13"
+ },
+ {
+  "manufacturer": "GLP",
+  "name": "JDC 1",
+  "longName": "GLP JDC 1",
+  "shortName": "JDC 1",
+  "fixtureTypeID": "9B181200-F6E3-4EE6-B385-FCE095B46424",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 25.6,
+  "weightKg": 11.6,
+  "dimensions": {
+   "model": "Base Yoke M1",
+   "lengthM": 0.39,
+   "widthM": 0.148,
+   "heightM": 0.217
+  },
+  "file": "GLP@JDC_1@20250711_JDC1_byRG_prelim05.gdtf",
+  "modes": [
+   [
+    "Mode 6 Easy (11ch)",
+    11
+   ],
+   [
+    "Mode 1 Compressed Pro (14ch)",
+    14
+   ],
+   [
+    "Mode 5 1Pix Pro (17ch)",
+    17
+   ],
+   [
+    "Mode 2 Normal (23ch)",
+    23
+   ],
+   [
+    "Mode 4 SPix PRO (62ch)",
+    51
+   ],
+   [
+    "Mode 3 SPix (68ch)",
+    57
+   ]
+  ],
+  "revisions": "2025-07-11T09:21:58"
+ },
+ {
+  "manufacturer": "GLP",
+  "name": "impression X4 Bar 20",
+  "longName": "X4 Bar 20",
+  "shortName": "Bar 20",
+  "fixtureTypeID": "B6AC1910-94BC-41CB-853F-6080EA24F932",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 35.3,
+  "weightKg": 16.0,
+  "dimensions": {
+   "model": "Yoke",
+   "lengthM": 1.0,
+   "widthM": 0.1,
+   "heightM": 0.179
+  },
+  "file": "GLP@impression_X4_Bar_20@Final._Based_of_X4_Bar_10.gdtf",
+  "modes": [
+   [
+    "Single Pixel Mode",
+    8
+   ],
+   [
+    "Dual Pixel Mode",
+    8
+   ],
+   [
+    "Single Pixel High Resolution",
+    9
+   ],
+   [
+    "Dual Pixel High Resolution",
+    9
+   ],
+   [
+    "Comp",
+    19
+   ],
+   [
+    "Norm",
+    33
+   ],
+   [
+    "High Resolution",
+    34
+   ]
+  ],
+  "revisions": "2023-02-14T10:23:56"
+ },
+ {
+  "manufacturer": "MDG",
+  "name": "theONE",
+  "longName": "",
+  "shortName": "theONE",
+  "fixtureTypeID": "B9850DB6-4371-48C2-BF9F-4544D8D311A7",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 73.9,
+  "weightKg": 33.5,
+  "dimensions": {
+   "model": "MDG The One",
+   "lengthM": 0.762,
+   "widthM": 0.887,
+   "heightM": 1.091
+  },
+  "file": "MDG@theONE@Release_1.0.gdtf",
+  "modes": [
+   [
+    "Mode 0",
+    5
+   ]
+  ],
+  "revisions": "2024-09-01T16:02:10"
+ },
+ {
+  "manufacturer": "Martin Professional",
+  "name": "MAC Aura PXL",
+  "longName": "MAC Aura PXL",
+  "shortName": "MACAurPXL",
+  "fixtureTypeID": "FA82248E-13F9-4755-AD6A-98D583652394",
+  "dataVersion": "1.2",
+  "official": true,
+  "provenanceStatus": "verified",
+  "weightLb": 34.4,
+  "weightKg": 15.6,
+  "dimensions": {
+   "model": "Yoke",
+   "lengthM": 0.41,
+   "widthM": 0.138,
+   "heightM": 0.338
+  },
+  "file": "Martin_Professional@MAC_Aura_PXL@20260823.gdtf",
+  "modes": [
+   [
+    "Compact",
+    17
+   ],
+   [
+    "Compact Direct",
+    17
+   ],
+   [
+    "Basic",
+    32
+   ],
+   [
+    "Extended",
+    35
+   ],
+   [
+    "Ludicrous",
+    92
+   ]
+  ],
+  "revisions": "2026-09-07T21:01:27"
+ },
+ {
+  "manufacturer": "Martin Professional",
+  "name": "MAC Aura XB",
+  "longName": "MAC Aura XB",
+  "shortName": "MACAurXB",
+  "fixtureTypeID": "D179FD28-256E-47E8-9EB7-21748CD9DB6D",
+  "dataVersion": "1.2",
+  "official": true,
+  "provenanceStatus": "verified",
+  "weightLb": 14.3,
+  "weightKg": 6.5,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.219,
+   "widthM": 0.22,
+   "heightM": 0.161
+  },
+  "file": "Martin_Professional@MAC_Aura_XB@20230201NoMeas.gdtf",
+  "modes": [
+   [
+    "Standard",
+    14
+   ],
+   [
+    "Extended",
+    25
+   ]
+  ],
+  "revisions": "2023-06-02T03:53:43"
+ },
+ {
+  "manufacturer": "Martin Professional",
+  "name": "MAC Encore Performance CLD",
+  "longName": "MAC Encore Performance CLD",
+  "shortName": "MACEncPerCLD",
+  "fixtureTypeID": "49428AC8-8B25-44A8-B009-D52A9AFB6836",
+  "dataVersion": "1.2",
+  "official": true,
+  "provenanceStatus": "verified",
+  "weightLb": 68.3,
+  "weightKg": 31.0,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.335,
+   "widthM": 0.302,
+   "heightM": 0.544
+  },
+  "file": "Martin_Professional@MAC_Encore_Performance_CLD@20230316NoMeas.gdtf",
+  "modes": [
+   [
+    "Basic",
+    38
+   ]
+  ],
+  "revisions": "2023-03-16T20:44:08"
+ },
+ {
+  "manufacturer": "Martin Professional",
+  "name": "MAC Ultra Performance",
+  "longName": "MAC Ultra Performance",
+  "shortName": "MACUltPer",
+  "fixtureTypeID": "EB46F8DF-374F-4A1A-9C80-C1FA8C3F61A0",
+  "dataVersion": "1.2",
+  "official": true,
+  "provenanceStatus": "verified",
+  "weightLb": 97.0,
+  "weightKg": 44.0,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.374,
+   "widthM": 0.32,
+   "heightM": 0.659
+  },
+  "file": "Martin_Professional@MAC_Ultra_Performance@20260228.gdtf",
+  "modes": [
+   [
+    "Compact",
+    42
+   ],
+   [
+    "Basic",
+    48
+   ],
+   [
+    "Extended",
+    58
+   ]
+  ],
+  "revisions": "2026-02-28T14:38:13"
+ },
+ {
+  "manufacturer": "Martin Professional",
+  "name": "MAC Viper Profile",
+  "longName": "MAC Viper Profile",
+  "shortName": "MACVipPro",
+  "fixtureTypeID": "00000000-EA4A-0000-BC47-3E4FBB861C6E",
+  "dataVersion": "1.2",
+  "official": true,
+  "provenanceStatus": "verified",
+  "weightLb": 82.0,
+  "weightKg": 37.2,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.326,
+   "widthM": 0.259,
+   "heightM": 0.555
+  },
+  "file": "Martin_Professional@MAC_Viper_Profile@20230516NoMeas.gdtf",
+  "modes": [
+   [
+    "Basic",
+    26
+   ],
+   [
+    "Extended",
+    34
+   ]
+  ],
+  "revisions": "2026-06-09T17:56:49"
+ },
+ {
+  "manufacturer": "Martin Professional",
+  "name": "RUSH PAR 2 RGBW Zoom",
+  "longName": "RUSH PAR 2 RGBW Zoom",
+  "shortName": "RUSH PAR 2 RGBW",
+  "fixtureTypeID": "478930BE-3D14-4735-828E-179B266D8506",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 12.1,
+  "weightKg": 5.5,
+  "dimensions": {
+   "model": "Body",
+   "lengthM": 0.18,
+   "widthM": 0.18,
+   "heightM": 0.384
+  },
+  "file": "Martin_Professional@RUSH_PAR_2_RGBW_Zoom@add_5Channel.gdtf",
+  "modes": [
+   [
+    "5 ch mode",
+    5
+   ],
+   [
+    "9 ch mode",
+    9
+   ]
+  ],
+  "revisions": "2025-04-29T09:39:17"
+ },
+ {
+  "manufacturer": "Robe Lighting",
+  "name": "Robin BMFL Blade",
+  "longName": "Robin BMFL Blade",
+  "shortName": "BMFLBlade",
+  "fixtureTypeID": "7F8C97FD-5A4A-403F-9486-A3A06FBFF570",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 83.6,
+  "weightKg": 37.9,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.308,
+   "widthM": 0.23,
+   "heightM": 0.613
+  },
+  "file": "Robe_Lighting@Robin_BMFL_Blade@2026-03-26_Color_macro_empty_wheel_slots_revision.gdtf",
+  "modes": [
+   [
+    "Mode 2 - Standard 8 bit",
+    42
+   ],
+   [
+    "Mode 1 - Standard 16 bit",
+    49
+   ]
+  ],
+  "revisions": "2026-03-26T09:12:00"
+ },
+ {
+  "manufacturer": "Robe Lighting",
+  "name": "Robin Esprite",
+  "longName": "Robin ESPRITE™",
+  "shortName": "ESPRITE",
+  "fixtureTypeID": "ED22065C-2C72-43FE-BA36-A81D53D0250D",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 62.2,
+  "weightKg": 28.2,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.278,
+   "widthM": 0.264,
+   "heightM": 0.539
+  },
+  "file": "Robe_Lighting@Robin_Esprite@2025-11-07_Personality_RDM_number_revision.gdtf",
+  "modes": [
+   [
+    "Mode 2 - Reduced 8 bit",
+    42
+   ],
+   [
+    "Mode 4 - Reduced 8 bit + green correction",
+    43
+   ],
+   [
+    "Mode 1 - Standard 16 bit",
+    49
+   ],
+   [
+    "Mode 3 - Standard 16 bit + green correction",
+    50
+   ],
+   [
+    "Mode 5 - Enhanced gobo control",
+    51
+   ]
+  ],
+  "revisions": "2025-11-07T12:35:02"
+ },
+ {
+  "manufacturer": "Robe Lighting",
+  "name": "Robin MegaPointe",
+  "longName": "Robin MegaPointe®",
+  "shortName": "MegaPointe",
+  "fixtureTypeID": "E3BD5003-C35C-4C69-AD69-E63ECF0FFB6B",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 48.5,
+  "weightKg": 22.0,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.285,
+   "widthM": 0.254,
+   "heightM": 0.453
+  },
+  "file": "Robe_Lighting@Robin_MegaPointe@2026-04-13_Shutter_channel_sets_revision.gdtf",
+  "modes": [
+   [
+    "Mode 2 - Reduced 8 - bit",
+    34
+   ],
+   [
+    "Mode 1 - Standard 16 - bit",
+    39
+   ]
+  ],
+  "revisions": "2026-04-13T08:14:20"
+ },
+ {
+  "manufacturer": "Robe Lighting",
+  "name": "Robin Pointe",
+  "longName": "Robin Pointe",
+  "shortName": "Pointe",
+  "fixtureTypeID": "3C217CA1-DD2C-462C-9C6D-9ECA7E3B9E5B",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 33.1,
+  "weightKg": 15.0,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.28,
+   "widthM": 0.202,
+   "heightM": 0.376
+  },
+  "file": "Robe_Lighting@Robin_Pointe@2024-04-22_Gobos_revision.gdtf",
+  "modes": [
+   [
+    "Mode 2 - Reduced 8bit",
+    16
+   ],
+   [
+    "Mode 1 - Standard 16bit",
+    24
+   ],
+   [
+    "Mode 3 - Extended 16bit",
+    30
+   ]
+  ],
+  "revisions": "2024-04-22T12:23:29"
+ },
+ {
+  "manufacturer": "Robe Lighting",
+  "name": "Robin Spiider",
+  "longName": "Robin Spiider",
+  "shortName": "Spiider",
+  "fixtureTypeID": "FF00403F-EEDC-4E89-8FF2-CD5976365896",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 29.2,
+  "weightKg": 13.25,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.292,
+   "widthM": 0.285,
+   "heightM": 0.225
+  },
+  "file": "Robe_Lighting@Robin_Spiider@2025-12-03_Reupload_to_share.gdtf",
+  "modes": [
+   [
+    "Mode 5 - Wash",
+    27
+   ],
+   [
+    "Mode 2 - Basic",
+    27
+   ],
+   [
+    "Mode 3 - Advanced",
+    33
+   ],
+   [
+    "Mode 6 - Pattern",
+    47
+   ],
+   [
+    "Mode 1 - Zones",
+    49
+   ],
+   [
+    "Mode 4 - Full RGBW",
+    57
+   ],
+   [
+    "Mode 7 - Pixel RGB",
+    58
+   ],
+   [
+    "Mode 8 - Pixel RGBW ",
+    66
+   ],
+   [
+    "Mode 9 - Pattern full RGB",
+    71
+   ],
+   [
+    "Mode 10 - Pattern full RGBW",
+    79
+   ]
+  ],
+  "revisions": "2025-12-03T07:20:39"
+ },
+ {
+  "manufacturer": "Robe Lighting",
+  "name": "Robin T1 Profile",
+  "longName": "Robin T1 Profile™",
+  "shortName": "T1Profile",
+  "fixtureTypeID": "F067E11C-F3E9-485B-B60D-5A15580DC6B0",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 53.6,
+  "weightKg": 24.3,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.278,
+   "widthM": 0.257,
+   "heightM": 0.535
+  },
+  "file": "Robe_Lighting@Robin_T1_Profile@2026-07-20_Color_Control_channel_update_2.gdtf",
+  "modes": [
+   [
+    "Mode 2 - Reduced CMY",
+    33
+   ],
+   [
+    "Mode 2 - Reduced RGB",
+    33
+   ],
+   [
+    "Mode 1 - CMY",
+    49
+   ],
+   [
+    "Mode 1 - RGB",
+    49
+   ],
+   [
+    "Mode 3 - RGBAL",
+    53
+   ]
+  ],
+  "revisions": "2026-07-20T12:25:52"
+ },
+ {
+  "manufacturer": "Robe Lighting",
+  "name": "Robin iSpiider",
+  "longName": "Robin iSpiider™",
+  "shortName": "iSpiider",
+  "fixtureTypeID": "9B811C7C-4D2C-4AD7-9EAC-3533BE07E92F",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 54.5,
+  "weightKg": 24.7,
+  "dimensions": {
+   "model": "Head",
+   "lengthM": 0.337,
+   "widthM": 0.335,
+   "heightM": 0.24
+  },
+  "file": "Robe_Lighting@Robin_iSpiider@2025-12-03_Reupload_to_share.gdtf",
+  "modes": [
+   [
+    "Mode 5 - Wash",
+    27
+   ],
+   [
+    "Mode 2 - Basic",
+    27
+   ],
+   [
+    "Mode 3 - Advanced",
+    33
+   ],
+   [
+    "Mode 6 - Pattern",
+    47
+   ],
+   [
+    "Mode 1 - Zones",
+    49
+   ],
+   [
+    "Mode 4 - Full RGBW",
+    57
+   ],
+   [
+    "Mode 7 - Pixel RGB",
+    58
+   ],
+   [
+    "Mode 8 - Pixel RGBW ",
+    66
+   ],
+   [
+    "Mode 9 - Pattern full RGB",
+    71
+   ],
+   [
+    "Mode 10 - Pattern full RGBW",
+    79
+   ]
+  ],
+  "revisions": "2025-12-03T07:50:30"
+ },
+ {
+  "manufacturer": "SGM Light",
+  "name": "Q7",
+  "longName": "SGM Q7",
+  "shortName": "LED PAR",
+  "fixtureTypeID": "9B293A60-AA9A-41DA-9741-2B876C193084",
+  "dataVersion": "1.2",
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "weightLb": 17.9,
+  "weightKg": 8.1,
+  "dimensions": {
+   "model": "Base",
+   "lengthM": 0.496,
+   "widthM": 0.119,
+   "heightM": 0.2
+  },
+  "file": "SGM_Light@Q7@BETA_1.1.gdtf",
+  "modes": [
+   [
+    "3Ch",
+    3
+   ],
+   [
+    "4Ch",
+    4
+   ]
+  ],
+  "revisions": "2023-10-24T10:15:47"
+ }
+]

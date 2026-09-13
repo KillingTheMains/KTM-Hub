@@ -1,0 +1,818 @@
+<!doctype html><html><head><meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Loom Plot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#5C636A;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF;
+  --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#71787F;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+  --rail:#B9BDB5; --rail-2:#A2A79E;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630; --rail:#343B41; --rail-2:#454E56;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630; --rail:#343B41; --rail-2:#454E56;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);overflow:hidden;
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;
+  line-height:1.45;display:flex;flex-direction:column}
+button,input,select,textarea{font:inherit;color:var(--ink)}
+option{color:var(--ink);background:var(--surface)}
+table,.card,.note,.stat{color:var(--ink)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+.bar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:9px 15px;background:var(--surface);
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.bar h1{font-family:"Archivo",sans-serif;font-size:15px;font-weight:700;margin:0;letter-spacing:.03em;white-space:nowrap}
+.grow{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--surface);border:0;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--sel);color:var(--ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:8px;padding:7px 13px;
+  font-size:12.5px;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--ink-2);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink);filter:none}
+.btn.danger{background:none;color:var(--crit);border:1px solid var(--line)}
+.btn.danger:hover{background:var(--crit-soft);filter:none}
+.btn.sm{padding:4px 9px;font-size:11.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+input[type=text],input[type=number],select{background:var(--surface-2);border:1px solid var(--line);
+  border-radius:7px;padding:6px 9px}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}
+
+main{flex:1;overflow-y:auto;padding:16px 18px 70px}
+.wrap{max-width:1280px;margin:0 auto}
+.cols{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}
+h3{font-family:"Archivo",sans-serif;font-size:12px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--accent);margin:20px 0 8px}
+h4{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700;margin:0 0 8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:9px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.stat .v{font-family:"Archivo",sans-serif;font-size:21px;font-weight:700;line-height:1.15;margin-top:1px}
+.stat .v small{font-size:10.5px;font-weight:500;color:var(--ink-3)}
+.stat.flag{border-color:var(--warn);background:var(--warn-soft)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 15px;
+  box-shadow:var(--shadow);margin-bottom:12px}
+.note{border-radius:10px;padding:11px 14px;font-size:12.5px;border:1px solid var(--line);
+  background:var(--surface);margin-bottom:13px}
+.note.warn{background:var(--warn-soft);border-color:transparent}
+.note.crit{background:var(--crit-soft);border-color:transparent}
+.muted{color:var(--ink-3)}
+.chip{display:inline-block;padding:1px 6px;border-radius:5px;font-size:10px;font-weight:600;white-space:nowrap}
+.chip.ok{background:var(--accent-soft);color:var(--accent)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.crit{background:var(--crit-soft);color:var(--crit)}
+.chip.dim{background:var(--sunken);color:var(--ink-3)}
+.empty{text-align:center;padding:40px 20px;color:var(--ink-3)}
+.empty .big{font-family:"Archivo",sans-serif;font-size:15px;font-weight:600;color:var(--ink-2);margin-bottom:4px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th{text-align:left;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;padding:7px 9px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:5px 9px;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* rack list */
+.racktab{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;
+  border:1px solid transparent;border-radius:8px;padding:7px 9px;cursor:pointer;color:var(--ink-2);font-size:13px}
+.racktab:hover{background:var(--surface-2);color:var(--ink)}
+.racktab.on{background:var(--sel);color:var(--ink);font-weight:600;border-color:var(--line)}
+.racktab .sq{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+.racktab .n{margin-left:auto;font-size:10.5px;color:var(--ink-3);font-weight:500}
+
+/* the elevation */
+.elev{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px 16px;
+  box-shadow:var(--shadow)}
+.elevhead{display:flex;align-items:baseline;gap:11px;margin-bottom:10px;flex-wrap:wrap}
+.elevhead b{font-family:"Archivo",sans-serif;font-size:15px}
+.elevhead .m{font-size:11.5px;color:var(--ink-3)}
+svg{display:block;width:100%;height:auto}
+
+/* port editor */
+.ports{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px;margin-top:9px}
+.port{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.port .pn{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.pdot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+.pdot.output{background:var(--s3)} .pdot.input{background:var(--s2)}
+.pdot.network{background:var(--s1)} .pdot.power{background:var(--s7)}
+.port input{width:100%;font-size:11.5px;padding:3px 6px;background:var(--surface);margin-bottom:3px}
+.port input:last-child{margin-bottom:0}
+.port.used{border-color:var(--accent)}
+
+@media print{
+  .bar,.side{display:none} main{overflow:visible;padding:0}
+  body{overflow:visible;background:#fff}
+  .cols{grid-template-columns:1fr}
+  .elev{box-shadow:none;border:0;padding:0;break-inside:avoid}
+  .ports{display:none}
+}
+@media(max-width:960px){ .cols{grid-template-columns:1fr} }
+
+/* ── loom-specific ─────────────────────────────────────────────────────── */
+.sheettab{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;
+  border:1px solid transparent;border-radius:8px;padding:7px 9px;cursor:pointer;color:var(--ink-2);font-size:13px}
+.sheettab:hover{background:var(--surface-2);color:var(--ink)}
+.sheettab.on{background:var(--sel);color:var(--ink);font-weight:600;border-color:var(--line)}
+.sheettab .n{margin-left:auto;font-size:10.5px;color:var(--ink-3);font-weight:500}
+
+td.tight{padding:3px 5px}
+td.tight input,td.tight select{width:100%;min-width:0;background:transparent;border:1px solid transparent;
+  border-radius:5px;padding:3px 5px;font-size:12px}
+td.tight input:hover,td.tight select:hover{border-color:var(--line)}
+td.tight input:focus,td.tight select:focus{background:var(--surface-2);outline:2px solid var(--accent);outline-offset:-1px}
+td.tight input.dirty{background:var(--accent-soft)}
+
+.typechip{display:inline-block;padding:1px 6px;border-radius:5px;font-size:9.5px;font-weight:700;
+  letter-spacing:.04em;white-space:nowrap;border:1px solid var(--line)}
+.swatch{width:15px;height:15px;border-radius:4px;border:1px solid var(--line-strong);flex:0 0 auto;display:inline-block;vertical-align:-3px}
+.swatch.none{background:repeating-linear-gradient(45deg,var(--sunken),var(--sunken) 3px,var(--surface) 3px,var(--surface) 6px)}
+
+/* assembly grid — position label carries the colour, length rides underneath */
+.asm td{text-align:center;padding:3px 5px}
+.asm .cell{display:flex;flex-direction:column;align-items:center;gap:1px;padding:4px 7px;
+  border-radius:6px;min-width:74px;border:1px solid transparent}
+.asm .cell.has{border-color:transparent}
+.asm .pos{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+.asm .len{font-size:11.5px;font-weight:600;font-family:"IBM Plex Mono",monospace}
+.asm .none{color:var(--ink-3);font-size:11px}
+.asm .colsum{background:var(--surface-2);text-align:center}
+.asm .colsum span{display:inline-block;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:800;margin:0 1px}
+.asm .lbl{text-align:left;white-space:nowrap;font-weight:600}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.legend b{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);align-self:center;margin-right:2px}
+.legend span{padding:1px 7px;border-radius:5px;font-size:10px;font-weight:700}
+
+.grouphead td{background:var(--surface-2);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:800;color:var(--ink-3);padding:5px 9px}
+.rowbtns{display:flex;gap:3px;justify-content:flex-end}
+.iconbtn{background:none;border:1px solid transparent;border-radius:5px;color:var(--ink-3);
+  font-size:11px;padding:2px 6px;cursor:pointer;font-weight:600}
+.iconbtn:hover{border-color:var(--line);color:var(--ink);background:var(--surface-2)}
+.iconbtn.danger:hover{color:var(--crit);background:var(--crit-soft)}
+</style></head><body>
+
+<div class="bar">
+  <h1>Loom&nbsp;Plot</h1>
+  <div class="seg" id="tabs"></div>
+  <div class="grow"></div>
+  <button class="btn ghost sm" id="lwbtn">Lightwright</button>
+  <button class="btn ghost sm" id="csvbtn">CSV</button>
+  <button class="btn ghost sm" id="printbtn">Print</button>
+  <button class="btn sm" id="savebtn">Save cables</button>
+</div>
+<main><div class="wrap" id="root"></div></main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   Loom Plot — the cable and loom list.
+
+   An inventory of real cut cables, not a bill of materials. This is the
+   piece that connects Distro Plot (soca cuts) to Rack Plot (snake
+   break-ins), and nothing else in the suite does it.
+
+   The model is Pre-Pro's Loom Builder, which ran BMW in production, and
+   the field its own documentation omits is the important one:
+
+     parts[]          six segment lengths, in feet
+     partPositions[]  a physical position label per segment
+
+   A 100' socapex run is not one cable. It is a cut from the distro, a
+   trunk run, and four drops on the truss, each with its own length and
+   its own place on the rig. Storing a single total loses the thing the
+   electrician actually needs at load-in.
+
+   Three conventions carried over verbatim, all of them scar tissue:
+
+   1. A SPARE is a " SP" label suffix plus PINK, same type as its
+      primary — a label, not a boolean, because crew read labels off
+      physical tape. B1 / B1 SP, MA / MA SP.
+   2. NEVER re-render on an input event. It destroys the DOM and kills
+      keyboard navigation mid-edit. Fields write to the model and repaint
+      nothing but their own dirty class.
+   3. Colours are stored as TOKEN NAMES and resolved to hex at render,
+      from meta/tokens. Pre-Pro's archived BMW import still carries
+      #ef4444 for RED while the live palette's RED is #ff2020, so any
+      record holding a hex silently repaints when re-imported.
+
+   The one thing here that Pre-Pro could not do: the CUT LIST. Every
+   segment rounds UP to the next standard length in gear/cable, and the
+   result aggregates by type × length into exactly the matrix a shop
+   order reads. That is the join to Shop Order, and it is why the
+   segments were worth storing separately in the first place.
+   ═══════════════════════════════════════════════════════════════════════ */
+const $  = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const num = v => { const n=parseFloat(v); return isFinite(n)?n:0; };
+
+const SLOTS = 6;
+
+/* Type grouping for the build view. Groups are the electrician's mental
+   buckets, not the catalog's power/data split — a socapex and an Edison
+   are both power but they are never handled the same way. */
+const GROUPS = [
+  { label:'Multi cable', ids:['socapex','cpc8','cpc4'] },
+  { label:'Data',        ids:['dmx-5pin','dmx-3pin','ethercon','fiber'] },
+  { label:'Power',       ids:['true1-jumper','true1-tail','powercon-blue','edison-uground'] },
+];
+const GROUP_OTHER = 'Other';
+
+/* Segment hints, per type. These are the questions the six slots answer,
+   and without them the columns are just six blanks. */
+const HINTS = {
+  socapex:'Pt1 from distro · Pt2 trunk · Pt3–6 on-truss drops',
+  cpc8:   'Pt1 from distro · Pt2 trunk',
+  cpc4:   'Pt1 from distro · Pt2 trunk',
+  'dmx-5pin':'Pt1 from node · Pt2 trunk · Pt3 last leg if looped',
+  ethercon:'Pt1 from switch · Pt2 trunk run',
+  _:'Lengths in feet, one per segment',
+};
+
+const S = { tab:'cables', loaded:false, show:null, showName:'',
+            types:[], lengths:[5,10,15,25,50,100], colors:{},
+            positions:[], sheets:[], cur:null, dirty:false, q:'' };
+
+function groupOf(typeId){
+  const g = GROUPS.find(g=>g.ids.includes(typeId));
+  return g ? g.label : GROUP_OTHER;
+}
+const type   = id => S.types.find(t=>t.id===id);
+const hex    = tok => S.colors[tok] || null;
+const sheet  = () => S.sheets.find(s=>s.id===S.cur);
+
+async function load(){
+  const K = window.KTM;
+  if(!K){ S.loaded=true; return; }
+  const gear = await K.list('gear');
+  const cab = gear.find(g=>g.kind==='cable');
+  if(cab){ S.types = cab.items||[]; if(cab.lengths) S.lengths = cab.lengths; }
+
+  const meta = await K.list('meta');
+  const tok = meta.find(m=>m.id==='tokens' || m.colors);
+  if(tok && tok.colors) S.colors = tok.colors;
+
+  S.show = K.activeShow ? K.activeShow() : null;
+  if(S.show){
+    const sh = await K.get(K.P.show(S.show));
+    S.showName = (sh && sh.name) || S.show;
+    S.positions = await K.list(K.P.sub(S.show,'positions'));
+    S.sheets = await K.list(K.P.sub(S.show,'looms'));
+  }
+  /* A sheet per position, created on demand rather than up front — an
+     empty show should not cost twenty documents. */
+  S.sheets.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
+  S.cur = S.sheets[0] ? S.sheets[0].id : null;
+  S.loaded = true;
+}
+
+async function save(){
+  const K=window.KTM;
+  if(!K) return alert('No store available.');
+  if(!S.show) return alert('Pick a show in the Hub first — cables belong to a show.');
+  const b=$('savebtn'); b.disabled=true; b.textContent='Saving…';
+  try{
+    for(const sh of S.sheets){
+      const {id, ...body} = sh;
+      body.kind = 'cableSheet';
+      await K.set(K.P.subDoc(S.show,'looms',id), body);
+    }
+    S.dirty=false; b.textContent='Saved';
+    document.querySelectorAll('td.tight input.dirty').forEach(i=>i.classList.remove('dirty'));
+    setTimeout(()=>{b.textContent='Save cables';b.disabled=false;},1400);
+  }catch(e){ b.textContent='Save cables'; b.disabled=false; alert('Could not save: '+e.message); }
+}
+
+/* ── the derived numbers ───────────────────────────────────────────────── */
+
+/* Total cut feet for one cable — the sum of its segments, not a single
+   run length. */
+const cableFeet = c => (c.parts||[]).reduce((a,p)=>a+num(p),0);
+
+/* Round a segment UP to the next standard length. A 22' run is bought as
+   a 25'; there is no such thing as ordering 22 feet of socapex. Anything
+   longer than the largest standard length is reported at its own size and
+   flagged, because that is a custom cut and a phone call. */
+function toStock(ft){
+  if(ft<=0) return null;
+  for(const L of S.lengths) if(ft<=L) return {len:L, custom:false};
+  return {len:ft, custom:true};
+}
+
+/* The cut list: type × standard length, counts in the cells. Exactly the
+   matrix a shop order reads, which is the whole point of storing the
+   segments separately. */
+function cutList(){
+  const rows = {}; const customs = [];
+  S.sheets.forEach(sh=>(sh.cables||[]).forEach(c=>{
+    (c.parts||[]).forEach((p,i)=>{
+      const ft = num(p); if(!ft) return;
+      const st = toStock(ft); if(!st) return;
+      const key = c.type||'unknown';
+      const r = rows[key] = rows[key] || {};
+      if(st.custom){
+        customs.push({type:key, ft, label:c.label, sheet:sh.name,
+                      pos:(c.partPositions||[])[i]||('Pt'+(i+1))});
+        r.custom = (r.custom||0)+1;
+      } else {
+        r[st.len] = (r[st.len]||0)+1;
+      }
+    });
+  }));
+  return {rows, customs};
+}
+
+function loomIndex(){
+  const idx = {};
+  S.sheets.forEach(sh=>(sh.cables||[]).forEach(c=>{
+    const l = (c.loomId||'').trim(); if(!l) return;
+    (idx[l]=idx[l]||[]).push({...c, sheet:sh.name});
+  }));
+  return idx;
+}
+
+function counts(){
+  let cables=0, feet=0, unloomed=0, spares=0, noParts=0;
+  S.sheets.forEach(sh=>(sh.cables||[]).forEach(c=>{
+    cables++; feet += cableFeet(c);
+    if(!(c.loomId||'').trim()) unloomed++;
+    if(/\sSP$/i.test(c.label||'')) spares++;
+    if(!cableFeet(c)) noParts++;
+  }));
+  return {sheets:S.sheets.length, cables, feet, looms:Object.keys(loomIndex()).length,
+          unloomed, spares, noParts};
+}
+
+/* ── render ───────────────────────────────────────────────────────────── */
+const TABS = [['cables','Cables'],['asm','Assembly'],['looms','Looms'],['cut','Cut list']];
+
+function render(){
+  $('tabs').innerHTML = TABS.map(([k,l])=>
+    `<button data-tab="${k}"${S.tab===k?' class="on"':''}>${l}</button>`).join('');
+  $('tabs').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();});
+
+  const r=$('root');
+  if(!S.loaded){ r.innerHTML='<div class="empty"><div class="big">Loading…</div></div>'; return; }
+  if(!window.KTM){
+    r.innerHTML='<div class="note crit"><b>No shared data layer.</b> Loom Plot reads the cable '
+      +'catalogue and colour tokens from the Hub. Open it from inside the KTM Hub rather than on its own.</div>';
+    return;
+  }
+  if(!S.show){
+    r.innerHTML='<div class="empty"><div class="big">No active show</div>'
+      +'<div>Cables belong to a show. Pick one in the Hub, then come back.</div></div>';
+    return;
+  }
+  if(!S.types.length){
+    r.innerHTML='<div class="empty"><div class="big">Cable catalogue is empty</div>'
+      +'<div>Seed <span class="mono">gear/cable</span> in the Hub first.</div></div>';
+    return;
+  }
+  r.innerHTML = S.tab==='cables' ? viewCables()
+              : S.tab==='asm'    ? viewAsm()
+              : S.tab==='looms'  ? viewLooms()
+              :                    viewCut();
+  if(S.tab==='cables') wireCables();
+}
+
+function statbar(){
+  const c = counts();
+  const cell = (k,v,sub,flag) => `<div class="stat${flag?' flag':''}"><div class="k">${k}</div>`
+    + `<div class="v">${v}${sub?` <small>${sub}</small>`:''}</div></div>`;
+  return '<div class="stats">'
+    + cell('Cables', c.cables)
+    + cell('Cut feet', c.feet.toLocaleString(), 'ft')
+    + cell('Looms', c.looms)
+    + cell('Unloomed', c.unloomed, '', c.unloomed>0)
+    + cell('Spares', c.spares)
+    + (c.noParts ? cell('No lengths', c.noParts, '', true) : '')
+    + '</div>';
+}
+
+function sheetRail(){
+  const rows = S.sheets.map(sh=>{
+    const n = (sh.cables||[]).length;
+    return `<button class="sheettab${sh.id===S.cur?' on':''}" data-sheet="${sh.id}">`
+      + `<span>${esc(sh.name||sh.id)}</span><span class="n">${n}</span></button>`;
+  }).join('');
+  /* Positions without a sheet yet are offered as one click, so the sheet
+     list mirrors the rig rather than being typed a second time. */
+  const used = new Set(S.sheets.map(s=>s.positionId).filter(Boolean));
+  const avail = S.positions.filter(p=>!used.has(p.id));
+  const add = avail.length
+    ? `<h4 style="margin-top:14px">Add from positions</h4>`
+      + avail.map(p=>`<button class="sheettab" data-newpos="${p.id}">`
+        + `<span class="muted">+ ${esc(p.name||p.id)}</span></button>`).join('')
+    : '';
+  return `<div class="card"><h4>Cable sheets</h4>${rows||'<div class="muted" style="font-size:12px">None yet.</div>'}`
+    + add
+    + `<div style="margin-top:12px;display:flex;gap:6px">`
+    + `<button class="btn ghost sm" id="newsheet">+ Sheet</button>`
+    + (S.cur?`<button class="btn danger sm" id="delsheet">Delete</button>`:'')
+    + `</div></div>`;
+}
+
+function colorSel(cid, field, val){
+  const toks = Object.keys(S.colors);
+  const opts = ['<option value="">—</option>']
+    .concat(toks.map(t=>`<option value="${t}"${t===val?' selected':''}>${t}</option>`)).join('');
+  const h = hex(val);
+  return `<span class="swatch${h?'':' none'}" style="${h?`background:${h}`:''}" data-sw="${cid}-${field}"></span>`
+    + `<select data-c="${cid}" data-f="${field}" style="width:auto;min-width:74px">${opts}</select>`;
+}
+
+function cableRow(c){
+  const t = type(c.type) || {};
+  const feet = cableFeet(c);
+  const spare = /\sSP$/i.test(c.label||'');
+  return `<tr data-row="${c.id}">
+    <td class="tight" style="min-width:110px"><input data-c="${c.id}" data-f="label" value="${esc(c.label||'')}" placeholder="B1"></td>
+    <td class="tight" style="min-width:130px"><select data-c="${c.id}" data-f="type">`
+      + S.types.map(x=>`<option value="${x.id}"${x.id===c.type?' selected':''}>${esc(x.name)}</option>`).join('')
+      + `</select></td>
+    <td class="tight" style="white-space:nowrap">${colorSel(c.id,'color',c.color||'')}</td>
+    <td class="tight" style="white-space:nowrap">${colorSel(c.id,'secColor',c.secColor||'')}</td>`
+    + Array.from({length:SLOTS},(_,i)=>`<td class="tight" style="min-width:58px">`
+        + `<input data-c="${c.id}" data-f="parts.${i}" value="${esc((c.parts||[])[i]||'')}" `
+        + `placeholder="—" inputmode="decimal" style="text-align:right">`
+        + `<input data-c="${c.id}" data-f="partPositions.${i}" value="${esc((c.partPositions||[])[i]||'')}" `
+        + `placeholder="pos" style="font-size:10px;text-align:center;color:var(--ink-3)"></td>`).join('')
+    + `<td class="num mono" style="color:var(--ink-3)">${feet||''}</td>
+    <td class="tight" style="min-width:88px"><input data-c="${c.id}" data-f="loomId" value="${esc(c.loomId||'')}" placeholder="Loom/case"></td>
+    <td class="tight" style="min-width:100px"><input data-c="${c.id}" data-f="notes" value="${esc(c.notes||'')}" placeholder="—"></td>
+    <td><div class="rowbtns">`
+      + (spare?'':`<button class="iconbtn" data-sp="${c.id}" title="Add a spare: same type, &quot; SP&quot; label, pink">+SP</button>`)
+      + `<button class="iconbtn" data-dup="${c.id}" title="Duplicate">⧉</button>`
+      + `<button class="iconbtn danger" data-del="${c.id}" title="Delete">✕</button>`
+    + `</div></td></tr>`;
+}
+
+function viewCables(){
+  const sh = sheet();
+  const body = !sh
+    ? '<div class="empty"><div class="big">No cable sheet selected</div>'
+      + '<div>Add one from a position, or make a free-standing sheet.</div></div>'
+    : (() => {
+        const cables = (sh.cables||[]).filter(c=>!S.q ||
+          [c.label,c.type,c.loomId,c.notes].join(' ').toLowerCase().includes(S.q));
+        /* Grouped by the electrician's buckets, in a fixed order, so the
+           sheet reads the same way every time. */
+        const order = GROUPS.map(g=>g.label).concat([GROUP_OTHER]);
+        const byGroup = {};
+        cables.forEach(c=>(byGroup[groupOf(c.type)] = byGroup[groupOf(c.type)]||[]).push(c));
+        const rows = order.filter(g=>byGroup[g]).map(g=>
+          `<tr class="grouphead"><td colspan="${SLOTS+7}">${g}</td></tr>`
+          + byGroup[g].map(cableRow).join('')).join('');
+        const hint = HINTS[(cables[0]||{}).type] || HINTS._;
+        return `<div class="tablewrap"><table><thead><tr>
+            <th>Label</th><th>Type</th><th>Colour</th><th>2nd</th>`
+          + Array.from({length:SLOTS},(_,i)=>`<th class="num">Pt${i+1}</th>`).join('')
+          + `<th class="num">Feet</th><th>Loom</th><th>Notes</th><th></th></tr></thead>
+            <tbody>${rows || `<tr><td colspan="${SLOTS+7}" class="muted" style="padding:16px">No cables yet.</td></tr>`}</tbody>
+            </table></div>
+            <div class="muted" style="font-size:11.5px;margin-top:7px">${esc(hint)}. Second row of each segment is its position label.</div>`;
+      })();
+  const head = sh ? `<div class="card" style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+      <input id="sheetname" value="${esc(sh.name||'')}" style="font-weight:600;min-width:180px">
+      <input id="search" value="${esc(S.q)}" placeholder="Filter cables…" style="min-width:150px">
+      <div class="grow"></div>
+      <button class="btn sm" id="addcable">+ Cable</button></div>` : '';
+  return `<div class="cols"><div class="side">${sheetRail()}</div><div>${statbar()}${head}${body}</div></div>`;
+}
+
+/* Inputs write the model and repaint NOTHING. A render() here destroys the
+   DOM mid-edit and kills tab order — the single hardest-won lesson in the
+   legacy suite, and the reason its rack patching was unusable for entering
+   forty rows in a row. Structural changes (add, delete, duplicate) do
+   re-render, because there the DOM genuinely changed. */
+function wireCables(){
+  const sh = sheet();
+  $('root').querySelectorAll('[data-sheet]').forEach(b=>b.onclick=()=>{S.cur=b.dataset.sheet;render();});
+  $('root').querySelectorAll('[data-newpos]').forEach(b=>b.onclick=()=>{
+    const p = S.positions.find(x=>x.id===b.dataset.newpos);
+    S.sheets.push({id:uid(), name:(p&&p.name)||b.dataset.newpos, positionId:b.dataset.newpos, cables:[]});
+    S.cur = S.sheets[S.sheets.length-1].id; S.dirty=true; render();
+  });
+  const ns=$('newsheet'); if(ns) ns.onclick=()=>{
+    S.sheets.push({id:uid(), name:'New sheet', positionId:'', cables:[]});
+    S.cur = S.sheets[S.sheets.length-1].id; S.dirty=true; render();
+  };
+  const ds=$('delsheet'); if(ds) ds.onclick=()=>{
+    if(!confirm('Delete this cable sheet and its cables?')) return;
+    S.sheets = S.sheets.filter(x=>x.id!==S.cur);
+    S.cur = S.sheets[0]?S.sheets[0].id:null; S.dirty=true; render();
+  };
+  if(!sh) return;
+
+  const sn=$('sheetname'); if(sn) sn.oninput=e=>{ sh.name=e.target.value; S.dirty=true; e.target.classList.add('dirty'); };
+  const sq=$('search'); if(sq) sq.onchange=e=>{ S.q=e.target.value.trim().toLowerCase(); render(); };
+  $('addcable').onclick=()=>{
+    sh.cables = sh.cables||[];
+    sh.cables.push({id:uid(), label:'', type:S.types[0].id, color:'', secColor:'',
+                    parts:[], partPositions:[], loomId:'', notes:''});
+    S.dirty=true; render();
+    const rows=$('root').querySelectorAll('[data-row]');
+    const last=rows[rows.length-1]; if(last){ const i=last.querySelector('input'); if(i){i.focus();i.scrollIntoView({block:'center'});} }
+  };
+
+  const find = id => (sh.cables||[]).find(c=>c.id===id);
+  $('root').querySelectorAll('[data-c][data-f]').forEach(el=>{
+    const c = find(el.dataset.c); if(!c) return;
+    const f = el.dataset.f;
+    const write = v => {
+      if(f.startsWith('parts.') || f.startsWith('partPositions.')){
+        const [arr,i] = f.split('.');
+        c[arr] = c[arr]||[];
+        while(c[arr].length <= +i) c[arr].push('');
+        c[arr][+i] = v;
+      } else c[f] = v;
+      S.dirty = true;
+    };
+    if(el.tagName==='SELECT'){
+      /* A select changing type or colour is not structural — repaint just
+         its own swatch and leave every other field's cursor alone. */
+      el.onchange = e => {
+        write(e.target.value);
+        const sw = $('root').querySelector(`[data-sw="${c.id}-${f}"]`);
+        if(sw){ const h=hex(e.target.value);
+          sw.className = 'swatch'+(h?'':' none'); sw.style.background = h||''; }
+      };
+    } else {
+      el.oninput = e => { write(e.target.value); e.target.classList.add('dirty'); };
+    }
+  });
+
+  $('root').querySelectorAll('[data-sp]').forEach(b=>b.onclick=()=>{
+    const c=find(b.dataset.sp); if(!c) return;
+    const i=(sh.cables||[]).indexOf(c);
+    /* The spare convention, verbatim: same type, " SP" on the label,
+       PINK. A label, not a flag — crew read it off the tape. */
+    sh.cables.splice(i+1, 0, {...c, id:uid(), label:(c.label||'')+' SP', color:'PINK',
+      parts:[...(c.parts||[])], partPositions:[...(c.partPositions||[])]});
+    S.dirty=true; render();
+  });
+  $('root').querySelectorAll('[data-dup]').forEach(b=>b.onclick=()=>{
+    const c=find(b.dataset.dup); if(!c) return;
+    const i=(sh.cables||[]).indexOf(c);
+    sh.cables.splice(i+1, 0, {...c, id:uid(),
+      parts:[...(c.parts||[])], partPositions:[...(c.partPositions||[])]});
+    S.dirty=true; render();
+  });
+  $('root').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    sh.cables = (sh.cables||[]).filter(c=>c.id!==b.dataset.del);
+    S.dirty=true; render();
+  });
+}
+
+/* ── assembly view ─────────────────────────────────────────────────────
+   Pre-Pro's best screen and the hardest one to get right. Columns are the
+   six segment slots; the cell carries the position label and the length,
+   and the POSITION drives the colour, not the cable. Reading down a
+   column tells you what every cable in this sheet is doing at that point
+   in its run — which is how a loom gets built on the shop floor. */
+const POSPAL = ['--s1','--s2','--s3','--s4','--s5','--s6','--s7','--s8','--s0'];
+function posColors(cables, slots){
+  const seen = [];
+  cables.forEach(c=>slots.forEach(i=>{
+    const p=((c.partPositions||[])[i]||'').trim().toUpperCase();
+    if(p && !seen.includes(p)) seen.push(p);
+  }));
+  const map={};
+  seen.forEach((p,i)=>map[p] = `var(${POSPAL[i%POSPAL.length]})`);
+  return map;
+}
+
+function viewAsm(){
+  if(!S.sheets.length) return '<div class="empty"><div class="big">No cables yet</div></div>';
+  const blocks = S.sheets.map(sh=>{
+    const cables = sh.cables||[];
+    if(!cables.length) return '';
+    /* Only slots that carry data anywhere in this sheet get a column —
+       six blank columns on a two-segment sheet is noise. */
+    const slots = [];
+    for(let i=0;i<SLOTS;i++){
+      const has = cables.some(c=>String((c.parts||[])[i]||'').trim()
+                              || String((c.partPositions||[])[i]||'').trim());
+      if(has) slots.push(i);
+    }
+    if(!slots.length) return '';
+    const pmap = posColors(cables, slots);
+
+    /* Column summary: which positions this slot is, most common first.
+       It is the header the eye actually uses. */
+    const summary = slots.map(i=>{
+      const freq={};
+      cables.forEach(c=>{ const p=((c.partPositions||[])[i]||'').trim().toUpperCase();
+        if(p) freq[p]=(freq[p]||0)+1; });
+      const badges = Object.entries(freq).sort((a,b)=>b[1]-a[1])
+        .map(([p])=>`<span style="background:${pmap[p]};color:#fff">${esc(p)}</span>`).join('');
+      return `<td class="colsum">${badges}</td>`;
+    }).join('');
+
+    const rows = cables.map(c=>{
+      const t = type(c.type)||{};
+      const h = hex(c.color);
+      const cells = slots.map(i=>{
+        const len = String((c.parts||[])[i]||'').trim();
+        const pos = String((c.partPositions||[])[i]||'').trim();
+        if(!len && !pos) return '<td><span class="none">—</span></td>';
+        const pc = pos ? pmap[pos.toUpperCase()] : null;
+        return `<td><div class="cell${pc?' has':''}" style="${pc?`background:${pc};color:#fff`:''}">`
+          + (pos?`<span class="pos">${esc(pos)}</span>`:'')
+          + (len?`<span class="len">${esc(len)}'</span>`:'')
+          + '</div></td>';
+      }).join('');
+      return `<tr><td class="lbl">`
+        + `<span class="swatch${h?'':' none'}" style="${h?`background:${h}`:''}"></span> `
+        + `<span class="typechip">${esc(t.name||c.type||'')}</span> ${esc(c.label||'')}`
+        + `</td>${cells}<td class="num mono">${cableFeet(c)||''}</td></tr>`;
+    }).join('');
+
+    const legend = Object.entries(pmap).map(([p,col])=>
+      `<span style="background:${col};color:#fff">${esc(p)}</span>`).join('');
+
+    return `<h3>${esc(sh.name||sh.id)}</h3>
+      <div class="tablewrap"><table class="asm"><thead><tr><th>Cable</th>`
+      + slots.map(i=>`<th class="num">Pt${i+1}</th>`).join('')
+      + `<th class="num">Feet</th></tr>
+        <tr><td class="colsum"></td>${summary}<td class="colsum"></td></tr></thead>
+        <tbody>${rows}</tbody></table></div>`
+      + (legend?`<div class="legend"><b>Positions</b>${legend}</div>`:'');
+  }).join('');
+  return statbar() + (blocks || '<div class="empty"><div class="big">No segments entered yet</div>'
+    + '<div>Enter lengths on the Cables tab and the assembly grid builds itself.</div></div>');
+}
+
+/* ── looms ────────────────────────────────────────────────────────────── */
+function viewLooms(){
+  const idx = loomIndex();
+  const names = Object.keys(idx).sort();
+  const unloomed = [];
+  S.sheets.forEach(sh=>(sh.cables||[]).forEach(c=>{
+    if(!(c.loomId||'').trim()) unloomed.push({...c, sheet:sh.name}); }));
+
+  const block = (title, cables, tone) => {
+    const feet = cables.reduce((a,c)=>a+cableFeet(c),0);
+    const types = {};
+    cables.forEach(c=>{ const t=(type(c.type)||{}).name||c.type||'—'; types[t]=(types[t]||0)+1; });
+    const chips = Object.entries(types).sort((a,b)=>b[1]-a[1])
+      .map(([t,n])=>`<span class="chip dim">${esc(t)} ×${n}</span>`).join(' ');
+    return `<div class="card">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <b style="font-family:Archivo,sans-serif;font-size:15px">${esc(title)}</b>
+        <span class="chip ${tone||'ok'}">${cables.length} cable${cables.length===1?'':'s'}</span>
+        <span class="muted mono" style="font-size:12px">${feet.toLocaleString()} ft</span>
+      </div>
+      <div style="margin:7px 0 8px">${chips}</div>
+      <div class="tablewrap"><table><thead><tr><th>Label</th><th>Type</th><th>Sheet</th>
+        <th class="num">Feet</th><th>Segments</th></tr></thead><tbody>`
+      + cables.map(c=>{
+          const h=hex(c.color);
+          const segs=(c.parts||[]).map((p,i)=>{ const l=String(p||'').trim(); if(!l) return '';
+            const pos=String((c.partPositions||[])[i]||'').trim();
+            return pos?`${l}' ${pos}`:`${l}'`; }).filter(Boolean).join(' · ');
+          return `<tr><td><span class="swatch${h?'':' none'}" style="${h?`background:${h}`:''}"></span> ${esc(c.label||'—')}</td>`
+            + `<td>${esc((type(c.type)||{}).name||c.type||'')}</td>`
+            + `<td class="muted">${esc(c.sheet||'')}</td>`
+            + `<td class="num mono">${cableFeet(c)||''}</td>`
+            + `<td class="muted mono" style="font-size:11.5px">${esc(segs)}</td></tr>`;
+        }).join('')
+      + '</tbody></table></div></div>';
+  };
+
+  return statbar()
+    + (names.length ? names.map(n=>block(n, idx[n])).join('')
+        : '<div class="note">No looms named yet. Put a name in the <b>Loom</b> column on the '
+          + 'Cables tab and everything carrying that name bundles here.</div>')
+    + (unloomed.length ? block('Unloomed — single runs', unloomed, 'warn') : '');
+}
+
+/* ── cut list ─────────────────────────────────────────────────────────── */
+function viewCut(){
+  const {rows, customs} = cutList();
+  const keys = Object.keys(rows);
+  if(!keys.length) return statbar()
+    + '<div class="empty"><div class="big">Nothing to cut yet</div>'
+    + '<div>Enter segment lengths and the cut list builds itself.</div></div>';
+
+  const head = `<tr><th>Type</th>` + S.lengths.map(L=>`<th class="num">${L}'</th>`).join('')
+    + `<th class="num">Custom</th><th class="num">Total</th></tr>`;
+  const body = keys.sort().map(k=>{
+    const r = rows[k];
+    const tot = S.lengths.reduce((a,L)=>a+(r[L]||0),0) + (r.custom||0);
+    return `<tr><td>${esc((type(k)||{}).name||k)}</td>`
+      + S.lengths.map(L=>`<td class="num mono">${r[L]||''}</td>`).join('')
+      + `<td class="num mono">${r.custom?`<span class="chip warn">${r.custom}</span>`:''}</td>`
+      + `<td class="num mono"><b>${tot}</b></td></tr>`;
+  }).join('');
+
+  const totals = S.lengths.map(L=>keys.reduce((a,k)=>a+(rows[k][L]||0),0));
+  const foot = `<tr><td><b>All</b></td>`
+    + totals.map(n=>`<td class="num mono"><b>${n||''}</b></td>`).join('')
+    + `<td class="num mono"><b>${customs.length||''}</b></td>`
+    + `<td class="num mono"><b>${totals.reduce((a,b)=>a+b,0)+customs.length}</b></td></tr>`;
+
+  const custom = customs.length ? `<h3>Custom cuts</h3>
+    <div class="note warn">Longer than the ${Math.max(...S.lengths)}′ standard, so each of these is
+      a custom cut and a phone call rather than a line on an order.</div>
+    <div class="tablewrap"><table><thead><tr><th>Cable</th><th>Type</th><th>Segment</th>
+      <th class="num">Feet</th><th>Sheet</th></tr></thead><tbody>`
+    + customs.map(c=>`<tr><td>${esc(c.label||'—')}</td><td>${esc((type(c.type)||{}).name||c.type)}</td>`
+      + `<td>${esc(c.pos)}</td><td class="num mono">${c.ft}</td><td class="muted">${esc(c.sheet||'')}</td></tr>`).join('')
+    + '</tbody></table></div>' : '';
+
+  return statbar()
+    + `<div class="note">Every segment is rounded <b>up</b> to the next standard length — a 22′ run is
+       bought as a 25′. This is the matrix a shop order reads, and it is the reason the six segments
+       are stored separately rather than as one total.</div>`
+    + `<div class="tablewrap"><table><thead>${head}</thead><tbody>${body}${foot}</tbody></table></div>`
+    + custom;
+}
+
+/* ── exports ──────────────────────────────────────────────────────────── */
+const csvCell = v => { const s=String(v??''); return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; };
+
+function cablesCSV(){
+  const rows = [['Sheet','Label','Type','Colour','2nd colour','Loom','Feet']
+    .concat(Array.from({length:SLOTS},(_,i)=>[`Pt${i+1} ft`,`Pt${i+1} pos`]).flat())
+    .concat(['Notes'])];
+  S.sheets.forEach(sh=>(sh.cables||[]).forEach(c=>{
+    const seg = Array.from({length:SLOTS},(_,i)=>
+      [(c.parts||[])[i]||'', (c.partPositions||[])[i]||'']).flat();
+    rows.push([sh.name||sh.id, c.label||'', (type(c.type)||{}).name||c.type||'',
+               c.color||'', c.secColor||'', c.loomId||'', cableFeet(c)||'']
+      .concat(seg).concat([c.notes||'']));
+  }));
+  return rows.map(r=>r.map(csvCell).join(',')).join('\n');
+}
+
+/* Lightwright cable strings, in the format the legacy exporter produced —
+   Loom Builder already wrote these, so the vocabulary is familiar on the
+   receiving end and nothing downstream has to change. */
+function lightwright(){
+  let out = `LIGHTWRIGHT CABLE STRINGS — ${S.showName||S.show}\n`;
+  out += `Generated: ${new Date().toLocaleDateString()}\n\n`;
+  S.sheets.forEach(sh=>{
+    const cables = (sh.cables||[]).filter(c=>cableFeet(c));
+    if(!cables.length) return;
+    out += `=== ${sh.name||sh.id} ===\n`;
+    cables.forEach(c=>{
+      const t=(type(c.type)||{}).name||c.type||'';
+      out += `${c.label||'(unlabelled)'}: `
+        + (c.parts||[]).filter(p=>String(p||'').trim()).map(p=>`${p} ${t}`).join(', ') + '\n';
+    });
+    out += '\n';
+  });
+  return out;
+}
+
+async function put(name, text, mime){
+  try{ const dl=await claude.use('downloads'); if(dl){ await dl.save({filename:name,data:text}); return; } }catch(e){}
+  try{ await navigator.clipboard.writeText(text); alert(name+' copied to the clipboard.'); }
+  catch(e){ alert('Could not export: '+e.message); }
+}
+const slug = s => String(s||'looms').replace(/[^\w.-]+/g,'-');
+
+$('csvbtn').onclick  = () => put(slug(S.showName)+'-cables.csv', cablesCSV(), 'text/csv');
+$('lwbtn').onclick   = () => put(slug(S.showName)+'-lightwright-strings.txt', lightwright(), 'text/plain');
+$('printbtn').onclick= () => { setTimeout(()=>window.print(),120); };
+$('savebtn').onclick = save;
+
+(async()=>{ render(); await load(); render(); })();
+</script>
+</body></html>

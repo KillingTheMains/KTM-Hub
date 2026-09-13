@@ -1,0 +1,633 @@
+<!doctype html><html><head><meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Label Plot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#5C636A;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF;
+  --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#71787F;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+  --rail:#B9BDB5; --rail-2:#A2A79E;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630; --rail:#343B41; --rail-2:#454E56;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630; --rail:#343B41; --rail-2:#454E56;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);overflow:hidden;
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;
+  line-height:1.45;display:flex;flex-direction:column}
+button,input,select,textarea{font:inherit;color:var(--ink)}
+option{color:var(--ink);background:var(--surface)}
+table,.card,.note,.stat{color:var(--ink)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+.bar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:9px 15px;background:var(--surface);
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.bar h1{font-family:"Archivo",sans-serif;font-size:15px;font-weight:700;margin:0;letter-spacing:.03em;white-space:nowrap}
+.grow{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--surface);border:0;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--sel);color:var(--ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:8px;padding:7px 13px;
+  font-size:12.5px;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--ink-2);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink);filter:none}
+.btn.danger{background:none;color:var(--crit);border:1px solid var(--line)}
+.btn.danger:hover{background:var(--crit-soft);filter:none}
+.btn.sm{padding:4px 9px;font-size:11.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+input[type=text],input[type=number],select{background:var(--surface-2);border:1px solid var(--line);
+  border-radius:7px;padding:6px 9px}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}
+
+main{flex:1;overflow-y:auto;padding:16px 18px 70px}
+.wrap{max-width:1280px;margin:0 auto}
+.cols{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}
+h3{font-family:"Archivo",sans-serif;font-size:12px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--accent);margin:20px 0 8px}
+h4{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700;margin:0 0 8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:9px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.stat .v{font-family:"Archivo",sans-serif;font-size:21px;font-weight:700;line-height:1.15;margin-top:1px}
+.stat .v small{font-size:10.5px;font-weight:500;color:var(--ink-3)}
+.stat.flag{border-color:var(--warn);background:var(--warn-soft)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 15px;
+  box-shadow:var(--shadow);margin-bottom:12px}
+.note{border-radius:10px;padding:11px 14px;font-size:12.5px;border:1px solid var(--line);
+  background:var(--surface);margin-bottom:13px}
+.note.warn{background:var(--warn-soft);border-color:transparent}
+.note.crit{background:var(--crit-soft);border-color:transparent}
+.muted{color:var(--ink-3)}
+.chip{display:inline-block;padding:1px 6px;border-radius:5px;font-size:10px;font-weight:600;white-space:nowrap}
+.chip.ok{background:var(--accent-soft);color:var(--accent)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.crit{background:var(--crit-soft);color:var(--crit)}
+.chip.dim{background:var(--sunken);color:var(--ink-3)}
+.empty{text-align:center;padding:40px 20px;color:var(--ink-3)}
+.empty .big{font-family:"Archivo",sans-serif;font-size:15px;font-weight:600;color:var(--ink-2);margin-bottom:4px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th{text-align:left;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;padding:7px 9px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:5px 9px;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* rack list */
+.racktab{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;
+  border:1px solid transparent;border-radius:8px;padding:7px 9px;cursor:pointer;color:var(--ink-2);font-size:13px}
+.racktab:hover{background:var(--surface-2);color:var(--ink)}
+.racktab.on{background:var(--sel);color:var(--ink);font-weight:600;border-color:var(--line)}
+.racktab .sq{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+.racktab .n{margin-left:auto;font-size:10.5px;color:var(--ink-3);font-weight:500}
+
+/* the elevation */
+.elev{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px 16px;
+  box-shadow:var(--shadow)}
+.elevhead{display:flex;align-items:baseline;gap:11px;margin-bottom:10px;flex-wrap:wrap}
+.elevhead b{font-family:"Archivo",sans-serif;font-size:15px}
+.elevhead .m{font-size:11.5px;color:var(--ink-3)}
+svg{display:block;width:100%;height:auto}
+
+/* port editor */
+.ports{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px;margin-top:9px}
+.port{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.port .pn{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.pdot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+.pdot.output{background:var(--s3)} .pdot.input{background:var(--s2)}
+.pdot.network{background:var(--s1)} .pdot.power{background:var(--s7)}
+.port input{width:100%;font-size:11.5px;padding:3px 6px;background:var(--surface);margin-bottom:3px}
+.port input:last-child{margin-bottom:0}
+.port.used{border-color:var(--accent)}
+
+@media print{
+  .bar,.side{display:none} main{overflow:visible;padding:0}
+  body{overflow:visible;background:#fff}
+  .cols{grid-template-columns:1fr}
+  .elev{box-shadow:none;border:0;padding:0;break-inside:avoid}
+  .ports{display:none}
+}
+@media(max-width:960px){ .cols{grid-template-columns:1fr} }
+
+/* ── label-specific ────────────────────────────────────────────────────── */
+.srctab{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;
+  border:1px solid transparent;border-radius:8px;padding:7px 9px;cursor:pointer;color:var(--ink-2);font-size:13px}
+.srctab:hover{background:var(--surface-2);color:var(--ink)}
+.srctab.on{background:var(--sel);color:var(--ink);font-weight:600;border-color:var(--line)}
+.srctab .n{margin-left:auto;font-size:10.5px;color:var(--ink-3);font-weight:500}
+
+.fmt{display:flex;flex-direction:column;gap:5px}
+.fmtbtn{text-align:left;background:none;border:1px solid var(--line);border-radius:8px;
+  padding:7px 9px;cursor:pointer;color:var(--ink-2);font-size:12.5px}
+.fmtbtn:hover{background:var(--surface-2);color:var(--ink)}
+.fmtbtn.on{background:var(--sel);color:var(--ink);border-color:var(--accent)}
+.fmtbtn small{display:block;color:var(--ink-3);font-size:10.5px;margin-top:1px}
+
+/* The preview is the label at real proportions, scaled. Nothing here uses
+   theme colours — a label is ink on media and must look the same in both. */
+.sheet{background:#fff;border:1px solid var(--line);border-radius:6px;padding:0;
+  box-shadow:var(--shadow);margin:0 auto 14px;position:relative;overflow:hidden}
+.lbl{position:relative;overflow:hidden;background:#fff;box-sizing:border-box}
+.lbl .bands{position:absolute;inset:0;display:flex;flex-direction:column}
+.lbl .band{flex:1;width:100%}
+.lbl .txt{position:relative;height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;line-height:1.02;
+  font-family:"Archivo",Helvetica,Arial,sans-serif;font-weight:800;padding:0 2%}
+.lbl .sub{font-weight:600;opacity:.92}
+.sheetgrid{position:relative}
+.cutline{position:absolute;border:1px dashed rgba(0,0,0,.18);pointer-events:none}
+
+.lblrow td{vertical-align:middle}
+td.tight{padding:3px 5px}
+td.tight input,td.tight select{width:100%;min-width:0;background:transparent;border:1px solid transparent;
+  border-radius:5px;padding:3px 5px;font-size:12px}
+td.tight input:hover,td.tight select:hover{border-color:var(--line)}
+td.tight input:focus,td.tight select:focus{background:var(--surface-2);outline:2px solid var(--accent);outline-offset:-1px}
+td.tight input.dirty{background:var(--accent-soft)}
+.rowbtns{display:flex;gap:3px;justify-content:flex-end}
+.iconbtn{background:none;border:1px solid transparent;border-radius:5px;color:var(--ink-3);
+  font-size:11px;padding:2px 6px;cursor:pointer;font-weight:600}
+.iconbtn:hover{border-color:var(--line);color:var(--ink);background:var(--surface-2)}
+.iconbtn.danger:hover{color:var(--crit);background:var(--crit-soft)}
+.bandpick{display:flex;gap:3px;flex-wrap:wrap}
+.bandpick button{width:17px;height:17px;border-radius:4px;border:1px solid var(--line-strong);cursor:pointer;padding:0}
+.bandpick button.on{outline:2px solid var(--accent);outline-offset:1px}
+
+@media print{
+  .bar,.side,.noprint{display:none!important}
+  main{overflow:visible;padding:0}
+  body{overflow:visible;background:#fff}
+  .cols{display:block}
+  .sheet{box-shadow:none;border:0;margin:0;border-radius:0;break-after:page}
+  .sheet:last-child{break-after:auto}
+  .cutline{display:none}
+}
+</style></head><body>
+
+<div class="bar">
+  <h1>Label&nbsp;Plot</h1>
+  <div class="seg" id="tabs"></div>
+  <div class="grow"></div>
+  <span class="muted" id="pagecount" style="font-size:11.5px"></span>
+  <button class="btn ghost sm" id="csvbtn">CSV</button>
+  <button class="btn sm" id="printbtn">Print</button>
+</div>
+<main><div class="wrap" id="root"></div></main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   Label Plot — thermal and sheet labels.
+
+   Pure output. Everything upstream cashes out here into something a crew
+   member physically holds, which is exactly the shape of the answer to
+   "everything leaves as a custom export".
+
+   Media geometry comes from gear/label-formats, harvested from the legacy
+   Label Builder and Truss Builder. Three techniques come with it, and all
+   three are scar tissue from real printing bugs:
+
+   1. THE FONT FITTER. Binary search 6–520px over canvas measureText, 32
+      iterations, result × 0.91. Sizing text by character count is what
+      everyone tries first and it is wrong the moment a label says "MMM"
+      instead of "III".
+
+   2. MULTI-COLOUR INK. Ink and halo are computed from the SPAN between
+      the lightest and darkest band on a label, not from one colour's
+      luminance. A single-colour luminance test picks white text, then a
+      second band arrives in yellow and the label is unreadable. The halo
+      widens as the span grows.
+
+   3. THE 0.15mm SEAM OVERLAP. Colour bands are painted with an inner-edge
+      overlap because coordinate rounding otherwise leaves hairline white
+      seams between them that show up only on the printed sheet.
+
+   Sources are the tools that write into the show tree: Rack Plot, Loom
+   Plot and Net Plot. The four ported tools still save under their own
+   tools/<tool>/ namespace and are NOT read here — pulling case labels
+   from Pull Plot is a job for the day Pull is natively integrated, and
+   asserting it works before then would be a lie in the UI.
+   ═══════════════════════════════════════════════════════════════════════ */
+const $  = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const MM_PX = 96/25.4;              // CSS pixels per millimetre at 96dpi
+
+const S = { tab:'build', loaded:false, show:null, showName:'',
+            formats:[], colors:{}, fmt:null, src:'manual',
+            racks:[], looms:[], nets:[], labels:[], dirty:false };
+
+const fmt = () => S.formats.find(f=>f.id===S.fmt) || S.formats[0];
+
+async function load(){
+  const K = window.KTM;
+  if(!K){ S.loaded=true; return; }
+  const gear = await K.list('gear');
+  const lf = gear.find(g=>g.kind==='label-format');
+  S.formats = (lf && lf.items) || [];
+  S.fmt = S.formats[0] ? S.formats[0].id : null;
+
+  const meta = await K.list('meta');
+  const tok = meta.find(m=>m.id==='tokens' || m.colors);
+  if(tok && tok.colors) S.colors = tok.colors;
+
+  S.show = K.activeShow ? K.activeShow() : null;
+  if(S.show){
+    const sh = await K.get(K.P.show(S.show));
+    S.showName = (sh && sh.name) || S.show;
+    S.racks = await K.list(K.P.sub(S.show,'racks'));
+    S.looms = await K.list(K.P.sub(S.show,'looms'));
+    S.nets  = await K.list(K.P.sub(S.show,'network'));
+  }
+  S.loaded = true;
+}
+
+/* ── ink ──────────────────────────────────────────────────────────────────
+   The multi-colour rule, carried over intact. A label's readability is a
+   property of the WHOLE label, not of any one band, so the decision is
+   made from the span between the lightest and darkest band present. */
+function lum(hex){
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex||'')); if(!m) return 1;
+  const n = parseInt(m[1],16);
+  const f = c => { c/=255; return c<=0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4); };
+  return 0.2126*f(n>>16 & 255) + 0.7152*f(n>>8 & 255) + 0.0722*f(n & 255);
+}
+function labelInk(bandHexes){
+  const hs = (bandHexes||[]).filter(Boolean);
+  if(!hs.length) return {ink:'#111', halo:0, haloColor:'#fff'};
+  const ls = hs.map(lum);
+  const lo = Math.min(...ls), hi = Math.max(...ls), span = hi - lo, mean = (lo+hi)/2;
+  const ink = mean > 0.45 ? '#111111' : '#ffffff';
+  /* The wider the span, the more the text has to survive crossing bands
+     it was not chosen for — so the halo grows with the span, and a
+     single-colour label gets none at all. */
+  const halo = span < 0.10 ? 0 : span < 0.30 ? 1 : span < 0.55 ? 2 : 3;
+  return {ink, halo, haloColor: ink === '#111111' ? '#ffffff' : '#000000'};
+}
+function haloShadow(ink, halo, haloColor){
+  if(!halo) return 'none';
+  const o=[]; const r=halo;
+  for(let a=0;a<8;a++){ const t=a*Math.PI/4;
+    o.push(`${(Math.cos(t)*r).toFixed(2)}px ${(Math.sin(t)*r).toFixed(2)}px 0 ${haloColor}`); }
+  return o.join(',');
+}
+
+/* ── the font fitter ──────────────────────────────────────────────────────
+   Binary search over real measured width, 32 iterations, × 0.91 for the
+   safety margin. Character-count heuristics fail on the first wide-glyph
+   label, which on this rig means every label that says "MAIN".  */
+let _cv;
+function measure(text, px, weight){
+  _cv = _cv || document.createElement('canvas');
+  const c = _cv.getContext('2d');
+  c.font = `${weight||800} ${px}px Archivo, Helvetica, Arial, sans-serif`;
+  return c.measureText(text).width;
+}
+function fitFont(text, boxW, boxH, weight){
+  if(!text) return 12;
+  let lo=6, hi=520;
+  for(let i=0;i<32;i++){
+    const mid=(lo+hi)/2;
+    const w=measure(text, mid, weight);
+    /* Height is bounded too — a one-character label would otherwise size
+       to the width and run off the top and bottom of the media. */
+    if(w<=boxW && mid*1.18<=boxH) lo=mid; else hi=mid;
+  }
+  return lo*0.91;
+}
+
+/* ── sources ──────────────────────────────────────────────────────────────
+   Each source turns a tool's saved records into label rows. The colour
+   bands come from what the record already carries — a loom cable knows
+   its own tape colours, so the label does not ask twice. */
+const SOURCES = [
+  {key:'manual', name:'Manual',      count:()=>0},
+  {key:'rack',   name:'Racks',       count:()=>S.racks.length},
+  {key:'loom',   name:'Loom cables', count:()=>S.looms.reduce((a,s)=>a+((s.cables||[]).length),0)},
+  {key:'case',   name:'Loom cases',  count:()=>Object.keys(loomCases()).length},
+  {key:'net',    name:'Network',     count:()=>S.nets.reduce((a,p)=>a+((p.devices||[]).length),0)},
+];
+function loomCases(){
+  const m={};
+  S.looms.forEach(s=>(s.cables||[]).forEach(c=>{
+    const l=(c.loomId||'').trim(); if(!l) return;
+    (m[l]=m[l]||[]).push({...c, sheet:s.name});
+  }));
+  return m;
+}
+const hexOf = tok => S.colors[tok] || null;
+
+function pull(src){
+  const out=[];
+  const mk=(main,sub,bands,note)=>out.push({id:uid(), main, sub, bands:bands.filter(Boolean), note:note||''});
+  if(src==='rack'){
+    S.racks.forEach(r=>mk(r.name||'RACK', S.showName, [], `${(r.items||[]).length} devices`));
+  }
+  if(src==='loom'){
+    S.looms.forEach(s=>(s.cables||[]).forEach(c=>
+      mk(c.label||'—', s.name||'', [hexOf(c.color), hexOf(c.secColor)],
+         (c.parts||[]).filter(p=>String(p||'').trim()).join('+')+"'")));
+  }
+  if(src==='case'){
+    const cases = loomCases();
+    Object.entries(cases).forEach(([name,cables])=>{
+      /* One band per distinct tape colour in the case, in first-seen
+         order — which is what makes a case label readable across a dock
+         at twenty feet. */
+      const seen=[];
+      cables.forEach(c=>[c.color,c.secColor].forEach(t=>{
+        const h=hexOf(t); if(h && !seen.includes(h)) seen.push(h); }));
+      mk(name, S.showName, seen.slice(0,6), `${cables.length} cables`);
+    });
+  }
+  if(src==='net'){
+    S.nets.forEach(p=>(p.devices||[]).forEach(d=>
+      mk(d.name||d.key, d.ip||p.name||'', [], p.name||'')));
+  }
+  return out;
+}
+
+/* ── one label ────────────────────────────────────────────────────────────
+   Rendered at true media proportions and scaled, so the preview and the
+   print are the same object at two sizes rather than two drawings that
+   have to be kept in agreement. */
+function labelHTML(l, wPx, hPx, scale){
+  const bands = (l.bands||[]).filter(Boolean);
+  const {ink, halo, haloColor} = labelInk(bands);
+  const W = wPx*scale, H = hPx*scale;
+  const pad = Math.max(3, W*0.035);
+  const boxW = W - pad*2;
+  const hasSub = !!(l.sub||'').trim();
+  const mainH = hasSub ? H*0.60 : H*0.80;
+  const mainPx = fitFont(l.main||'', boxW, mainH, 800);
+  const subPx  = hasSub ? Math.min(fitFont(l.sub, boxW, H*0.24, 600), mainPx*0.42) : 0;
+
+  /* The 0.15mm seam overlap: each band reaches 0.15mm past its own inner
+     edge so rounding cannot leave a hairline of white between two bands. */
+  const ov = 0.15*MM_PX*scale;
+  const bandDivs = bands.length
+    ? `<div class="bands">` + bands.map((b,i)=>
+        `<div class="band" style="background:${b};margin-top:${i?-ov:0}px;`
+        + `padding-bottom:${i<bands.length-1?ov:0}px"></div>`).join('') + `</div>`
+    : '';
+  return `<div class="lbl" style="width:${W}px;height:${H}px">${bandDivs}
+    <div class="txt" style="color:${ink};text-shadow:${haloShadow(ink,halo,haloColor)}">
+      <div style="font-size:${mainPx}px">${esc(l.main||'')}</div>
+      ${hasSub?`<div class="sub" style="font-size:${subPx}px;margin-top:${H*0.03}px">${esc(l.sub)}</div>`:''}
+    </div></div>`;
+}
+
+/* ── pagination ───────────────────────────────────────────────────────── */
+function pages(){
+  const f = fmt(); if(!f) return [];
+  const per = f.kind==='thermal' ? 1 : (f.cols||1)*(f.rows||1);
+  const out=[];
+  for(let i=0;i<S.labels.length;i+=per) out.push(S.labels.slice(i,i+per));
+  return out;
+}
+function sheetHTML(page, scale){
+  const f = fmt();
+  if(f.kind==='thermal'){
+    const W=f.wPx*scale, H=f.hPx*scale, p=(f.padPx||0)*scale;
+    return `<div class="sheet" style="width:${W}px;height:${H}px;padding:${p}px">`
+      + labelHTML(page[0], f.wPx-(f.padPx||0)*2, f.hPx-(f.padPx||0)*2, scale) + '</div>';
+  }
+  /* Letter, in millimetres, positioned absolutely — the same geometry the
+     legacy builder printed from, so a sheet that lined up there lines up
+     here. */
+  const PW=215.9, PH=279.4;
+  const mt=f.marginTopMm ?? 12.7, ms=f.marginSideMm ?? ((PW-(f.cols*f.wMm)-((f.cols-1)*(f.gapMm||0)))/2);
+  const cells = page.map((l,i)=>{
+    const c=i%f.cols, r=Math.floor(i/f.cols);
+    const x=ms + c*(f.wMm+(f.gapMm||0)), y=mt + r*(f.hMm+(f.gapMm||0));
+    return `<div style="position:absolute;left:${x*MM_PX*scale}px;top:${y*MM_PX*scale}px">`
+      + labelHTML(l, f.wMm*MM_PX, f.hMm*MM_PX, scale)
+      + `</div><div class="cutline" style="left:${x*MM_PX*scale}px;top:${y*MM_PX*scale}px;`
+      + `width:${f.wMm*MM_PX*scale}px;height:${f.hMm*MM_PX*scale}px"></div>`;
+  }).join('');
+  return `<div class="sheet sheetgrid" style="width:${PW*MM_PX*scale}px;height:${PH*MM_PX*scale}px">${cells}</div>`;
+}
+
+/* ── render ───────────────────────────────────────────────────────────── */
+const TABS=[['build','Labels'],['sheet','Print preview']];
+function render(){
+  $('tabs').innerHTML = TABS.map(([k,l])=>
+    `<button data-tab="${k}"${S.tab===k?' class="on"':''}>${l}</button>`).join('');
+  $('tabs').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();});
+
+  const r=$('root');
+  if(!S.loaded){ r.innerHTML='<div class="empty"><div class="big">Loading…</div></div>'; return; }
+  if(!window.KTM){
+    r.innerHTML='<div class="note crit"><b>No shared data layer.</b> Label Plot reads media geometry '
+      +'from the Hub. Open it from inside the KTM Hub rather than on its own.</div>'; return; }
+  if(!S.formats.length){
+    r.innerHTML='<div class="empty"><div class="big">No label media</div>'
+      +'<div>Seed <span class="mono">gear/label-formats</span> in the Hub first.</div></div>'; return; }
+
+  const n = pages().length;
+  $('pagecount').textContent = S.labels.length
+    ? `${S.labels.length} label${S.labels.length===1?'':'s'} · ${n} page${n===1?'':'s'}` : '';
+  r.innerHTML = S.tab==='build' ? viewBuild() : viewSheet();
+  wire();
+}
+
+function rail(){
+  const f = fmt();
+  const src = SOURCES.map(s=>{
+    const n = s.count();
+    return `<button class="srctab${S.src===s.key?' on':''}" data-src="${s.key}">`
+      + `<span>${esc(s.name)}</span>${s.key!=='manual'?`<span class="n">${n}</span>`:''}</button>`;
+  }).join('');
+  const fmts = S.formats.map(x=>{
+    const dim = x.kind==='thermal' ? `${(x.wPx/x.dpi).toFixed(0)}×${(x.hPx/x.dpi).toFixed(0)} in · 1 per page`
+      : `${(x.wMm/25.4).toFixed(x.wMm/25.4%1?1:0)}×${(x.hMm/25.4).toFixed(x.hMm/25.4%1?1:0)} in · ${x.cols*x.rows} per sheet`;
+    return `<button class="fmtbtn${S.fmt===x.id?' on':''}" data-fmt="${x.id}">`
+      + `${esc(x.name)}<small>${esc(dim)}</small></button>`;
+  }).join('');
+  return `<div class="card"><h4>Media</h4><div class="fmt">${fmts}</div></div>
+    <div class="card"><h4>Pull from</h4>${src}
+      <button class="btn ghost sm" id="pullbtn" style="margin-top:10px;width:100%"
+        ${S.src==='manual'?'disabled':''}>Load ${S.src==='manual'?'—':esc((SOURCES.find(s=>s.key===S.src)||{}).name)}</button>
+      <div class="muted" style="font-size:11px;margin-top:7px">Loading replaces the list. Edit freely
+        afterwards — labels are not saved back to the source.</div></div>`;
+}
+
+function bandPicker(l, i){
+  const toks = Object.keys(S.colors);
+  const cur = (l.bands||[])[i] || '';
+  return `<div class="bandpick" data-bp="${l.id}-${i}">`
+    + `<button data-band="${l.id}|${i}|" title="none" style="background:transparent"></button>`
+    + toks.map(t=>`<button data-band="${l.id}|${i}|${S.colors[t]}" title="${t}"
+        style="background:${S.colors[t]}"${cur===S.colors[t]?' class="on"':''}></button>`).join('')
+    + '</div>';
+}
+
+function viewBuild(){
+  const f = fmt();
+  const rows = S.labels.map((l,idx)=>{
+    const bands=(l.bands||[]);
+    const swatches = bands.length
+      ? bands.map(b=>`<span class="swatch" style="display:inline-block;width:13px;height:13px;
+          border-radius:3px;border:1px solid var(--line-strong);background:${b};vertical-align:-2px"></span>`).join(' ')
+      : '<span class="muted" style="font-size:11px">none</span>';
+    return `<tr class="lblrow">
+      <td class="muted mono" style="width:26px">${idx+1}</td>
+      <td class="tight" style="min-width:130px"><input data-l="${l.id}" data-f="main" value="${esc(l.main||'')}" placeholder="MAIN"></td>
+      <td class="tight" style="min-width:120px"><input data-l="${l.id}" data-f="sub" value="${esc(l.sub||'')}" placeholder="sub-line"></td>
+      <td style="white-space:nowrap">${swatches}
+        <button class="iconbtn" data-addband="${l.id}">+</button>
+        ${bands.length?`<button class="iconbtn" data-popband="${l.id}">−</button>`:''}</td>
+      <td>${bands.map((_,i)=>bandPicker(l,i)).join('<div style="height:3px"></div>')}</td>
+      <td><div class="rowbtns">
+        <button class="iconbtn" data-dup="${l.id}">⧉</button>
+        <button class="iconbtn danger" data-del="${l.id}">✕</button></div></td></tr>`;
+  }).join('');
+
+  const previewOne = S.labels[0]
+    ? `<div class="card"><h4>Preview — first label</h4>
+        <div style="display:flex;justify-content:center;padding:8px 0">`
+      + (f.kind==='thermal'
+          ? labelHTML(S.labels[0], f.wPx-(f.padPx||0)*2, f.hPx-(f.padPx||0)*2, 0.55)
+          : labelHTML(S.labels[0], f.wMm*MM_PX, f.hMm*MM_PX, 1.05))
+      + `</div><div class="muted" style="font-size:11px;text-align:center">
+          Text is fitted by measurement, not by character count. Ink and halo come from the span
+          between the lightest and darkest band.</div></div>`
+    : '';
+
+  return `<div class="cols"><div class="side">${rail()}</div><div>
+    <div class="card" style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+      <b>${esc(f.name)}</b>
+      <span class="muted" style="font-size:12px">${esc(f.note||'')}</span>
+      <div class="grow"></div>
+      <button class="btn ghost sm" id="clearbtn">Clear</button>
+      <button class="btn sm" id="addbtn">+ Label</button></div>
+    ${previewOne}
+    <div class="tablewrap"><table><thead><tr>
+      <th></th><th>Main</th><th>Sub</th><th>Bands</th><th>Colours</th><th></th>
+      </tr></thead><tbody>${rows||'<tr><td colspan="6" class="muted" style="padding:16px">No labels yet — pull from a tool or add one.</td></tr>'}</tbody></table></div>
+    </div></div>`;
+}
+
+function viewSheet(){
+  const f = fmt();
+  const pgs = pages();
+  if(!pgs.length) return `<div class="cols"><div class="side">${rail()}</div><div>`
+    + '<div class="empty"><div class="big">Nothing to print</div>'
+    + '<div>Add labels on the Labels tab.</div></div></div></div>';
+  /* Preview scale is the legacy 0.551 for thermal, and a fit-to-column
+     scale for sheets. Print is always 1:1 — the preview scale never
+     reaches the printed page. */
+  const scale = f.kind==='thermal' ? (f.previewScale||0.551) : 0.62;
+  return `<div class="cols"><div class="side">${rail()}</div><div>
+    <div class="note noprint">${pgs.length} page${pgs.length===1?'':'s'} of
+      <b>${esc(f.name)}</b>. Dashed lines mark the media edges and do not print.
+      Print at <b>100% scale, no fit-to-page</b> — a scaled sheet will not line up with the die cut.</div>
+    ${pgs.map(p=>sheetHTML(p, scale)).join('')}
+    </div></div>`;
+}
+
+/* ── wiring ───────────────────────────────────────────────────────────── */
+function wire(){
+  $('root').querySelectorAll('[data-fmt]').forEach(b=>b.onclick=()=>{S.fmt=b.dataset.fmt;render();});
+  $('root').querySelectorAll('[data-src]').forEach(b=>b.onclick=()=>{S.src=b.dataset.src;render();});
+  const pb=$('pullbtn'); if(pb) pb.onclick=()=>{
+    const got = pull(S.src);
+    if(!got.length) return alert('Nothing to pull — that tool has no saved records for this show yet.');
+    S.labels = got; S.tab='build'; render();
+  };
+  const ab=$('addbtn'); if(ab) ab.onclick=()=>{
+    S.labels.push({id:uid(), main:'', sub:'', bands:[]}); render();
+    const ins=$('root').querySelectorAll('[data-f="main"]');
+    const last=ins[ins.length-1]; if(last){ last.focus(); last.scrollIntoView({block:'center'}); }
+  };
+  const cb=$('clearbtn'); if(cb) cb.onclick=()=>{ if(confirm('Clear every label?')){ S.labels=[]; render(); } };
+
+  const find = id => S.labels.find(l=>l.id===id);
+  /* Text writes the model and repaints nothing. The preview is one label
+     behind until a structural change, which is the right trade — a live
+     repaint on every keystroke would rebuild the table and eat the
+     cursor, and this is a tool for typing forty labels in a row. */
+  $('root').querySelectorAll('[data-l][data-f]').forEach(el=>{
+    const l=find(el.dataset.l); if(!l) return;
+    el.oninput = e => { l[el.dataset.f]=e.target.value; e.target.classList.add('dirty'); };
+  });
+  $('root').querySelectorAll('[data-addband]').forEach(b=>b.onclick=()=>{
+    const l=find(b.dataset.addband); if(!l) return;
+    l.bands=(l.bands||[]).concat(['#ff2020']); render();
+  });
+  $('root').querySelectorAll('[data-popband]').forEach(b=>b.onclick=()=>{
+    const l=find(b.dataset.popband); if(!l) return;
+    l.bands=(l.bands||[]).slice(0,-1); render();
+  });
+  $('root').querySelectorAll('[data-band]').forEach(b=>b.onclick=()=>{
+    const [id,i,hex]=b.dataset.band.split('|');
+    const l=find(id); if(!l) return;
+    l.bands=(l.bands||[]).slice();
+    if(hex) l.bands[+i]=hex; else l.bands.splice(+i,1);
+    render();
+  });
+  $('root').querySelectorAll('[data-dup]').forEach(b=>b.onclick=()=>{
+    const l=find(b.dataset.dup); if(!l) return;
+    S.labels.splice(S.labels.indexOf(l)+1, 0, {...l, id:uid(), bands:[...(l.bands||[])]});
+    render();
+  });
+  $('root').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    S.labels=S.labels.filter(l=>l.id!==b.dataset.del); render();
+  });
+}
+
+/* ── export ───────────────────────────────────────────────────────────── */
+const csvCell=v=>{const s=String(v??''); return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;};
+function toCSV(){
+  const rows=[['#','Main','Sub','Bands','Note']];
+  S.labels.forEach((l,i)=>rows.push([i+1, l.main||'', l.sub||'', (l.bands||[]).join(' '), l.note||'']));
+  return rows.map(r=>r.map(csvCell).join(',')).join('\n');
+}
+$('csvbtn').onclick = async () => {
+  const name=String(S.showName||'labels').replace(/[^\w.-]+/g,'-')+'-labels.csv', csv=toCSV();
+  try{ const dl=await claude.use('downloads'); if(dl){ await dl.save({filename:name,data:csv}); return; } }catch(e){}
+  try{ await navigator.clipboard.writeText(csv); alert('CSV copied to the clipboard.'); }catch(e){}
+};
+$('printbtn').onclick = () => {
+  /* Print always comes off the sheet view — printing from the editor
+     would put the table on paper, which is the one thing nobody wants. */
+  if(S.tab!=='sheet'){ S.tab='sheet'; render(); }
+  setTimeout(()=>window.print(), 180);
+};
+
+(async()=>{ render(); await load(); render(); })();
+</script>
+</body></html>

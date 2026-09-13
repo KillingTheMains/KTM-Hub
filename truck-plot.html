@@ -1,0 +1,585 @@
+<!doctype html><html><head><meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Truck Plot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#5C636A;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF;
+  --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#71787F;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);overflow:hidden;
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.45;
+  display:flex;flex-direction:column}
+button,input,select,textarea{font:inherit;color:var(--ink)}
+option{color:var(--ink);background:var(--surface)}
+table,.card,.note,.stat{color:var(--ink)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+.bar{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px;
+  background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.bar h1{font-family:"Archivo",sans-serif;font-size:15px;font-weight:700;margin:0;
+  letter-spacing:.03em;white-space:nowrap}
+.grow{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--surface);border:0;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--sel);color:var(--ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:8px;
+  padding:7px 13px;font-size:12.5px;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--ink-2);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink);filter:none}
+.btn.sm{padding:4px 9px;font-size:11.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+input[type=text],input[type=number],select{background:var(--surface-2);border:1px solid var(--line);
+  border-radius:7px;padding:6px 9px}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}
+
+main{flex:1;overflow-y:auto;padding:18px 20px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+h3{font-family:"Archivo",sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-2);margin:22px 0 9px}
+.sub{color:var(--ink-3);font-size:12.5px;margin:0 0 14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+.stat .k{font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.stat .v{font-family:"Archivo",sans-serif;font-size:23px;font-weight:700;line-height:1.15;margin-top:2px}
+.stat .v small{font-size:11px;font-weight:500;color:var(--ink-3)}
+.stat.flag{border-color:var(--warn);background:var(--warn-soft)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px 16px;
+  box-shadow:var(--shadow)}
+.note{border-radius:10px;padding:11px 14px;font-size:12.5px;border:1px solid var(--line);
+  background:var(--surface);margin-bottom:14px}
+.note.warn{background:var(--warn-soft);border-color:transparent}
+.note.crit{background:var(--crit-soft);border-color:transparent}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th{text-align:left;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;padding:8px 10px;background:var(--surface-2);border-bottom:1px solid var(--line);
+  position:sticky;top:0;white-space:nowrap}
+td{padding:6px 10px;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-3)}
+.chip{display:inline-block;padding:1px 6px;border-radius:5px;font-size:10px;font-weight:600}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.qty{width:64px;text-align:right}
+.empty{text-align:center;padding:44px 20px;color:var(--ink-3)}
+.empty .big{font-family:"Archivo",sans-serif;font-size:15px;font-weight:600;color:var(--ink-2);margin-bottom:4px}
+.trucks{display:flex;flex-direction:column;gap:16px}
+.truck{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+.truckhead{display:flex;align-items:baseline;gap:12px;margin-bottom:9px;flex-wrap:wrap}
+.truckhead b{font-family:"Archivo",sans-serif;font-size:14px}
+.truckhead .m{font-size:11.5px;color:var(--ink-3)}
+svg{display:block;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:5px 12px;margin-top:8px;font-size:11px;color:var(--ink-3)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+@media print{
+  .bar{display:none} main{overflow:visible;padding:0}
+  .truck{break-inside:avoid;page-break-inside:avoid;box-shadow:none;margin-bottom:12px}
+  body{overflow:visible;background:#fff}
+}
+</style></head><body>
+
+<div class="bar">
+  <h1>Truck&nbsp;Plot</h1>
+  <div class="seg" id="tabs"></div>
+  <div class="grow"></div>
+  <label class="muted" style="font-size:11.5px">Payload cap
+    <input type="number" id="cap" class="mono" style="width:88px" step="500"> lb</label>
+  <button class="btn ghost sm" id="csvbtn">CSV</button>
+  <button class="btn ghost sm" id="printbtn">Print</button>
+  <button class="btn sm" id="savebtn">Save plan</button>
+</div>
+<main><div class="wrap" id="root"></div></main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   Truck Plot — the planning half of Truck Packer.
+
+   Geometry and the placer are transplanted from Truck Packer's
+   src/data/constants.js and src/main.jsx, where they ran a real show:
+   a 53 x 8.5 ft flat deck on a 2-inch snap grid, first-fit placement,
+   AABB collision. Those are pure functions with no React or Firestore in
+   them, so they port verbatim.
+
+   What is new here is the half Truck Packer never had: WEIGHT and CUBE.
+   That app tracks neither, while the Christie Lites weights-and-dimensions
+   sheet sat unread in its own repo root. That sheet is now gear/cases, and
+   it is what lets this tool answer the question Truck Packer cannot —
+   how many trucks, and what does each one weigh.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+const TW_FT   = 53;      // trailer interior length, nose -> doors
+const TH_FT   = 8.5;     // trailer interior width
+const SNAP_FT = 1/6;     // 2-inch grid
+const EPS     = 0.001;
+
+/* Default payload cap. Deliberately an INPUT, not an asserted constant:
+   legal payload varies by tractor, trailer, axle configuration and state,
+   and this project's standard is that an unsourced figure is never
+   presented as fact. Treat the default as a placeholder and set your
+   carrier's number. */
+const DEFAULT_CAP_LB = 44000;
+
+const $  = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const n2 = v => Math.round(v*100)/100;
+const fmt = v => (v==null || isNaN(v)) ? '—' : Number(v).toLocaleString(undefined,{maximumFractionDigits:0});
+
+const S = {
+  tab: 'list', catalog: [], list: {}, query: '', capLb: DEFAULT_CAP_LB,
+  show: null, packed: null, loaded: false, dirty: false
+};
+
+/* ── catalog ──────────────────────────────────────────────────────────
+   Two sources, deliberately kept distinguishable:
+   - gear/cases       114 types with real weight AND outside dimensions,
+                      so footprint comes straight from W x L inches.
+   - gear/pack-items   41 trailer footprints in feet with NO weight —
+                      truss lengths, carts, straps. Flagged, never guessed. */
+async function loadCatalog(){
+  const K = window.KTM;
+  if (!K){ S.loaded = true; return; }
+  const gear = await K.list('gear');
+  const out = [];
+
+  /* Selected by KIND, never by document id. Case catalogs are shop-specific —
+     what a "Quarter Standard" is and what it weighs is Christie Lites' own
+     convention — so there will be more than one, and a hardcoded id would
+     quietly ignore every shop but the first. */
+  gear.filter(g => g.kind === 'case').forEach(cat => {
+    (cat.items || []).forEach(c => {
+      const w = c.wIn ? c.wIn/12 : null, d = c.lIn ? c.lIn/12 : null;
+      if (!w || !d) return;                     // 2 of 114 carry no dims
+      out.push({ key:cat.id+':'+c.name, name:c.name, group:c.caseType || 'Case',
+                 shop:cat.shopName || null, wFt:n2(w), dFt:n2(d),
+                 lb:c.weightLb ?? null, cubeFt:c.cubeFt ?? null, src:'cases' });
+    });
+  });
+
+  gear.filter(g => g.kind === 'pack-item').forEach(cat => {
+    (cat.items || []).forEach(p => {
+      out.push({ key:cat.id+':'+p.name, name:p.name, group:p.cat || 'Pack item',
+                 shop:cat.shopName || null, wFt:p.wFt, dFt:p.hFt,
+                 lb:null, cubeFt:null, src:'pack' });
+    });
+  });
+
+  S.catalog = out.sort((a,b) => a.group.localeCompare(b.group) || a.name.localeCompare(b.name));
+  S.show = K.activeShow ? K.activeShow() : null;
+  S.loaded = true;
+}
+
+async function loadPlan(){
+  const K = window.KTM;
+  if (!K || !S.show) return;
+  try {
+    const doc = await K.get(K.P.subDoc(S.show, 'trucks', 'plan'));
+    if (doc){
+      S.list = doc.list || {};
+      if (doc.capLb) S.capLb = doc.capLb;
+    }
+  } catch(e){}
+}
+
+async function savePlan(){
+  const K = window.KTM;
+  if (!K) return alert('No store available.');
+  if (!S.show) return alert('Pick a show in the Hub first — a load plan belongs to a show.');
+  const btn = $('savebtn'); btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    await K.set(K.P.subDoc(S.show, 'trucks', 'plan'), {
+      list: S.list, capLb: S.capLb,
+      summary: summarise(), packedAt: new Date().toISOString()
+    });
+    S.dirty = false; btn.textContent = 'Saved';
+    setTimeout(()=>{ btn.textContent='Save plan'; btn.disabled=false; }, 1400);
+  } catch(e){
+    btn.textContent = 'Save plan'; btn.disabled = false;
+    alert('Could not save: ' + e.message);
+  }
+}
+
+/* ── placement, from Truck Packer ─────────────────────────────────────
+   overlapsRect and the first-fit scan are that app's own logic. It is a
+   first-fit placer, not an optimiser: it walks x from the nose and y
+   across at snap resolution and takes the first cell the item fits. Good
+   enough to plan against, and it is what actually packed the show. */
+function overlapsRect(ax,ay,aw,ad, bx,by,bw,bd){
+  return ax < bx+bw-EPS && ax+aw > bx+EPS && ay < by+bd-EPS && ay+ad > by+EPS;
+}
+
+function findPos(w,d, placed){
+  for (let x=0; x+w <= TW_FT+EPS; x += SNAP_FT){
+    for (let y=0; y+d <= TH_FT+EPS; y += SNAP_FT){
+      let clear = true;
+      for (const p of placed){
+        if (overlapsRect(x,y,w,d, p.x,p.y,p.w,p.d)){ clear = false; break; }
+      }
+      if (clear) return {x:n2(x), y:n2(y)};
+    }
+  }
+  return null;
+}
+
+/* Orient so the long side runs nose-to-doors, unless that is wider than
+   the trailer. Truck Packer's apOrientItem, same idea. */
+function orient(it){
+  let w = it.wFt, d = it.dFt;
+  if (d > w && d <= TH_FT) { /* already fine */ }
+  if (w > TH_FT && d <= TH_FT) return {w, d};
+  if (d > TH_FT && w <= TH_FT) return {w:d, d:w};
+  return (w >= d) ? {w, d} : {w:d, d:w};
+}
+
+function expand(){
+  const rows = [];
+  Object.entries(S.list).forEach(([key, qty]) => {
+    const it = S.catalog.find(c => c.key === key);
+    if (!it) return;
+    for (let i=0;i<qty;i++) rows.push(it);
+  });
+  // Biggest footprint first: first-fit does much better on a descending sort.
+  return rows.sort((a,b) => (b.wFt*b.dFt) - (a.wFt*a.dFt));
+}
+
+function pack(){
+  const items = expand();
+  const trucks = [];
+  for (const it of items){
+    const {w,d} = orient(it);
+    let placed = false;
+    for (const t of trucks){
+      if (it.lb != null && t.lb + it.lb > S.capLb) continue;   // weight-capped
+      const pos = findPos(w, d, t.items);
+      if (pos){
+        t.items.push({...pos, w, d, ref:it});
+        t.lb += (it.lb || 0);
+        t.cube += (it.cubeFt || 0);
+        t.unknownLb += (it.lb == null ? 1 : 0);
+        placed = true; break;
+      }
+    }
+    if (!placed){
+      const t = {items:[], lb:0, cube:0, unknownLb:0};
+      const pos = findPos(w, d, t.items);
+      if (!pos){ trucks.push({oversize:it, items:[], lb:0, cube:0, unknownLb:0}); continue; }
+      t.items.push({...pos, w, d, ref:it});
+      t.lb = it.lb || 0; t.cube = it.cubeFt || 0; t.unknownLb = it.lb == null ? 1 : 0;
+      trucks.push(t);
+    }
+  }
+  return trucks;
+}
+
+function summarise(){
+  const items = expand();
+  const known = items.filter(i => i.lb != null);
+  const lb    = known.reduce((a,i)=>a+i.lb, 0);
+  const cube  = items.reduce((a,i)=>a+(i.cubeFt||0), 0);
+  const area  = items.reduce((a,i)=>a+(i.wFt*i.dFt), 0);
+  return { pieces: items.length, lb, cube: n2(cube), area: n2(area),
+           unknownLb: items.length - known.length,
+           deckFt: n2(area / TH_FT) };
+}
+
+/* ── colour by group, stable ──────────────────────────────────────────── */
+const PALETTE = ['--s1','--s2','--s3','--s4','--s5','--s6','--s7','--s8','--s0'];
+const groupColor = g => {
+  let h = 0; for (let i=0;i<g.length;i++) h = (h*31 + g.charCodeAt(i)) >>> 0;
+  return 'var(' + PALETTE[h % PALETTE.length] + ')';
+};
+
+/* ═══════════════════════════════ views ═══════════════════════════════ */
+function render(){
+  $('tabs').innerHTML = [['list','Load list'],['pack','Pack'],['summary','Summary']]
+    .map(([k,l]) => '<button data-tab="'+k+'"'+(S.tab===k?' class="on"':'')+'>'+l+'</button>').join('');
+  $('tabs').querySelectorAll('[data-tab]').forEach(b =>
+    b.onclick = () => { S.tab = b.dataset.tab; render(); });
+  $('cap').value = S.capLb;
+
+  const r = $('root');
+  if (!S.loaded){ r.innerHTML = '<div class="empty"><div class="big">Loading catalog…</div></div>'; return; }
+  if (!window.KTM){
+    r.innerHTML = '<div class="note crit"><b>No shared data layer.</b> Truck Plot reads the case '
+      + 'and pack catalogs from the Hub. Open it from inside the KTM Hub rather than on its own.</div>';
+    return;
+  }
+  if (!S.catalog.length){
+    r.innerHTML = '<div class="empty"><div class="big">Gear library is empty</div>'
+      + '<div>Seed the case and pack catalogs in the Hub’s Gear library first.</div></div>';
+    return;
+  }
+  if (S.tab === 'list')    return void (r.innerHTML = viewList(), wireList());
+  if (S.tab === 'pack')    return void (r.innerHTML = viewPack());
+  if (S.tab === 'summary') return void (r.innerHTML = viewSummary());
+}
+
+function viewList(){
+  const s = summarise();
+  const rows = S.catalog.filter(c => !S.query ||
+    (c.name + ' ' + c.group + ' ' + (c.shop||'')).toLowerCase().includes(S.query.toLowerCase()));
+
+  let h = '';
+  if (!S.show) h += '<div class="note warn"><b>No show selected.</b> You can plan freely, but '
+    + 'saving a load plan needs a show — pick one at the top of the Hub.</div>';
+
+  h += '<div class="stats">'
+     + st('Pieces', fmt(s.pieces))
+     + st('Weight', fmt(s.lb) + '<small> lb</small>', s.unknownLb ? 'flag' : '')
+     + st('Cube', fmt(s.cube) + '<small> ft³</small>')
+     + st('Deck used', s.deckFt + '<small> ft of 53</small>')
+     + '</div>';
+
+  if (s.unknownLb)
+    h += '<div class="note warn" style="margin-top:12px"><b>' + s.unknownLb + ' piece'
+       + (s.unknownLb===1?'':'s') + ' with no weight on record.</b> Everything from the pack-footprint '
+       + 'catalog (truss lengths, carts, straps) has a trailer footprint but no weight — Truck Packer '
+       + 'never tracked weight, so there is nothing to import. Those pieces are packed by size and '
+       + 'excluded from every weight total rather than being guessed at.</div>';
+
+  h += '<div class="bar" style="background:none;border:0;padding:12px 0;gap:9px">'
+     + '<input type="text" id="q" placeholder="Search the catalog…" value="'+esc(S.query)+'" style="width:260px">'
+     + '<div class="grow"></div>'
+     + '<button class="btn ghost sm" id="clearbtn">Clear list</button></div>';
+
+  h += '<div class="tablewrap"><table><thead><tr>'
+     + '<th>Item</th><th>Group</th><th class="num">W ft</th><th class="num">D ft</th>'
+     + '<th class="num">lb</th><th class="num">ft³</th><th class="num" style="width:96px">Qty</th>'
+     + '</tr></thead><tbody>'
+     + rows.map(c => {
+        const q = S.list[c.key] || 0;
+        return '<tr'+(q?' style="background:var(--sel)"':'')+'>'
+        + '<td>'+esc(c.name)+(c.lb==null?' <span class="chip warn">no weight</span>':'')+'</td>'
+        + '<td class="muted">'+esc(c.group)
+        + (c.shop ? ' <span class="muted" style="font-size:10px">· '+esc(c.shop)+'</span>' : '')+'</td>'
+        + '<td class="num">'+c.wFt+'</td><td class="num">'+c.dFt+'</td>'
+        + '<td class="num">'+(c.lb ?? '—')+'</td><td class="num">'+(c.cubeFt ?? '—')+'</td>'
+        + '<td class="num"><input type="number" class="qty mono" min="0" step="1" value="'+q+'" '
+        + 'data-key="'+esc(c.key)+'"></td></tr>';
+       }).join('')
+     + '</tbody></table></div>';
+  return h;
+}
+
+function wireList(){
+  const q = $('q');
+  if (q) q.oninput = () => { S.query = q.value; const r=$('root');
+    r.innerHTML = viewList(); wireList();
+    const nq=$('q'); if(nq){ nq.focus(); nq.setSelectionRange(nq.value.length,nq.value.length); } };
+  document.querySelectorAll('[data-key]').forEach(inp => inp.onchange = () => {
+    const v = Math.max(0, parseInt(inp.value||'0', 10) || 0);
+    if (v) S.list[inp.dataset.key] = v; else delete S.list[inp.dataset.key];
+    S.dirty = true; S.packed = null;
+    const r=$('root'); r.innerHTML = viewList(); wireList();
+  });
+  const c = $('clearbtn');
+  if (c) c.onclick = () => { if (!confirm('Clear the whole load list?')) return;
+    S.list = {}; S.packed = null; S.dirty = true; render(); };
+}
+
+function viewPack(){
+  const s = summarise();
+  if (!s.pieces) return '<div class="empty"><div class="big">Nothing on the list</div>'
+    + '<div>Add gear on the Load list tab.</div></div>';
+
+  const trucks = S.packed = pack();
+  const over = trucks.filter(t => t.oversize);
+
+  let h = '<div class="stats">'
+    + st('Trucks', trucks.length)
+    + st('Pieces', fmt(s.pieces))
+    + st('Total weight', fmt(s.lb) + '<small> lb</small>')
+    + st('Payload cap', fmt(S.capLb) + '<small> lb each</small>')
+    + '</div>';
+
+  h += '<div class="note"><b>First-fit, biggest piece first.</b> This is Truck Packer’s own placer '
+     + '— it walks the deck from the nose at 2-inch resolution and takes the first cell a piece fits. '
+     + 'It is not an optimiser, so treat the truck count as a solid estimate to plan and quote '
+     + 'against, not as the final pack. A piece with no weight on record is placed by size and left '
+     + 'out of the weight running total.</div>';
+
+  if (over.length)
+    h += '<div class="note crit"><b>' + over.length + ' piece' + (over.length===1?'':'s')
+       + ' will not fit a 53 × 8.5 ft deck in any orientation:</b> '
+       + over.map(t => esc(t.oversize.name)).join(', ')
+       + '. Check the dimensions on those records.</div>';
+
+  h += '<div class="trucks">' + trucks.filter(t => !t.oversize).map((t, i) => {
+    const groups = [...new Set(t.items.map(p => p.ref.group))];
+    const usedFt = Math.max(0, ...t.items.map(p => p.x + p.w));
+    return '<div class="truck">'
+      + '<div class="truckhead"><b>Truck ' + (i+1) + '</b>'
+      + '<span class="m">' + t.items.length + ' pieces</span>'
+      + '<span class="m mono">' + fmt(t.lb) + ' lb'
+        + (t.unknownLb ? ' + ' + t.unknownLb + ' unweighed' : '') + '</span>'
+      + '<span class="m mono">' + fmt(t.cube) + ' ft³</span>'
+      + '<span class="m mono">' + n2(usedFt) + ' ft of deck used</span>'
+      + (t.lb > S.capLb*0.95 ? '<span class="chip warn">near payload cap</span>' : '')
+      + '</div>'
+      + trailerSVG(t)
+      + '<div class="legend">' + groups.map(g =>
+          '<span><i style="background:'+groupColor(g)+'"></i>'+esc(g)+'</span>').join('')
+      + '</div></div>';
+  }).join('') + '</div>';
+  return h;
+}
+
+/* Deck plan, to scale. Nose at left, doors at right. */
+function trailerSVG(t){
+  const PX = 17;                       // px per foot
+  const W = TW_FT*PX, H = TH_FT*PX, PAD = 16;
+  let s = '<svg viewBox="0 0 '+(W+PAD*2)+' '+(H+PAD*2+14)+'" role="img" '
+        + 'aria-label="Trailer deck plan, '+t.items.length+' pieces">';
+  s += '<rect x="'+PAD+'" y="'+PAD+'" width="'+W+'" height="'+H+'" fill="var(--sunken)" '
+     + 'stroke="var(--line-strong)" stroke-width="1.5" rx="3"/>';
+  for (let f=5; f<TW_FT; f+=5){
+    s += '<line x1="'+(PAD+f*PX)+'" y1="'+PAD+'" x2="'+(PAD+f*PX)+'" y2="'+(PAD+H)
+       + '" stroke="var(--line)" stroke-width="0.5"/>'
+       + '<text x="'+(PAD+f*PX)+'" y="'+(PAD+H+11)+'" font-size="8" fill="var(--ink-3)" '
+       + 'text-anchor="middle" font-family="IBM Plex Mono,monospace">'+f+'</text>';
+  }
+  t.items.forEach(p => {
+    const x = PAD+p.x*PX, y = PAD+p.y*PX, w = p.w*PX, d = p.d*PX;
+    const label = p.ref.name.replace(/^Case /,'');
+    s += '<g><rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+d+'" fill="'+groupColor(p.ref.group)
+       + '" fill-opacity="0.82" stroke="var(--surface)" stroke-width="1" rx="1.5"/>';
+    if (w > 26 && d > 13)
+      s += '<text x="'+(x+w/2)+'" y="'+(y+d/2+3)+'" font-size="7.5" fill="#fff" '
+         + 'text-anchor="middle" font-family="IBM Plex Sans,sans-serif">'
+         + esc(label.length>16 ? label.slice(0,15)+'…' : label) + '</text>';
+    s += '<title>'+esc(p.ref.name)+' — '+p.w+' × '+p.d+' ft'
+       + (p.ref.lb!=null ? ', '+p.ref.lb+' lb' : ', weight unknown')+'</title></g>';
+  });
+  s += '<text x="'+PAD+'" y="'+(PAD-5)+'" font-size="8" fill="var(--ink-3)" '
+     + 'font-family="IBM Plex Mono,monospace">NOSE</text>';
+  s += '<text x="'+(PAD+W)+'" y="'+(PAD-5)+'" font-size="8" fill="var(--ink-3)" '
+     + 'text-anchor="end" font-family="IBM Plex Mono,monospace">DOORS</text>';
+  return s + '</svg>';
+}
+
+function viewSummary(){
+  const s = summarise();
+  const trucks = S.packed || pack();
+  const real = trucks.filter(t => !t.oversize);
+  if (!s.pieces) return '<div class="empty"><div class="big">Nothing on the list</div></div>';
+
+  const byGroup = {};
+  expand().forEach(i => {
+    const g = byGroup[i.group] = byGroup[i.group] || {n:0, lb:0, cube:0, unknown:0};
+    g.n++; g.lb += (i.lb||0); g.cube += (i.cubeFt||0); if (i.lb==null) g.unknown++;
+  });
+
+  let h = '<div class="stats">'
+    + st('Trucks', real.length)
+    + st('Pieces', fmt(s.pieces))
+    + st('Weight', fmt(s.lb)+'<small> lb</small>')
+    + st('Cube', fmt(s.cube)+'<small> ft³</small>')
+    + st('Deck', s.deckFt+'<small> ft</small>')
+    + '</div>';
+
+  h += '<h3>By group</h3><div class="tablewrap"><table><thead><tr>'
+     + '<th>Group</th><th class="num">Pieces</th><th class="num">Weight lb</th>'
+     + '<th class="num">Cube ft³</th><th class="num">Unweighed</th></tr></thead><tbody>'
+     + Object.entries(byGroup).sort((a,b)=>b[1].lb-a[1].lb).map(([g,v]) =>
+        '<tr><td><i style="display:inline-block;width:9px;height:9px;border-radius:2px;'
+        + 'background:'+groupColor(g)+';margin-right:6px"></i>'+esc(g)+'</td>'
+        + '<td class="num">'+v.n+'</td><td class="num">'+fmt(v.lb)+'</td>'
+        + '<td class="num">'+fmt(n2(v.cube))+'</td>'
+        + '<td class="num">'+(v.unknown||'—')+'</td></tr>').join('')
+     + '</tbody></table></div>';
+
+  h += '<h3>Per truck</h3><div class="tablewrap"><table><thead><tr>'
+     + '<th>Truck</th><th class="num">Pieces</th><th class="num">Weight lb</th>'
+     + '<th class="num">Cube ft³</th><th class="num">Deck ft</th><th class="num">% of cap</th>'
+     + '</tr></thead><tbody>'
+     + real.map((t,i) => {
+        const used = Math.max(0, ...t.items.map(p=>p.x+p.w));
+        const pct  = Math.round(t.lb / S.capLb * 100);
+        return '<tr><td>Truck '+(i+1)+'</td><td class="num">'+t.items.length+'</td>'
+        + '<td class="num">'+fmt(t.lb)+(t.unknownLb?' <span class="chip warn">+'+t.unknownLb+'</span>':'')+'</td>'
+        + '<td class="num">'+fmt(n2(t.cube))+'</td><td class="num">'+n2(used)+'</td>'
+        + '<td class="num">'+pct+'%</td></tr>';
+       }).join('')
+     + '</tbody></table></div>';
+  return h;
+}
+
+const st = (k,v,cls) => '<div class="stat'+(cls?' '+cls:'')+'"><div class="k">'+esc(k)
+  + '</div><div class="v">'+v+'</div></div>';
+
+/* ── exports ──────────────────────────────────────────────────────────── */
+function toCSV(){
+  const trucks = S.packed || pack();
+  const rows = [['Truck','Item','Group','W_ft','D_ft','X_ft','Y_ft','Weight_lb','Cube_ft3']];
+  trucks.filter(t=>!t.oversize).forEach((t,i) => t.items.forEach(p =>
+    rows.push([i+1, p.ref.name, p.ref.group, p.w, p.d, p.x, p.y,
+               p.ref.lb ?? '', p.ref.cubeFt ?? ''])));
+  return rows.map(r => r.map(v => {
+    const s = String(v ?? '');
+    return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+  }).join(',')).join('\n');
+}
+
+async function downloadCSV(){
+  const csv = toCSV();
+  const name = ((S.show || 'load-plan') + '-truck-plot.csv').replace(/[^\w.-]+/g,'-');
+  try {
+    const dl = await claude.use('downloads');
+    if (dl){ await dl.save({filename:name, data:csv}); return; }
+  } catch(e){}
+  try { await navigator.clipboard.writeText(csv); alert('CSV copied to the clipboard.'); }
+  catch(e){ alert('Could not export: ' + e.message); }
+}
+
+/* ── boot ─────────────────────────────────────────────────────────────── */
+$('cap').onchange = () => { S.capLb = Math.max(1000, parseInt($('cap').value,10) || DEFAULT_CAP_LB);
+  S.packed = null; render(); };
+$('csvbtn').onclick   = downloadCSV;
+$('printbtn').onclick = () => { if (S.tab!=='pack'){ S.tab='pack'; render(); } setTimeout(()=>window.print(), 120); };
+$('savebtn').onclick  = savePlan;
+
+(async () => {
+  render();
+  await loadCatalog();
+  await loadPlan();
+  render();
+})();
+</script>
+</body></html>

@@ -1,0 +1,1098 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Truss Plot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#666D74;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF; --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#8A9097;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13;
+  --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF; --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF; --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}
+
+*{box-sizing:border-box}
+::selection{background:var(--sel); color:var(--ink)}
+body{margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:14px; line-height:1.5}
+.wrap{max-width:1280px; margin:0 auto; padding:20px 20px 64px; display:flex; flex-direction:column; gap:18px}
+
+h1,h2,h3{margin:0; font-family:"Archivo",sans-serif; text-wrap:balance}
+h1{font-size:26px; font-weight:800; font-stretch:112%; letter-spacing:-.015em; line-height:1}
+h2{font-size:13px; font-weight:700; font-stretch:82%; text-transform:uppercase; letter-spacing:.13em; color:var(--ink-2)}
+.eyebrow{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.16em; color:var(--ink-3)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums}
+
+header.top{display:flex; flex-wrap:wrap; align-items:flex-end; gap:16px 22px; padding-bottom:14px; border-bottom:2px solid var(--ink)}
+.brand{display:flex; flex-direction:column; gap:3px}
+.brand .sub{font-size:12.5px; color:var(--ink-2); max-width:50ch}
+.top .spacer{flex:1 1 auto}
+.setbar{display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end}
+.field{display:flex; flex-direction:column; gap:4px}
+.field > label{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.14em; color:var(--ink-3)}
+select,input[type=number],input[type=text]{
+  font-family:"IBM Plex Mono",monospace; font-size:13px; font-variant-numeric:tabular-nums;
+  background:var(--surface); color:var(--ink); border:1px solid var(--line-strong);
+  border-radius:3px; padding:5px 7px; min-height:30px; caret-color:var(--accent)}
+select{font-family:"IBM Plex Sans",sans-serif}
+input[type=number]{width:82px}
+:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden}
+.tile{background:var(--surface); padding:11px 13px 12px; display:flex; flex-direction:column; gap:2px}
+.tile .k{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.13em; color:var(--ink-3)}
+.tile .v{font-family:"IBM Plex Mono",monospace; font-size:22px; font-weight:600; letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums; line-height:1.15}
+.tile .v small{font-size:12px; font-weight:400; color:var(--ink-3); letter-spacing:0}
+.tile .n{font-size:11.5px; color:var(--ink-3)}
+.tile.flag-ok .v{color:var(--accent)} .tile.flag-warn .v{color:var(--warn)} .tile.flag-crit .v{color:var(--crit)}
+
+.panel{min-width:0; background:var(--surface); border:1px solid var(--line); border-radius:4px; box-shadow:var(--shadow)}
+.panel > .head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 13px; border-bottom:1px solid var(--line)}
+.panel > .head .spacer{flex:1 1 auto}
+.panel > .body{padding:13px}
+.cols{display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:18px; align-items:stretch}
+.duo{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:18px; align-items:start}
+@media (max-width:940px){ .cols{grid-template-columns:minmax(0,1fr)} }
+
+button{font-family:"Archivo",sans-serif; font-stretch:88%; font-weight:600; font-size:12px; letter-spacing:.03em;
+  cursor:pointer; border-radius:3px; border:1px solid var(--line-strong);
+  background:var(--surface-2); color:var(--ink); padding:6px 11px; min-height:30px}
+button:hover{border-color:var(--ink-3)}
+button.primary{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+button.primary:hover{filter:brightness(1.07)}
+button.ghost{background:transparent; border-color:transparent; color:var(--ink-3); padding:4px 6px; min-height:24px}
+button.ghost:hover{color:var(--crit); background:var(--crit-soft)}
+.seg{display:inline-flex; border:1px solid var(--line-strong); border-radius:3px; overflow:hidden}
+.seg button{border:0; border-radius:0; background:var(--surface); padding:5px 10px; min-height:28px; color:var(--ink-3)}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--surface)}
+
+.scroll{overflow-x:auto; scrollbar-color:var(--line-strong) transparent; scrollbar-width:thin}
+table{border-collapse:collapse; width:100%; font-size:13px}
+th{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.12em; color:var(--ink-3); text-align:left; padding:0 8px 6px;
+  border-bottom:1px solid var(--line-strong); white-space:nowrap}
+td{padding:5px 8px; border-bottom:1px solid var(--line); vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.rig-name{font-weight:500; white-space:nowrap}
+.rig-brand{color:var(--ink-3); font-size:11.5px}
+.qty{width:56px; text-align:right}
+td select{font-size:12px; padding:3px 5px; min-height:26px; max-width:190px}
+.empty{padding:26px 10px; text-align:center; color:var(--ink-3); font-size:13px}
+.sw{display:inline-block; width:10px; height:10px; border-radius:2px; vertical-align:-1px; margin-right:6px;
+  border:1px solid rgba(128,128,128,.35)}
+
+
+.legend{display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:12px; font-size:11.5px; color:var(--ink-2)}
+.legend .it{display:flex; align-items:center; gap:6px}
+
+.tag{font-family:"Archivo",sans-serif; font-stretch:82%; font-weight:700; font-size:11px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink-2); background:var(--surface-2); border:1px solid var(--line);
+  border-radius:2px; padding:2px 7px; white-space:nowrap}
+.tag.warn{color:var(--warn); border-color:var(--warn); background:var(--warn-soft)}
+.tag.crit{color:var(--crit); border-color:var(--crit); background:var(--crit-soft)}
+.tag.ok{color:var(--accent); border-color:var(--accent); background:var(--accent-soft)}
+
+.note{display:flex; gap:8px; align-items:flex-start; font-size:12.5px; line-height:1.45; border-radius:3px;
+  padding:8px 10px; border:1px solid transparent}
+.note.warn{background:var(--warn-soft); border-color:var(--warn)}
+.note.crit{background:var(--crit-soft); border-color:var(--crit)}
+.note.ok{background:var(--accent-soft); border-color:var(--accent)}
+.note .m{font-family:"Archivo",sans-serif; font-stretch:85%; font-weight:700; text-transform:uppercase;
+  font-size:11px; letter-spacing:.12em; padding-top:2px; white-space:nowrap}
+.notes{display:flex; flex-direction:column; gap:7px}
+.notes:empty{display:none}
+
+.rows{display:flex; flex-direction:column}
+.rows .r{display:flex; align-items:baseline; gap:10px; padding:6px 0; border-bottom:1px dotted var(--line)}
+.rows .r:last-child{border-bottom:0}
+.rows .r .k{color:var(--ink-2); font-size:12.5px}
+.rows .r .v{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-weight:600; font-variant-numeric:tabular-nums; text-align:right}
+
+
+/* ---------- data riser ---------- */
+.riser{margin:0; display:flex; flex-direction:column; gap:9px}
+.riser svg{width:100%; max-width:960px; height:auto; color:var(--ink); display:block}
+.riser figcaption{font-size:11.5px; color:var(--ink-3); line-height:1.5; max-width:92ch}
+.riser .bx{fill:var(--surface-2); stroke:var(--line-strong)}
+.riser .ttl{font-family:"Archivo",sans-serif; font-size:9.5px; font-weight:700; letter-spacing:.14em; fill:var(--ink-3)}
+.riser .nm{font-family:"IBM Plex Sans",sans-serif; font-size:12.5px; font-weight:500; fill:var(--ink)}
+.riser .dt{font-family:"IBM Plex Mono",monospace; font-size:11px; fill:var(--ink-2)}
+.riser .sm{font-family:"IBM Plex Mono",monospace; font-size:10px; fill:var(--ink-3)}
+.riser .big{font-family:"IBM Plex Mono",monospace; font-size:19px; font-weight:600; fill:var(--ink)}
+.riser .ln{stroke:var(--ink-2); fill:none}
+
+.saved{display:flex; flex-wrap:wrap; gap:6px}
+.chip{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line-strong);
+  background:var(--surface-2); border-radius:14px; padding:3px 5px 3px 11px; font-size:12.5px}
+.chip button{border:0; background:transparent; padding:1px 4px; min-height:0; color:var(--ink-3); font-size:13px; line-height:1}
+.chip button:hover{color:var(--crit)}
+.chip .load-b{cursor:pointer}
+
+footer.fine{font-size:11.5px; color:var(--ink-3); line-height:1.6; max-width:100ch;
+  border-top:1px solid var(--line); padding-top:12px; display:flex; flex-direction:column; gap:7px}
+footer.fine b{color:var(--ink-2); font-weight:600}
+footer.fine a{color:var(--ink-2)}
+.hide{display:none !important}
+
+
+@media print{
+  body{background:#fff; color:#000; font-size:10pt}
+  .wrap{max-width:none; padding:0; gap:12px}
+  .noprint{display:none !important}
+  .panel{box-shadow:none; border:1px solid #999; break-inside:avoid}
+  .tiles{border-color:#999; background:#999}
+  .tile{background:#fff}
+  .elev{break-inside:avoid}
+  header.top{border-bottom:2px solid #000}
+}
+</style>\n<style>
+/* ---------- elevations ---------- */
+.elevs{display:flex; flex-direction:column; gap:6px}
+.elev{display:flex; flex-direction:column; gap:6px; padding:10px 0 12px; border-top:1px dotted var(--line)}
+.elev:first-child{border-top:0; padding-top:2px}
+.elev .eh{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.elev .eh .pos{font-family:"Archivo",sans-serif; font-stretch:95%; font-weight:700; font-size:13px}
+.elev .eh hr{flex:1; border:0; border-top:1px solid var(--line); margin:0; min-width:20px}
+.elev svg{width:100%; height:auto; display:block; color:var(--ink)}
+.elev .grid{stroke:var(--ink-3); stroke-width:3}
+.elev .chain{stroke:var(--ink-2); stroke-width:1.5; stroke-dasharray:3 2}
+.elev .hoist{fill:var(--surface-2); stroke:var(--ink-2); stroke-width:1}
+.elev .truss{fill:var(--surface-2); stroke:var(--ink); stroke-width:1.25}
+.elev .lace{stroke:var(--line-strong); stroke-width:.75; fill:none}
+.elev .fx{stroke:var(--surface); stroke-width:.5}
+.elev .lbl{font-family:"IBM Plex Mono",monospace; font-size:10px; fill:var(--ink-2)}
+.elev .lbl.b{font-weight:600; fill:var(--ink)}
+.elev .sm{font-family:"IBM Plex Mono",monospace; font-size:9px; fill:var(--ink-3)}
+.elev .ttl{font-family:"Archivo",sans-serif; font-size:9px; font-weight:700; letter-spacing:.13em; fill:var(--ink-3)}
+.elev .util{fill:var(--accent); opacity:.55}
+.elev .util.warn{fill:var(--warn)} .elev .util.crit{fill:var(--crit)}
+.elev .cap{stroke:var(--ink-3); stroke-width:1; stroke-dasharray:2 2}
+.elev .cg{fill:var(--ink)}
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">Truss loading &amp; rigging point schedule</div>
+      <h1>Truss Plot</h1>
+      <div class="sub">Hang the rig by truss. It weighs every stick, splits the load between the hoists,
+        checks the span against the manufacturer's table, and writes the point loads the venue asks for.</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="setbar noprint">
+      <div class="field"><label for="hoist">Hoist</label><select id="hoist"></select></div>
+      <div class="field"><label for="chain">Chain lift (ft)</label><input type="number" id="chain" min="10" max="200" value="60"></div>
+      <div class="field"><label for="rep">Repetitive use</label>
+        <select id="rep"><option value="1">×0.85 · E1.2 touring</option><option value="0">Table as published</option></select></div>
+      <div class="field"><label for="dyn">Hoist dynamic</label>
+        <select id="dyn"><option value="1">×1.0 static</option><option value="1.2">×1.2</option><option value="1.5">×1.5</option></select></div>
+      <div class="field"><label for="cab">Cable (lb/ft)</label><input type="number" id="cab" min="0" max="20" step="0.5" value="2.5"></div>
+    </div>
+  </header>
+
+  <section class="tiles" id="tiles"></section>
+  <div class="notes" id="notes"></div>
+
+  <!-- ===================== RIG ===================== -->
+  <section class="panel">
+    <div class="head">
+      <h2>Rig</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="rigcount"></span>
+    </div>
+    <div class="body" style="display:flex;flex-direction:column;gap:12px">
+      <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end">
+        <div class="field" style="flex:1 1 200px;min-width:170px"><label for="pick">Add fixture</label>
+          <select id="pick"></select></div>
+        <div class="field"><label for="pickqty">Qty</label>
+          <input type="number" id="pickqty" class="qty" min="1" max="999" value="12"></div>
+        <div class="field"><label for="pickpos">Truss</label><select id="pickpos"></select></div>
+        <button class="primary" id="addbtn">Add</button>
+      </div>
+
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th>Fixture</th><th class="num">Qty</th><th>Truss</th><th class="num">From ft</th><th class="num">To ft</th>
+            <th class="num">lb ea</th><th class="num">+ hardware</th><th class="num">Total lb</th><th class="noprint"></th>
+          </tr></thead>
+          <tbody id="rigbody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11.5px;color:var(--ink-3);margin:0;line-height:1.5">Fixtures spread evenly between From and To, measured from the stage-left
+        end of the truss. Hardware is two half-couplers and a safety for anything on omegas, one clamp for conventionals.</p>
+
+      <details class="noprint">
+        <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-2)">Add something not in the library</summary>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-top:9px">
+          <div class="field" style="flex:1 1 160px"><label for="cname">Name</label>
+            <input type="text" id="cname" placeholder="Scenic header"></div>
+          <div class="field"><label for="clb">lb each</label><input type="number" id="clb" min="1" max="5000" value="40"></div>
+          <div class="field"><label for="cqty">Qty</label><input type="number" id="cqty" class="qty" min="1" max="999" value="4"></div>
+          <button id="addcustom">Add</button>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================== TRUSSES ===================== -->
+  <section class="panel">
+    <div class="head">
+      <h2>Trusses</h2><span class="spacer"></span>
+      <button id="addpos" class="noprint">Add truss</button>
+    </div>
+    <div class="body">
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th>Truss</th><th>Type</th><th class="num">Length ft</th><th class="num">Hoists</th><th class="num">Inset ft</th>
+            <th class="num">Hung lb</th><th class="num">Heaviest hook</th><th class="num">Worst span</th><th class="noprint"></th>
+          </tr></thead>
+          <tbody id="posbody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.5">Hoists sit evenly between the insets; one hoist hangs at centre.
+        Hung weight includes the truss itself and the cable allowance. Heaviest hook is the load on that hoist's hook as a share of its WLL.</p>
+    </div>
+  </section>
+
+  <!-- ===================== ELEVATIONS ===================== -->
+  <section class="panel">
+    <div class="head"><h2>Elevations</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="elevsum"></span></div>
+    <div class="body"><div class="elevs" id="elevs"></div><div class="legend" id="legend"></div></div>
+  </section>
+
+  <div class="cols">
+    <!-- ===================== POINTS ===================== -->
+    <section class="panel">
+      <div class="head">
+        <h2>Rigging points</h2><span class="spacer"></span>
+        <span class="eyebrow mono" id="ptsum"></span>
+        <button id="csv" class="noprint">Export CSV</button>
+        <button id="printbtn" class="noprint">Print</button>
+      </div>
+      <div class="body"><div class="scroll"><table>
+        <thead><tr><th>Pt</th><th>Truss</th><th class="num">At ft</th><th class="num">On hook</th><th class="num">% WLL</th><th class="num">To the grid</th><th>Flag</th></tr></thead>
+        <tbody id="ptbody"></tbody></table></div></div>
+    </section>
+
+    <!-- ===================== SPANS ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Truss check</h2><span class="spacer"></span><span class="eyebrow mono" id="spansum"></span></div>
+      <div class="body"><div class="scroll"><table>
+        <thead><tr><th>Truss</th><th>Segment</th><th class="num">ft</th><th class="num">Moment</th><th class="num">Allowed</th><th class="num">Bending</th><th class="num">Shear</th><th class="num">Sag</th></tr></thead>
+        <tbody id="spanbody"></tbody></table></div>
+        <p style="font-size:11.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.5">Moment in lb·ft. Allowed is the lower of the table's UDL and CPL
+          rows converted to a moment at that span, after the repetitive-use factor. Sag is the table's deflection scaled to the actual moment.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="duo">
+    <!-- ===================== WEIGHTS ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Fixture weights</h2><span class="spacer"></span><span class="eyebrow mono" id="wtrule"></span></div>
+      <div class="body"><div class="scroll"><table>
+        <thead><tr><th>Fixture</th><th class="num">lb</th><th class="num">Hung</th><th class="num">Per 10 ft @ 3 ft</th></tr></thead>
+        <tbody id="wtbody"></tbody></table></div></div>
+    </section>
+
+    <!-- ===================== SAVE ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Saved rigs</h2></div>
+      <div class="body" style="display:flex;flex-direction:column;gap:12px">
+        <div class="rows" id="sumrows"></div>
+        <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;border-top:1px solid var(--line);padding-top:11px">
+          <div class="field" style="flex:1 1 150px"><label for="signame">Save this rig as</label>
+            <input type="text" id="signame" placeholder="Arena A — main truss"></div>
+          <button id="savebtn">Save</button>
+        </div>
+        <div class="saved noprint" id="saved"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== PACK LIST ===================== -->
+  <section class="panel">
+    <div class="head"><h2>Pack list</h2><span class="spacer"></span><span class="eyebrow mono" id="packweight"></span></div>
+    <div class="body"><div class="duo"><div class="rows" id="packrows"></div><div class="rows" id="packrows2"></div></div></div>
+  </section>
+
+  <footer class="fine">
+    <div><b>Read this before you fly anything.</b> Truss Plot is a planning aid for the pre-production conversation with the venue and
+    the rigger. It is not an engineering review, and every manufacturer table it uses says the same thing: point loads at panel
+    points, no bridling from the truss, and cantilevers or anything past the table need the manufacturer or a licensed engineer.
+    Fixture weights are published figures with omega brackets where the maker includes them; check the real thing on a scale.</div>
+    <div><b>What the numbers assume.</b> Two hoists: exact statics, so an overhung end shows uplift on the far hoist when it happens.
+    Three or more: the tributary split riggers use in practice — each hoist takes the load from the midpoint to its neighbours —
+    and each span is checked as a simple beam between its two hoists, which is conservative for midspan and blind to hogging over
+    the middle hoists. Truss capacity is compared by moment: the lower of the table's UDL and CPL rows at that span, interpolated
+    between rows; a cantilever of length a is checked against the table at a span of 2a. Tomcat tables are Aluminum Design
+    Manual figures not yet reduced for repetitive use — the ×0.85 is ANSI E1.2's touring factor and is applied to every table
+    when selected, which is doubly conservative on Thomas tables that already carry 20 % for dynamics and on Prolyte's
+    Eurocode tables. Hoist WLL is checked against the hook load times the dynamic factor; the load to the grid adds the hoist
+    body, chain at the chain-lift length, and a bag.</div>
+    <div><b>Bridles</b> aren't planned here. If a point lands where there's no steel, a two-leg bridle at 90° included puts
+    0.71× the point load in each leg; ASME B30.9 stops you at 120°. That's the venue rigger's call, not this page's.</div>
+  </footer>
+</div>
+\n<script>
+(function(){
+"use strict";
+
+/* ============================ REFERENCE DATA ============================ */
+/* Published fixture weights in lb, omega brackets included where the manufacturer includes them.
+   hw: "omega" = two half-couplers + safety (3.1 lb) · "clamp" = one C-clamp/half-coupler + safety (1.7 lb) · "incl" = clamp already in the figure */
+const LIB = [
+  {c:"Moving light", b:"Robe",     n:"BMFL Blade",              lb:83.6, hw:"omega"},
+  {c:"Moving light", b:"Robe",     n:"MegaPointe",              lb:48.5, hw:"omega"},
+  {c:"Moving light", b:"Robe",     n:"Pointe",                  lb:33.0, hw:"omega"},
+  {c:"Moving light", b:"Robe",     n:"Spiider",                 lb:29.2, hw:"omega"},
+  {c:"Moving light", b:"Robe",     n:"T1 Profile",              lb:54.0, hw:"omega"},
+  {c:"Moving light", b:"Martin",   n:"MAC Aura XB",             lb:14.4, hw:"clamp"},
+  {c:"Moving light", b:"Martin",   n:"MAC Aura PXL",            lb:34.4, hw:"omega"},
+  {c:"Moving light", b:"Martin",   n:"MAC Viper Profile",       lb:82.0, hw:"omega"},
+  {c:"Moving light", b:"Martin",   n:"MAC Ultra Performance",   lb:97.0, hw:"omega"},
+  {c:"Moving light", b:"Martin",   n:"MAC Encore Performance",  lb:68.4, hw:"omega"},
+  {c:"Moving light", b:"Claypaky", n:"Sharpy",                  lb:41.8, hw:"omega"},
+  {c:"Moving light", b:"Claypaky", n:"Mythos 2",                lb:70.5, hw:"omega"},
+  {c:"Moving light", b:"Claypaky", n:"Scenius Unico",           lb:92.6, hw:"omega"},
+  {c:"Moving light", b:"Ayrton",   n:"Khamsin-S",               lb:87.7, hw:"omega"},
+  {c:"Moving light", b:"Ayrton",   n:"Diablo-S",                lb:48.5, hw:"omega"},
+  {c:"Moving light", b:"Elation",  n:"Proteus Maximus",         lb:117,  hw:"omega"},
+  {c:"Moving light", b:"Chauvet",  n:"Rogue R2 Wash",           lb:20.4, hw:"omega"},
+  {c:"Moving light", b:"Chauvet",  n:"Maverick Force S Profile",lb:52.9, hw:"omega"},
+  {c:"Wash / bar / strobe", b:"GLP", n:"impression X4 Bar 20",  lb:35.3, hw:"omega"},
+  {c:"Wash / bar / strobe", b:"GLP", n:"JDC1",                  lb:25.6, hw:"omega"},
+  {c:"Wash / bar / strobe", b:"SGM", n:"Q-7",                   lb:17.9, hw:"omega"},
+  {c:"Conventional", b:"ETC", n:"Source Four LED S3 Lustr",     lb:19.6, hw:"incl"},
+  {c:"Conventional", b:"ETC", n:"ColorSource PAR",              lb:8.3,  hw:"clamp"},
+  {c:"Conventional", b:"ETC", n:"Source Four 750 W",            lb:14.0, hw:"incl"},
+  {c:"Atmospherics", b:"MDG",    n:"theONE hazer (cradle, dry)",lb:74.0, hw:"omega"},
+  {c:"Atmospherics", b:"Look",   n:"Viper NT fogger (full)",    lb:30.0, hw:"clamp"},
+  {c:"Atmospherics", b:"Martin", n:"JEM ZR45 fogger (full)",    lb:50.0, hw:"clamp"}
+];
+LIB.forEach(function(f,i){ f.id = "L"+i; });
+const HW = {omega:3.1, clamp:1.7, incl:0.3};
+
+/* Manufacturer load tables. rows: [span ft, allowable UDL total lb, allowable CPL lb, UDL deflection in]
+   basis: "adm" = Aluminum Design Manual, not reduced for repetitive use · "dyn20" = Thomas, 20 % dynamic included · "ec" = Eurocode */
+const TRUSS = [
+  {id:"tc12", n:"Tomcat LD 12″ plated", w:6.2, basis:"adm", sec:[10,5,2],
+    rows:[[10,5230,2613,.13],[15,3435,1717,.29],[20,2520,1261,.52],[25,1950,981,.81],[30,1590,790,1.17],[35,1295,649,1.61],[40,1080,539,2.12],[45,900,450,2.72],[50,750,376,3.39]]},
+  {id:"tc20", n:"Tomcat MD 20.5″ plated", w:9.2, basis:"adm", sec:[10,5,2],
+    rows:[[10,8690,6814,.08],[20,6680,3343,.48],[30,4320,2158,1.09],[40,3080,1544,1.93],[50,2300,1159,3.02],[60,1800,888,4.34],[70,1330,682,5.91]]},
+  {id:"tcpr", n:"Tomcat pre-rig 26″ single-hung", w:10.6, basis:"adm", sec:[10.25,7.75,5.25],
+    rows:[[7.75,8804,4403,0],[15.5,8153,4077,0],[23.25,5324,2664,0],[31,3875,1941,0],[38.75,2984,1494,0],[46.5,2325,1185,0],[54.25,1899,956,0]]},
+  {id:"th12", n:"Thomas GP 12″", w:5.5, basis:"dyn20", sec:[10,8,5,2.5],
+    rows:[[10,6140,4497,.28],[20,3100,1550,1.10],[30,1726,864,2.21],[40,855,428,2.96]]},
+  {id:"th15", n:"Thomas GP 15″", w:6.15, basis:"dyn20", sec:[10,8,5,2.5],
+    rows:[[10,9200,4600,0],[15,6100,3050,0],[20,4500,2250,0],[25,3500,1750,0],[30,2900,1450,0],[40,2000,1000,0],[50,1300,650,0],[55,1000,500,0]]},
+  {id:"th20", n:"Thomas GP 20.5″", w:8.8, basis:"dyn20", sec:[10,8,5],
+    rows:[[10,5741,2870,1.06],[20,5741,2870,1.06],[30,3715,1858,1.57],[40,2643,1322,2.44],[50,1911,957,3.70]]},
+  {id:"gf34", n:"Global Truss F34 (290 mm)", w:4.1, basis:"adm", sec:[9.84,6.56,4.92,3.28],
+    rows:[[9.84,2017,1375,0],[13.12,1837,1150,0],[16.41,1822,975,0],[19.69,1615,800,0],[22.97,1447,700,0],[26.25,1129,600,0],[29.53,1004,540,0],[32.81,787,480,0],[36.09,686,440,0],[39.37,512,400,0]]},
+  {id:"ph30", n:"Prolyte H30V", w:4.2, basis:"ec", sec:[13.12,9.84,6.56,3.28],
+    rows:[[9.84,4293,3677,.4],[19.69,4254,2016,1.6],[29.53,3024,1378,3.6],[39.37,2201,1028,6.5],[49.2,1693,804,10.1],[59.06,1341,644,14.5],[65.6,1160,560,17.9]]},
+  {id:"ph40", n:"Prolyte H40V", w:4.6, basis:"ec", sec:[13.12,9.84,6.56,3.28],
+    rows:[[9.84,5525,4848,.3],[19.69,5485,2721,1.1],[29.53,4326,1900,2.6],[39.37,3172,1440,4.6],[49.2,2464,1142,7.2],[59.06,1976,930,10.3],[65.6,1729,818,12.7]]}
+];
+const HOISTS = [
+  {id:"L",  n:"Lodestar L · 1 t",   wll:2000, lb:110, chain:1.11, fpm:16},
+  {id:"LL", n:"Lodestar LL · 1 t",  wll:2000, lb:117, chain:1.11, fpm:32},
+  {id:"F",  n:"Lodestar F · ½ t",   wll:1000, lb:66,  chain:0.81, fpm:16},
+  {id:"J",  n:"Lodestar J · ½ t",   wll:1000, lb:110, chain:1.11, fpm:32},
+  {id:"R",  n:"Lodestar R · 2 t",   wll:4000, lb:130, chain:2.22, fpm:8},
+  {id:"RR", n:"Lodestar RR · 2 t",  wll:4000, lb:137, chain:2.22, fpm:16}
+];
+const BAG_LB = 6, SLING_LB = 3.75, SHACKLE_LB = 1.37;   /* 5 ft GAC-flex, 5/8″ shackle */
+const PAL = ["s1","s2","s3","s4","s5","s6","s7","s8"];
+
+/* ============================== STATE ============================== */
+const DEFAULT_POS = [
+  {id:"p1", name:"Downstage truss", type:"tc20", len:50, hoists:2, inset:5},
+  {id:"p2", name:"Mid truss",       type:"tc12", len:50, hoists:2, inset:5},
+  {id:"p3", name:"Upstage truss",   type:"tc20", len:60, hoists:3, inset:5},
+  {id:"p4", name:"FOH truss",       type:"th12", len:40, hoists:2, inset:5}
+];
+const DEFAULT_ROWS = [
+  {fid:"L6",  qty:12, pos:"p1"},              // Aura PXL
+  {fid:"L0",  qty:8,  pos:"p1", from:5, to:45}, // BMFL
+  {fid:"L1",  qty:12, pos:"p2"},              // MegaPointe
+  {fid:"L6",  qty:12, pos:"p2"},              // Aura PXL
+  {fid:"L18", qty:16, pos:"p3"},              // X4 Bar 20
+  {fid:"L19", qty:8,  pos:"p3", from:10, to:50}, // JDC1
+  {fid:"L21", qty:30, pos:"p4"}               // S4 LED S3
+];
+let S = {
+  hoist:"L", chain:60, rep:true, dyn:1, cab:2.5,
+  positions: DEFAULT_POS.map(function(p){ return Object.assign({}, p); }),
+  rows: DEFAULT_ROWS.map(function(r){ return Object.assign({uid:uid()}, r); })
+};
+let DB = null, DOWNLOADS = null, savedRigs = [];
+
+function uid(){ return "r" + Math.random().toString(36).slice(2,9); }
+function fx(id){ return LIB.find(function(f){ return f.id===id; }); }
+function pos(id){ return S.positions.find(function(p){ return p.id===id; }); }
+function trussOf(p){ return TRUSS.find(function(t){ return t.id===p.type; }) || TRUSS[0]; }
+function hoistModel(){ return HOISTS.find(function(h){ return h.id===S.hoist; }) || HOISTS[0]; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function rowInfo(r){
+  if(r.custom) return {name:r.custom.name, brand:"Custom", lb:r.custom.lb, hw:HW.clamp, key:"custom:"+r.custom.name};
+  const f = fx(r.fid);
+  return f ? {name:f.n, brand:f.b, lb:f.lb, hw:HW[f.hw], key:f.id} : {name:"(missing)", brand:"", lb:0, hw:0, key:"x"};
+}
+function hoistXs(p){
+  const n = Math.max(1, p.hoists|0), L = p.len, ins = Math.min(p.inset, L/2);
+  if(n===1) return [L/2];
+  const out = []; for(let i=0;i<n;i++) out.push(ins + (L-2*ins)*i/(n-1)); return out;
+}
+/* linear interpolation in the table: conservative for a capacity curve that falls off like 1/L² */
+function tableAt(t, span){
+  const rows = t.rows;
+  if(span <= rows[0][0]) return {udl:rows[0][1], cpl:rows[0][2], defl:rows[0][3], inTable:true};
+  if(span > rows[rows.length-1][0]) return {udl:0, cpl:0, defl:0, inTable:false};
+  for(let i=1;i<rows.length;i++){
+    if(span <= rows[i][0]){
+      const a = rows[i-1], b = rows[i], f = (span-a[0])/(b[0]-a[0]);
+      return {udl:a[1]+(b[1]-a[1])*f, cpl:a[2]+(b[2]-a[2])*f, defl:a[3]+(b[3]-a[3])*f, inTable:true};
+    }
+  }
+  return {udl:0, cpl:0, defl:0, inTable:false};
+}
+function repFactor(){ return S.rep ? 0.85 : 1; }
+function cutSections(len, stock){
+  const out = []; let left = len, guard = 0;
+  while(left > 0.01 && guard++ < 40){
+    const fit = stock.find(function(L){ return L <= left + 0.01; });
+    if(!fit){ out.push(stock[stock.length-1]); break; }
+    out.push(fit); left -= fit;
+  }
+  return out;
+}
+function cutLabel(arr){
+  const c = {}; arr.forEach(function(L){ c[L]=(c[L]||0)+1; });
+  return Object.keys(c).sort(function(a,b){ return b-a; })
+    .map(function(L){ return (c[L]>1 ? c[L]+"×" : "") + (+L).toFixed(+L%1?2:0) + "′"; }).join(" + ");
+}
+
+/* ============================== THE MATH ============================== */
+/* Simple beam between two supports at xa < xb: point loads inside, UDL w over the segment.
+   Returns reactions, Mmax and its location, and the moment sampled along the segment. */
+function simpleBeam(xa, xb, loads, w){
+  const L = xb - xa;
+  let rb = w*L*L/2;   /* moment about a */
+  loads.forEach(function(p){ rb += p.lb * (p.x - xa); });
+  rb /= L;
+  const ra = w*L + loads.reduce(function(t,p){ return t+p.lb; },0) - rb;
+  const samples = [], N = 60;
+  let mmax = 0, xm = xa;
+  for(let i=0;i<=N;i++){
+    const x = xa + L*i/N;
+    let m = ra*(x-xa) - w*(x-xa)*(x-xa)/2;
+    loads.forEach(function(p){ if(p.x < x) m -= p.lb*(x-p.x); });
+    samples.push([x, m]);
+    if(m > mmax){ mmax = m; xm = x; }
+  }
+  return {ra:ra, rb:rb, mmax:mmax, xm:xm, samples:samples, vmax:Math.max(Math.abs(ra), Math.abs(rb))};
+}
+/* Cantilever beyond a support: loads at distance d past it, UDL w over length a */
+function cantilever(a, loads, w){
+  let m = w*a*a/2, v = w*a;
+  loads.forEach(function(p){ m += p.lb*p.d; v += p.lb; });
+  return {m:m, v:v};
+}
+
+function compute(){
+  const hoist = hoistModel(), rep = repFactor();
+  const typeOrder = []; S.rows.forEach(function(r){ const k = rowInfo(r).key; if(typeOrder.indexOf(k)<0) typeOrder.push(k); });
+  const slotOf = function(key){ const i = typeOrder.indexOf(key); return i < PAL.length ? PAL[i] : "s0"; };
+
+  const positions = [], points = [], segments = [];
+  let hung = 0, fixtures = 0, fixtureLb = 0, trussLb = 0, cableLb = 0, ptNum = 0;
+
+  S.positions.forEach(function(p){
+    const t = trussOf(p), L = p.len;
+    const w = t.w + S.cab;                                  /* lb/ft along the whole stick */
+    const loads = [];
+    S.rows.filter(function(r){ return r.pos===p.id; }).forEach(function(r){
+      const info = rowInfo(r), each = info.lb + info.hw;
+      const from = Math.max(0, Math.min(L, r.from==null ? 0 : r.from));
+      const to   = Math.max(from, Math.min(L, r.to==null ? L : r.to));
+      for(let i=0;i<r.qty;i++){
+        const x = r.qty===1 ? (from+to)/2 : from + (to-from)*(i+0.5)/r.qty;
+        loads.push({x:x, lb:each, name:info.name, slot:slotOf(info.key), key:info.key});
+      }
+    });
+    loads.sort(function(a,b){ return a.x-b.x; });
+    const fixLb = loads.reduce(function(t,l){ return t+l.lb; },0);
+    const total = fixLb + w*L;
+    const xs = hoistXs(p), n = xs.length;
+    const cgx = total>0 ? (loads.reduce(function(t,l){ return t+l.lb*l.x; },0) + w*L*L/2) / total : L/2;
+
+    /* ---- reactions ---- */
+    let R = [];
+    if(n===1){ R = [total]; }
+    else if(n===2){
+      const b = simpleBeam(xs[0], xs[1], loads, 0);            /* point loads via statics about the hoists */
+      const wa = w*L, ra = wa*(xs[1]-cgxUDL(L))/(xs[1]-xs[0]);  /* UDL of the whole stick about the hoists */
+      const r1 = b.ra + ra, r2 = b.rb + (wa - ra);
+      R = [r1, r2];
+    } else {
+      R = xs.map(function(){ return 0; });
+      const bounds = [0]; for(let i=1;i<n;i++) bounds.push((xs[i-1]+xs[i])/2); bounds.push(L);
+      for(let i=0;i<n;i++){
+        R[i] += w*(bounds[i+1]-bounds[i]);
+        loads.forEach(function(l){ if(l.x >= bounds[i] && (l.x < bounds[i+1] || i===n-1)) R[i] += l.lb; });
+      }
+    }
+
+    /* ---- truss segments: overhang left, spans, overhang right ---- */
+    const segs = [];
+    const overL = xs[0], overR = L - xs[n-1];
+    const capAt = function(span){
+      const tb = tableAt(t, span);
+      const mAllow = tb.inTable ? Math.min(tb.udl*span/8, tb.cpl*span/4)*rep : 0;
+      const vAllow = tb.inTable ? tb.udl/2*rep : 0;
+      return {tb:tb, mAllow:mAllow, vAllow:vAllow, inTable:tb.inTable};
+    };
+    if(overL > 0.5){
+      const c = cantilever(overL, loads.filter(function(l){ return l.x < xs[0]; }).map(function(l){ return {lb:l.lb, d:xs[0]-l.x}; }), w);
+      const cap = capAt(Math.max(2*overL, t.rows[0][0]));
+      segs.push({kind:"overhang", label:"SL overhang", len:overL, m:c.m, v:c.v, mAllow:cap.mAllow, vAllow:cap.vAllow, inTable:true, sag:0, x0:0, x1:xs[0]});
+    }
+    for(let i=1;i<n;i++){
+      const span = xs[i]-xs[i-1];
+      const inside = loads.filter(function(l){ return l.x >= xs[i-1] && l.x <= xs[i]; });
+      const b = simpleBeam(xs[i-1], xs[i], inside, w);
+      const cap = capAt(span);
+      const sag = cap.inTable && cap.mAllow>0 ? cap.tb.defl * (b.mmax/(cap.mAllow/rep)) : 0;
+      segs.push({kind:"span", label:n===2?"Span":"Span "+i, len:span, m:b.mmax, v:b.vmax, mAllow:cap.mAllow, vAllow:cap.vAllow,
+        inTable:cap.inTable, sag:sag, samples:b.samples, x0:xs[i-1], x1:xs[i]});
+    }
+    if(overR > 0.5){
+      const c = cantilever(overR, loads.filter(function(l){ return l.x > xs[n-1]; }).map(function(l){ return {lb:l.lb, d:l.x-xs[n-1]}; }), w);
+      const cap = capAt(Math.max(2*overR, t.rows[0][0]));
+      segs.push({kind:"overhang", label:"SR overhang", len:overR, m:c.m, v:c.v, mAllow:cap.mAllow, vAllow:cap.vAllow, inTable:true, sag:0, x0:xs[n-1], x1:L});
+    }
+    if(n===1){
+      const span = L;                                          /* one point: the whole stick balances on it — check as a 2×half-length cantilever */
+      const half = Math.max(L - xs[0], xs[0]);
+      const c = cantilever(half, loads.filter(function(l){ return l.x > xs[0]; }).map(function(l){ return {lb:l.lb, d:l.x-xs[0]}; }), w);
+      const cap = capAt(Math.max(2*half, t.rows[0][0]));
+      segs.push({kind:"overhang", label:"Balanced on one point", len:half, m:c.m, v:c.v, mAllow:cap.mAllow, vAllow:cap.vAllow, inTable:cap.inTable, sag:0, x0:0, x1:L});
+    }
+    segs.forEach(function(sg){
+      sg.util = sg.inTable && sg.mAllow>0 ? Math.max(sg.m/sg.mAllow, sg.v/sg.vAllow) : Infinity;
+      sg.bend = sg.inTable && sg.mAllow>0 ? sg.m/sg.mAllow : Infinity;
+      sg.shear = sg.inTable && sg.vAllow>0 ? sg.v/sg.vAllow : Infinity;
+      sg.pos = p; sg.truss = t;
+      segments.push(sg);
+    });
+    const worst = segs.reduce(function(m,sg){ return sg.util>m ? sg.util : m; }, 0);
+
+    /* ---- points ---- */
+    const pts = xs.map(function(x,i){
+      const hook = R[i], pctWll = hook*S.dyn/hoist.wll*100;
+      const grid = hook + hoist.lb + hoist.chain*S.chain + BAG_LB + SLING_LB + 2*SHACKLE_LB;
+      const flag = hook < 0 ? "uplift" : pctWll > 100 ? "over" : pctWll > 85 ? "hot" : "";
+      const pt = {num:++ptNum, pos:p, x:x, hook:hook, pctWll:pctWll, grid:grid, flag:flag, i:i};
+      points.push(pt); return pt;
+    });
+    const heaviest = pts.reduce(function(m,q){ return q.hook>m.hook ? q : m; }, pts[0]);
+    const uplift = pts.some(function(q){ return q.hook < 0; });
+    const tilt = n===1 && Math.abs(cgx - xs[0]) > 0.5;
+
+    hung += total; fixtures += loads.length; fixtureLb += fixLb; trussLb += t.w*L; cableLb += S.cab*L;
+    positions.push({p:p, t:t, L:L, w:w, loads:loads, xs:xs, R:R, total:total, fixLb:fixLb, cgx:cgx, segs:segs, pts:pts,
+      heaviest:heaviest, worst:worst, uplift:uplift, tilt:tilt, overL:overL, overR:overR,
+      sections:cutSections(L, t.sec)});
+  });
+
+  const worstSeg = segments.reduce(function(m,sg){ return sg.util>m.util ? sg : m; }, {util:0});
+  const heaviestPt = points.reduce(function(m,q){ return q.hook>m.hook ? q : m; }, {hook:0, pctWll:0});
+  const gridTotal = points.reduce(function(t,q){ return t+Math.max(q.grid,0); },0);
+  const upliftPts = points.filter(function(q){ return q.hook < 0; });
+  const overPts = points.filter(function(q){ return q.flag==="over"; });
+  const sagMax = segments.reduce(function(m,sg){ return sg.sag>m.sag ? sg : m; }, {sag:0});
+  const chainFt = points.length * S.chain;
+
+  return {positions:positions, points:points, segments:segments, hung:hung, fixtures:fixtures, fixtureLb:fixtureLb,
+    trussLb:trussLb, cableLb:cableLb, worstSeg:worstSeg, heaviestPt:heaviestPt, gridTotal:gridTotal, upliftPts:upliftPts,
+    overPts:overPts, sagMax:sagMax, hoist:hoist, chainFt:chainFt, typeOrder:typeOrder, slotOf:slotOf, rep:rep};
+}
+function cgxUDL(L){ return L/2; }
+
+/* ============================== RENDER ============================== */
+const $ = function(id){ return document.getElementById(id); };
+const n0 = function(v){ return Math.round(v).toLocaleString(); };
+const n1 = function(v){ return v.toFixed(1); };
+const pct = function(v){ return isFinite(v) ? Math.round(v*100)+" %" : "off table"; };
+const plural = function(n, s){ return n+" "+s+(n===1?"":"s"); };
+function sev(u){ return !isFinite(u) || u>1 ? "crit" : u>0.85 ? "warn" : ""; }
+
+function render(){
+  const R = compute();
+
+  /* ---------- tiles ---------- */
+  const wFlag = R.worstSeg.util>1 || !isFinite(R.worstSeg.util) ? "flag-crit" : R.worstSeg.util>0.85 ? "flag-warn" : "flag-ok";
+  const hFlag = R.heaviestPt.pctWll>100 ? "flag-crit" : R.heaviestPt.pctWll>85 ? "flag-warn" : "flag-ok";
+  $("tiles").innerHTML = [
+    tile("Hung weight", n0(R.hung), " lb", plural(R.fixtures,"fixture")+" · "+n0(R.fixtureLb)+" lb of fixtures"),
+    tile("Truss & cable", n0(R.trussLb+R.cableLb), " lb", n0(R.trussLb)+" truss · "+n0(R.cableLb)+" cable"),
+    tile("Points", String(R.points.length), "", R.hoist.n),
+    tile("Heaviest hook", n0(Math.max(R.heaviestPt.hook,0)), " lb", Math.round(R.heaviestPt.pctWll)+" % of WLL"+(S.dyn>1?" ×"+S.dyn:""), hFlag),
+    tile("To the grid", n0(R.gridTotal), " lb", "with hoists, chain and steel"),
+    tile("Worst span", pct(R.worstSeg.util), "", R.worstSeg.pos ? R.worstSeg.pos.name+" · "+R.worstSeg.label : "—", wFlag),
+    tile("Most sag", R.sagMax.sag ? n1(R.sagMax.sag) : "—", " in", R.sagMax.pos ? R.sagMax.pos.name : "estimated at midspan")
+  ].join("");
+
+  /* ---------- notices ---------- */
+  const notes = [];
+  if(!R.fixtures) notes.push(note("ok","Empty","Add fixtures and the trusses load up."));
+  const offTable = R.segments.filter(function(sg){ return !sg.inTable; });
+  if(offTable.length)
+    notes.push(note("crit","Off the table", offTable.map(function(sg){ return sg.pos.name+" ("+n1(sg.len)+"′ "+sg.label.toLowerCase()+")"; }).join(", ")+
+      " — longer than the manufacturer publishes for that truss. Add a hoist or pick a bigger stick."));
+  const over = R.segments.filter(function(sg){ return sg.inTable && sg.util>1; });
+  if(over.length)
+    notes.push(note("crit","Overloaded", over.map(function(sg){ return sg.pos.name+" "+sg.label.toLowerCase()+" at "+pct(sg.util); }).join(", ")+
+      ". Move the hoists in, add a third, or step up to a heavier truss."));
+  if(R.upliftPts.length)
+    notes.push(note("crit","Uplift", R.upliftPts.map(function(q){ return q.pos.name+" pt "+q.num; }).join(", ")+
+      (R.upliftPts.length===1?" goes":" go")+" negative — the overhung end outweighs the backspan and that chain goes slack. Move the hoist out or the load in."));
+  if(R.overPts.length)
+    notes.push(note("crit","Hoist", R.overPts.map(function(q){ return q.pos.name+" pt "+q.num+" ("+n0(q.hook)+" lb)"; }).join(", ")+
+      " past the "+n0(R.hoist.wll)+" lb WLL"+(S.dyn>1?" with the ×"+S.dyn+" dynamic factor":"")+". Bigger hoist or another point."));
+  R.positions.forEach(function(P){
+    if(P.tilt) notes.push(note("warn","Balance", P.p.name+" hangs on one point with its centre of gravity "+n1(Math.abs(P.cgx-P.xs[0]))+"′ off the hook — it will tilt. Move the load or add a point."));
+    if(P.pts.length>=2 && (P.overL > 0.25*(P.xs[1]-P.xs[0]) || P.overR > 0.25*(P.xs[P.xs.length-1]-P.xs[P.xs.length-2])))
+      notes.push(note("warn","Cantilever", P.p.name+" overhangs past a quarter of the span. Every manufacturer here wants that signed off — bring the hoist out toward the end."));
+  });
+  const hot = R.points.filter(function(q){ return q.flag==="hot"; });
+  if(hot.length && !R.overPts.length)
+    notes.push(note("warn","Hoist", hot.length+" hook"+(hot.length===1?"":"s")+" past 85 % of WLL. Fine on paper; a swing during the pick isn't in the number."));
+  $("notes").innerHTML = notes.join("");
+
+  /* ---------- rig ---------- */
+  $("rigcount").textContent = plural(R.fixtures,"fixture")+" · "+n0(R.fixtureLb)+" lb";
+  const body = $("rigbody");
+  if(!S.rows.length) body.innerHTML = '<tr><td colspan="9" class="empty">Nothing hung yet.</td></tr>';
+  else body.innerHTML = S.rows.map(function(r){
+    const i = rowInfo(r), p = pos(r.pos) || S.positions[0];
+    const from = r.from==null ? 0 : r.from, to = r.to==null ? p.len : r.to;
+    return '<tr>'+
+      '<td><span class="rig-name"><span class="sw" style="background:var(--'+R.slotOf(i.key)+')"></span>'+esc(i.name)+'</span> <span class="rig-brand">'+esc(i.brand)+'</span></td>'+
+      '<td class="num"><input type="number" class="qty" min="1" max="999" value="'+r.qty+'" data-q="'+r.uid+'"></td>'+
+      '<td><select data-p="'+r.uid+'">'+ S.positions.map(function(q){
+          return '<option value="'+q.id+'"'+(q.id===r.pos?" selected":"")+'>'+esc(q.name)+'</option>'; }).join('') +'</select></td>'+
+      '<td class="num"><input type="number" class="qty" min="0" max="'+p.len+'" step="0.5" value="'+from+'" data-f="'+r.uid+'"></td>'+
+      '<td class="num"><input type="number" class="qty" min="0" max="'+p.len+'" step="0.5" value="'+to+'" data-t="'+r.uid+'"></td>'+
+      '<td class="num">'+n1(i.lb)+'</td><td class="num">'+n1(i.lb+i.hw)+'</td><td class="num">'+n0((i.lb+i.hw)*r.qty)+'</td>'+
+      '<td class="noprint" style="text-align:right"><button class="ghost" data-x="'+r.uid+'" aria-label="Remove '+esc(i.name)+'">✕</button></td></tr>';
+  }).join("") + (S.rows.length>1 ?
+    '<tr><td colspan="7" style="text-align:right;color:var(--ink-3);font-size:12px;border-top:1px solid var(--line-strong)">Fixtures and hardware</td>'+
+    '<td class="num" style="font-weight:600;border-top:1px solid var(--line-strong)">'+n0(R.fixtureLb)+'</td>'+
+    '<td class="noprint" style="border-top:1px solid var(--line-strong)"></td></tr>' : "");
+
+  /* ---------- trusses ---------- */
+  $("posbody").innerHTML = R.positions.map(function(P){
+    const hs = sev(P.heaviest ? P.heaviest.pctWll/100 : 0), ws = sev(P.worst);
+    const col = function(s){ return s==="crit" ? "color:var(--crit);font-weight:600" : s==="warn" ? "color:var(--warn)" : ""; };
+    return '<tr>'+
+      '<td><input type="text" data-pn="'+P.p.id+'" value="'+esc(P.p.name)+'" style="width:100%;min-width:140px;font-family:inherit"></td>'+
+      '<td><select data-pt="'+P.p.id+'">'+TRUSS.map(function(t){ return '<option value="'+t.id+'"'+(t.id===P.p.type?" selected":"")+'>'+esc(t.n)+'</option>'; }).join("")+'</select></td>'+
+      '<td class="num"><input type="number" data-pl="'+P.p.id+'" class="qty" min="5" max="200" value="'+P.p.len+'"></td>'+
+      '<td class="num"><input type="number" data-ph="'+P.p.id+'" class="qty" min="1" max="12" value="'+P.p.hoists+'"></td>'+
+      '<td class="num"><input type="number" data-pi="'+P.p.id+'" class="qty" min="0" max="'+(P.p.len/2)+'" step="0.5" value="'+P.p.inset+'"></td>'+
+      '<td class="num">'+n0(P.total)+'</td>'+
+      '<td class="num" style="'+col(hs)+'">'+(P.heaviest ? n0(Math.max(P.heaviest.hook,0))+' · '+Math.round(P.heaviest.pctWll)+' %' : '—')+'</td>'+
+      '<td class="num" style="'+col(ws)+'">'+pct(P.worst)+'</td>'+
+      '<td class="noprint" style="text-align:right">'+(S.positions.length>1 ?
+        '<button class="ghost" data-px="'+P.p.id+'" aria-label="Remove '+esc(P.p.name)+'">✕</button>' : '')+'</td></tr>';
+  }).join("");
+
+  /* ---------- elevations ---------- */
+  $("elevsum").textContent = plural(R.points.length,"point")+" · "+n0(R.hung)+" lb hung";
+  $("elevs").innerHTML = R.positions.map(function(P){ return elevation(P, R); }).join("") ||
+    '<div class="empty">Add a truss and it draws itself.</div>';
+  $("legend").innerHTML = R.typeOrder.map(function(k){
+    const nm = k.indexOf("custom:")===0 ? k.slice(7) : (fx(k)||{}).n || k;
+    return '<div class="it"><span class="sw" style="background:var(--'+R.slotOf(k)+')"></span>'+esc(nm)+'</div>';
+  }).join("") + (R.typeOrder.length>PAL.length ? '<div class="it"><span class="sw" style="background:var(--s0)"></span>Other types</div>' : '') +
+  '<div class="it" style="color:var(--ink-3)">Tick = one fixture · Band under the chord = bending as a share of the table, green to red · ▲ = centre of gravity</div>';
+
+  /* ---------- points ---------- */
+  $("ptsum").textContent = plural(R.points.length,"point")+" · "+n0(R.gridTotal)+" lb to the grid";
+  $("ptbody").innerHTML = R.points.map(function(q){
+    const s = q.flag==="uplift"||q.flag==="over" ? "crit" : q.flag==="hot" ? "warn" : "";
+    const tag = q.flag==="uplift" ? '<span class="tag crit">Uplift</span>' : q.flag==="over" ? '<span class="tag crit">Over WLL</span>' :
+                q.flag==="hot" ? '<span class="tag warn">Hot</span>' : '<span class="tag ok">OK</span>';
+    return '<tr><td class="num" style="font-weight:600">'+q.num+'</td><td>'+esc(q.pos.name)+'</td><td class="num">'+n1(q.x)+'</td>'+
+      '<td class="num" style="'+(s==="crit"?"color:var(--crit);font-weight:600":"")+'">'+n0(q.hook)+'</td>'+
+      '<td class="num" style="'+(s==="crit"?"color:var(--crit)":s==="warn"?"color:var(--warn)":"")+'">'+Math.round(q.pctWll)+'</td>'+
+      '<td class="num">'+n0(Math.max(q.grid,0))+'</td><td>'+tag+'</td></tr>';
+  }).join("") || '<tr><td colspan="7" class="empty">Points appear once a truss has hoists.</td></tr>';
+
+  /* ---------- spans ---------- */
+  $("spansum").textContent = (S.rep?"×0.85 repetitive · ":"")+plural(R.segments.length,"segment");
+  $("spanbody").innerHTML = R.segments.map(function(sg){
+    const s = sev(sg.util);
+    const col = s==="crit"?"color:var(--crit);font-weight:600":s==="warn"?"color:var(--warn)":"";
+    return '<tr><td>'+esc(sg.pos.name)+'</td><td style="color:var(--ink-2)">'+esc(sg.label)+'</td><td class="num">'+n1(sg.len)+'</td>'+
+      '<td class="num">'+n0(sg.m)+'</td><td class="num">'+(sg.inTable?n0(sg.mAllow):"—")+'</td>'+
+      '<td class="num" style="'+col+'">'+pct(sg.bend)+'</td><td class="num">'+pct(sg.shear)+'</td>'+
+      '<td class="num">'+(sg.sag?n1(sg.sag)+'″':"—")+'</td></tr>';
+  }).join("") || '<tr><td colspan="8" class="empty">Spans appear once a truss has two hoists.</td></tr>';
+
+  /* ---------- weights ---------- */
+  $("wtrule").textContent = "hardware included";
+  const seen = {};
+  $("wtbody").innerHTML = S.rows.map(function(r){ const i = rowInfo(r); if(seen[i.key]) return ""; seen[i.key]=1;
+    return '<tr><td><span class="rig-name"><span class="sw" style="background:var(--'+R.slotOf(i.key)+')"></span>'+esc(i.name)+'</span> <span class="rig-brand">'+esc(i.brand)+'</span></td>'+
+      '<td class="num">'+n1(i.lb)+'</td><td class="num">'+n1(i.lb+i.hw)+'</td><td class="num">'+n0((i.lb+i.hw)*10/3)+' lb</td></tr>';
+  }).join("") || '<tr><td colspan="4" class="empty">Add fixtures to see weights.</td></tr>';
+
+  /* ---------- summary rows ---------- */
+  $("sumrows").innerHTML = [
+    row("Hoist", R.hoist.n+" · "+n0(R.hoist.wll)+" lb WLL"),
+    row("Chain out", n0(S.chain)+" ft each · "+n0(R.chainFt)+" ft total"),
+    row("Design policy", (S.rep?"×0.85 repetitive use":"table as published")+" · hoists ×"+S.dyn),
+    row("Cable allowance", n1(S.cab)+" lb/ft on every stick")
+  ].join("");
+
+  /* ---------- pack list ---------- */
+  const pk = [], pk2 = [];
+  R.positions.forEach(function(P){ pk.push(row(P.t.n+" — "+P.p.name, cutLabel(P.sections)+"  ("+n0(P.t.w*P.L)+" lb)")); });
+  pk.push(row("Truss weight", n0(R.trussLb)+" lb"));
+  const omegaFx = R.positions.reduce(function(t,P){ return t + P.loads.filter(function(l){ const f = fx(l.key); return f && f.hw==="omega"; }).length; },0);
+  const clampFx = R.fixtures - omegaFx;
+  pk2.push(row("Hoists", R.points.length+"× "+R.hoist.n));
+  pk2.push(row("Chain bags", String(R.points.length)));
+  pk2.push(row("Steel — 5′ GAC-flex", String(R.points.length)));
+  pk2.push(row("Shackles, ⅝″", String(R.points.length*2)));
+  pk2.push(row("Half-couplers", String(omegaFx*2 + clampFx)));
+  pk2.push(row("Safety cables", String(R.fixtures)));
+  pk2.push(row("Hoist + steel weight", n0(R.points.length*(R.hoist.lb+R.hoist.chain*S.chain+BAG_LB+SLING_LB+2*SHACKLE_LB))+" lb"));
+  $("packrows").innerHTML = pk.join(""); $("packrows2").innerHTML = pk2.join("");
+  $("packweight").textContent = n0(R.gridTotal)+" lb in the air";
+
+  renderSaved();
+  window.__R = R;
+}
+
+/* ---------- one elevation per truss ---------- */
+function elevation(P, R){
+  const W = 920, padL = 30, padR = 30, top = 22, gridY = 34, hoistY = 78, trussY = 118, trussH = 16, fxY = trussY+trussH+4, utilY = fxY+22, utilH = 26, H = utilY+utilH+22;
+  const sx = function(x){ return padL + (W-padL-padR)*x/P.L; };
+  const hs = sev(P.heaviest ? P.heaviest.pctWll/100 : 0), ws = sev(P.worst);
+  const head = '<div class="eh"><span class="pos">'+esc(P.p.name)+'</span><span class="tag">'+esc(P.t.n)+' · '+P.L+'′</span>'+
+    '<span class="tag '+ws+'">'+pct(P.worst)+' of table</span>'+
+    (P.uplift ? '<span class="tag crit">Uplift</span>' : '')+'<hr><span class="tag">'+plural(P.pts.length,"point")+' · '+n0(P.total)+' lb</span></div>';
+  let svg = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Elevation of '+esc(P.p.name)+': '+P.pts.length+' hoists on a '+P.L+' foot truss">';
+  /* grid line */
+  svg += '<line class="grid" x1="'+(padL-10)+'" y1="'+gridY+'" x2="'+(W-padR+10)+'" y2="'+gridY+'"></line>';
+  svg += '<text class="ttl" x="'+(padL-10)+'" y="'+(gridY-8)+'">GRID</text>';
+  /* chains + hoists + labels */
+  P.pts.forEach(function(q){
+    const x = sx(q.x), s = q.flag==="uplift"||q.flag==="over" ? "var(--crit)" : q.flag==="hot" ? "var(--warn)" : "var(--ink-2)";
+    svg += '<line class="chain" x1="'+x+'" y1="'+gridY+'" x2="'+x+'" y2="'+(hoistY-9)+'"></line>';
+    svg += '<rect class="hoist" x="'+(x-9)+'" y="'+(hoistY-9)+'" width="18" height="18" rx="2"></rect>';
+    svg += '<line x1="'+x+'" y1="'+(hoistY+9)+'" x2="'+x+'" y2="'+trussY+'" stroke="var(--ink-2)" stroke-width="1.5"></line>';
+    const right = q.x > 0.72*P.L, lx = right ? x-13 : x+13, anc = right ? ' text-anchor="end"' : '';
+    svg += '<text class="lbl b" x="'+lx+'" y="'+(hoistY-1)+'" fill="'+s+'"'+anc+'>'+n0(q.hook)+' lb</text>';
+    svg += '<text class="sm" x="'+lx+'" y="'+(hoistY+10)+'"'+anc+'>pt '+q.num+' · '+Math.round(q.pctWll)+' % · '+n0(Math.max(q.grid,0))+' to grid</text>';
+    svg += '<text class="sm" x="'+x+'" y="'+(gridY-8)+'" text-anchor="middle">'+n1(q.x)+'′</text>';
+  });
+  /* truss */
+  svg += '<rect class="truss" x="'+sx(0)+'" y="'+trussY+'" width="'+(sx(P.L)-sx(0))+'" height="'+trussH+'" rx="1"></rect>';
+  const nSeg = Math.max(2, Math.round(P.L/2.5));
+  for(let i=0;i<nSeg;i++){ const a = sx(P.L*i/nSeg), b = sx(P.L*(i+1)/nSeg);
+    svg += '<line class="lace" x1="'+a+'" y1="'+(i%2?trussY:trussY+trussH)+'" x2="'+b+'" y2="'+(i%2?trussY+trussH:trussY)+'"></line>'; }
+  svg += '<text class="sm" x="'+sx(0)+'" y="'+(trussY+trussH+12)+'">SL 0′</text>';
+  svg += '<text class="sm" x="'+sx(P.L)+'" y="'+(trussY+trussH+12)+'" text-anchor="end">'+P.L+'′ SR</text>';
+  /* fixtures */
+  const occupied = {};
+  P.loads.forEach(function(l){
+    const x = sx(l.x), h = 5 + Math.min(12, l.lb/10), k = Math.round(x*2);
+    const dx = (occupied[k] = (occupied[k]||0) + 1) - 1;          /* coincident fixtures fan out sideways */
+    svg += '<rect class="fx" x="'+(x-2.5+dx*4)+'" y="'+(fxY)+'" width="5" height="'+h+'" fill="var(--'+l.slot+')"><title>'+esc(l.name)+' · '+n1(l.lb)+' lb at '+n1(l.x)+'′</title></rect>';
+  });
+  /* CG */
+  svg += '<path class="cg" d="M'+sx(P.cgx)+','+(trussY-2)+' l-4,-6 l8,0 z"><title>Centre of gravity at '+n1(P.cgx)+'′</title></path>';
+  /* utilization band */
+  svg += '<line class="cap" x1="'+sx(0)+'" y1="'+utilY+'" x2="'+sx(P.L)+'" y2="'+utilY+'"></line>';
+  svg += '<text class="sm" x="'+(W-padR+4)+'" y="'+(utilY+3)+'">100 %</text>';
+  P.segs.forEach(function(sg){
+    const cls = "util "+sev(sg.util);
+    if(sg.kind==="span" && sg.samples && isFinite(sg.util) && sg.mAllow>0){
+      let d = "M"+sx(sg.x0)+","+(utilY+utilH);
+      sg.samples.forEach(function(s){ const u = Math.max(0, Math.min(1.6, s[1]/sg.mAllow)); d += " L"+sx(s[0])+","+(utilY+utilH - u*utilH); });
+      d += " L"+sx(sg.x1)+","+(utilY+utilH)+" z";
+      svg += '<path class="'+cls+'" d="'+d+'"></path>';
+    } else if(isFinite(sg.util)) {
+      const u = Math.max(0.02, Math.min(1.6, sg.util));
+      svg += '<rect class="'+cls+'" x="'+sx(sg.x0)+'" y="'+(utilY+utilH-u*utilH)+'" width="'+(sx(sg.x1)-sx(sg.x0))+'" height="'+(u*utilH)+'"></rect>';
+    } else {
+      svg += '<rect class="util crit" x="'+sx(sg.x0)+'" y="'+utilY+'" width="'+(sx(sg.x1)-sx(sg.x0))+'" height="'+utilH+'"></rect>';
+    }
+    const cx = sx((sg.x0+sg.x1)/2);
+    svg += '<text class="sm" x="'+cx+'" y="'+(utilY+utilH+12)+'" text-anchor="middle">'+esc(sg.label)+' '+n1(sg.len)+'′ · '+pct(sg.util)+'</text>';
+  });
+  svg += '</svg>';
+  return '<div class="elev">'+head+svg+'</div>';
+}
+
+function tile(k,v,unit,n,flag){
+  return '<div class="tile '+(flag||"")+'"><span class="k">'+k+'</span><span class="v">'+v+
+    (unit?'<small>'+unit+'</small>':'')+'</span><span class="n">'+n+'</span></div>';
+}
+function note(kind,m,t){ return '<div class="note '+kind+'"><span class="m">'+m+'</span><span>'+t+'</span></div>'; }
+function row(k,v,cls){
+  const col = cls==="crit"?"color:var(--crit)":cls==="warn"?"color:var(--warn)":(cls==="ok"||cls==="em")?"color:var(--accent)":"";
+  return '<div class="r"><span class="k">'+k+'</span><span class="v" style="'+col+'">'+v+'</span></div>';
+}
+
+/* ============================== CONTROLS ============================== */
+function fillPicker(){
+  let html = "", cat = null;
+  LIB.forEach(function(f){
+    if(f.c!==cat){ if(cat!==null) html += "</optgroup>"; html += '<optgroup label="'+f.c+'">'; cat = f.c; }
+    html += '<option value="'+f.id+'">'+esc(f.b)+" "+esc(f.n)+" — "+f.lb+" lb</option>";
+  });
+  $("pick").innerHTML = html + "</optgroup>";
+}
+function fillPositions(){
+  const keep = $("pickpos").value;
+  $("pickpos").innerHTML = S.positions.map(function(p){ return '<option value="'+p.id+'">'+esc(p.name)+'</option>'; }).join("");
+  $("pickpos").value = S.positions.some(function(p){ return p.id===keep; }) ? keep : (S.positions[0]||{}).id;
+}
+function fillHoists(){
+  $("hoist").innerHTML = HOISTS.map(function(h){ return '<option value="'+h.id+'">'+esc(h.n)+' · '+n0(h.wll)+' lb</option>'; }).join("");
+  $("hoist").value = S.hoist;
+}
+function bind(){
+  $("hoist").addEventListener("change", function(e){ S.hoist = e.target.value; render(); });
+  $("chain").addEventListener("input", function(e){ S.chain = Math.max(10, Math.min(200, +e.target.value||10)); render(); });
+  $("rep").addEventListener("change", function(e){ S.rep = e.target.value==="1"; render(); });
+  $("dyn").addEventListener("change", function(e){ S.dyn = +e.target.value; render(); });
+  $("cab").addEventListener("input", function(e){ S.cab = Math.max(0, Math.min(20, +e.target.value||0)); render(); });
+  $("printbtn").addEventListener("click", function(){ window.print(); });
+
+  $("addbtn").addEventListener("click", function(){
+    const fid = $("pick").value, qty = Math.max(1, +$("pickqty").value||1), p = $("pickpos").value;
+    const hit = S.rows.find(function(r){ return r.fid===fid && r.pos===p && r.from==null && r.to==null; });
+    if(hit) hit.qty += qty; else S.rows.push({uid:uid(), fid:fid, qty:qty, pos:p});
+    render();
+  });
+  $("addcustom").addEventListener("click", function(){
+    const name = ($("cname").value||"").trim() || "Custom load";
+    S.rows.push({uid:uid(), custom:{name:name, lb:Math.max(1, +$("clb").value||1)}, qty:Math.max(1,+$("cqty").value||1), pos:$("pickpos").value});
+    $("cname").value = ""; render();
+  });
+  $("addpos").addEventListener("click", function(){
+    const id = "p"+Math.random().toString(36).slice(2,7);
+    S.positions.push({id:id, name:"Truss "+(S.positions.length+1), type:"tc12", len:40, hoists:2, inset:5});
+    fillPositions(); render();
+  });
+
+  $("rigbody").addEventListener("input", function(e){
+    const q = e.target.getAttribute("data-q"), f = e.target.getAttribute("data-f"), t = e.target.getAttribute("data-t");
+    const key = q||f||t; if(!key) return;
+    const r = S.rows.find(function(x){ return x.uid===key; }); if(!r) return;
+    if(q) r.qty = Math.max(1, Math.min(999, +e.target.value||1));
+    else if(f) r.from = Math.max(0, +e.target.value||0);
+    else r.to = Math.max(0, +e.target.value||0);
+    softRender(e.target);
+  });
+  $("rigbody").addEventListener("change", function(e){
+    const p = e.target.getAttribute("data-p"); if(!p) return;
+    const r = S.rows.find(function(x){ return x.uid===p; }); if(!r) return;
+    r.pos = e.target.value; r.from = null; r.to = null; render();
+  });
+  $("rigbody").addEventListener("click", function(e){
+    const btn = e.target.closest("[data-x]"); if(!btn) return;
+    S.rows = S.rows.filter(function(x){ return x.uid !== btn.getAttribute("data-x"); }); render();
+  });
+
+  $("posbody").addEventListener("input", function(e){
+    const el = e.target, id = el.getAttribute("data-pn")||el.getAttribute("data-pl")||el.getAttribute("data-ph")||el.getAttribute("data-pi");
+    if(!id) return; const p = pos(id); if(!p) return;
+    if(el.hasAttribute("data-pn")){ p.name = el.value; fillPositions(); softRender(el); return; }
+    if(el.hasAttribute("data-pl")) p.len = Math.max(5, Math.min(200, +el.value||5));
+    else if(el.hasAttribute("data-ph")) p.hoists = Math.max(1, Math.min(12, +el.value||1));
+    else p.inset = Math.max(0, +el.value||0);
+    softRender(el);
+  });
+  $("posbody").addEventListener("change", function(e){
+    const id = e.target.getAttribute("data-pt"); if(!id) return;
+    const p = pos(id); if(p){ p.type = e.target.value; render(); }
+  });
+  $("posbody").addEventListener("click", function(e){
+    const btn = e.target.closest("[data-px]"); if(!btn) return;
+    const id = btn.getAttribute("data-px"); if(S.positions.length<2) return;
+    S.positions = S.positions.filter(function(p){ return p.id!==id; });
+    const fallback = S.positions[0].id;
+    S.rows.forEach(function(r){ if(r.pos===id){ r.pos = fallback; r.from = null; r.to = null; } });
+    fillPositions(); render();
+  });
+
+  $("csv").addEventListener("click", exportCSV);
+  $("savebtn").addEventListener("click", saveRig);
+}
+/* re-render without stealing focus from the input being edited */
+let softTimer = null;
+function softRender(el){
+  clearTimeout(softTimer);
+  softTimer = setTimeout(function(){
+    const attrs = ["data-pn","data-pl","data-ph","data-pi","data-q","data-f","data-t"];
+    const a = document.activeElement; let sel = null;
+    attrs.forEach(function(k){ if(a && a.hasAttribute && a.hasAttribute(k)) sel = '['+k+'="'+a.getAttribute(k)+'"]'; });
+    const start = a && a.selectionStart;
+    render();
+    if(sel){ const n = document.querySelector(sel); if(n){ n.focus(); try{ n.setSelectionRange(start,start); }catch(e){} } }
+  }, 350);
+}
+
+/* ============================== EXPORT ============================== */
+function exportCSV(){
+  const R = window.__R || compute();
+  const L = [
+    ["Truss Plot — rigging points"],
+    ["Hoist", R.hoist.n, "WLL lb", R.hoist.wll, "Chain ft", S.chain, "Repetitive use", S.rep?"0.85":"1.0", "Dynamic", S.dyn, "Cable lb/ft", S.cab],
+    ["Hung lb", n0(R.hung), "To grid lb", n0(R.gridTotal), "Points", R.points.length],
+    [],
+    ["Point","Truss","Truss type","Length ft","At ft from SL","On hook lb","% WLL","To grid lb","Flag"]
+  ];
+  R.points.forEach(function(q){
+    L.push([q.num, q.pos.name, trussOf(q.pos).n, q.pos.len, n1(q.x), Math.round(q.hook), Math.round(q.pctWll), Math.round(q.grid), q.flag||"ok"]);
+  });
+  L.push([]); L.push(["Truss check"]); L.push(["Truss","Segment","Length ft","Moment lb-ft","Allowed lb-ft","Bending","Shear","Sag in"]);
+  R.segments.forEach(function(sg){
+    L.push([sg.pos.name, sg.label, n1(sg.len), Math.round(sg.m), sg.inTable?Math.round(sg.mAllow):"off table", pct(sg.bend), pct(sg.shear), sg.sag?n1(sg.sag):""]);
+  });
+  L.push([]); L.push(["Rig"]); L.push(["Truss","Fixture","Qty","From ft","To ft","lb each hung","Total lb"]);
+  S.rows.forEach(function(r){ const i = rowInfo(r), p = pos(r.pos)||{};
+    L.push([p.name, i.name, r.qty, r.from==null?0:r.from, r.to==null?p.len:r.to, n1(i.lb+i.hw), Math.round((i.lb+i.hw)*r.qty)]); });
+  L.push([]); L.push(["Pack list"]);
+  R.positions.forEach(function(P){ L.push([P.t.n+" — "+P.p.name, cutLabel(P.sections), Math.round(P.t.w*P.L)+" lb"]); });
+  L.push(["Hoists", R.points.length, R.hoist.n]); L.push(["Steel 5 ft", R.points.length]); L.push(["Shackles 5/8", R.points.length*2]);
+  const csv = L.map(function(r){ return r.map(function(x){ x = String(x==null?"":x); return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(","); }).join("\n");
+  if(DOWNLOADS) DOWNLOADS.save({filename:"truss-plot-points.csv", data:csv}).catch(function(){ copyFallback(csv); });
+  else copyFallback(csv);
+}
+function copyFallback(csv){
+  const b = $("csv"), old = b.textContent;
+  if(navigator.clipboard && navigator.clipboard.writeText)
+    navigator.clipboard.writeText(csv).then(function(){ b.textContent = "Copied to clipboard"; setTimeout(function(){ b.textContent = old; },1800); })
+      .catch(function(){ b.textContent = "Copy blocked"; setTimeout(function(){ b.textContent = old; },1800); });
+  else { b.textContent = "Copy blocked"; setTimeout(function(){ b.textContent = old; },1800); }
+}
+
+/* ============================== SAVED RIGS ============================== */
+function snapshot(){
+  return {hoist:S.hoist, chain:S.chain, rep:S.rep, dyn:S.dyn, cab:S.cab,
+    positions:S.positions.map(function(p){ return {id:p.id, name:p.name, type:p.type, len:p.len, hoists:p.hoists, inset:p.inset}; }),
+    rows:S.rows.map(function(r){ return {fid:r.fid, custom:r.custom, qty:r.qty, pos:r.pos, from:r.from, to:r.to}; })};
+}
+function applySnapshot(d){
+  if(!d || !Array.isArray(d.rows)) return;
+  S.hoist = d.hoist||"L"; S.chain = d.chain||60; S.rep = d.rep!==false; S.dyn = d.dyn||1; S.cab = d.cab==null?2.5:d.cab;
+  S.positions = (Array.isArray(d.positions) && d.positions.length)
+    ? d.positions.map(function(p){ return {id:p.id, name:p.name, type:p.type||"tc12", len:p.len||40, hoists:p.hoists||2, inset:p.inset==null?5:p.inset}; })
+    : DEFAULT_POS.map(function(p){ return Object.assign({}, p); });
+  const ids = S.positions.map(function(p){ return p.id; });
+  S.rows = d.rows.map(function(r){ return {uid:uid(), fid:r.fid, custom:r.custom, qty:r.qty||1, pos: ids.indexOf(r.pos)>=0 ? r.pos : ids[0], from:r.from, to:r.to}; });
+  $("hoist").value = S.hoist; $("chain").value = S.chain; $("rep").value = S.rep?"1":"0"; $("dyn").value = String(S.dyn); $("cab").value = S.cab;
+  fillPositions(); render();
+}
+function saveRig(){
+  const name = ($("signame").value||"").trim();
+  if(!name){ $("signame").focus(); return; }
+  const key = name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60) || ("rig-"+Date.now());
+  const rec = {name:name, saved:Date.now(), data:snapshot()};
+  savedRigs = savedRigs.filter(function(x){ return x.key!==key; });
+  savedRigs.push(Object.assign({key:key}, rec));
+  $("signame").value = "";
+  if(DB) DB.doc("rigs/"+key).set(rec).catch(function(){ localWrite(); }); else localWrite();
+  localWrite(); renderSaved();
+}
+function localWrite(){ try{ localStorage.setItem("truss-plot-rigs", JSON.stringify(savedRigs)); }catch(e){} }
+function removeRig(key){
+  savedRigs = savedRigs.filter(function(x){ return x.key!==key; });
+  if(DB) DB.doc("rigs/"+key).delete().catch(function(){});
+  localWrite(); renderSaved();
+}
+function renderSaved(){
+  const el = $("saved");
+  if(!savedRigs.length){ el.innerHTML = '<span style="font-size:12px;color:var(--ink-3)">No saved rigs yet — save one and it comes back next time you open this.</span>'; return; }
+  el.innerHTML = savedRigs.slice().sort(function(a,b){ return b.saved-a.saved; }).map(function(r){
+    return '<span class="chip"><span class="load-b" data-load="'+esc(r.key)+'" role="button" tabindex="0">'+esc(r.name)+
+      '</span><button data-del="'+esc(r.key)+'" aria-label="Delete '+esc(r.name)+'">✕</button></span>';
+  }).join("");
+}
+document.addEventListener("click", function(e){
+  const l = e.target.closest("[data-load]");
+  if(l){ const r = savedRigs.find(function(x){ return x.key===l.getAttribute("data-load"); }); if(r) applySnapshot(r.data); return; }
+  const d = e.target.closest("[data-del]"); if(d) removeRig(d.getAttribute("data-del"));
+});
+document.addEventListener("keydown", function(e){
+  if(e.key!=="Enter" && e.key!==" ") return;
+  const l = e.target.closest && e.target.closest("[data-load]"); if(!l) return;
+  e.preventDefault(); l.click();
+});
+
+/* ============================== BOOT ============================== */
+fillPicker(); fillPositions(); fillHoists(); bind();
+try{ const raw = localStorage.getItem("truss-plot-rigs"); if(raw) savedRigs = JSON.parse(raw)||[]; } catch(e){ savedRigs = []; }
+render();
+
+if(window.claude && typeof window.claude.use === "function"){
+  window.claude.use("downloads").then(function(d){ DOWNLOADS = d; }).catch(function(){});
+  window.claude.use("db").then(function(db){
+    if(!db) return; DB = db;
+    return db.collection("rigs").get().then(function(snap){
+      const docs = (snap && snap.docs) ? snap.docs : [];
+      const remote = docs.map(function(doc){ const v = typeof doc.data === "function" ? doc.data() : doc.data; return Object.assign({key:doc.id}, v||{}); })
+        .filter(function(x){ return x.name && x.data; });
+      if(remote.length){ const seen = {}; savedRigs = remote.concat(savedRigs).filter(function(x){ if(seen[x.key]) return false; seen[x.key]=1; return true; }); renderSaved(); }
+    });
+  }).catch(function(){});
+}
+})();
+</script>
+
+</body></html>

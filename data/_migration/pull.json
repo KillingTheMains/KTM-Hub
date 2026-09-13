@@ -1,0 +1,506 @@
+{
+  "tool": "pull-plot",
+  "source": "https://claude.ai/code/artifact/d1648d1c-9a60-44c8-9aa4-8c24720d0d4d",
+  "fixtures": [
+    {
+      "c": "Moving light",
+      "b": "Robe",
+      "n": "BMFL Blade",
+      "va": 2000,
+      "ch": 49,
+      "lb": 83.6,
+      "cs": "tall",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Robe",
+      "n": "MegaPointe",
+      "va": 670,
+      "ch": 39,
+      "lb": 48.5,
+      "cs": "dual",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Robe",
+      "n": "Pointe",
+      "va": 470,
+      "ch": 24,
+      "lb": 33,
+      "cs": "quad",
+      "per": 4
+    },
+    {
+      "c": "Moving light",
+      "b": "Robe",
+      "n": "Spiider",
+      "va": 660,
+      "ch": 49,
+      "lb": 29.2,
+      "cs": "quad",
+      "per": 4
+    },
+    {
+      "c": "Moving light",
+      "b": "Robe",
+      "n": "T1 Profile",
+      "va": 650,
+      "ch": 49,
+      "lb": 54,
+      "cs": "dual",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Martin",
+      "n": "MAC Aura XB",
+      "va": 400,
+      "ch": 25,
+      "lb": 14.4,
+      "cs": "std",
+      "per": 6
+    },
+    {
+      "c": "Moving light",
+      "b": "Martin",
+      "n": "MAC Aura PXL",
+      "va": 500,
+      "ch": 89,
+      "lb": 34.4,
+      "cs": "std",
+      "per": 5
+    },
+    {
+      "c": "Moving light",
+      "b": "Martin",
+      "n": "MAC Viper Profile",
+      "va": 1225,
+      "ch": 34,
+      "lb": 82,
+      "cs": "tall",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Martin",
+      "n": "MAC Ultra Performance",
+      "va": 1450,
+      "ch": 48,
+      "lb": 97,
+      "cs": "tall",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Martin",
+      "n": "MAC Encore Performance",
+      "va": 600,
+      "ch": 38,
+      "lb": 68.4,
+      "cs": "tall",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Claypaky",
+      "n": "Sharpy",
+      "va": 440,
+      "ch": 16,
+      "lb": 41.8,
+      "cs": "std",
+      "per": 3
+    },
+    {
+      "c": "Moving light",
+      "b": "Claypaky",
+      "n": "Mythos 2",
+      "va": 700,
+      "ch": 30,
+      "lb": 70.5,
+      "cs": "tall",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Claypaky",
+      "n": "Scenius Unico",
+      "va": 1800,
+      "ch": 40,
+      "lb": 92.6,
+      "cs": "tall",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Ayrton",
+      "n": "Khamsin-S",
+      "va": 1150,
+      "ch": 42,
+      "lb": 87.7,
+      "cs": "tall",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Ayrton",
+      "n": "Diablo-S",
+      "va": 550,
+      "ch": 36,
+      "lb": 48.5,
+      "cs": "dual",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Elation",
+      "n": "Proteus Maximus",
+      "va": 1400,
+      "ch": 61,
+      "lb": 117,
+      "cs": "tall",
+      "per": 2
+    },
+    {
+      "c": "Moving light",
+      "b": "Chauvet",
+      "n": "Rogue R2 Wash",
+      "va": 339,
+      "ch": 22,
+      "lb": 20.4,
+      "cs": "r4",
+      "per": 4
+    },
+    {
+      "c": "Moving light",
+      "b": "Chauvet",
+      "n": "Maverick Force S Profile",
+      "va": 563,
+      "ch": 47,
+      "lb": 52.9,
+      "cs": "dual",
+      "per": 2
+    },
+    {
+      "c": "Wash / bar / strobe",
+      "b": "GLP",
+      "n": "impression X4 Bar 20",
+      "va": 400,
+      "ch": 88,
+      "lb": 35.3,
+      "cs": "std",
+      "per": 4
+    },
+    {
+      "c": "Wash / bar / strobe",
+      "b": "GLP",
+      "n": "JDC1",
+      "va": 1200,
+      "ch": 62,
+      "lb": 25.6,
+      "cs": "std",
+      "per": 6
+    },
+    {
+      "c": "Wash / bar / strobe",
+      "b": "SGM",
+      "n": "Q-7",
+      "va": 465,
+      "ch": 6,
+      "lb": 17.9,
+      "cs": "sgm4",
+      "per": 4,
+      "ln": true
+    },
+    {
+      "c": "Conventional",
+      "b": "ETC",
+      "n": "Source Four LED S3 Lustr",
+      "va": 307,
+      "ch": 12,
+      "lb": 19.6,
+      "cs": "tall",
+      "per": 8,
+      "ln": true
+    },
+    {
+      "c": "Conventional",
+      "b": "ETC",
+      "n": "ColorSource PAR",
+      "va": 90,
+      "ch": 5,
+      "lb": 8.3,
+      "cs": "std",
+      "per": 8,
+      "ln": true
+    },
+    {
+      "c": "Conventional",
+      "b": "ETC",
+      "n": "Source Four 750 W",
+      "va": 750,
+      "ch": 1,
+      "lb": 14,
+      "cs": "tall",
+      "per": 8,
+      "ln": true
+    },
+    {
+      "c": "Atmospherics",
+      "b": "MDG",
+      "n": "theONE hazer",
+      "va": 1480,
+      "ch": 5,
+      "lb": 74,
+      "cs": "cradle",
+      "per": 1,
+      "ln": true,
+      "haze": true
+    },
+    {
+      "c": "Atmospherics",
+      "b": "Look",
+      "n": "Viper NT fogger",
+      "va": 1300,
+      "ch": 1,
+      "lb": 30,
+      "cs": "half",
+      "per": 2,
+      "ln": true,
+      "haze": true
+    },
+    {
+      "c": "Atmospherics",
+      "b": "Martin",
+      "n": "JEM ZR45 fogger",
+      "va": 1800,
+      "ch": 1,
+      "lb": 50,
+      "cs": "std",
+      "per": 2,
+      "ln": true,
+      "haze": true
+    }
+  ],
+  "cases": {
+    "std": {
+      "n": "Standard case",
+      "L": 48,
+      "W": 24,
+      "H": 26,
+      "lb": 109,
+      "stack": true
+    },
+    "tall": {
+      "n": "Tall standard case",
+      "L": 48,
+      "W": 24,
+      "H": 37.75,
+      "lb": 150,
+      "stack": true
+    },
+    "half": {
+      "n": "Half case",
+      "L": 24,
+      "W": 24,
+      "H": 26,
+      "lb": 65,
+      "stack": true
+    },
+    "quarter": {
+      "n": "Quarter case",
+      "L": 24,
+      "W": 24,
+      "H": 12.75,
+      "lb": 40,
+      "stack": true
+    },
+    "dual": {
+      "n": "Mover 2-way case",
+      "L": 24,
+      "W": 24,
+      "H": 35,
+      "lb": 115,
+      "stack": true
+    },
+    "quad": {
+      "n": "Mover 4-way top-loader",
+      "L": 38,
+      "W": 24,
+      "H": 32,
+      "lb": 120,
+      "stack": true
+    },
+    "r4": {
+      "n": "Wash 4-way trunk",
+      "L": 30,
+      "W": 24,
+      "H": 32.5,
+      "lb": 107,
+      "stack": true
+    },
+    "sgm4": {
+      "n": "SGM 4-way case",
+      "L": 28,
+      "W": 24,
+      "H": 24,
+      "lb": 84,
+      "stack": true
+    },
+    "cradle": {
+      "n": "theONE touring cradle",
+      "L": 30,
+      "W": 24,
+      "H": 42,
+      "lb": 111,
+      "stack": false
+    },
+    "cable": {
+      "n": "Tall wide cable case",
+      "L": 48,
+      "W": 32,
+      "H": 37.75,
+      "lb": 234,
+      "stack": true
+    },
+    "trunk": {
+      "n": "Half-pack cable trunk",
+      "L": 45,
+      "W": 30,
+      "H": 30,
+      "lb": 89,
+      "stack": true
+    },
+    "distro": {
+      "n": "Distro rack, 24 RU",
+      "L": 30,
+      "W": 24,
+      "H": 51,
+      "lb": 152,
+      "stack": false
+    },
+    "noderk": {
+      "n": "Node & switch rack",
+      "L": 24,
+      "W": 24,
+      "H": 26,
+      "lb": 65,
+      "stack": true
+    },
+    "motor": {
+      "n": "Motor case, 2-way",
+      "L": 48,
+      "W": 24,
+      "H": 26,
+      "lb": 109,
+      "stack": true
+    },
+    "motorh": {
+      "n": "½-ton motor case, 2-way",
+      "L": 24,
+      "W": 24,
+      "H": 26,
+      "lb": 65,
+      "stack": true
+    },
+    "dolly12": {
+      "n": "Truss dolly, 12″",
+      "L": 96,
+      "W": 24,
+      "H": 55,
+      "lb": 95,
+      "stack": false
+    },
+    "dolly20": {
+      "n": "Truss dolly, 20.5″",
+      "L": 96,
+      "W": 31,
+      "H": 89,
+      "lb": 125,
+      "stack": false
+    },
+    "console": {
+      "n": "Console case",
+      "L": 54,
+      "W": 34,
+      "H": 26,
+      "lb": 106,
+      "stack": false
+    },
+    "workbox": {
+      "n": "Utility work box",
+      "L": 32,
+      "W": 24,
+      "H": 52,
+      "lb": 136,
+      "stack": false
+    },
+    "hw": {
+      "n": "Rigging hardware case",
+      "L": 24,
+      "W": 24,
+      "H": 26,
+      "lb": 65,
+      "stack": true
+    }
+  },
+  "trucks": [
+    {
+      "id": "t53",
+      "n": "53′ trailer",
+      "L": 630,
+      "W": 99,
+      "H": 108,
+      "pay": 44000
+    },
+    {
+      "id": "t48",
+      "n": "48′ trailer",
+      "L": 570,
+      "W": 98,
+      "H": 108,
+      "pay": 45000
+    },
+    {
+      "id": "b26",
+      "n": "26′ box truck",
+      "L": 311,
+      "W": 97,
+      "H": 97,
+      "pay": 10000
+    },
+    {
+      "id": "b22",
+      "n": "22′ box truck",
+      "L": 263,
+      "W": 97,
+      "H": 97,
+      "pay": 10000
+    },
+    {
+      "id": "bus",
+      "n": "Bus trailer, 24′",
+      "L": 288,
+      "W": 96,
+      "H": 84,
+      "pay": 10000
+    },
+    {
+      "id": "b16",
+      "n": "16′ box truck",
+      "L": 192,
+      "W": 91,
+      "H": 78,
+      "pay": 4300
+    },
+    {
+      "id": "spr",
+      "n": "Sprinter 170″ HR",
+      "L": 174,
+      "W": 70,
+      "H": 79,
+      "pay": 3800
+    }
+  ]
+}

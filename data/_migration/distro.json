@@ -1,0 +1,182 @@
+{
+ "tool": "distro-plot",
+ "source": "https://claude.ai/code/artifact/ee876806-7765-4b3a-b54e-3e176a44cc8b",
+ "fixtures": [
+  {
+   "c": "Moving light",
+   "b": "Robe",
+   "n": "BMFL Blade",
+   "va": 2000
+  },
+  {
+   "c": "Moving light",
+   "b": "Robe",
+   "n": "MegaPointe",
+   "va": 670
+  },
+  {
+   "c": "Moving light",
+   "b": "Robe",
+   "n": "Pointe",
+   "va": 470
+  },
+  {
+   "c": "Moving light",
+   "b": "Robe",
+   "n": "Spiider",
+   "va": 660
+  },
+  {
+   "c": "Moving light",
+   "b": "Robe",
+   "n": "T1 Profile",
+   "va": 650
+  },
+  {
+   "c": "Moving light",
+   "b": "Martin",
+   "n": "MAC Aura XB",
+   "va": 400
+  },
+  {
+   "c": "Moving light",
+   "b": "Martin",
+   "n": "MAC Aura PXL",
+   "va": 500
+  },
+  {
+   "c": "Moving light",
+   "b": "Martin",
+   "n": "MAC Viper Profile",
+   "va": 1225
+  },
+  {
+   "c": "Moving light",
+   "b": "Martin",
+   "n": "MAC Ultra Performance",
+   "va": 1450
+  },
+  {
+   "c": "Moving light",
+   "b": "Martin",
+   "n": "MAC Encore Performance",
+   "va": 600
+  },
+  {
+   "c": "Moving light",
+   "b": "Claypaky",
+   "n": "Sharpy",
+   "va": 440
+  },
+  {
+   "c": "Moving light",
+   "b": "Claypaky",
+   "n": "Mythos 2",
+   "va": 700
+  },
+  {
+   "c": "Moving light",
+   "b": "Claypaky",
+   "n": "Scenius Unico",
+   "va": 1800
+  },
+  {
+   "c": "Moving light",
+   "b": "Ayrton",
+   "n": "Khamsin-S",
+   "va": 1150
+  },
+  {
+   "c": "Moving light",
+   "b": "Ayrton",
+   "n": "Diablo-S",
+   "va": 550
+  },
+  {
+   "c": "Moving light",
+   "b": "Elation",
+   "n": "Proteus Maximus",
+   "va": 1400
+  },
+  {
+   "c": "Moving light",
+   "b": "Chauvet",
+   "n": "Rogue R2 Wash",
+   "va": 339
+  },
+  {
+   "c": "Moving light",
+   "b": "Chauvet",
+   "n": "Maverick Force S Profile",
+   "va": 563
+  },
+  {
+   "c": "Wash / bar / strobe",
+   "b": "GLP",
+   "n": "impression X4 Bar 20",
+   "va": 400
+  },
+  {
+   "c": "Wash / bar / strobe",
+   "b": "GLP",
+   "n": "JDC1",
+   "va": 1200
+  },
+  {
+   "c": "Wash / bar / strobe",
+   "b": "SGM",
+   "n": "Q-7",
+   "va": 465
+  },
+  {
+   "c": "Conventional",
+   "b": "ETC",
+   "n": "Source Four LED S3 Lustr",
+   "va": 307
+  },
+  {
+   "c": "Conventional",
+   "b": "ETC",
+   "n": "ColorSource PAR",
+   "va": 90
+  },
+  {
+   "c": "Conventional",
+   "b": "ETC",
+   "n": "Source Four 750 W",
+   "va": 750
+  },
+  {
+   "c": "Atmospherics",
+   "b": "MDG",
+   "n": "theONE hazer",
+   "va": 1480
+  },
+  {
+   "c": "Atmospherics",
+   "b": "Look",
+   "n": "Viper NT fogger",
+   "va": 1300
+  },
+  {
+   "c": "Atmospherics",
+   "b": "Martin",
+   "n": "JEM ZR45 fogger",
+   "va": 1800
+  },
+  {
+   "c": "Control & rigging",
+   "b": "MA Lighting",
+   "n": "grandMA3 full-size",
+   "va": 300
+  },
+  {
+   "c": "Control & rigging",
+   "b": "CM",
+   "n": "Lodestar 1-ton hoist",
+   "va": 1450,
+   "motor": true,
+   "mode": "3ph"
+  }
+ ]
+}

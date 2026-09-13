@@ -1,0 +1,11 @@
+# credentials — never commit
+gdtf-share.json
+.gdtf-session
+
+# 72 MB of GDTF zips copied from ~/MALightingTechnology/gma3_library; regenerable, keep local
+gdtf/*.gdtf
+
+# local noise
+.DS_Store
+__pycache__/
+*.working.html

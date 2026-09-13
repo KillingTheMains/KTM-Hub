@@ -1,0 +1,1202 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Patch Plot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#666D74;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF; --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#8A9097;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13;
+  --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF; --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF; --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}
+
+*{box-sizing:border-box}
+::selection{background:var(--sel); color:var(--ink)}
+body{margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:14px; line-height:1.5}
+.wrap{max-width:1280px; margin:0 auto; padding:20px 20px 64px; display:flex; flex-direction:column; gap:18px}
+
+h1,h2,h3{margin:0; font-family:"Archivo",sans-serif; text-wrap:balance}
+h1{font-size:26px; font-weight:800; font-stretch:112%; letter-spacing:-.015em; line-height:1}
+h2{font-size:13px; font-weight:700; font-stretch:82%; text-transform:uppercase; letter-spacing:.13em; color:var(--ink-2)}
+.eyebrow{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.16em; color:var(--ink-3)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums}
+
+header.top{display:flex; flex-wrap:wrap; align-items:flex-end; gap:16px 22px; padding-bottom:14px; border-bottom:2px solid var(--ink)}
+.brand{display:flex; flex-direction:column; gap:3px}
+.brand .sub{font-size:12.5px; color:var(--ink-2); max-width:50ch}
+.top .spacer{flex:1 1 auto}
+.setbar{display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end}
+.field{display:flex; flex-direction:column; gap:4px}
+.field > label{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.14em; color:var(--ink-3)}
+select,input[type=number],input[type=text]{
+  font-family:"IBM Plex Mono",monospace; font-size:13px; font-variant-numeric:tabular-nums;
+  background:var(--surface); color:var(--ink); border:1px solid var(--line-strong);
+  border-radius:3px; padding:5px 7px; min-height:30px; caret-color:var(--accent)}
+select{font-family:"IBM Plex Sans",sans-serif}
+input[type=number]{width:82px}
+:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden}
+.tile{background:var(--surface); padding:11px 13px 12px; display:flex; flex-direction:column; gap:2px}
+.tile .k{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.13em; color:var(--ink-3)}
+.tile .v{font-family:"IBM Plex Mono",monospace; font-size:22px; font-weight:600; letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums; line-height:1.15}
+.tile .v small{font-size:12px; font-weight:400; color:var(--ink-3); letter-spacing:0}
+.tile .n{font-size:11.5px; color:var(--ink-3)}
+.tile.flag-ok .v{color:var(--accent)} .tile.flag-warn .v{color:var(--warn)} .tile.flag-crit .v{color:var(--crit)}
+
+.panel{min-width:0; background:var(--surface); border:1px solid var(--line); border-radius:4px; box-shadow:var(--shadow)}
+.panel > .head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 13px; border-bottom:1px solid var(--line)}
+.panel > .head .spacer{flex:1 1 auto}
+.panel > .body{padding:13px}
+.cols{display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:18px; align-items:stretch}
+.duo{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:18px; align-items:start}
+@media (max-width:940px){ .cols{grid-template-columns:minmax(0,1fr)} }
+
+button{font-family:"Archivo",sans-serif; font-stretch:88%; font-weight:600; font-size:12px; letter-spacing:.03em;
+  cursor:pointer; border-radius:3px; border:1px solid var(--line-strong);
+  background:var(--surface-2); color:var(--ink); padding:6px 11px; min-height:30px}
+button:hover{border-color:var(--ink-3)}
+button.primary{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+button.primary:hover{filter:brightness(1.07)}
+button.ghost{background:transparent; border-color:transparent; color:var(--ink-3); padding:4px 6px; min-height:24px}
+button.ghost:hover{color:var(--crit); background:var(--crit-soft)}
+.seg{display:inline-flex; border:1px solid var(--line-strong); border-radius:3px; overflow:hidden}
+.seg button{border:0; border-radius:0; background:var(--surface); padding:5px 10px; min-height:28px; color:var(--ink-3)}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--surface)}
+
+.scroll{overflow-x:auto; scrollbar-color:var(--line-strong) transparent; scrollbar-width:thin}
+table{border-collapse:collapse; width:100%; font-size:13px}
+th{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.12em; color:var(--ink-3); text-align:left; padding:0 8px 6px;
+  border-bottom:1px solid var(--line-strong); white-space:nowrap}
+td{padding:5px 8px; border-bottom:1px solid var(--line); vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.rig-name{font-weight:500; white-space:nowrap}
+.rig-brand{color:var(--ink-3); font-size:11.5px}
+.qty{width:56px; text-align:right}
+td select{font-size:12px; padding:3px 5px; min-height:26px; max-width:190px}
+.empty{padding:26px 10px; text-align:center; color:var(--ink-3); font-size:13px}
+.sw{display:inline-block; width:10px; height:10px; border-radius:2px; vertical-align:-1px; margin-right:6px;
+  border:1px solid rgba(128,128,128,.35)}
+
+/* ---------- universe map ---------- */
+.umap{display:flex; flex-direction:column; gap:0}
+.umap .axis{display:grid; grid-template-columns:118px minmax(0,1fr) 118px; align-items:end; margin-bottom:6px}
+.umap .axis .ticks{position:relative; height:14px; font-family:"IBM Plex Mono",monospace; font-size:9.5px; color:var(--ink-3)}
+.umap .axis .ticks span{position:absolute; transform:translateX(-50%); top:0}
+.umap .axis .ticks span:first-child{transform:none}
+.umap .axis .ticks span:last-child{transform:translateX(-100%)}
+.urow{display:grid; grid-template-columns:118px minmax(0,1fr) 118px; align-items:center; gap:0 10px; padding:5px 0;
+  border-top:1px dotted var(--line)}
+.umap .grp-h + .urow{border-top:0}
+.urow .ur .why.order{color:var(--ink-3)}
+.urow .ul{display:flex; flex-direction:column; gap:1px; min-width:0}
+.urow .ul .u{font-family:"Archivo",sans-serif; font-stretch:105%; font-weight:800; font-size:14px; line-height:1.1}
+.urow .ul .p{font-size:11px; color:var(--ink-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.urow .bar{position:relative; height:26px; background:var(--sunken); border:1px solid var(--line); border-radius:3px; overflow:hidden}
+.urow .bar .blk{position:absolute; top:0; bottom:0; display:flex; align-items:center; justify-content:center; overflow:hidden;
+  border-right:2px solid var(--surface); box-sizing:border-box}
+.urow .bar .blk:last-child{border-right:0}
+.urow .bar .blk span{font-family:"IBM Plex Mono",monospace; font-size:9.5px; font-weight:500; color:#fff; white-space:nowrap;
+  padding:0 3px; text-shadow:0 0 2px rgba(0,0,0,.35)}
+.urow .bar .cap{position:absolute; top:0; bottom:0; border-left:1.5px dashed var(--ink-3); pointer-events:none}
+.urow .bar .tick{position:absolute; top:0; bottom:0; width:1px; background:var(--line); pointer-events:none}
+.urow .ur{display:flex; flex-direction:column; align-items:flex-end; gap:1px; min-width:0}
+.urow .ur .f{font-family:"IBM Plex Mono",monospace; font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums}
+.urow .ur .why{font-family:"Archivo",sans-serif; font-stretch:82%; font-size:10px; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); white-space:nowrap}
+.urow .ur .why.dev{color:var(--warn)}
+.urow .ur .why.over{color:var(--crit)}
+.umap .grp-h{display:flex; align-items:center; gap:8px; margin:10px 0 3px; flex-wrap:wrap}
+.umap .grp-h:first-child{margin-top:0}
+.umap .grp-h .pos{font-family:"Archivo",sans-serif; font-stretch:95%; font-weight:700; font-size:13px}
+.umap .grp-h hr{flex:1; border:0; border-top:1px solid var(--line); margin:0; min-width:20px}
+@media (max-width:640px){
+  .umap .axis, .urow{grid-template-columns:64px minmax(0,1fr) 78px}
+  .urow .ur .f{font-size:11px}
+}
+
+.legend{display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:12px; font-size:11.5px; color:var(--ink-2)}
+.legend .it{display:flex; align-items:center; gap:6px}
+
+.tag{font-family:"Archivo",sans-serif; font-stretch:82%; font-weight:700; font-size:11px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink-2); background:var(--surface-2); border:1px solid var(--line);
+  border-radius:2px; padding:2px 7px; white-space:nowrap}
+.tag.warn{color:var(--warn); border-color:var(--warn); background:var(--warn-soft)}
+.tag.crit{color:var(--crit); border-color:var(--crit); background:var(--crit-soft)}
+.tag.ok{color:var(--accent); border-color:var(--accent); background:var(--accent-soft)}
+
+.note{display:flex; gap:8px; align-items:flex-start; font-size:12.5px; line-height:1.45; border-radius:3px;
+  padding:8px 10px; border:1px solid transparent}
+.note.warn{background:var(--warn-soft); border-color:var(--warn)}
+.note.crit{background:var(--crit-soft); border-color:var(--crit)}
+.note.ok{background:var(--accent-soft); border-color:var(--accent)}
+.note .m{font-family:"Archivo",sans-serif; font-stretch:85%; font-weight:700; text-transform:uppercase;
+  font-size:11px; letter-spacing:.12em; padding-top:2px; white-space:nowrap}
+.notes{display:flex; flex-direction:column; gap:7px}
+.notes:empty{display:none}
+
+.rows{display:flex; flex-direction:column}
+.rows .r{display:flex; align-items:baseline; gap:10px; padding:6px 0; border-bottom:1px dotted var(--line)}
+.rows .r:last-child{border-bottom:0}
+.rows .r .k{color:var(--ink-2); font-size:12.5px}
+.rows .r .v{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-weight:600; font-variant-numeric:tabular-nums; text-align:right}
+
+/* ---------- patch sheet ---------- */
+.sheet .uh{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin:16px 0 6px}
+.sheet .uh:first-child{margin-top:2px}
+.sheet .uh .u{font-family:"Archivo",sans-serif; font-stretch:105%; font-weight:800; font-size:15px}
+.sheet .uh .addr{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-3)}
+.sheet .uh hr{flex:1; border:0; border-top:1px solid var(--line); margin:0; min-width:20px}
+.sheet table{font-size:12.5px}
+.sheet td{padding:3px 8px}
+.sheet .a{font-family:"IBM Plex Mono",monospace; font-weight:600; font-variant-numeric:tabular-nums}
+.sheet .rng{font-family:"IBM Plex Mono",monospace; color:var(--ink-3); font-variant-numeric:tabular-nums}
+
+/* ---------- data riser ---------- */
+.riser{margin:0; display:flex; flex-direction:column; gap:9px}
+.riser svg{width:100%; max-width:960px; height:auto; color:var(--ink); display:block}
+.riser figcaption{font-size:11.5px; color:var(--ink-3); line-height:1.5; max-width:92ch}
+.riser .bx{fill:var(--surface-2); stroke:var(--line-strong)}
+.riser .ttl{font-family:"Archivo",sans-serif; font-size:9.5px; font-weight:700; letter-spacing:.14em; fill:var(--ink-3)}
+.riser .nm{font-family:"IBM Plex Sans",sans-serif; font-size:12.5px; font-weight:500; fill:var(--ink)}
+.riser .dt{font-family:"IBM Plex Mono",monospace; font-size:11px; fill:var(--ink-2)}
+.riser .sm{font-family:"IBM Plex Mono",monospace; font-size:10px; fill:var(--ink-3)}
+.riser .big{font-family:"IBM Plex Mono",monospace; font-size:19px; font-weight:600; fill:var(--ink)}
+.riser .ln{stroke:var(--ink-2); fill:none}
+
+.saved{display:flex; flex-wrap:wrap; gap:6px}
+.chip{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line-strong);
+  background:var(--surface-2); border-radius:14px; padding:3px 5px 3px 11px; font-size:12.5px}
+.chip button{border:0; background:transparent; padding:1px 4px; min-height:0; color:var(--ink-3); font-size:13px; line-height:1}
+.chip button:hover{color:var(--crit)}
+.chip .load-b{cursor:pointer}
+
+footer.fine{font-size:11.5px; color:var(--ink-3); line-height:1.6; max-width:100ch;
+  border-top:1px solid var(--line); padding-top:12px; display:flex; flex-direction:column; gap:7px}
+footer.fine b{color:var(--ink-2); font-weight:600}
+footer.fine a{color:var(--ink-2)}
+.hide{display:none !important}
+@media (prefers-reduced-motion:no-preference){ .urow .bar .blk{transition:left .28s ease, width .28s ease} }
+
+@media print{
+  body{background:#fff; color:#000; font-size:10pt}
+  .wrap{max-width:none; padding:0; gap:12px}
+  .noprint{display:none !important}
+  .panel{box-shadow:none; border:1px solid #999; break-inside:avoid}
+  .tiles{border-color:#999; background:#999}
+  .tile{background:#fff}
+  .urow, .sheet .uh{break-inside:avoid}
+  header.top{border-bottom:2px solid #000}
+  .urow .bar .blk span{text-shadow:none}
+}
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">DMX universe packing &amp; data distribution</div>
+      <h1>Patch Plot</h1>
+      <div class="sub">Build the rig by position, pick each fixture's mode. It packs the universes, writes the addresses,
+        counts the node ports, and tells you which constraint actually closed each universe.</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="setbar noprint">
+      <div class="field"><label for="proto">Protocol</label>
+        <select id="proto"><option value="sacn">sACN (E1.31)</option><option value="artnet">Art-Net 4</option></select></div>
+      <div class="field"><label for="ustart">First universe</label>
+        <input type="number" id="ustart" min="1" max="63000" value="1"></div>
+      <div class="field"><label for="fill">Universe fill</label>
+        <select id="fill"><option value="1">Full · 512 ch</option><option value="0.85">Headroom · 85 %</option></select></div>
+      <div class="field"><label for="lcap">Per DMX line</label>
+        <select id="lcap"><option value="32">32 · E1.11 max</option><option value="30">30 · Pathway</option>
+          <option value="24" selected>24 · touring RDM</option><option value="16">16</option><option value="12">12</option></select></div>
+      <div class="field"><label for="step">Address step</label>
+        <select id="step"><option value="0">Packed</option><option value="10">Round to 10</option><option value="20">Round to 20</option>
+          <option value="50">Round to 50</option><option value="100">Round to 100</option></select></div>
+    </div>
+  </header>
+
+  <section class="tiles" id="tiles"></section>
+  <div class="notes" id="notes"></div>
+
+  <!-- ===================== RIG ===================== -->
+  <section class="panel">
+    <div class="head">
+      <h2>Rig</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="rigcount"></span>
+    </div>
+    <div class="body" style="display:flex;flex-direction:column;gap:12px">
+      <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end">
+        <div class="field" style="flex:1 1 200px;min-width:170px"><label for="pick">Add fixture</label>
+          <select id="pick"></select></div>
+        <div class="field"><label for="pickqty">Qty</label>
+          <input type="number" id="pickqty" class="qty" min="1" max="999" value="12"></div>
+        <div class="field"><label for="pickmode">Mode</label><select id="pickmode"></select></div>
+        <div class="field"><label for="pickpos">Position</label><select id="pickpos"></select></div>
+        <button class="primary" id="addbtn">Add</button>
+      </div>
+
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th>Fixture</th><th class="num">Qty</th><th>Position</th><th>Mode</th>
+            <th class="num">Ch ea</th><th class="num">Total ch</th><th>Data</th><th class="noprint"></th>
+          </tr></thead>
+          <tbody id="rigbody"></tbody>
+        </table>
+      </div>
+
+      <details class="noprint">
+        <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-2)">Add something not in the library</summary>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-top:9px">
+          <div class="field" style="flex:1 1 160px"><label for="cname">Name</label>
+            <input type="text" id="cname" placeholder="LED tape controller"></div>
+          <div class="field"><label for="cch">Channels</label><input type="number" id="cch" min="1" max="512" value="16"></div>
+          <div class="field"><label for="cqty">Qty</label><input type="number" id="cqty" class="qty" min="1" max="999" value="4"></div>
+          <button id="addcustom">Add</button>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <div class="cols">
+    <!-- ===================== UNIVERSE MAP ===================== -->
+    <section class="panel">
+      <div class="head">
+        <h2>Universe map</h2><span class="spacer"></span>
+        <div class="seg noprint" role="group" aria-label="Packing order">
+          <button id="mOrder" aria-pressed="true">In rig order</button>
+          <button id="mTight" aria-pressed="false">Pack tight</button>
+        </div>
+      </div>
+      <div class="body">
+        <div class="umap" id="umap"></div>
+        <div class="legend" id="legend"></div>
+      </div>
+    </section>
+
+    <!-- ===================== POSITIONS ===================== -->
+    <section class="panel">
+      <div class="head">
+        <h2>Positions</h2><span class="spacer"></span>
+        <button id="addpos" class="noprint">Add position</button>
+      </div>
+      <div class="body">
+        <div class="scroll">
+          <table>
+            <thead><tr>
+              <th>Position</th><th class="num">Run ft</th><th class="num">Fixt</th>
+              <th class="num">Ch</th><th class="num">Univ</th><th>Node</th><th>Line</th><th class="noprint"></th>
+            </tr></thead>
+            <tbody id="posbody"></tbody>
+          </table>
+        </div>
+        <p style="font-size:11.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.5" id="poshint"></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== RISER ===================== -->
+  <section class="panel">
+    <div class="head"><h2>Data riser</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="risersum"></span></div>
+    <div class="body"><figure class="riser" id="riser"></figure></div>
+  </section>
+
+  <!-- ===================== PATCH SHEET ===================== -->
+  <section class="panel">
+    <div class="head">
+      <h2>Patch sheet</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="sheetsum"></span>
+      <button id="csv" class="noprint">Export CSV</button>
+      <button id="printbtn" class="noprint">Print</button>
+    </div>
+    <div class="body sheet" id="sheet"></div>
+  </section>
+
+  <div class="duo">
+    <!-- ===================== NETWORK ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Nodes &amp; network</h2></div>
+      <div class="body" style="display:flex;flex-direction:column;gap:12px">
+        <div class="noprint" style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end">
+          <div class="field"><label for="topo">Topology</label>
+            <select id="topo"><option value="node">Node at each position</option><option value="home">Home-run DMX from the rack</option></select></div>
+          <div class="field"><label for="node">Node model</label><select id="node"></select></div>
+          <div class="field"><label for="jump">Jumper (ft)</label><input type="number" id="jump" min="1" max="200" value="10"></div>
+        </div>
+        <div class="rows" id="netrows"></div>
+      </div>
+    </section>
+
+    <!-- ===================== SAVE ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Console &amp; saved rigs</h2></div>
+      <div class="body" style="display:flex;flex-direction:column;gap:12px">
+        <div class="rows" id="conrows"></div>
+        <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;border-top:1px solid var(--line);padding-top:11px">
+          <div class="field" style="flex:1 1 150px"><label for="signame">Save this rig as</label>
+            <input type="text" id="signame" placeholder="Arena A — main truss"></div>
+          <button id="savebtn">Save</button>
+        </div>
+        <div class="saved noprint" id="saved"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="duo">
+    <!-- ===================== CHAIN LIMITS ===================== -->
+    <section class="panel">
+      <div class="head"><h2>How many per universe</h2><span class="spacer"></span>
+        <span class="eyebrow mono" id="chainrule"></span></div>
+      <div class="body">
+        <div class="scroll"><table>
+          <thead><tr><th>Fixture · mode</th><th class="num">Ch</th>
+            <th class="num">By channels</th><th class="num">By line</th><th>Governs</th></tr></thead>
+          <tbody id="chainbody"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ===================== PACK LIST ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Pack list</h2><span class="spacer"></span>
+        <span class="eyebrow mono" id="packweight"></span></div>
+      <div class="body"><div class="rows" id="packrows"></div></div>
+    </section>
+  </div>
+
+  <footer class="fine">
+    <div><b>Read this before you patch.</b> Patch Plot is a planning aid, not the show file. Footprints are the
+    manufacturer's published channel counts for each mode and change with firmware — the Encore Performance went
+    from 33 to 38 channels, the Scenius Unico from 39 to 40. Confirm the fixture's own menu before you address it.</div>
+    <div><b>What the numbers assume.</b> One universe is one DMX line is one node port, and a universe never
+    spans two positions. Every fixture is counted as one unit load; ANSI E1.11 §5.10 allows 32 per line, Pathway
+    plans on 30, and the 24 default is touring practice for RDM discovery speed, not a standard. Fixtures never
+    straddle a universe boundary, so a full universe is rarely 512 used channels. Run limits: ESTA's recommended
+    practice keeps a DMX line under 300 m (1000 ft) and RDM gets flaky well before that; Cat5e/6 is 100 m (328 ft)
+    by TIA-568, past which you are on fiber. Termination (120 Ω) is assumed on every line and is mandatory for RDM.</div>
+    <div><b>Addressing.</b> sACN (E1.31) universes are 1–63999 on UDP 5568, multicast 239.255.hi.lo, default
+    priority 100. Art-Net 4 port addresses are 15-bit and zero-based — Net 0–127, Sub-Net 0–15, Universe 0–15 —
+    so sACN universe 1 is Art-Net 0.0.0. Wireless receivers (CRMX, W-DMX, Multiverse) start a fresh line with the
+    same 32-load budget; they are noted per fixture but not planned here.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================ REFERENCE DATA ============================ */
+/* Modes are manufacturer-published channel counts. The first entry is the touring default.
+   data: "5" 5-pin XLR · "3+5" both · "+net" etherCON/RJ45 Art-Net/sACN · "+crmx" LumenRadio built in ·
+   "+wdmx" Wireless Solution · "+mv" City Theatrical Multiverse. rdm:false when the manual is silent. */
+const LIB = [
+  {c:"Moving light", b:"Robe",     n:"BMFL Blade",        m:[["Mode 1",49],["Mode 2",42]], d:"3+5+net"},
+  {c:"Moving light", b:"Robe",     n:"MegaPointe",        m:[["Mode 1",39],["Mode 2",34]], d:"3+5+net"},
+  {c:"Moving light", b:"Robe",     n:"Pointe",            m:[["Mode 1",24],["Mode 2",16],["Mode 3",30]], d:"3+5+net"},
+  {c:"Moving light", b:"Robe",     n:"Spiider",           m:[["Mode 1 · zones",49],["Mode 2",27],["Mode 3",33],["Mode 4 · pixel RGB",90],["Mode 7 · pixel RGB",91],["Mode 8 · pixel RGBW",110],["Mode 10 · pattern+RGBW",123]], d:"3+5+net"},
+  {c:"Moving light", b:"Robe",     n:"T1 Profile",        m:[["Mode 1 · CMY",49],["Mode 2 · reduced",33],["Mode 3 · five colour",53]], d:"3+5+net"},
+  {c:"Moving light", b:"Martin",   n:"MAC Aura XB",       m:[["Extended",25],["Standard",14]], d:"5"},
+  {c:"Moving light", b:"Martin",   n:"MAC Aura PXL",      m:[["Extended",89],["Basic",32],["Compact",17],["Ludicrous",512]], d:"5+net"},
+  {c:"Moving light", b:"Martin",   n:"MAC Viper Profile", m:[["Extended 16-bit",34],["Basic 16-bit",26]], d:"5"},
+  {c:"Moving light", b:"Martin",   n:"MAC Ultra Performance", m:[["Basic",48],["Extended",58]], d:"5+net"},
+  {c:"Moving light", b:"Martin",   n:"MAC Encore Performance", m:[["Standard · fw ≥1.6",38],["Legacy fw",33]], d:"5"},
+  {c:"Moving light", b:"Claypaky", n:"Sharpy",            m:[["Standard",16],["Vector",20]], d:"3+5"},
+  {c:"Moving light", b:"Claypaky", n:"Mythos 2",          m:[["Standard",30],["Vector",34]], d:"5+net"},
+  {c:"Moving light", b:"Claypaky", n:"Scenius Unico",     m:[["Standard",40],["Vector",44]], d:"5+net"},
+  {c:"Moving light", b:"Ayrton",   n:"Khamsin-S",         m:[["Standard",42],["Basic",40],["Extended",64]], d:"5+net+crmx"},
+  {c:"Moving light", b:"Ayrton",   n:"Diablo-S",          m:[["Standard",36],["Basic",34],["Extended",56]], d:"5+crmx"},
+  {c:"Moving light", b:"Elation",  n:"Proteus Maximus",   m:[["Extended",61],["Standard",37]], d:"5+net"},
+  {c:"Moving light", b:"Chauvet",  n:"Rogue R2 Wash",     m:[["22 ch",22],["15 ch",15],["17 ch",17],["33 ch",33],["54 ch",54],["56 ch · pixel",56]], d:"3+5", rdm:false},
+  {c:"Moving light", b:"Chauvet",  n:"Maverick Force S Profile", m:[["47 ch",47],["31 ch",31]], d:"3+5+net+wdmx"},
+  {c:"Wash / bar / strobe", b:"GLP", n:"impression X4 Bar 20", m:[["Single Pixel",88],["Normal",34],["Compressed",20],["HiRes",35],["Dual Pixel",48],["Single Pixel HiRes",89]], d:"5"},
+  {c:"Wash / bar / strobe", b:"GLP", n:"JDC1",            m:[["SPix Pro",62],["Normal",23],["Compressed Pro",14],["SPix",68],["1Pix Pro",17],["Easy",11]], d:"5"},
+  {c:"Wash / bar / strobe", b:"SGM", n:"Q-7",             m:[["6 ch · CTC",6],["3 ch",3],["4 ch RAW",4],["6 ch RAW",6],["8 ch · XC-5",8]], d:"5+crmx"},
+  {c:"Conventional", b:"ETC", n:"Source Four LED S3 Lustr", m:[["Direct",12],["Expanded",11],["Studio",7],["RGB",3],["1 ch",1]], d:"5+mv"},
+  {c:"Conventional", b:"ETC", n:"ColorSource PAR",        m:[["5 ch",5],["Direct",6],["RGB",3],["1 ch",1]], d:"5"},
+  {c:"Conventional", b:"ETC", n:"Source Four 750 W",      m:[["Dimmer",1]], d:"dim", rdm:false},
+  {c:"Atmospherics", b:"MDG",    n:"theONE hazer",        m:[["Standard",5]], d:"5+net"},
+  {c:"Atmospherics", b:"Look",   n:"Viper NT fogger",     m:[["Output",1]], d:"5", rdm:false},
+  {c:"Atmospherics", b:"Martin", n:"JEM ZR45 fogger",     m:[["1C",1],["2C",2]], d:"5"}
+];
+LIB.forEach(function(f,i){ f.id = "L"+i; if(f.rdm===undefined) f.rdm = true; });
+
+const NODES = [
+  {id:"ln4",  n:"Luminex LumiNode 4",       ports:4,  proto:"Art-Net · sACN", poe:true},
+  {id:"ln2",  n:"Luminex LumiNode 2",       ports:2,  proto:"Art-Net · sACN", poe:true},
+  {id:"ln1",  n:"Luminex LumiNode 1",       ports:1,  proto:"Art-Net · sACN", poe:true},
+  {id:"ln12", n:"Luminex LumiNode 12",      ports:12, proto:"Art-Net · sACN", poe:true},
+  {id:"mk2-2",n:"ETC Response Mk2 2-port",  ports:2,  proto:"sACN only",      poe:true},
+  {id:"mk2-4",n:"ETC Response Mk2 4-port",  ports:4,  proto:"sACN only",      poe:true},
+  {id:"mk2-8",n:"ETC Response Mk2 8-port",  ports:8,  proto:"sACN only",      poe:true},
+  {id:"pp4",  n:"Pathway Pathport 4-port",  ports:4,  proto:"Art-Net · sACN", poe:true},
+  {id:"pp8",  n:"Pathway Pathport Octo",    ports:8,  proto:"Art-Net · sACN", poe:true},
+  {id:"xnd4", n:"Swisson XND-4",            ports:4,  proto:"Art-Net · sACN", poe:false},
+  {id:"xnd8", n:"Swisson XND-8",            ports:8,  proto:"Art-Net · sACN", poe:false},
+  {id:"ode",  n:"ENTTEC ODE Mk3",           ports:2,  proto:"Art-Net · sACN", poe:true}
+];
+const DMX_STOCK = [150,100,50,25,10,5];
+const CAT_STOCK = [300,200,150,100,50,25,10];
+const DMX_LBFT = 0.05, CAT_LBFT = 0.03, XLR_LB = 0.12;
+const DMX_LIMIT_FT = 1000, CAT_LIMIT_FT = 328, RDM_SOFT_FT = 500;
+const NODE_TAIL_FT = 25;      /* node port to first fixture when the node lives on the truss */
+const SWITCHES = [5,8,16,24,48];
+const PAL = ["s1","s2","s3","s4","s5","s6","s7","s8"];
+
+/* ============================== STATE ============================== */
+const DEFAULT_POS = [
+  {id:"p1", name:"Downstage truss", dist:90},
+  {id:"p2", name:"Mid truss",       dist:110},
+  {id:"p3", name:"Upstage truss",   dist:135},
+  {id:"p4", name:"Floor package",   dist:60},
+  {id:"p5", name:"FOH truss",       dist:200}
+];
+const DEFAULT_ROWS = [
+  {fid:"L6",  qty:12, mode:0, pos:"p1"},   // Aura PXL Extended
+  {fid:"L0",  qty:8,  mode:0, pos:"p1"},   // BMFL Blade
+  {fid:"L1",  qty:12, mode:0, pos:"p2"},   // MegaPointe
+  {fid:"L6",  qty:12, mode:0, pos:"p2"},   // Aura PXL
+  {fid:"L18", qty:16, mode:0, pos:"p3"},   // X4 Bar 20 Single Pixel
+  {fid:"L19", qty:8,  mode:0, pos:"p3"},   // JDC1 SPix Pro
+  {fid:"L24", qty:2,  mode:0, pos:"p4"},   // theONE
+  {fid:"L20", qty:10, mode:0, pos:"p4"},   // Q-7
+  {fid:"L21", qty:30, mode:0, pos:"p5"}    // S4 LED S3 Direct
+];
+let S = {
+  proto:"sacn", ustart:1, fill:1, lcap:24, step:0, tight:false,
+  topo:"node", node:"ln4", jump:10,
+  positions: DEFAULT_POS.map(function(p){ return Object.assign({}, p); }),
+  rows: DEFAULT_ROWS.map(function(r){ return Object.assign({uid:uid()}, r); })
+};
+let DB = null, DOWNLOADS = null, savedRigs = [];
+
+function uid(){ return "r" + Math.random().toString(36).slice(2,9); }
+function fx(id){ return LIB.find(function(f){ return f.id===id; }); }
+function pos(id){ return S.positions.find(function(p){ return p.id===id; }); }
+function nodeModel(){ return NODES.find(function(n){ return n.id===S.node; }) || NODES[0]; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function rowInfo(r){
+  if(r.custom) return {name:r.custom.name, brand:"Custom", ch:r.custom.ch, mode:"Custom", data:"5", rdm:true,
+    key:"custom:"+r.custom.name};
+  const f = fx(r.fid);
+  if(!f) return {name:"(missing)", brand:"", ch:0, mode:"", data:"", rdm:true, key:"x"};
+  const m = f.m[Math.min(r.mode||0, f.m.length-1)];
+  return {name:f.n, brand:f.b, ch:m[1], mode:m[0], data:f.d, rdm:f.rdm, key:f.id};
+}
+function dataLabel(d){
+  if(d==="dim") return "Dimmer";
+  const parts = [];
+  if(d.indexOf("3+5")===0) parts.push("3+5 pin"); else parts.push("5 pin");
+  if(d.indexOf("net")>=0) parts.push("etherCON");
+  if(d.indexOf("crmx")>=0) parts.push("CRMX");
+  if(d.indexOf("wdmx")>=0) parts.push("W-DMX");
+  if(d.indexOf("mv")>=0) parts.push("Multiverse");
+  return parts.join(" · ");
+}
+function alignAddr(next){ const s = S.step; if(!s || next<=1) return next; return Math.ceil((next-1)/s)*s + 1; }
+function cutLengths(dist, stock){
+  const out = []; let left = dist, guard = 0;
+  while(left > 0 && guard++ < 12){
+    const fit = stock.find(function(L){ return L <= left; });
+    if(!fit){ out.push(stock[stock.length-1]); break; }
+    out.push(fit); left -= fit;
+  }
+  const total = out.reduce(function(t,x){ return t+x; }, 0);
+  if(total < dist) out.push(stock[stock.length-1]);
+  return out;
+}
+function cutLabel(arr){
+  const c = {}; arr.forEach(function(L){ c[L]=(c[L]||0)+1; });
+  return Object.keys(c).sort(function(a,b){ return b-a; })
+    .map(function(L){ return (c[L]>1 ? c[L]+"×" : "") + L + "′"; }).join(" + ");
+}
+function uniAddr(u){
+  if(S.proto==="sacn") return {main:"sACN "+u, sub:"239.255."+(u>>8)+"."+(u&255)};
+  const a = u-1; return {main:"Art-Net "+(a>>8)+"."+((a>>4)&15)+"."+(a&15), sub:"port address "+a};
+}
+
+/* ============================== THE MATH ============================== */
+function compute(){
+  const cap = Math.floor(512 * S.fill);
+  const lcap = S.lcap;
+  const node = nodeModel();
+
+  /* stable colour per fixture type — order of first appearance in the rig, never re-cycled */
+  const typeOrder = []; S.rows.forEach(function(r){ const k = rowInfo(r).key; if(typeOrder.indexOf(k)<0) typeOrder.push(k); });
+  const slotOf = function(key){ const i = typeOrder.indexOf(key); return i < PAL.length ? PAL[i] : "s0"; };
+
+  const posOrder = {}; S.rows.forEach(function(r,i){ posOrder[r.uid] = i; });
+  const positions = [], universes = [];
+  let uNum = S.ustart, unitTotal = 0, chTotal = 0, noRdm = 0, unitSerial = {};
+
+  S.positions.forEach(function(p){
+    /* expand this position's rows into units, in rig order (fixture types stay contiguous) */
+    let units = [];
+    S.rows.filter(function(r){ return r.pos===p.id; })
+      .sort(function(a,b){ return posOrder[a.uid]-posOrder[b.uid]; })
+      .forEach(function(r){
+        const info = rowInfo(r);
+        for(let i=0;i<r.qty;i++){
+          unitSerial[info.key] = (unitSerial[info.key]||0) + 1;
+          units.push({row:r, name:info.name, brand:info.brand, mode:info.mode, ch:info.ch, key:info.key,
+            slot:slotOf(info.key), data:info.data, rdm:info.rdm, serial:unitSerial[info.key]});
+        }
+      });
+    units.forEach(function(u){ unitTotal++; chTotal += u.ch; if(!u.rdm) noRdm++; });
+
+    const bins = [];
+    const place = function(u){
+      /* first-fit when packing tight, next-fit (last bin only) in rig order */
+      const candidates = S.tight ? bins : bins.slice(-1);
+      let bin = null;
+      for(let i=0;i<candidates.length;i++){
+        const b = candidates[i], start = alignAddr(b.next);
+        if(b.units.length < lcap && start + u.ch - 1 <= cap){ bin = b; break; }
+      }
+      if(!bin){ bin = {units:[], next:1, used:0, pid:p.id, posName:p.name}; bins.push(bin); }
+      const start = alignAddr(bin.next);
+      u.addr = start; u.end = start + u.ch - 1;
+      bin.units.push(u); bin.next = u.end + 1; bin.used += u.ch;
+      if(u.end > 512) bin.over = true;
+    };
+    const order = S.tight ? units.slice().sort(function(a,b){ return b.ch-a.ch || a.serial-b.serial; }) : units;
+    order.forEach(place);
+
+    const minCh = units.length ? Math.min.apply(null, units.map(function(u){ return u.ch; })) : 0;
+    bins.forEach(function(b, i){
+      b.num = uNum++;
+      b.high = b.units.reduce(function(m,u){ return Math.max(m,u.end); }, 0);
+      b.fillPct = b.used/512*100;
+      /* what closed this universe: overflow, the line cap, no room for even the smallest fixture here,
+         or simply that the next fixture in rig order was too big (the straddle waste) */
+      const roomLeft = cap - alignAddr(b.next) + 1;
+      b.why = b.over ? "over" : b.units.length >= lcap ? "dev" : roomLeft < minCh ? "ch" :
+              i === bins.length-1 ? "open" : "order";
+      b.addr = uniAddr(b.num);
+      universes.push(b);
+    });
+
+    const nUni = bins.length;
+    const nodes = S.topo==="node" ? Math.ceil(nUni / node.ports) : 0;
+    /* run lengths: node-per-position = Cat5 to the truss, then short DMX; home-run = DMX from the rack */
+    const longestChain = bins.reduce(function(m,b){ return Math.max(m, (b.units.length-1)*S.jump); }, 0);
+    const lineFt = (S.topo==="node" ? NODE_TAIL_FT : p.dist) + longestChain;
+    let runFlag = "", runText = "";
+    if(S.topo==="node"){
+      if(nUni){ runText = p.dist > CAT_LIMIT_FT ? "fiber" : "Cat5e"; if(p.dist > CAT_LIMIT_FT) runFlag = "warn"; }
+      if(lineFt > DMX_LIMIT_FT) runFlag = "crit";
+    } else if(nUni){
+      runText = "DMX";
+      if(lineFt > DMX_LIMIT_FT) runFlag = "crit"; else if(lineFt > RDM_SOFT_FT) runFlag = "warn";
+    }
+    positions.push({p:p, bins:bins, units:units, nUni:nUni, nodes:nodes, lineFt:lineFt, runFlag:runFlag, runText:runText,
+      ch:units.reduce(function(t,u){ return t+u.ch; },0)});
+  });
+
+  const nUni = universes.length;
+  const capacity = nUni * 512;
+  const fillPct = capacity ? chTotal/capacity*100 : 0;
+  const devBound = universes.filter(function(b){ return b.why==="dev"; });
+  const over = universes.filter(function(b){ return b.over; });
+  const chIdeal = Math.ceil(chTotal / cap);                       /* if fixtures could straddle */
+  const nodesTotal = S.topo==="node"
+    ? positions.reduce(function(t,P){ return t+P.nodes; },0)
+    : Math.ceil(nUni / node.ports);
+  const portsTotal = nodesTotal * node.ports;
+  const switchPorts = nodesTotal + 1;                              /* + console */
+  const switchPick = SWITCHES.find(function(x){ return x >= switchPorts; }) || null;
+  const fiberDrops = S.topo==="node" ? positions.filter(function(P){ return P.nodes && P.p.dist > CAT_LIMIT_FT; }).length : 0;
+  const longest = positions.reduce(function(m,P){ return P.nUni && P.lineFt > m.ft ? {ft:P.lineFt, name:P.p.name} : m; }, {ft:0, name:"—"});
+
+  /* ---- pack list ---- */
+  let dmxFeet = 0, catFeet = 0, jumpers = 0, tails = 0;
+  const dmxCuts = [], catCuts = [];
+  positions.forEach(function(P){
+    if(!P.nUni) return;
+    const chainJ = P.bins.reduce(function(t,b){ return t + Math.max(0, b.units.length-1); }, 0);
+    jumpers += chainJ; dmxFeet += chainJ * S.jump;
+    if(S.topo==="node"){
+      tails += P.nUni; dmxFeet += P.nUni * NODE_TAIL_FT;
+      const cut = cutLengths(P.p.dist, CAT_STOCK), feet = cut.reduce(function(t,x){ return t+x; },0);
+      catFeet += feet * P.nodes;
+      catCuts.push({name:P.p.name, n:P.nodes, label:cutLabel(cut), feet:feet, fiber:P.p.dist > CAT_LIMIT_FT});
+    } else {
+      const cut = cutLengths(P.p.dist, DMX_STOCK), feet = cut.reduce(function(t,x){ return t+x; },0);
+      dmxFeet += feet * P.nUni;
+      dmxCuts.push({name:P.p.name, n:P.nUni, label:cutLabel(cut), feet:feet});
+    }
+  });
+  const weight = dmxFeet*DMX_LBFT + catFeet*CAT_LBFT + (jumpers+tails+dmxCuts.reduce(function(t,x){return t+x.n;},0))*XLR_LB;
+
+  return {positions:positions, universes:universes, nUni:nUni, units:unitTotal, ch:chTotal, cap:cap, capacity:capacity,
+    fillPct:fillPct, devBound:devBound, over:over, chIdeal:chIdeal, node:node, nodesTotal:nodesTotal,
+    portsTotal:portsTotal, switchPorts:switchPorts, switchPick:switchPick, fiberDrops:fiberDrops, longest:longest,
+    noRdm:noRdm, typeOrder:typeOrder, slotOf:slotOf, dmxFeet:dmxFeet, catFeet:catFeet, jumpers:jumpers, tails:tails,
+    dmxCuts:dmxCuts, catCuts:catCuts, weight:weight};
+}
+
+/* ============================== RENDER ============================== */
+const $ = function(id){ return document.getElementById(id); };
+const n0 = function(v){ return Math.round(v).toLocaleString(); };
+const n1 = function(v){ return v.toFixed(1); };
+const plural = function(n, s){ return n+" "+s+(n===1?"":"s"); };
+const WHY = {ch:"Channels", dev:"Line cap", open:"Open", over:"Overflow", order:"Rig order"};
+
+function render(){
+  const R = compute();
+
+  /* ---------- tiles ---------- */
+  const fillFlag = R.fillPct < 60 ? "flag-warn" : "";
+  const runFlag = R.longest.ft > DMX_LIMIT_FT ? "flag-crit" : R.longest.ft > RDM_SOFT_FT ? "flag-warn" : "flag-ok";
+  $("tiles").innerHTML = [
+    tile("Channels", n0(R.ch), "", plural(R.units,"fixture")+" · "+S.positions.length+" positions"),
+    tile("Universes", String(R.nUni), "", n0(R.capacity)+" ch of capacity"),
+    tile("Fill", n1(R.fillPct), " %", R.nUni>R.chIdeal ? (R.nUni-R.chIdeal)+" more than the channel count alone" : "no straddle waste", fillFlag),
+    tile("Line-capped", String(R.devBound.length), "", "universes closed by "+S.lcap+" fixtures, not channels", R.devBound.length?"flag-warn":""),
+    tile("Node ports", R.nUni+"<small> / "+R.portsTotal+"</small>", "", R.nodesTotal+"× "+R.node.n.split(" ").slice(1).join(" ")),
+    tile("Switch", R.switchPick ? String(R.switchPick) : "—", " port", R.switchPorts+" used"+(R.fiberDrops?" · "+R.fiberDrops+" on fiber":"")),
+    tile("Longest line", n0(R.longest.ft), " ft", R.longest.name, runFlag)
+  ].join("");
+
+  /* ---------- notices ---------- */
+  const notes = [];
+  if(!R.units) notes.push(note("ok","Empty","Add fixtures and the universes fill in."));
+  if(R.over.length)
+    notes.push(note("crit","Overflow", R.over.map(function(b){ return "Universe "+b.num; }).join(", ")+
+      " run past address 512 — a mode bigger than the universe fill allows had nowhere else to go. Set fill to Full or pick a smaller mode."));
+  if(R.devBound.length)
+    notes.push(note("warn","Line cap", R.devBound.length+" universe"+(R.devBound.length===1?" was":"s were")+" closed at "+S.lcap+
+      " fixtures with channels to spare: "+R.devBound.map(function(b){ return "U"+b.num+" ("+b.used+" ch)"; }).join(", ")+
+      ". That is the RDM line limit doing the work, not the universe. Raise the cap to 32 only if you trust discovery on a long chain."));
+  if(R.nUni > R.chIdeal && R.units)
+    notes.push(note("warn","Straddle", R.ch.toLocaleString()+" channels would fit in "+R.chIdeal+" universes if fixtures could cross a boundary; they can't, so it takes "+
+      R.nUni+". "+(S.tight?"":"Pack tight would try to fill the gaps with smaller fixtures. ")+"The big pixel modes are where the slack lives."));
+  const longLines = R.positions.filter(function(P){ return P.runFlag==="crit"; });
+  if(longLines.length)
+    notes.push(note("crit","DMX run", longLines.map(function(P){ return P.p.name+" ("+n0(P.lineFt)+"′)"; }).join(", ")+
+      " exceed"+(longLines.length===1?"s":"")+" the 1000 ft ESTA recommended practice for a DMX line. Move a node closer or split the chain."));
+  if(S.topo==="node" && R.fiberDrops)
+    notes.push(note("warn","Fiber", R.fiberDrops+" position"+(R.fiberDrops===1?"":"s")+" sit"+(R.fiberDrops===1?"s":"")+
+      " past 328 ft of Cat5e (100 m, TIA-568). Those drops go on fiber with an opticalCON or a media converter at each end."));
+  if(S.topo==="home"){
+    const softLines = R.positions.filter(function(P){ return P.runFlag==="warn"; });
+    if(softLines.length)
+      notes.push(note("warn","RDM reach", softLines.map(function(P){ return P.p.name+" ("+n0(P.lineFt)+"′)"; }).join(", ")+
+        " past 500 ft on a home-run line. DMX will get there; RDM discovery over that distance is where it gets flaky."));
+  }
+  if(R.node.proto==="sACN only" && S.proto==="artnet")
+    notes.push(note("crit","Protocol", R.node.n+" speaks sACN only. Switch the protocol to sACN or pick a node that takes Art-Net."));
+  if(R.noRdm)
+    notes.push(note("ok","RDM", R.noRdm+" fixture"+(R.noRdm===1?"":"s")+" without RDM (dimmers, foggers). They still count as a unit load — they just won't show up in discovery, so address them by hand."));
+  $("notes").innerHTML = notes.join("");
+
+  /* ---------- rig ---------- */
+  $("rigcount").textContent = plural(R.units,"fixture")+" · "+n0(R.ch)+" ch";
+  const body = $("rigbody");
+  if(!S.rows.length) body.innerHTML = '<tr><td colspan="8" class="empty">Nothing patched yet.</td></tr>';
+  else body.innerHTML = S.rows.map(function(r){
+    const i = rowInfo(r), f = r.custom ? null : fx(r.fid);
+    return '<tr>'+
+      '<td><span class="rig-name"><span class="sw" style="background:var(--'+R.slotOf(i.key)+')"></span>'+esc(i.name)+'</span> <span class="rig-brand">'+esc(i.brand)+'</span></td>'+
+      '<td class="num"><input type="number" class="qty" min="1" max="999" value="'+r.qty+'" data-q="'+r.uid+'"></td>'+
+      '<td><select data-p="'+r.uid+'">'+ S.positions.map(function(p){
+          return '<option value="'+p.id+'"'+(p.id===r.pos?" selected":"")+'>'+esc(p.name)+'</option>'; }).join('') +'</select></td>'+
+      '<td>'+(f ? '<select data-m="'+r.uid+'">'+ f.m.map(function(m,j){
+          return '<option value="'+j+'"'+(j===(r.mode||0)?" selected":"")+'>'+esc(m[0])+' · '+m[1]+' ch</option>'; }).join('') +'</select>'
+          : '<span class="rig-brand">Custom</span>')+'</td>'+
+      '<td class="num">'+i.ch+'</td><td class="num">'+n0(i.ch*r.qty)+'</td>'+
+      '<td style="font-size:11.5px;color:var(--ink-3);white-space:nowrap">'+esc(dataLabel(i.data))+(i.rdm?"":" · no RDM")+'</td>'+
+      '<td class="noprint" style="text-align:right"><button class="ghost" data-x="'+r.uid+'" aria-label="Remove '+esc(i.name)+'">✕</button></td></tr>';
+  }).join("") + (S.rows.length>1 ?
+    '<tr><td colspan="5" style="text-align:right;color:var(--ink-3);font-size:12px;border-top:1px solid var(--line-strong)">Patched total</td>'+
+    '<td class="num" style="font-weight:600;border-top:1px solid var(--line-strong)">'+n0(R.ch)+'</td>'+
+    '<td colspan="2" class="noprint" style="border-top:1px solid var(--line-strong)"></td></tr>' : "");
+
+  /* ---------- universe map ---------- */
+  const um = $("umap");
+  if(!R.nUni) um.innerHTML = '<div class="empty">Universes appear once there is a rig to patch.</div>';
+  else {
+    let html = '<div class="axis"><span></span><div class="ticks">'+
+      [1,128,256,384,512].map(function(a){ return '<span style="left:'+((a-1)/511*100).toFixed(2)+'%">'+a+'</span>'; }).join("")+
+      '</div><span></span></div>';
+    R.positions.forEach(function(P){
+      if(!P.nUni) return;
+      html += '<div class="grp-h"><span class="pos">'+esc(P.p.name)+'</span><hr><span class="tag">'+
+        plural(P.nUni,"universe")+' · '+plural(P.units.length,"fixture")+'</span></div>';
+      P.bins.forEach(function(b){
+        const blocks = b.units.map(function(u){
+          const left = (u.addr-1)/512*100, w = u.ch/512*100;
+          return '<div class="blk" style="left:'+left.toFixed(3)+'%;width:'+w.toFixed(3)+'%;background:var(--'+u.slot+')" title="'+
+            esc(u.name+" "+u.serial+" · "+u.mode+" · "+u.addr+"–"+u.end)+'">'+(w>4.5?'<span>'+u.addr+'</span>':'')+'</div>';
+        }).join("");
+        const ticks = [128,256,384].map(function(a){ return '<div class="tick" style="left:'+(a/512*100).toFixed(2)+'%"></div>'; }).join("");
+        const capLine = S.fill<1 ? '<div class="cap" style="left:'+(R.cap/512*100).toFixed(2)+'%"></div>' : '';
+        html += '<div class="urow"><div class="ul"><span class="u">U'+b.num+'</span><span class="p">'+esc(b.addr.main)+'</span></div>'+
+          '<div class="bar">'+ticks+blocks+capLine+'</div>'+
+          '<div class="ur"><span class="f">'+b.used+' ch · '+b.units.length+' fx</span>'+
+          '<span class="why '+b.why+'">'+WHY[b.why]+'</span></div></div>';
+      });
+    });
+    um.innerHTML = html;
+  }
+  $("legend").innerHTML = R.typeOrder.map(function(k,j){
+    const nm = k.indexOf("custom:")===0 ? k.slice(7) : (fx(k)||{}).n || k;
+    return '<div class="it"><span class="sw" style="background:var(--'+R.slotOf(k)+')"></span>'+esc(nm)+'</div>';
+  }).join("") + (R.typeOrder.length>PAL.length ? '<div class="it"><span class="sw" style="background:var(--s0)"></span>Other types</div>' : '') +
+  '<div class="it" style="color:var(--ink-3)">Block = one fixture, labelled with its start address · Right edge = what closed the universe</div>';
+
+  /* ---------- positions ---------- */
+  $("posbody").innerHTML = R.positions.map(function(P){
+    const col = P.runFlag==="crit" ? "color:var(--crit);font-weight:600" : P.runFlag==="warn" ? "color:var(--warn)" : "";
+    const nodeTxt = S.topo==="node" ? (P.nodes ? P.nodes+"× "+R.node.n.split(" ").slice(1).join(" ") : "—") : "rack";
+    return '<tr>'+
+      '<td><input type="text" data-pn="'+P.p.id+'" value="'+esc(P.p.name)+'" style="width:100%;min-width:150px;font-family:inherit"></td>'+
+      '<td class="num"><input type="number" data-pd="'+P.p.id+'" class="qty" min="1" max="3000" value="'+P.p.dist+'"></td>'+
+      '<td class="num">'+P.units.length+'</td><td class="num">'+n0(P.ch)+'</td><td class="num">'+P.nUni+'</td>'+
+      '<td style="font-size:12px;white-space:nowrap">'+esc(nodeTxt)+'</td>'+
+      '<td style="font-size:12px;white-space:nowrap;'+col+'">'+(P.nUni ? esc(P.runText)+" · "+n0(P.lineFt)+"′" : "—")+'</td>'+
+      '<td class="noprint" style="text-align:right">'+(S.positions.length>1 ?
+        '<button class="ghost" data-px="'+P.p.id+'" aria-label="Remove '+esc(P.p.name)+'">✕</button>' : '')+'</td></tr>';
+  }).join("");
+  $("poshint").textContent = S.topo==="node"
+    ? "Run length is switch to position — the Cat5e drop to the node. Line is the node's "+NODE_TAIL_FT+" ft tail plus the longest fixture-to-fixture chain at "+S.jump+" ft a jumper."
+    : "Run length is rack to position — the 5-pin home run. Line is that run plus the longest fixture-to-fixture chain at "+S.jump+" ft a jumper.";
+
+  /* ---------- patch sheet ---------- */
+  $("sheetsum").textContent = R.nUni+" universes · "+plural(R.units,"fixture")+(S.step?" · addresses on "+S.step+"s":"");
+  const sh = $("sheet");
+  if(!R.nUni) sh.innerHTML = '<div class="empty">The sheet writes itself once there is a rig.</div>';
+  else sh.innerHTML = R.universes.map(function(b){
+    const nodeLbl = S.topo==="node" ? b.posName : "Rack";
+    return '<div class="uh"><span class="u">Universe '+b.num+'</span><span class="addr">'+esc(b.addr.main)+' · '+esc(b.addr.sub)+'</span>'+
+      '<hr><span class="tag'+(b.why==="dev"?" warn":b.why==="over"?" crit":"")+'">'+b.used+' ch · '+plural(b.units.length,"fixture")+' · '+WHY[b.why]+'</span>'+
+      '<span class="tag">'+esc(nodeLbl)+'</span></div>'+
+      '<div class="scroll"><table><thead><tr><th class="num">Addr</th><th>Fixture</th><th>Mode</th><th class="num">Ch</th><th>Range</th><th>Data</th></tr></thead><tbody>'+
+      b.units.map(function(u){
+        return '<tr><td class="num a">'+u.addr+'</td><td><span class="sw" style="background:var(--'+u.slot+')"></span>'+esc(u.name)+' <span class="rig-brand">'+u.serial+'</span></td>'+
+          '<td style="color:var(--ink-2)">'+esc(u.mode)+'</td><td class="num">'+u.ch+'</td><td class="rng">'+u.addr+'–'+u.end+'</td>'+
+          '<td style="font-size:11.5px;color:var(--ink-3)">'+esc(dataLabel(u.data))+(u.rdm?"":" · no RDM")+'</td></tr>';
+      }).join("")+'</tbody></table></div>';
+  }).join("");
+
+  /* ---------- network ---------- */
+  const nr = [];
+  if(S.topo==="node"){
+    nr.push(row("Nodes on the rig", plural(R.nodesTotal, R.node.n)));
+    nr.push(row("Ports used / available", R.nUni+" / "+R.portsTotal, R.nUni>R.portsTotal?"crit":""));
+    nr.push(row("Spare ports", String(R.portsTotal-R.nUni), (R.portsTotal-R.nUni)===0 && R.nUni ? "warn" : ""));
+    nr.push(row("Switch ports (nodes + console)", String(R.switchPorts)+(R.switchPick?" → "+R.switchPick+"-port":"")));
+    nr.push(row("Drops on fiber (> 328 ft)", String(R.fiberDrops), R.fiberDrops?"warn":""));
+    nr.push(row("Node power", R.node.poe ? "PoE 802.3af" : "Local mains — no PoE", R.node.poe?"":"warn"));
+  } else {
+    nr.push(row("Nodes at the rack", plural(R.nodesTotal, R.node.n)));
+    nr.push(row("Ports used / available", R.nUni+" / "+R.portsTotal));
+    nr.push(row("Spare ports", String(R.portsTotal-R.nUni)));
+    nr.push(row("Switch ports (nodes + console)", String(R.switchPorts)));
+    nr.push(row("DMX lines leaving the rack", String(R.nUni)));
+  }
+  nr.push(row("Node protocol", R.node.proto, (R.node.proto==="sACN only" && S.proto==="artnet")?"crit":""));
+  $("netrows").innerHTML = nr.join("");
+
+  /* ---------- console ---------- */
+  const first = R.nUni ? R.universes[0].num : S.ustart, last = R.nUni ? R.universes[R.nUni-1].num : S.ustart;
+  const cr = [
+    row("Output", S.proto==="sacn" ? "sACN · UDP 5568 · multicast" : "Art-Net 4 · UDP 6454 · unicast"),
+    row("Universes", R.nUni ? (first===last ? String(first) : first+" – "+last) : "—"),
+    row("Parameters", n0(R.ch)+" of "+n0(R.capacity)),
+    row("RDM devices to discover", String(R.units - R.noRdm)),
+    row(S.proto==="sacn" ? "Priority" : "Art-Net of sACN 1", S.proto==="sacn" ? "100 (default)" : "0.0.0 — zero-based")
+  ];
+  $("conrows").innerHTML = cr.join("");
+
+  /* ---------- chain limits ---------- */
+  $("chainrule").textContent = R.cap+" ch"+(S.step?" · step "+S.step:"")+" · "+S.lcap+" per line";
+  const seen = {};
+  const chainRows = S.rows.map(function(r){ const i = rowInfo(r); const k = i.key+"|"+i.mode; if(seen[k]) return ""; seen[k]=1;
+    let n = 0, a = 1; while(true){ const s = alignAddr(a); if(s + i.ch - 1 > R.cap) break; n++; a = s + i.ch; if(n>512) break; }
+    const byCh = n, byLine = S.lcap, gov = byCh < byLine ? "Channels" : byCh > byLine ? "Line cap" : "Both";
+    return '<tr><td><span class="sw" style="background:var(--'+R.slotOf(i.key)+'"></span><span class="rig-name">'+esc(i.name)+'</span> <span class="rig-brand">'+esc(i.mode)+'</span></td>'+
+      '<td class="num">'+i.ch+'</td><td class="num">'+byCh+'</td><td class="num">'+byLine+'</td>'+
+      '<td><span class="tag'+(gov==="Line cap"?" warn":"")+'">'+gov+'</span></td></tr>';
+  }).join("");
+  $("chainbody").innerHTML = chainRows || '<tr><td colspan="5" class="empty">Add fixtures to see chain limits.</td></tr>';
+
+  /* ---------- pack list ---------- */
+  const pk = [];
+  if(S.topo==="node"){
+    R.catCuts.forEach(function(x){ pk.push(row((x.fiber?"Fiber":"Cat5e")+" — "+x.name, x.n+"× "+x.label+(x.fiber?"  (opticalCON)":""))); });
+    pk.push(row("Node tails, "+NODE_TAIL_FT+"′ 5-pin", String(R.tails)));
+  } else {
+    R.dmxCuts.forEach(function(x){ pk.push(row("5-pin home run — "+x.name, x.n+"× "+x.label+"  ("+n0(x.feet*x.n)+"′)")); });
+  }
+  pk.push(row("Jumpers, "+S.jump+"′ 5-pin", String(R.jumpers)));
+  pk.push(row("Terminators, 120 Ω", String(R.nUni)));
+  pk.push(row("Nodes", plural(R.nodesTotal, R.node.n)));
+  pk.push(row("Switch", R.switchPick ? R.switchPick+"-port"+(R.fiberDrops?" with "+R.fiberDrops+" SFP":"") : "—"));
+  pk.push(row("Cable weight, approx.", n0(R.weight)+" lb"));
+  $("packrows").innerHTML = pk.join("");
+  $("packweight").textContent = n0(R.dmxFeet)+" ft DMX"+(R.catFeet?" · "+n0(R.catFeet)+" ft Cat5e":"");
+
+  renderRiser(R);
+  renderSaved();
+  window.__R = R;
+}
+
+/* ---------- data riser: console → switch → nodes → positions ---------- */
+function renderRiser(R){
+  const rows = R.positions.filter(function(P){ return P.nUni; }).map(function(P){
+    const sev = P.runFlag==="crit" ? "var(--crit)" : P.runFlag==="warn" ? "var(--warn)" : "var(--accent)";
+    const sub = S.topo==="node"
+      ? (P.nodes+"× "+R.node.n.split(" ").slice(1).join(" ")+" · "+P.p.dist+"′ "+P.runText)
+      : (P.nUni+"× 5-pin · "+P.p.dist+"′ run");
+    return {name:P.p.name, sev:sev, sub:sub,
+      r1:plural(P.nUni,"universe")+" · "+n0(P.ch)+" ch",
+      r2:P.units.length+" fx · "+n0(P.lineFt)+"′ line"};
+  });
+  $("risersum").textContent = R.nUni+" universes · "+plural(R.nodesTotal,"node")+" · "+plural(rows.length,"drop");
+  if(!rows.length){ $("riser").innerHTML = '<div class="empty">The riser draws itself once a position has fixtures on it.</div>'; return; }
+
+  const W=920, rowH=46, gap=9, top=26, bot=24, disH=118, srcH=92;
+  const contentH = rows.length*rowH + (rows.length-1)*gap;
+  const bandH = Math.max(contentH, disH);
+  const H = top + bandH + bot;
+  const cy = top + bandH/2;
+  const rowTop = cy - contentH/2;
+  const rcy = function(i){ return rowTop + i*(rowH+gap) + rowH/2; };
+  const srcX=8, srcW=152, disX=296, disW=176, busX=516, posX=592, posW=320;
+  const srcY = cy - srcH/2, disY = cy - disH/2;
+  const trunc = function(t){ return t.length>26 ? t.slice(0,25)+"…" : t; };
+  const midLabel = S.proto==="sacn" ? "sACN · "+R.nUni+" universes" : "Art-Net · "+R.nUni+" universes";
+  const midName = S.topo==="node" ? "SWITCH" : "NODE RACK";
+
+  const svg =
+  '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Data riser: console to switch to '+rows.length+' positions carrying '+R.nUni+' universes">'+
+  '<defs><marker id="rsr-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">'+
+    '<path d="M0,0 L8,4 L0,8 z" fill="var(--ink-2)"></path></marker></defs>'+
+  '<rect class="bx" x="'+srcX+'" y="'+srcY+'" width="'+srcW+'" height="'+srcH+'" rx="3"></rect>'+
+  '<text class="ttl" x="'+(srcX+13)+'" y="'+(srcY+20)+'">CONSOLE</text>'+
+  '<text class="big" x="'+(srcX+13)+'" y="'+(srcY+45)+'">'+R.nUni+' U</text>'+
+  '<text class="sm" x="'+(srcX+13)+'" y="'+(srcY+64)+'">'+n0(R.ch)+' parameters</text>'+
+  '<text class="sm" x="'+(srcX+13)+'" y="'+(srcY+79)+'">'+(S.proto==="sacn"?"E1.31 · priority 100":"Art-Net 4 · unicast")+'</text>'+
+  '<line class="ln" x1="'+(srcX+srcW)+'" y1="'+cy+'" x2="'+(disX-4)+'" y2="'+cy+'" stroke-width="2.5" marker-end="url(#rsr-arrow)"></line>'+
+  '<text class="sm" x="'+((srcX+srcW+disX)/2)+'" y="'+(cy-10)+'" text-anchor="middle">'+midLabel+'</text>'+
+  '<text class="sm" x="'+((srcX+srcW+disX)/2)+'" y="'+(cy+19)+'" text-anchor="middle">Cat5e · 1 GbE</text>'+
+  '<rect class="bx" x="'+disX+'" y="'+disY+'" width="'+disW+'" height="'+disH+'" rx="3"></rect>'+
+  '<text class="ttl" x="'+(disX+13)+'" y="'+(disY+20)+'">'+midName+'</text>'+
+  '<text class="dt" x="'+(disX+13)+'" y="'+(disY+42)+'">'+(S.topo==="node" ? (R.switchPick||"—")+"-port switch" : plural(R.nodesTotal,"node"))+'</text>'+
+  '<text class="dt" x="'+(disX+13)+'" y="'+(disY+61)+'">'+(S.topo==="node" ? R.switchPorts+" ports used" : R.nUni+" / "+R.portsTotal+" ports")+'</text>'+
+  '<text class="dt" x="'+(disX+13)+'" y="'+(disY+80)+'">'+(S.topo==="node" ? (R.fiberDrops ? R.fiberDrops+" SFP fiber" : "copper only") : "5-pin out")+'</text>'+
+  '<text class="sm" x="'+(disX+13)+'" y="'+(disY+103)+'">'+(R.node.poe ? "PoE to nodes" : "nodes on mains")+'</text>'+
+  '<line class="ln" x1="'+(disX+disW)+'" y1="'+cy+'" x2="'+busX+'" y2="'+cy+'" stroke-width="2.5"></line>'+
+  (rows.length>1 ? '<line class="ln" x1="'+busX+'" y1="'+rcy(0)+'" x2="'+busX+'" y2="'+rcy(rows.length-1)+'" stroke-width="2.5"></line>' : '')+
+  rows.map(function(r,i){
+    return '<line class="ln" x1="'+busX+'" y1="'+rcy(i)+'" x2="'+(posX-4)+'" y2="'+rcy(i)+'" stroke-width="1.5" marker-end="url(#rsr-arrow)"></line>'+
+      '<circle cx="'+busX+'" cy="'+rcy(i)+'" r="2.5" fill="var(--ink-2)"></circle>';
+  }).join("")+
+  rows.map(function(r,i){
+    const y = rcy(i) - rowH/2;
+    return '<rect class="bx" x="'+posX+'" y="'+y+'" width="'+posW+'" height="'+rowH+'" rx="3"></rect>'+
+      '<rect x="'+posX+'" y="'+y+'" width="3.5" height="'+rowH+'" fill="'+r.sev+'"></rect>'+
+      '<text class="nm" x="'+(posX+15)+'" y="'+(y+20)+'">'+esc(trunc(r.name))+'</text>'+
+      '<text class="sm" x="'+(posX+15)+'" y="'+(y+36)+'">'+esc(r.sub)+'</text>'+
+      '<text class="dt" x="'+(posX+posW-13)+'" y="'+(y+20)+'" text-anchor="end">'+esc(r.r1)+'</text>'+
+      '<text class="dt" x="'+(posX+posW-13)+'" y="'+(y+36)+'" text-anchor="end" fill="'+r.sev+'">'+esc(r.r2)+'</text>';
+  }).join("")+
+  '</svg>';
+
+  $("riser").innerHTML = svg +
+    '<figcaption>'+(S.topo==="node"
+      ? 'Universes leave the console as Ethernet, fan out at the switch, and become DMX at a node on each position. The stripe on each position is its longest DMX line — green under 500 ft, amber past it, red past the 1000 ft recommended practice — and amber also marks a Cat5e drop over 328 ft that needs fiber.'
+      : 'Universes become DMX at the rack and each line runs home to its position on 5-pin. The stripe is the longest line at that position — green under 500 ft, amber where RDM starts to struggle, red past the 1000 ft recommended practice.')+
+    '</figcaption>';
+}
+
+function tile(k,v,unit,n,flag){
+  return '<div class="tile '+(flag||"")+'"><span class="k">'+k+'</span><span class="v">'+v+
+    (unit?'<small>'+unit+'</small>':'')+'</span><span class="n">'+n+'</span></div>';
+}
+function note(kind,m,t){ return '<div class="note '+kind+'"><span class="m">'+m+'</span><span>'+t+'</span></div>'; }
+function row(k,v,cls){
+  const col = cls==="crit"?"color:var(--crit)":cls==="warn"?"color:var(--warn)":
+              (cls==="ok"||cls==="em")?"color:var(--accent)":"";
+  return '<div class="r"><span class="k">'+k+'</span><span class="v" style="'+col+'">'+v+'</span></div>';
+}
+
+/* ============================== CONTROLS ============================== */
+function fillPicker(){
+  let html = "", cat = null;
+  LIB.forEach(function(f){
+    if(f.c!==cat){ if(cat!==null) html += "</optgroup>"; html += '<optgroup label="'+f.c+'">'; cat = f.c; }
+    html += '<option value="'+f.id+'">'+esc(f.b)+" "+esc(f.n)+"</option>";
+  });
+  $("pick").innerHTML = html + "</optgroup>";
+}
+function fillModes(){
+  const f = fx($("pick").value); if(!f) return;
+  $("pickmode").innerHTML = f.m.map(function(m,j){ return '<option value="'+j+'">'+esc(m[0])+' · '+m[1]+' ch</option>'; }).join("");
+}
+function fillPositions(){
+  const keep = $("pickpos").value;
+  $("pickpos").innerHTML = S.positions.map(function(p){
+    return '<option value="'+p.id+'">'+esc(p.name)+'</option>'; }).join("");
+  $("pickpos").value = S.positions.some(function(p){ return p.id===keep; }) ? keep : (S.positions[0]||{}).id;
+}
+function fillNodes(){
+  $("node").innerHTML = NODES.map(function(n){ return '<option value="'+n.id+'">'+esc(n.n)+' · '+n.ports+'</option>'; }).join("");
+  $("node").value = S.node;
+}
+
+function bind(){
+  $("proto").addEventListener("change", function(e){ S.proto = e.target.value; render(); });
+  $("ustart").addEventListener("input", function(e){ S.ustart = Math.max(1, Math.min(63000, +e.target.value||1)); render(); });
+  $("fill").addEventListener("change", function(e){ S.fill = +e.target.value; render(); });
+  $("lcap").addEventListener("change", function(e){ S.lcap = +e.target.value; render(); });
+  $("step").addEventListener("change", function(e){ S.step = +e.target.value; render(); });
+  $("topo").addEventListener("change", function(e){ S.topo = e.target.value; render(); });
+  $("node").addEventListener("change", function(e){ S.node = e.target.value; render(); });
+  $("jump").addEventListener("input", function(e){ S.jump = Math.max(1, Math.min(200, +e.target.value||1)); render(); });
+  $("mOrder").addEventListener("click", function(){ S.tight=false; setSeg(); render(); });
+  $("mTight").addEventListener("click", function(){ S.tight=true;  setSeg(); render(); });
+  $("printbtn").addEventListener("click", function(){ window.print(); });
+  $("pick").addEventListener("change", fillModes);
+
+  $("addbtn").addEventListener("click", function(){
+    const fid = $("pick").value, qty = Math.max(1, +$("pickqty").value||1);
+    const m = +$("pickmode").value||0, p = $("pickpos").value;
+    const hit = S.rows.find(function(r){ return r.fid===fid && (r.mode||0)===m && r.pos===p; });
+    if(hit) hit.qty += qty; else S.rows.push({uid:uid(), fid:fid, qty:qty, mode:m, pos:p});
+    render();
+  });
+  $("addcustom").addEventListener("click", function(){
+    const name = ($("cname").value||"").trim() || "Custom fixture";
+    S.rows.push({uid:uid(), custom:{name:name, ch:Math.max(1, Math.min(512, +$("cch").value||1))},
+      qty:Math.max(1,+$("cqty").value||1), mode:0, pos:$("pickpos").value});
+    $("cname").value = ""; render();
+  });
+  $("addpos").addEventListener("click", function(){
+    const id = "p"+Math.random().toString(36).slice(2,7);
+    S.positions.push({id:id, name:"Position "+(S.positions.length+1), dist:100});
+    fillPositions(); render();
+  });
+
+  $("rigbody").addEventListener("input", function(e){
+    const q = e.target.getAttribute("data-q"); if(!q) return;
+    const r = S.rows.find(function(x){ return x.uid===q; });
+    if(r){ r.qty = Math.max(1, Math.min(999, +e.target.value||1)); render(); }
+  });
+  $("rigbody").addEventListener("change", function(e){
+    const m = e.target.getAttribute("data-m"), p = e.target.getAttribute("data-p");
+    const key = m || p; if(!key) return;
+    const r = S.rows.find(function(x){ return x.uid===key; });
+    if(!r) return;
+    if(m) r.mode = +e.target.value; else r.pos = e.target.value;
+    render();
+  });
+  $("rigbody").addEventListener("click", function(e){
+    const btn = e.target.closest("[data-x]"); if(!btn) return;
+    S.rows = S.rows.filter(function(x){ return x.uid !== btn.getAttribute("data-x"); });
+    render();
+  });
+
+  $("posbody").addEventListener("input", function(e){
+    const nm = e.target.getAttribute("data-pn"), d = e.target.getAttribute("data-pd");
+    if(nm){ const p = pos(nm); if(p){ p.name = e.target.value; fillPositions(); repaintSoft(); } }
+    else if(d){ const p = pos(d); if(p){ p.dist = Math.max(1, Math.min(3000, +e.target.value||1)); render(); } }
+  });
+  $("posbody").addEventListener("click", function(e){
+    const btn = e.target.closest("[data-px]"); if(!btn) return;
+    const id = btn.getAttribute("data-px");
+    if(S.positions.length<2) return;
+    S.positions = S.positions.filter(function(p){ return p.id!==id; });
+    const fallback = S.positions[0].id;
+    S.rows.forEach(function(r){ if(r.pos===id) r.pos = fallback; });
+    fillPositions(); render();
+  });
+
+  $("csv").addEventListener("click", exportCSV);
+  $("savebtn").addEventListener("click", saveRig);
+}
+let softTimer = null;
+function repaintSoft(){ clearTimeout(softTimer); softTimer = setTimeout(function(){
+  const a = document.activeElement, id = a && a.getAttribute && a.getAttribute("data-pn");
+  const selStart = id && a.selectionStart;
+  render();
+  if(id){ const el = document.querySelector('[data-pn="'+id+'"]');
+    if(el){ el.focus(); try{ el.setSelectionRange(selStart, selStart); }catch(e){} } }
+}, 450); }
+function setSeg(){
+  $("mOrder").setAttribute("aria-pressed", String(!S.tight));
+  $("mTight").setAttribute("aria-pressed", String(S.tight));
+}
+
+/* ============================== EXPORT ============================== */
+function exportCSV(){
+  const R = window.__R || compute();
+  const L = [
+    ["Patch Plot — patch sheet"],
+    ["Protocol", S.proto==="sacn"?"sACN":"Art-Net 4", "First universe", S.ustart, "Fill", Math.round(S.fill*100)+" %",
+     "Per line", S.lcap, "Address step", S.step||"packed"],
+    ["Topology", S.topo==="node"?"Node at each position":"Home-run DMX", "Node", R.node.n, "Nodes", R.nodesTotal,
+     "Universes", R.nUni, "Channels", R.ch],
+    [],
+    ["Universe","sACN","Art-Net net.sub.uni","Multicast","Address","End","Fixture","Unit","Mode","Channels","Position","Node","Data","RDM"]
+  ];
+  R.universes.forEach(function(b){
+    const a = b.num-1, art = (a>>8)+"."+((a>>4)&15)+"."+(a&15), mc = "239.255."+(b.num>>8)+"."+(b.num&255);
+    b.units.forEach(function(u){
+      L.push([b.num, b.num, art, mc, u.addr, u.end, u.name, u.serial, u.mode, u.ch, b.posName,
+        S.topo==="node"?b.posName:"Rack", dataLabel(u.data), u.rdm?"yes":"no"]);
+    });
+  });
+  L.push([]); L.push(["Pack list"]);
+  if(S.topo==="node"){ R.catCuts.forEach(function(x){ L.push([(x.fiber?"Fiber":"Cat5e")+" — "+x.name, x.n, x.label]); });
+    L.push(["Node tails "+NODE_TAIL_FT+" ft", R.tails]); }
+  else R.dmxCuts.forEach(function(x){ L.push(["5-pin home run — "+x.name, x.n, x.label]); });
+  L.push(["Jumpers "+S.jump+" ft", R.jumpers]); L.push(["Terminators", R.nUni]);
+  L.push(["Nodes", R.nodesTotal, R.node.n]); L.push(["Switch ports", R.switchPorts]);
+  L.push(["Cable weight approx", n0(R.weight)+" lb"]);
+
+  const csv = L.map(function(r){ return r.map(function(x){
+    x = String(x==null?"":x); return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(","); }).join("\n");
+  if(DOWNLOADS) DOWNLOADS.save({filename:"patch-plot-sheet.csv", data:csv}).catch(function(){ copyFallback(csv); });
+  else copyFallback(csv);
+}
+function copyFallback(csv){
+  const b = $("csv"), old = b.textContent;
+  if(navigator.clipboard && navigator.clipboard.writeText)
+    navigator.clipboard.writeText(csv).then(function(){
+      b.textContent = "Copied to clipboard"; setTimeout(function(){ b.textContent = old; },1800);
+    }).catch(function(){ b.textContent = "Copy blocked"; setTimeout(function(){ b.textContent = old; },1800); });
+  else { b.textContent = "Copy blocked"; setTimeout(function(){ b.textContent = old; },1800); }
+}
+
+/* ============================== SAVED RIGS ============================== */
+function snapshot(){
+  return {proto:S.proto, ustart:S.ustart, fill:S.fill, lcap:S.lcap, step:S.step, tight:S.tight,
+    topo:S.topo, node:S.node, jump:S.jump,
+    positions:S.positions.map(function(p){ return {id:p.id, name:p.name, dist:p.dist}; }),
+    rows:S.rows.map(function(r){ return {fid:r.fid, custom:r.custom, qty:r.qty, mode:r.mode||0, pos:r.pos}; })};
+}
+function applySnapshot(d){
+  if(!d || !Array.isArray(d.rows)) return;
+  S.proto = d.proto||"sacn"; S.ustart = d.ustart||1; S.fill = d.fill||1; S.lcap = d.lcap||24; S.step = d.step||0;
+  S.tight = !!d.tight; S.topo = d.topo||"node"; S.node = d.node||"ln4"; S.jump = d.jump||10;
+  S.positions = (Array.isArray(d.positions) && d.positions.length)
+    ? d.positions.map(function(p){ return {id:p.id, name:p.name, dist:p.dist}; })
+    : DEFAULT_POS.map(function(p){ return Object.assign({}, p); });
+  const ids = S.positions.map(function(p){ return p.id; });
+  S.rows = d.rows.map(function(r){
+    return {uid:uid(), fid:r.fid, custom:r.custom, qty:r.qty||1, mode:r.mode||0,
+      pos: ids.indexOf(r.pos)>=0 ? r.pos : ids[0]}; });
+  $("proto").value = S.proto; $("ustart").value = S.ustart; $("fill").value = String(S.fill);
+  $("lcap").value = String(S.lcap); $("step").value = String(S.step); $("topo").value = S.topo; $("jump").value = S.jump;
+  fillPositions(); fillNodes(); setSeg(); render();
+}
+function saveRig(){
+  const name = ($("signame").value||"").trim();
+  if(!name){ $("signame").focus(); return; }
+  const key = name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60) || ("rig-"+Date.now());
+  const rec = {name:name, saved:Date.now(), data:snapshot()};
+  savedRigs = savedRigs.filter(function(x){ return x.key!==key; });
+  savedRigs.push(Object.assign({key:key}, rec));
+  $("signame").value = "";
+  if(DB) DB.doc("rigs/"+key).set(rec).catch(function(){ localWrite(); }); else localWrite();
+  localWrite(); renderSaved();
+}
+function localWrite(){ try{ localStorage.setItem("patch-plot-rigs", JSON.stringify(savedRigs)); }catch(e){} }
+function removeRig(key){
+  savedRigs = savedRigs.filter(function(x){ return x.key!==key; });
+  if(DB) DB.doc("rigs/"+key).delete().catch(function(){});
+  localWrite(); renderSaved();
+}
+function renderSaved(){
+  const el = $("saved");
+  if(!savedRigs.length){
+    el.innerHTML = '<span style="font-size:12px;color:var(--ink-3)">No saved rigs yet — save one and it comes back next time you open this.</span>';
+    return;
+  }
+  el.innerHTML = savedRigs.slice().sort(function(a,b){ return b.saved-a.saved; }).map(function(r){
+    return '<span class="chip"><span class="load-b" data-load="'+esc(r.key)+'" role="button" tabindex="0">'+esc(r.name)+
+      '</span><button data-del="'+esc(r.key)+'" aria-label="Delete '+esc(r.name)+'">✕</button></span>';
+  }).join("");
+}
+document.addEventListener("click", function(e){
+  const l = e.target.closest("[data-load]");
+  if(l){ const r = savedRigs.find(function(x){ return x.key===l.getAttribute("data-load"); });
+    if(r) applySnapshot(r.data); return; }
+  const d = e.target.closest("[data-del]");
+  if(d) removeRig(d.getAttribute("data-del"));
+});
+document.addEventListener("keydown", function(e){
+  if(e.key!=="Enter" && e.key!==" ") return;
+  const l = e.target.closest && e.target.closest("[data-load]"); if(!l) return;
+  e.preventDefault(); l.click();
+});
+
+/* ============================== BOOT ============================== */
+fillPicker(); fillModes(); fillPositions(); fillNodes(); setSeg(); bind();
+try{ const raw = localStorage.getItem("patch-plot-rigs"); if(raw) savedRigs = JSON.parse(raw)||[]; }
+catch(e){ savedRigs = []; }
+render();
+
+if(window.claude && typeof window.claude.use === "function"){
+  window.claude.use("downloads").then(function(d){ DOWNLOADS = d; }).catch(function(){});
+  window.claude.use("db").then(function(db){
+    if(!db) return; DB = db;
+    return db.collection("rigs").get().then(function(snap){
+      const docs = (snap && snap.docs) ? snap.docs : [];
+      const remote = docs.map(function(doc){
+        const v = typeof doc.data === "function" ? doc.data() : doc.data;
+        return Object.assign({key:doc.id}, v||{});
+      }).filter(function(x){ return x.name && x.data; });
+      if(remote.length){
+        const seen = {};
+        savedRigs = remote.concat(savedRigs).filter(function(x){
+          if(seen[x.key]) return false; seen[x.key]=1; return true; });
+        renderSaved();
+      }
+    });
+  }).catch(function(){});
+}
+})();
+</script>
+
+</body></html>

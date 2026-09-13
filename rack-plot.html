@@ -1,0 +1,572 @@
+<!doctype html><html><head><meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rack Plot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#5C636A;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF;
+  --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#71787F;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+  --rail:#B9BDB5; --rail-2:#A2A79E;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630; --rail:#343B41; --rail-2:#454E56;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630; --rail:#343B41; --rail-2:#454E56;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);overflow:hidden;
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;
+  line-height:1.45;display:flex;flex-direction:column}
+button,input,select,textarea{font:inherit;color:var(--ink)}
+option{color:var(--ink);background:var(--surface)}
+table,.card,.note,.stat{color:var(--ink)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+.bar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:9px 15px;background:var(--surface);
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.bar h1{font-family:"Archivo",sans-serif;font-size:15px;font-weight:700;margin:0;letter-spacing:.03em;white-space:nowrap}
+.grow{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--surface);border:0;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--sel);color:var(--ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:8px;padding:7px 13px;
+  font-size:12.5px;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--ink-2);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink);filter:none}
+.btn.danger{background:none;color:var(--crit);border:1px solid var(--line)}
+.btn.danger:hover{background:var(--crit-soft);filter:none}
+.btn.sm{padding:4px 9px;font-size:11.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+input[type=text],input[type=number],select{background:var(--surface-2);border:1px solid var(--line);
+  border-radius:7px;padding:6px 9px}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}
+
+main{flex:1;overflow-y:auto;padding:16px 18px 70px}
+.wrap{max-width:1280px;margin:0 auto}
+.cols{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}
+h3{font-family:"Archivo",sans-serif;font-size:12px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--accent);margin:20px 0 8px}
+h4{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700;margin:0 0 8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:9px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.stat .v{font-family:"Archivo",sans-serif;font-size:21px;font-weight:700;line-height:1.15;margin-top:1px}
+.stat .v small{font-size:10.5px;font-weight:500;color:var(--ink-3)}
+.stat.flag{border-color:var(--warn);background:var(--warn-soft)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 15px;
+  box-shadow:var(--shadow);margin-bottom:12px}
+.note{border-radius:10px;padding:11px 14px;font-size:12.5px;border:1px solid var(--line);
+  background:var(--surface);margin-bottom:13px}
+.note.warn{background:var(--warn-soft);border-color:transparent}
+.note.crit{background:var(--crit-soft);border-color:transparent}
+.muted{color:var(--ink-3)}
+.chip{display:inline-block;padding:1px 6px;border-radius:5px;font-size:10px;font-weight:600;white-space:nowrap}
+.chip.ok{background:var(--accent-soft);color:var(--accent)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.crit{background:var(--crit-soft);color:var(--crit)}
+.chip.dim{background:var(--sunken);color:var(--ink-3)}
+.empty{text-align:center;padding:40px 20px;color:var(--ink-3)}
+.empty .big{font-family:"Archivo",sans-serif;font-size:15px;font-weight:600;color:var(--ink-2);margin-bottom:4px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th{text-align:left;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;padding:7px 9px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:5px 9px;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* rack list */
+.racktab{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;
+  border:1px solid transparent;border-radius:8px;padding:7px 9px;cursor:pointer;color:var(--ink-2);font-size:13px}
+.racktab:hover{background:var(--surface-2);color:var(--ink)}
+.racktab.on{background:var(--sel);color:var(--ink);font-weight:600;border-color:var(--line)}
+.racktab .sq{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+.racktab .n{margin-left:auto;font-size:10.5px;color:var(--ink-3);font-weight:500}
+
+/* the elevation */
+.elev{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px 16px;
+  box-shadow:var(--shadow)}
+.elevhead{display:flex;align-items:baseline;gap:11px;margin-bottom:10px;flex-wrap:wrap}
+.elevhead b{font-family:"Archivo",sans-serif;font-size:15px}
+.elevhead .m{font-size:11.5px;color:var(--ink-3)}
+svg{display:block;width:100%;height:auto}
+
+/* port editor */
+.ports{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px;margin-top:9px}
+.port{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.port .pn{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.pdot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+.pdot.output{background:var(--s3)} .pdot.input{background:var(--s2)}
+.pdot.network{background:var(--s1)} .pdot.power{background:var(--s7)}
+.port input{width:100%;font-size:11.5px;padding:3px 6px;background:var(--surface);margin-bottom:3px}
+.port input:last-child{margin-bottom:0}
+.port.used{border-color:var(--accent)}
+
+@media print{
+  .bar,.side{display:none} main{overflow:visible;padding:0}
+  body{overflow:visible;background:#fff}
+  .cols{grid-template-columns:1fr}
+  .elev{box-shadow:none;border:0;padding:0;break-inside:avoid}
+  .ports{display:none}
+}
+@media(max-width:960px){ .cols{grid-template-columns:1fr} }
+</style></head><body>
+
+<div class="bar">
+  <h1>Rack&nbsp;Plot</h1>
+  <div class="seg" id="tabs"></div>
+  <div class="grow"></div>
+  <button class="btn ghost sm" id="csvbtn">CSV</button>
+  <button class="btn ghost sm" id="printbtn">Print</button>
+  <button class="btn sm" id="savebtn">Save racks</button>
+</div>
+<main><div class="wrap" id="root"></div></main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   Rack Plot — rack elevations and port-level patching.
+
+   The largest thing the legacy Pre-Pro suite did that this one had no
+   answer for, and the natural downstream of Patch Plot: Patch decides
+   which universes exist, Rack decides which physical port carries each
+   one and what leaves that port.
+
+   Equipment comes from gear/rack-equipment — 8 devices with real RU
+   heights and full port maps, harvested from Pre-Pro's own BUILTIN_TYPES
+   (which differ from what its documentation claimed; the code was right).
+
+   Two patterns carried over deliberately from Pre-Pro, both scar tissue:
+
+   1. NEVER re-render on an input event. Pre-Pro's hardest-won lesson was
+      that a full render() on blur destroys the DOM and kills keyboard
+      navigation mid-edit. Port fields here write to the model and repaint
+      nothing; the elevation redraws only on structural change.
+   2. RU positions are 1-indexed from the BOTTOM, the way a rack is
+      actually counted and labelled.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+const $  = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+const COLORS = ['--s1','--s2','--s3','--s4','--s5','--s6','--s7','--s8','--s0'];
+
+const S = { tab:'build', loaded:false, show:null, showName:'',
+            equip:[], racks:[], cur:null, dirty:false };
+
+async function load(){
+  const K = window.KTM;
+  if(!K){ S.loaded=true; return; }
+  const gear = await K.list('gear');
+  const re = gear.find(g=>g.kind==='rack-equipment');
+  S.equip = (re && re.items) || [];
+  S.show = K.activeShow ? K.activeShow() : null;
+  if(S.show){
+    const sh = await K.get(K.P.show(S.show));
+    S.showName = (sh && sh.name) || S.show;
+    S.racks = await K.list(K.P.sub(S.show,'racks'));
+    S.racks.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
+  }
+  S.cur = S.racks[0] ? S.racks[0].id : null;
+  S.loaded = true;
+}
+
+async function save(){
+  const K=window.KTM;
+  if(!K) return alert('No store available.');
+  if(!S.show) return alert('Pick a show in the Hub first — racks belong to a show.');
+  const b=$('savebtn'); b.disabled=true; b.textContent='Saving…';
+  try{
+    for(const r of S.racks){
+      const {id, ...body} = r;
+      await K.set(K.P.subDoc(S.show,'racks',id), body);
+    }
+    S.dirty=false; b.textContent='Saved';
+    setTimeout(()=>{b.textContent='Save racks';b.disabled=false;},1400);
+  }catch(e){ b.textContent='Save racks'; b.disabled=false; alert('Could not save: '+e.message); }
+}
+
+const rack = () => S.racks.find(r=>r.id===S.cur);
+const eq   = id => S.equip.find(e=>e.id===id);
+
+/* ── occupancy ────────────────────────────────────────────────────────────
+   RU 1 is the bottom. An item at ru=3 with ruHeight=2 occupies 3 and 4. */
+function occupancy(r){
+  const map = {};
+  (r.items||[]).forEach(it=>{
+    const e = eq(it.gearId); if(!e) return;
+    for(let u=it.ru; u<it.ru+(e.ruHeight||1); u++) map[u] = it;
+  });
+  return map;
+}
+function fits(r, ru, height, ignoreKey){
+  if(ru<1 || ru+height-1 > (r.ru||12)) return false;
+  const occ = occupancy(r);
+  for(let u=ru; u<ru+height; u++){
+    const at = occ[u];
+    if(at && at.key !== ignoreKey) return false;
+  }
+  return true;
+}
+function firstFit(r, height){
+  for(let u=1; u+height-1 <= (r.ru||12); u++) if(fits(r,u,height)) return u;
+  return null;
+}
+
+/* Every universe assigned anywhere, and where. Duplicates are the finding —
+   the same universe on two ports is nearly always a mistake, and nothing
+   else in the suite would catch it. */
+function universeIndex(){
+  const idx = {};
+  S.racks.forEach(r=>(r.items||[]).forEach(it=>{
+    Object.entries(it.ports||{}).forEach(([pid,p])=>{
+      const u=(p.universe||'').trim(); if(!u) return;
+      (idx[u]=idx[u]||[]).push({rack:r.name, item:it.label||(eq(it.gearId)||{}).name, port:pid});
+    });
+  }));
+  return idx;
+}
+
+function counts(){
+  let items=0, ru=0, used=0, ports=0, patched=0;
+  S.racks.forEach(r=>{
+    ru += (r.ru||12);
+    (r.items||[]).forEach(it=>{
+      const e=eq(it.gearId); if(!e) return;
+      items++; used += (e.ruHeight||1);
+      const out=(e.ports||[]).filter(p=>p.type==='output');
+      ports += out.length;
+      out.forEach(p=>{ const pp=(it.ports||{})[p.id]; if(pp && (pp.universe||pp.label)) patched++; });
+    });
+  });
+  const dupes = Object.values(universeIndex()).filter(a=>a.length>1).length;
+  return {racks:S.racks.length, items, ru, used, ports, patched, dupes};
+}
+
+/* ── render ───────────────────────────────────────────────────────────── */
+function render(){
+  $('tabs').innerHTML=[['build','Racks'],['patch','Patch sheet']]
+    .map(([k,l])=>`<button data-tab="${k}"${S.tab===k?' class="on"':''}>${l}</button>`).join('');
+  $('tabs').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();});
+
+  const r=$('root');
+  if(!S.loaded){ r.innerHTML='<div class="empty"><div class="big">Loading…</div></div>'; return; }
+  if(!window.KTM){
+    r.innerHTML='<div class="note crit"><b>No shared data layer.</b> Rack Plot reads the rack '
+      +'equipment catalog from the Hub. Open it from inside the KTM Hub rather than on its own.</div>';
+    return;
+  }
+  if(!S.equip.length){
+    r.innerHTML='<div class="empty"><div class="big">Rack equipment catalog is empty</div>'
+      +'<div>Seed <span class="mono">gear/rack-equipment</span> in the Hub first.</div></div>';
+    return;
+  }
+  r.innerHTML = S.tab==='build' ? viewBuild() : viewPatch();
+  S.tab==='build' ? wireBuild() : null;
+}
+
+function viewBuild(){
+  const c=counts();
+  let h='';
+  if(!S.show) h+='<div class="note warn"><b>No show selected.</b> You can lay racks out freely, '
+    +'but saving needs a show — pick one at the top of the Hub.</div>';
+
+  h+='<div class="stats">'
+   + st('Racks',c.racks) + st('Devices',c.items)
+   + st('RU used',c.used+'<small> / '+c.ru+'</small>')
+   + st('Outputs',c.ports) + st('Patched',c.patched)
+   + (c.dupes?st('Duplicate universes',c.dupes,'flag'):'')
+   + '</div>';
+
+  if(c.dupes){
+    const dl=Object.entries(universeIndex()).filter(([,a])=>a.length>1);
+    h+='<div class="note warn"><b>'+c.dupes+' universe'+(c.dupes===1?'':'s')+' assigned to more than '
+     +'one port.</b> '+dl.slice(0,3).map(([u,a])=>esc(u)+' on '+a.length+' ports').join('; ')
+     +(dl.length>3?` and ${dl.length-3} more`:'')
+     +'. Sometimes deliberate for a split, usually not.</div>';
+  }
+
+  h+='<div class="cols"><div class="side">';
+
+  // rack list + add
+  h+='<div class="card"><h4>Racks</h4>'
+   + (S.racks.length
+      ? S.racks.map((r,i)=>`<button class="racktab${r.id===S.cur?' on':''}" data-rk="${esc(r.id)}">`
+         + `<span class="sq" style="background:var(${r.color||COLORS[i%COLORS.length]})"></span>`
+         + `<span>${esc(r.name||'Rack')}</span>`
+         + `<span class="n">${(r.items||[]).length} · ${r.ru||12}RU</span></button>`).join('')
+      : '<div class="muted" style="font-size:12px;margin-bottom:8px">No racks yet.</div>')
+   + '<div style="display:flex;gap:6px;margin-top:9px">'
+   + '<input type="text" id="newrack" placeholder="Rack name" style="flex:1;min-width:0">'
+   + '<input type="number" id="newru" value="12" min="1" max="45" style="width:62px" title="RU">'
+   + '<button class="btn sm" id="addrack">Add</button></div></div>';
+
+  const r=rack();
+  if(r){
+    h+='<div class="card"><h4>Add device to '+esc(r.name||'rack')+'</h4>'
+     + '<select id="eqpick" style="width:100%;margin-bottom:7px">'
+     + S.equip.map(e=>`<option value="${esc(e.id)}">${esc(e.name)} · ${e.ruHeight||1}RU · ${e.portCount} ports</option>`).join('')
+     + '</select>'
+     + '<div style="display:flex;gap:6px"><input type="text" id="eqlabel" placeholder="Label (e.g. NODE 1)" style="flex:1;min-width:0">'
+     + '<button class="btn sm" id="addeq">Add</button></div>'
+     + '<div class="muted" style="font-size:11px;margin-top:7px">Dropped into the lowest RU it fits.</div>'
+     + '</div>'
+     + '<div class="card"><h4>Rack</h4>'
+     + `<div style="display:flex;gap:6px;margin-bottom:6px"><input type="text" id="rkname" value="${esc(r.name||'')}" style="flex:1;min-width:0">`
+     + `<input type="number" id="rkru" value="${r.ru||12}" min="1" max="45" style="width:62px"></div>`
+     + '<button class="btn danger sm" id="delrack">Delete rack</button></div>';
+  }
+  h+='</div><div>';
+
+  // the elevation
+  if(!r){
+    h+='<div class="empty"><div class="big">No rack selected</div>'
+     + '<div>Add one on the left. Equipment comes from the shared catalog, so RU heights and '
+     + 'port maps are the same numbers every tool uses.</div></div>';
+  }else{
+    h+=`<div class="elev"><div class="elevhead"><b>${esc(r.name||'Rack')}</b>`
+     + `<span class="m">${r.ru||12} RU</span>`
+     + `<span class="m">${(r.items||[]).length} devices</span>`
+     + `<span class="m mono">${ruUsed(r)} RU used</span></div>`
+     + elevationSVG(r) + '</div>';
+    (r.items||[]).slice().sort((a,b)=>b.ru-a.ru).forEach(it=>{ h+=deviceCard(r,it); });
+  }
+  return h+'</div></div>';
+}
+
+const ruUsed = r => (r.items||[]).reduce((a,it)=>a+((eq(it.gearId)||{}).ruHeight||1),0);
+
+/* Rack elevation. Cage-nut rails, RU numbers up the left, devices as blocks.
+   Drawn bottom-up because that is how a rack is counted. */
+function elevationSVG(r){
+  const RU=r.ru||12, UH=21, W=560, RAIL=17, PAD=26;
+  const H=RU*UH, occ=occupancy(r);
+  let s=`<svg viewBox="0 0 ${W+PAD*2} ${H+PAD*2}" role="img" aria-label="Rack elevation, ${RU} RU">`;
+  // carcass
+  s+=`<rect x="${PAD}" y="${PAD}" width="${W}" height="${H}" fill="var(--sunken)" stroke="var(--line-strong)" stroke-width="1.5" rx="3"/>`;
+  // rails
+  [PAD, PAD+W-RAIL].forEach(x=>{
+    s+=`<rect x="${x}" y="${PAD}" width="${RAIL}" height="${H}" fill="var(--rail)"/>`;
+    for(let u=0;u<RU;u++){
+      const cy=PAD+H-(u*UH)-UH/2;
+      [-6,0,6].forEach(dy=>{ s+=`<rect x="${x+RAIL/2-2}" y="${cy+dy-1.6}" width="4" height="3.2" rx="1" fill="var(--rail-2)"/>`; });
+    }
+  });
+  // RU numbers
+  for(let u=1;u<=RU;u++){
+    const cy=PAD+H-((u-1)*UH)-UH/2;
+    s+=`<text x="${PAD-5}" y="${cy+3.4}" font-size="8.5" fill="var(--ink-3)" text-anchor="end" `
+     + `font-family="IBM Plex Mono,monospace">${u}</text>`;
+    if(!occ[u])
+      s+=`<line x1="${PAD+RAIL}" y1="${cy+UH/2}" x2="${PAD+W-RAIL}" y2="${cy+UH/2}" `
+       + `stroke="var(--line)" stroke-width="0.5" stroke-dasharray="2 3"/>`;
+  }
+  // devices
+  (r.items||[]).forEach((it,i)=>{
+    const e=eq(it.gearId); if(!e) return;
+    const hgt=(e.ruHeight||1), y=PAD+H-((it.ru-1)*UH)-hgt*UH;
+    const col=`var(${it.color||COLORS[i%COLORS.length]})`;
+    const outs=(e.ports||[]).filter(p=>p.type==='output');
+    const done=outs.filter(p=>{const pp=(it.ports||{})[p.id]; return pp&&(pp.universe||pp.label);}).length;
+    s+=`<g><rect x="${PAD+RAIL}" y="${y+1}" width="${W-RAIL*2}" height="${hgt*UH-2}" rx="2.5" `
+     + `fill="${col}" fill-opacity="0.86" stroke="var(--surface)" stroke-width="1"/>`
+     + `<text x="${PAD+RAIL+9}" y="${y+hgt*UH/2+3.6}" font-size="10.5" fill="#fff" `
+     + `font-family="IBM Plex Sans,sans-serif" font-weight="600">${esc(it.label||e.name)}</text>`
+     + `<text x="${PAD+W-RAIL-9}" y="${y+hgt*UH/2+3.4}" font-size="8.5" fill="#fff" fill-opacity="0.9" `
+     + `text-anchor="end" font-family="IBM Plex Mono,monospace">${esc(e.name)}`
+     + (outs.length?`  ${done}/${outs.length}`:'')+`</text>`
+     + `<title>${esc(e.name)} at RU ${it.ru}${hgt>1?'–'+(it.ru+hgt-1):''}</title></g>`;
+  });
+  return s+'</svg>';
+}
+
+/* Per-device port editor. Inputs write straight to the model and repaint
+   nothing — see the note at the top about why. */
+function deviceCard(r,it){
+  const e=eq(it.gearId); if(!e) return '';
+  const outs=(e.ports||[]);
+  return `<div class="card"><div style="display:flex;align-items:center;gap:9px;margin-bottom:2px">`
+   + `<b style="font-family:Archivo,sans-serif;font-size:13.5px">${esc(it.label||e.name)}</b>`
+   + `<span class="muted" style="font-size:11.5px">${esc(e.name)} · RU ${it.ru} · ${e.ruHeight||1}RU</span>`
+   + (e.hasIp?`<input type="text" data-ip="${esc(it.key)}" value="${esc(it.ip||'')}" placeholder="IP" `
+      + `class="mono" style="width:118px;font-size:11.5px;padding:3px 6px">`:'')
+   + `<span class="grow"></span>`
+   + `<button class="btn ghost sm" data-mv="${esc(it.key)}" data-d="1">▲</button>`
+   + `<button class="btn ghost sm" data-mv="${esc(it.key)}" data-d="-1">▼</button>`
+   + `<button class="btn danger sm" data-rm="${esc(it.key)}">Remove</button></div>`
+   + `<div class="ports">`
+   + outs.map(p=>{
+      const pp=(it.ports||{})[p.id]||{};
+      const used=!!(pp.universe||pp.label);
+      return `<div class="port${used?' used':''}">`
+       + `<div class="pn"><span class="pdot ${esc(p.type||'output')}"></span>${esc(p.name||p.id)}</div>`
+       + (p.type==='output'||p.type==='input'
+          ? `<input type="text" data-pu="${esc(it.key)}|${esc(p.id)}" value="${esc(pp.universe||'')}" placeholder="Universe" class="mono">` : '')
+       + `<input type="text" data-pl="${esc(it.key)}|${esc(p.id)}" value="${esc(pp.label||'')}" placeholder="Goes to…">`
+       + `</div>`;
+     }).join('')
+   + `</div></div>`;
+}
+
+function wireBuild(){
+  const ar=$('addrack');
+  if(ar) ar.onclick=()=>{
+    const nm=($('newrack').value||'').trim()||('Rack '+(S.racks.length+1));
+    const ru=Math.max(1,Math.min(45,parseInt($('newru').value||'12',10)||12));
+    const id='rack-'+uid();
+    S.racks.push({id, name:nm, ru, color:COLORS[S.racks.length%COLORS.length], items:[]});
+    S.cur=id; S.dirty=true; render();
+  };
+  document.querySelectorAll('[data-rk]').forEach(b=>b.onclick=()=>{S.cur=b.dataset.rk;render();});
+
+  const ae=$('addeq');
+  if(ae) ae.onclick=()=>{
+    const r=rack(); if(!r) return;
+    const gid=$('eqpick').value, e=eq(gid); if(!e) return;
+    const at=firstFit(r,e.ruHeight||1);
+    if(at===null){ alert('No free space in this rack for a '+(e.ruHeight||1)+'RU device.'); return; }
+    r.items=r.items||[];
+    r.items.push({key:'i-'+uid(), gearId:gid, ru:at,
+                  label:($('eqlabel').value||'').trim()||null,
+                  color:COLORS[r.items.length%COLORS.length], ip:null, ports:{}});
+    S.dirty=true; render();
+  };
+
+  const rn=$('rkname'); if(rn) rn.onchange=()=>{const r=rack(); if(r){r.name=rn.value;S.dirty=true;render();}};
+  const rr=$('rkru');   if(rr) rr.onchange=()=>{
+    const r=rack(); if(!r) return;
+    const v=Math.max(1,Math.min(45,parseInt(rr.value||'12',10)||12));
+    const tallest=(r.items||[]).reduce((a,it)=>Math.max(a,it.ru+((eq(it.gearId)||{}).ruHeight||1)-1),0);
+    if(v<tallest){ alert('Cannot shrink below RU '+tallest+' — a device is mounted there.'); rr.value=r.ru; return; }
+    r.ru=v; S.dirty=true; render();
+  };
+  const dr=$('delrack'); if(dr) dr.onclick=()=>{
+    const r=rack(); if(!r) return;
+    if(!confirm('Delete "'+(r.name||'rack')+'" and its '+(r.items||[]).length+' devices?')) return;
+    S.racks=S.racks.filter(x=>x.id!==r.id); S.cur=S.racks[0]?S.racks[0].id:null; S.dirty=true; render();
+  };
+
+  document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{
+    const r=rack(); r.items=r.items.filter(x=>x.key!==b.dataset.rm); S.dirty=true; render();
+  });
+  document.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{
+    const r=rack(), it=(r.items||[]).find(x=>x.key===b.dataset.mv); if(!it) return;
+    const e=eq(it.gearId), h=(e&&e.ruHeight)||1, d=+b.dataset.d;
+    if(fits(r, it.ru+d, h, it.key)){ it.ru+=d; S.dirty=true; render(); }
+  });
+
+  /* No re-render on these. Pre-Pro's lesson: a render() on input destroys the
+     DOM mid-edit and kills tab order. Write the model, leave the DOM alone. */
+  document.querySelectorAll('[data-pu],[data-pl]').forEach(inp=>inp.oninput=()=>{
+    const isU=inp.hasAttribute('data-pu');
+    const [k,pid]=(isU?inp.dataset.pu:inp.dataset.pl).split('|');
+    const r=rack(), it=(r.items||[]).find(x=>x.key===k); if(!it) return;
+    it.ports=it.ports||{}; it.ports[pid]=Object.assign({},it.ports[pid],
+      isU?{universe:inp.value}:{label:inp.value});
+    inp.closest('.port').classList.toggle('used',
+      !!((it.ports[pid].universe||'')||(it.ports[pid].label||'')));
+    S.dirty=true;
+  });
+  document.querySelectorAll('[data-ip]').forEach(inp=>inp.oninput=()=>{
+    const r=rack(), it=(r.items||[]).find(x=>x.key===inp.dataset.ip);
+    if(it){ it.ip=inp.value; S.dirty=true; }
+  });
+}
+
+/* ── patch sheet ──────────────────────────────────────────────────────── */
+function viewPatch(){
+  const rows=[];
+  S.racks.forEach(r=>(r.items||[]).forEach(it=>{
+    const e=eq(it.gearId); if(!e) return;
+    (e.ports||[]).forEach(p=>{
+      const pp=(it.ports||{})[p.id]||{};
+      if(!pp.universe && !pp.label) return;
+      rows.push({rack:r.name, device:it.label||e.name, model:e.name, ip:it.ip,
+                 port:p.name||p.id, type:p.type, universe:pp.universe||'', dest:pp.label||''});
+    });
+  }));
+  if(!rows.length) return '<div class="empty"><div class="big">Nothing patched yet</div>'
+    +'<div>Assign universes to ports on the Racks tab.</div></div>';
+
+  const idx=universeIndex();
+  let h=`<div class="elev"><div class="elevhead"><b>Patch sheet</b>`
+   + `<span class="m">${esc(S.showName||'no show')}</span>`
+   + `<span class="m">${rows.length} ports</span></div>`;
+  h+='<div class="tablewrap"><table><thead><tr><th>Rack</th><th>Device</th><th>IP</th>'
+   + '<th>Port</th><th>Universe</th><th>Goes to</th></tr></thead><tbody>'
+   + rows.map(r=>{
+      const dup=r.universe && (idx[r.universe.trim()]||[]).length>1;
+      return `<tr><td>${esc(r.rack)}</td><td><b>${esc(r.device)}</b> `
+       + `<span class="muted" style="font-size:11px">${esc(r.model)}</span></td>`
+       + `<td class="mono" style="font-size:11px">${esc(r.ip||'—')}</td>`
+       + `<td class="mono" style="font-size:11.5px">${esc(r.port)}</td>`
+       + `<td class="mono"><b>${esc(r.universe||'—')}</b>`
+       + (dup?' <span class="chip warn">dup</span>':'')+`</td>`
+       + `<td>${esc(r.dest||'—')}</td></tr>`;
+     }).join('')
+   + '</tbody></table></div></div>';
+  return h;
+}
+
+const st=(k,v,cls)=>`<div class="stat${cls?' '+cls:''}"><div class="k">${esc(k)}</div><div class="v">${v}</div></div>`;
+
+function toCSV(){
+  const out=[['Rack','Device','Model','IP','Port','Type','Universe','Goes to']];
+  S.racks.forEach(r=>(r.items||[]).forEach(it=>{
+    const e=eq(it.gearId); if(!e) return;
+    (e.ports||[]).forEach(p=>{
+      const pp=(it.ports||{})[p.id]||{};
+      if(!pp.universe && !pp.label) return;
+      out.push([r.name, it.label||e.name, e.name, it.ip||'', p.name||p.id, p.type||'',
+                pp.universe||'', pp.label||'']);
+    });
+  }));
+  return out.map(r=>r.map(v=>{const s=String(v??'');
+    return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');
+}
+async function downloadCSV(){
+  const csv=toCSV(), name=((S.showName||'racks')+'-patch-sheet.csv').replace(/[^\w.-]+/g,'-');
+  try{ const dl=await claude.use('downloads'); if(dl){ await dl.save({filename:name,data:csv}); return; } }catch(e){}
+  try{ await navigator.clipboard.writeText(csv); alert('CSV copied to the clipboard.'); }
+  catch(e){ alert('Could not export: '+e.message); }
+}
+
+$('csvbtn').onclick=downloadCSV;
+$('printbtn').onclick=()=>{ setTimeout(()=>window.print(),120); };
+$('savebtn').onclick=save;
+
+(async()=>{ render(); await load(); render(); })();
+</script>
+</body></html>

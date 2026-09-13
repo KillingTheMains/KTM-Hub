@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rig Plot fixture library",
+  "description": "Canonical fixture data shared by Distro, Patch, Truss and Pull Plot. Every measured attribute carries its own provenance — the label the source used is part of the record, because mislabelled figures are this project's known failure mode.",
+  "type": "object",
+  "required": ["version", "updated", "fixtures"],
+  "properties": {
+    "version": { "type": "integer" },
+    "updated": { "type": "string", "format": "date" },
+    "fixtures": { "type": "array", "items": { "$ref": "#/$defs/fixture" } }
+  },
+  "$defs": {
+    "fixture": {
+      "type": "object",
+      "required": ["id", "name", "manufacturer", "power"],
+      "properties": {
+        "id": { "type": "string", "description": "Stable slug. Never renamed once a tool references it." },
+        "name": { "type": "string" },
+        "manufacturer": { "type": "string" },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "category": {
+          "enum": ["mover", "wash", "beam", "strobe", "bar", "conventional", "atmospheric", "other"]
+        },
+        "power": {
+          "$ref": "#/$defs/provenance",
+          "description": "Nominal max draw in VA. NOT LED engine wattage and NOT lamp wattage — those two substitutions are the project's known failure mode, which is why sourceLabel is required."
+        },
+        "connection": {
+          "enum": ["L-N", "L-L", "3ph"],
+          "description": "Default connection mode. An L-L load loads both its legs at full line current."
+        },
+        "dmx": {
+          "type": "object",
+          "properties": {
+            "footprints": { "type": "array", "items": { "type": "integer" } },
+            "default": { "type": "integer" },
+            "sourceUrl": { "type": "string", "format": "uri" }
+          },
+          "description": "Channel counts per personality; default is the mode the tools assume."
+        },
+        "weight": { "$ref": "#/$defs/provenance" },
+        "case": {
+          "type": "object",
+          "required": ["family", "perCase"],
+          "properties": {
+            "family": { "type": "string", "description": "Case family, e.g. Standard, Tall Standard, 4-way top-loader." },
+            "perCase": { "type": "integer" },
+            "sourceUrl": { "type": "string", "format": "uri" },
+            "note": { "type": "string", "description": "One rental house's convention. Meant to be edited." }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["value", "unit", "sourceLabel", "sourceUrl", "retrieved", "status"],
+      "properties": {
+        "value": { "type": "number" },
+        "unit": { "type": "string" },
+        "sourceLabel": {
+          "type": "string",
+          "description": "Verbatim, what the source calls this number: 'Max power consumption', 'LED engine wattage', 'Lamp wattage'. The label is the finding."
+        },
+        "sourceUrl": { "type": "string", "format": "uri" },
+        "retrieved": { "type": "string", "format": "date" },
+        "status": { "enum": ["verified", "interpreted", "conflicting"] },
+        "conflicting": {
+          "type": "array",
+          "description": "When status is conflicting: every competing value with its own source. Unresolved on purpose.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value": { "type": "number" },
+              "sourceLabel": { "type": "string" },
+              "sourceUrl": { "type": "string", "format": "uri" }
+            }
+          }
+        },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,620 @@
+<!doctype html><html><head><meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shop Order</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#5C636A;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF;
+  --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#71787F;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);overflow:hidden;
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;
+  line-height:1.45;display:flex;flex-direction:column}
+button,input,select,textarea{font:inherit;color:var(--ink)}
+option{color:var(--ink);background:var(--surface)}
+table,.card,.note,.stat,.sheet{color:var(--ink)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+.bar{flex:0 0 auto;display:flex;align-items:center;gap:11px;padding:9px 15px;background:var(--surface);
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.bar h1{font-family:"Archivo",sans-serif;font-size:15px;font-weight:700;margin:0;letter-spacing:.03em;white-space:nowrap}
+.grow{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--surface);border:0;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--sel);color:var(--ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:8px;padding:7px 13px;
+  font-size:12.5px;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--ink-2);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink);filter:none}
+.btn.sm{padding:4px 9px;font-size:11.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+input[type=text],input[type=number],input[type=date],select{background:var(--surface-2);
+  border:1px solid var(--line);border-radius:7px;padding:6px 9px}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}
+
+main{flex:1;overflow-y:auto;padding:18px 20px 70px}
+.wrap{max-width:1240px;margin:0 auto}
+.cols{display:grid;grid-template-columns:1fr 268px;gap:18px;align-items:start}
+h3{font-family:"Archivo",sans-serif;font-size:12px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--accent);margin:22px 0 8px}
+.sub{color:var(--ink-3);font-size:12.5px;margin:0 0 14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:9px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.stat .v{font-family:"Archivo",sans-serif;font-size:21px;font-weight:700;line-height:1.15;margin-top:1px}
+.stat .v small{font-size:10.5px;font-weight:500;color:var(--ink-3)}
+.stat.flag{border-color:var(--warn);background:var(--warn-soft)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 15px;
+  box-shadow:var(--shadow)}
+.note{border-radius:10px;padding:11px 14px;font-size:12.5px;border:1px solid var(--line);
+  background:var(--surface);margin-bottom:14px}
+.note.warn{background:var(--warn-soft);border-color:transparent}
+.note.crit{background:var(--crit-soft);border-color:transparent}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th{text-align:left;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;padding:7px 9px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:5px 9px;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-3)}
+.chip{display:inline-block;padding:1px 6px;border-radius:5px;font-size:10px;font-weight:600;white-space:nowrap}
+.chip.ok{background:var(--accent-soft);color:var(--accent)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.crit{background:var(--crit-soft);color:var(--crit)}
+.chip.dim{background:var(--sunken);color:var(--ink-3)}
+.q{width:52px;text-align:right;padding:3px 5px}
+.empty{text-align:center;padding:42px 20px;color:var(--ink-3)}
+.empty .big{font-family:"Archivo",sans-serif;font-size:15px;font-weight:600;color:var(--ink-2);margin-bottom:4px}
+
+/* layout rail — section order, visibility, titles */
+.rail h4{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;margin:0 0 8px}
+.secrow{display:flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:8px;padding:5px 7px;margin-bottom:5px}
+.secrow input[type=text]{flex:1;min-width:0;background:none;border:0;padding:2px 3px;font-size:12px}
+.secrow input[type=text]:focus{outline:1px solid var(--accent);border-radius:4px}
+.secrow button{background:none;border:0;cursor:pointer;color:var(--ink-3);padding:1px 4px;font-size:12px}
+.secrow button:hover{color:var(--ink)}
+.secrow.off{opacity:.45}
+
+/* the printed sheet */
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px 24px;
+  box-shadow:var(--shadow)}
+.sheethead{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  border-bottom:2px solid var(--accent);padding-bottom:11px;margin-bottom:6px}
+.sheethead h2{font-family:"Archivo",sans-serif;font-size:19px;margin:0}
+.sheethead .m{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.7}
+@media print{
+  .bar,.rail{display:none} main{overflow:visible;padding:0}
+  body{overflow:visible;background:#fff}
+  .cols{grid-template-columns:1fr}
+  .sheet{box-shadow:none;border:0;padding:0}
+  table{font-size:10px} th,td{padding:3px 5px}
+  h3{page-break-after:avoid} tr{page-break-inside:avoid}
+}
+@media(max-width:900px){ .cols{grid-template-columns:1fr} }
+</style></head><body>
+
+<div class="bar">
+  <h1>Shop&nbsp;Order</h1>
+  <div class="seg" id="tabs"></div>
+  <div class="grow"></div>
+  <label class="muted" style="font-size:11.5px">Vendor
+    <select id="vendorsel" style="margin-left:5px"></select></label>
+  <button class="btn ghost sm" id="csvbtn">CSV</button>
+  <button class="btn ghost sm" id="printbtn">Print</button>
+  <button class="btn sm" id="savebtn">Save order</button>
+</div>
+<main><div class="wrap" id="root"></div></main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   Shop Order — what the production electrician actually sends the vendor.
+
+   Three ideas here are lifted from a colleague's tool, deliberately:
+     1. Section layout is configurable — reorder, retitle, hide. One order,
+        several audiences (the shop, the crew, the PM) without re-authoring.
+     2. Cable is a LENGTH MATRIX, type down the side and length across the
+        top. That is how a shop order reads and how a truck packs.
+     3. Adapters are a first-class section. Not fixtures, not cable, and the
+        thing that ruins a load-in when it is missing.
+
+   What this adds that his does not: the two-fer count is DERIVED. The
+   library knows which fixtures have a power pass-thru and which do not, so
+   the order can say how many two-fers the rig needs instead of leaving it
+   to memory. That is the whole reason the powerOut research was worth doing.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+const $  = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = v => (v==null||isNaN(v)) ? '—' : Number(v).toLocaleString(undefined,{maximumFractionDigits:0});
+const n1  = v => Math.round(v*10)/10;
+
+const S = {
+  tab:'build', loaded:false, show:null, showName:'',
+  vendors:[], vendorId:null,
+  fixtures:[], cable:null, adapters:null, hardware:null, layout:null,
+  order:{ fixtures:{}, cable:{}, adapters:{}, hardware:{}, control:{}, notes:'',
+          dates:{loadIn:'',loadOut:''}, rev:'A' },
+  q:'', dirty:false
+};
+
+/* ── load ─────────────────────────────────────────────────────────────── */
+async function load(){
+  const K = window.KTM;
+  if (!K){ S.loaded = true; return; }
+  const [fx, gear, vendors] = await Promise.all([
+    K.list('fixtures'), K.list('gear'), K.list('vendors')
+  ]);
+  S.fixtures = fx.sort((a,b)=>((a.manufacturer||'')+' '+(a.name||''))
+                        .localeCompare((b.manufacturer||'')+' '+(b.name||'')));
+  S.cable    = gear.find(g=>g.kind==='cable');
+  S.adapters = gear.find(g=>g.kind==='adapter');
+  S.hardware = gear.find(g=>g.kind==='hardware');
+  S.vendors  = vendors.filter(v=>v.active!==false)
+                      .sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+  S.vendorId = S.vendorId || (S.vendors[0] && S.vendors[0].id) || null;
+
+  const lay = await K.get('meta/orderLayout');
+  S.layout = JSON.parse(JSON.stringify((lay && lay.sections) || []));
+
+  S.show = K.activeShow ? K.activeShow() : null;
+  if (S.show){
+    const sh = await K.get(K.P.show(S.show));
+    S.showName = (sh && sh.name) || S.show;
+    const saved = await K.get(K.P.subDoc(S.show,'orders','current'));
+    if (saved){
+      S.order = Object.assign(S.order, saved.order || {});
+      if (saved.layout) S.layout = saved.layout;
+      if (saved.vendorId) S.vendorId = saved.vendorId;
+    }
+  }
+  S.loaded = true;
+}
+
+async function save(){
+  const K = window.KTM;
+  if (!K) return alert('No store available.');
+  if (!S.show) return alert('Pick a show in the Hub first — an order belongs to a show.');
+  const b = $('savebtn'); b.disabled = true; b.textContent = 'Saving…';
+  try{
+    await K.set(K.P.subDoc(S.show,'orders','current'), {
+      vendorId:S.vendorId, order:S.order, layout:S.layout,
+      totals:totals(), generatedAt:new Date().toISOString()
+    });
+    S.dirty=false; b.textContent='Saved';
+    setTimeout(()=>{b.textContent='Save order';b.disabled=false;},1400);
+  }catch(e){ b.textContent='Save order'; b.disabled=false; alert('Could not save: '+e.message); }
+}
+
+/* ── derived quantities ───────────────────────────────────────────────────
+   The order knows things the person ordering should not have to remember. */
+
+/* A fixture with no power pass-thru cannot be daisy-chained: every unit past
+   the first on a circuit needs a two-fer. A fixture WITH a pass-thru needs
+   none. `maxLinked` refines it further where the manufacturer publishes it. */
+function twoferNeed(){
+  let need = 0; const why = [];
+  Object.entries(S.order.fixtures).forEach(([fid, row]) => {
+    const f = S.fixtures.find(x=>x.id===fid); if (!f) return;
+    const qty = (row.active||0) + (row.spare||0); if (!qty) return;
+    const po = f.powerOut || {};
+    if (po.present === false){
+      // no chaining at all — pair them up, one two-fer per pair
+      const t = Math.floor(qty/2);
+      if (t){ need += t; why.push(`${f.name}: ${qty} with no pass-thru → ${t}`); }
+    } else if (po.present === null || po.present === undefined){
+      why.push(`${f.name}: pass-thru unknown — not counted`);
+    }
+  });
+  return { need, why };
+}
+
+/* Circuits, from draw and the published per-voltage link limits. Deliberately
+   coarse: this is an ORDER, not Distro Plot. It exists so the cable count is
+   not invented from nothing. */
+function circuitNeed(volts){
+  let ckt = 0;
+  Object.entries(S.order.fixtures).forEach(([fid,row])=>{
+    const f = S.fixtures.find(x=>x.id===fid); if(!f) return;
+    const qty=(row.active||0)+(row.spare||0); if(!qty) return;
+    const po=f.powerOut||{};
+    let per = 1;
+    if (po.present && Array.isArray(po.maxLinked) && po.maxLinked.length){
+      const m = po.maxLinked.filter(p=>p[0]<=volts).sort((a,b)=>b[0]-a[0])[0]
+             || po.maxLinked[0];
+      per = m ? m[1] : 1;
+    }
+    ckt += Math.ceil(qty/per);
+  });
+  return ckt;
+}
+
+function totals(){
+  let lines=0, watts=0, lb=0, ch=0, units=0, unknownPower=0;
+  Object.entries(S.order.fixtures).forEach(([fid,row])=>{
+    const f=S.fixtures.find(x=>x.id===fid); if(!f) return;
+    const qty=(row.active||0)+(row.spare||0); if(!qty) return;
+    lines++; units+=qty;
+    const p=f.power||{};
+    if (p.value!=null) watts += p.value*qty; else unknownPower += qty;
+    if (f.weight && f.weight.value!=null) lb += f.weight.value*qty;
+    const mode=row.mode, fps=(f.dmx&&f.dmx.footprints)||[];
+    const hit=fps.find(m=>m[0]===mode);
+    ch += ((hit&&hit[1]) || (f.dmx&&f.dmx.default) || 0) * (row.active||0);
+  });
+  ['cable','adapters','hardware'].forEach(k=>{
+    Object.values(S.order[k]).forEach(v=>{
+      if (k==='cable'){ const t=Object.values(v||{}).reduce((a,b)=>a+(+b||0),0); if(t) lines++; }
+      else if (+v) lines++;
+    });
+  });
+  return { lines, units, kW:n1(watts/1000), lb:Math.round(lb), ch, unknownPower };
+}
+
+const cableTotal = id => Object.values(S.order.cable[id]||{}).reduce((a,b)=>a+(+b||0),0);
+
+/* ── render ───────────────────────────────────────────────────────────── */
+function render(){
+  $('tabs').innerHTML = [['build','Build'],['sheet','Shop order']]
+    .map(([k,l])=>`<button data-tab="${k}"${S.tab===k?' class="on"':''}>${l}</button>`).join('');
+  $('tabs').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();});
+
+  const vs=$('vendorsel');
+  vs.innerHTML = S.vendors.length
+    ? S.vendors.map(v=>`<option value="${esc(v.id)}"${v.id===S.vendorId?' selected':''}>${esc(v.name)}</option>`).join('')
+    : '<option>No vendors</option>';
+  vs.disabled = !S.vendors.length;
+  vs.onchange = ()=>{ S.vendorId=vs.value; S.dirty=true; render(); };
+
+  const r=$('root');
+  if(!S.loaded){ r.innerHTML='<div class="empty"><div class="big">Loading…</div></div>'; return; }
+  if(!window.KTM){
+    r.innerHTML='<div class="note crit"><b>No shared data layer.</b> Shop Order reads the fixture '
+      +'library and the cable, adapter and hardware catalogs from the Hub. Open it from inside the '
+      +'KTM Hub rather than on its own.</div>'; return;
+  }
+  r.innerHTML = S.tab==='build' ? viewBuild() : viewSheet();
+  S.tab==='build' ? wireBuild() : wireSheet();
+}
+
+function viewBuild(){
+  const t=totals(), tf=twoferNeed();
+  let h='';
+  if(!S.show) h+='<div class="note warn"><b>No show selected.</b> You can build freely, but saving '
+    +'an order needs a show — pick one at the top of the Hub.</div>';
+
+  h+='<div class="stats">'
+   + st('Line items',fmt(t.lines))
+   + st('Units',fmt(t.units))
+   + st('Fixture draw',t.kW+'<small> kW</small>', t.unknownPower?'flag':'')
+   + st('Est. weight',fmt(t.lb)+'<small> lb</small>')
+   + st('DMX channels',fmt(t.ch))
+   + st('Two-fers needed',fmt(tf.need), tf.need?'flag':'')
+   + '</div>';
+
+  if(t.unknownPower)
+    h+=`<div class="note warn"><b>${t.unknownPower} unit${t.unknownPower===1?'':'s'} with no `
+      +'published draw</b> are excluded from the kW total rather than guessed at. The library '
+      +'marks those <span class="chip dim">missing</span>.</div>';
+
+  h+='<div class="cols"><div>';
+
+  // ── fixtures ─────────────────────────────────────────────────────────
+  h+='<h3>Fixtures</h3>'
+   + '<div class="bar" style="background:none;border:0;padding:0 0 9px;gap:8px">'
+   + `<input type="text" id="q" placeholder="Search the fixture library…" value="${esc(S.q)}" style="width:250px">`
+   + '<span class="muted" style="font-size:11.5px">Only rows with a quantity land on the order</span></div>';
+
+  const rows=S.fixtures.filter(f=>{
+    if(!S.q) return (S.order.fixtures[f.id]&&((S.order.fixtures[f.id].active||0)+(S.order.fixtures[f.id].spare||0)))||S.q==='';
+    const q=S.q.toLowerCase();
+    return ((f.manufacturer||'')+' '+(f.name||'')+' '+(f.aliases||[]).join(' ')).toLowerCase().includes(q);
+  });
+
+  h+='<div class="tablewrap"><table><thead><tr><th>Fixture</th><th>Mode</th>'
+   + '<th>Power in</th><th>Chain</th><th class="num">Active</th><th class="num">Spare</th>'
+   + '<th>Hang</th></tr></thead><tbody>'
+   + rows.map(f=>{
+      const row=S.order.fixtures[f.id]||{};
+      const on=(row.active||0)+(row.spare||0);
+      const fps=(f.dmx&&f.dmx.footprints)||[];
+      const po=f.powerOut||{}, pin=f.powerIn||{};
+      const chain = po.present===true
+        ? `<span class="chip ok">chains${(po.maxLinked&&po.maxLinked.length)?' '+po.maxLinked.map(p=>p[1]+'@'+p[0]).join('/'):''}</span>`
+        : po.present===false ? '<span class="chip crit">two-fer</span>'
+        : '<span class="chip dim">?</span>';
+      return `<tr${on?' style="background:var(--sel)"':''}>`
+       + `<td><b>${esc(f.name)}</b> <span class="muted" style="font-size:11px">${esc(f.manufacturer||'')}</span>`
+       + (f.power&&f.power.value!=null?` <span class="muted mono" style="font-size:10.5px">${f.power.value}${esc(f.power.unit||'')}</span>`:'')
+       + '</td>'
+       + `<td><select data-mode="${esc(f.id)}" style="max-width:150px;font-size:11.5px;padding:3px 5px">`
+       + '<option value="">default</option>'
+       + fps.map(m=>`<option value="${esc(m[0])}"${row.mode===m[0]?' selected':''}>${esc(m[0])} · ${m[1]}ch</option>`).join('')
+       + '</select></td>'
+       + `<td class="mono" style="font-size:10.5px">${esc((pin.connector||'—').slice(0,26))}</td>`
+       + `<td>${chain}</td>`
+       + `<td class="num"><input type="number" min="0" class="q mono" data-fx="${esc(f.id)}" data-k="active" value="${row.active||0}"></td>`
+       + `<td class="num"><input type="number" min="0" class="q mono" data-fx="${esc(f.id)}" data-k="spare" value="${row.spare||0}"></td>`
+       + `<td><select data-hang="${esc(f.id)}" style="max-width:130px;font-size:11.5px;padding:3px 5px">`
+       + '<option value="">—</option>'
+       + ((S.hardware&&S.hardware.items)||[]).map(hw=>`<option value="${esc(hw.id)}"${row.hang===hw.id?' selected':''}>${esc(hw.name)}</option>`).join('')
+       + '</select></td></tr>';
+     }).join('')
+   + '</tbody></table></div>';
+
+  // ── cable matrix ─────────────────────────────────────────────────────
+  const L=(S.cable&&S.cable.lengths)||[5,10,15,25,50,100];
+  h+='<h3>Power / data cable</h3>'
+   + '<div class="tablewrap"><table><thead><tr><th>Type</th>'
+   + L.map(l=>`<th class="num">${l}′</th>`).join('')
+   + '<th class="num">Total</th></tr></thead><tbody>'
+   + ((S.cable&&S.cable.items)||[]).map(c=>{
+      const tot=cableTotal(c.id);
+      return `<tr${tot?' style="background:var(--sel)"':''}><td><b>${esc(c.name)}</b>`
+       + `<br><span class="muted mono" style="font-size:10px">${esc(c.connector||'')}</span></td>`
+       + L.map(l=>`<td class="num"><input type="number" min="0" class="q mono" data-cb="${esc(c.id)}" data-len="${l}" value="${(S.order.cable[c.id]&&S.order.cable[c.id][l])||0}"></td>`).join('')
+       + `<td class="num"><b>${tot||'—'}</b></td></tr>`;
+     }).join('')
+   + '</tbody></table></div>';
+
+  // ── adapters, with the derived two-fer prompt ────────────────────────
+  h+='<h3>Adapters</h3>';
+  if(tf.need)
+    h+=`<div class="note warn"><b>The rig needs about ${tf.need} two-fer${tf.need===1?'':'s'}.</b> `
+      +'Derived from the library: '+esc(tf.why.slice(0,4).join('; '))
+      +(tf.why.length>4?` and ${tf.why.length-4} more`:'')
+      +'. One per pair of unchainable fixtures — adjust for how the circuits actually land.</div>';
+  h+=grid(S.adapters,'adapters');
+
+  h+='<h3>Rigging hardware</h3>'+grid(S.hardware,'hardware');
+  h+='</div>';
+
+  // ── layout rail ──────────────────────────────────────────────────────
+  h+='<div class="rail"><div class="card"><h4>Order layout</h4>'
+   + S.layout.map((s,i)=>`<div class="secrow${s.visible?'':' off'}">`
+      + `<button data-up="${i}" title="Move up"${i===0?' disabled':''}>↑</button>`
+      + `<button data-down="${i}" title="Move down"${i===S.layout.length-1?' disabled':''}>↓</button>`
+      + `<input type="text" data-title="${i}" value="${esc(s.title)}">`
+      + `<button data-vis="${i}" title="Show or hide">${s.visible?'👁':'🚫'}</button></div>`).join('')
+   + '<div class="muted" style="font-size:11px;margin-top:9px">Reorder, retitle or hide a section. '
+   + 'Saved with the order, so one build serves the shop, the crew and the PM without re-authoring.'
+   + '</div></div>'
+   + `<div class="card" style="margin-top:11px"><h4>Order</h4>`
+   + `<div style="display:flex;flex-direction:column;gap:7px">`
+   + `<label class="muted" style="font-size:11px">Load in<input type="date" id="din" value="${esc(S.order.dates.loadIn||'')}" style="width:100%;margin-top:2px"></label>`
+   + `<label class="muted" style="font-size:11px">Load out<input type="date" id="dout" value="${esc(S.order.dates.loadOut||'')}" style="width:100%;margin-top:2px"></label>`
+   + `<label class="muted" style="font-size:11px">Revision<input type="text" id="drev" value="${esc(S.order.rev||'A')}" style="width:100%;margin-top:2px"></label>`
+   + `</div></div></div></div>`;
+  return h;
+}
+
+function grid(cat, key){
+  if(!cat||!cat.items) return '<div class="muted" style="font-size:12px">Catalog not seeded.</div>';
+  return '<div class="tablewrap"><table><thead><tr><th>Item</th><th>Note</th>'
+   + '<th class="num" style="width:76px">Qty</th></tr></thead><tbody>'
+   + cat.items.map(it=>{
+      const v=S.order[key][it.id]||0;
+      return `<tr${v?' style="background:var(--sel)"':''}><td><b>${esc(it.name)}</b></td>`
+       + `<td class="muted" style="font-size:11.5px">${esc(it.note||'')}</td>`
+       + `<td class="num"><input type="number" min="0" class="q mono" data-cat="${key}" data-id="${esc(it.id)}" value="${v}"></td></tr>`;
+     }).join('')
+   + '</tbody></table></div>';
+}
+
+function wireBuild(){
+  const q=$('q');
+  if(q) q.oninput=()=>{S.q=q.value; const r=$('root'); r.innerHTML=viewBuild(); wireBuild();
+    const n=$('q'); if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);} };
+
+  document.querySelectorAll('[data-fx]').forEach(i=>i.onchange=()=>{
+    const id=i.dataset.fx, k=i.dataset.k, v=Math.max(0,parseInt(i.value||'0',10)||0);
+    S.order.fixtures[id]=Object.assign({},S.order.fixtures[id],{[k]:v});
+    S.dirty=true; repaint();
+  });
+  document.querySelectorAll('[data-mode]').forEach(s=>s.onchange=()=>{
+    const id=s.dataset.mode;
+    S.order.fixtures[id]=Object.assign({},S.order.fixtures[id],{mode:s.value||null});
+    S.dirty=true; repaint();
+  });
+  document.querySelectorAll('[data-hang]').forEach(s=>s.onchange=()=>{
+    const id=s.dataset.hang;
+    S.order.fixtures[id]=Object.assign({},S.order.fixtures[id],{hang:s.value||null});
+    S.dirty=true;
+  });
+  document.querySelectorAll('[data-cb]').forEach(i=>i.onchange=()=>{
+    const id=i.dataset.cb, l=i.dataset.len, v=Math.max(0,parseInt(i.value||'0',10)||0);
+    S.order.cable[id]=Object.assign({},S.order.cable[id],{[l]:v});
+    S.dirty=true; repaint();
+  });
+  document.querySelectorAll('[data-cat]').forEach(i=>i.onchange=()=>{
+    const v=Math.max(0,parseInt(i.value||'0',10)||0);
+    S.order[i.dataset.cat][i.dataset.id]=v; S.dirty=true; repaint();
+  });
+
+  document.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>move(+b.dataset.up,-1));
+  document.querySelectorAll('[data-down]').forEach(b=>b.onclick=()=>move(+b.dataset.down,1));
+  document.querySelectorAll('[data-vis]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.vis; S.layout[i].visible=!S.layout[i].visible; S.dirty=true; repaint();
+  });
+  document.querySelectorAll('[data-title]').forEach(inp=>inp.onchange=()=>{
+    S.layout[+inp.dataset.title].title=inp.value; S.dirty=true;
+  });
+  ['din','dout','drev'].forEach(id=>{ const e=$(id); if(e) e.onchange=()=>{
+    if(id==='din') S.order.dates.loadIn=e.value;
+    if(id==='dout') S.order.dates.loadOut=e.value;
+    if(id==='drev') S.order.rev=e.value;
+    S.dirty=true; }; });
+}
+function move(i,d){ const j=i+d; if(j<0||j>=S.layout.length) return;
+  const a=S.layout; [a[i],a[j]]=[a[j],a[i]]; S.dirty=true; repaint(); }
+function repaint(){ const r=$('root'); r.innerHTML=viewBuild(); wireBuild(); }
+
+/* ── the sheet ────────────────────────────────────────────────────────── */
+function viewSheet(){
+  const t=totals(), tf=twoferNeed();
+  const vendor=S.vendors.find(v=>v.id===S.vendorId);
+  const L=(S.cable&&S.cable.lengths)||[5,10,15,25,50,100];
+
+  const body = {
+    fixtures: ()=>{
+      const rows=Object.entries(S.order.fixtures)
+        .map(([fid,r])=>[S.fixtures.find(f=>f.id===fid),r])
+        .filter(([f,r])=>f&&((r.active||0)+(r.spare||0)));
+      if(!rows.length) return null;
+      return '<div class="tablewrap"><table><thead><tr><th>Fixture</th>'
+       + '<th class="num">Active</th><th class="num">Spare</th><th>Hang</th><th>Plug</th>'
+       + '<th>Mode</th><th class="num">Ch</th></tr></thead><tbody>'
+       + rows.map(([f,r])=>{
+          const fps=(f.dmx&&f.dmx.footprints)||[];
+          const hit=fps.find(m=>m[0]===r.mode);
+          const hw=((S.hardware&&S.hardware.items)||[]).find(h=>h.id===r.hang);
+          return `<tr><td>${esc(f.manufacturer||'')} ${esc(f.name)}</td>`
+           + `<td class="num">${r.active||0}</td><td class="num">${r.spare||'—'}</td>`
+           + `<td>${esc(hw?hw.name:'—')}</td>`
+           + `<td class="mono" style="font-size:10.5px">${esc(shortConn((f.powerIn||{}).connector))}</td>`
+           + `<td>${esc(r.mode||'default')}</td>`
+           + `<td class="num">${(hit&&hit[1])||(f.dmx&&f.dmx.default)||'—'}</td></tr>`;
+         }).join('')+'</tbody></table></div>';
+    },
+    cable: ()=>{
+      const rows=((S.cable&&S.cable.items)||[]).filter(c=>cableTotal(c.id));
+      if(!rows.length) return null;
+      return '<div class="tablewrap"><table><thead><tr><th>Type</th>'
+       + L.map(l=>`<th class="num">${l}′</th>`).join('')+'<th class="num">Total</th></tr></thead><tbody>'
+       + rows.map(c=>`<tr><td>${esc(c.name)}</td>`
+          + L.map(l=>`<td class="num">${(S.order.cable[c.id]&&S.order.cable[c.id][l])||'—'}</td>`).join('')
+          + `<td class="num"><b>${cableTotal(c.id)}</b></td></tr>`).join('')
+       + '</tbody></table></div>';
+    },
+    adapters: ()=>listSec(S.adapters,'adapters'),
+    hardware: ()=>listSec(S.hardware,'hardware'),
+    control:  ()=>null,
+    truss:    ()=>null,
+    totals: ()=>'<div class="tablewrap"><table><tbody>'
+      + row('Total line items',fmt(t.lines))
+      + row('Fixture units',fmt(t.units))
+      + row('Fixture draw',t.kW+' kW'+(t.unknownPower?`  (${t.unknownPower} units unpublished, excluded)`:''))
+      + row('Estimated weight',fmt(t.lb)+' lb')
+      + row('DMX channels',fmt(t.ch))
+      + row('Two-fers (derived)',fmt(tf.need))
+      + '</tbody></table></div>'
+  };
+
+  let h='<div class="sheet"><div class="sheethead"><div>'
+   + `<h2>${esc(vendor?vendor.name:'Shop Order')}</h2>`
+   + `<div class="muted" style="font-size:12px">Shop Order — ${esc(S.showName||'no show')}</div></div>`
+   + '<div class="m">'
+   + (S.order.dates.loadIn?`Load In: ${esc(S.order.dates.loadIn)}<br>`:'')
+   + (S.order.dates.loadOut?`Load Out: ${esc(S.order.dates.loadOut)}<br>`:'')
+   + `Generated: ${new Date().toISOString().slice(0,10)} · Rev ${esc(S.order.rev||'A')}`
+   + '</div></div>';
+
+  let any=false;
+  S.layout.filter(s=>s.visible).forEach(s=>{
+    const made = body[s.key] && body[s.key]();
+    if(!made) return;
+    any=true;
+    h += `<h3>${esc(s.title)}</h3>` + made;
+  });
+  if(!any) h+='<div class="empty"><div class="big">Nothing on the order yet</div>'
+    +'<div>Add quantities on the Build tab.</div></div>';
+  return h+'</div>';
+}
+const row=(k,v)=>`<tr><td>${esc(k)}</td><td class="num">${v}</td></tr>`;
+function listSec(cat,key){
+  const rows=((cat&&cat.items)||[]).filter(i=>S.order[key][i.id]);
+  if(!rows.length) return null;
+  return '<div class="tablewrap"><table><thead><tr><th>Item</th><th class="num">Qty</th>'
+   + '<th>Note</th></tr></thead><tbody>'
+   + rows.map(i=>`<tr><td>${esc(i.name)}</td><td class="num">${S.order[key][i.id]}</td>`
+      + `<td class="muted" style="font-size:11.5px">${esc(i.note||'')}</td></tr>`).join('')
+   + '</tbody></table></div>';
+}
+function wireSheet(){}
+/* Connector strings carry a lot of caveat text in the library. The order needs
+   the family, not the footnote. */
+function shortConn(c){
+  if(!c) return '—';
+  const m=c.match(/powerCON TRUE1 TOP|powerCON TRUE1|powerCON A-type[^,(]*|Seetronic[^,(]*|Edison[^,(]*|REAN[^,(]*/i);
+  return (m?m[0]:c).trim().slice(0,28);
+}
+const st=(k,v,cls)=>`<div class="stat${cls?' '+cls:''}"><div class="k">${esc(k)}</div><div class="v">${v}</div></div>`;
+
+/* ── exports ──────────────────────────────────────────────────────────── */
+function toCSV(){
+  const out=[['Section','Item','Detail','Qty','Note']];
+  const vendor=S.vendors.find(v=>v.id===S.vendorId);
+  Object.entries(S.order.fixtures).forEach(([fid,r])=>{
+    const f=S.fixtures.find(x=>x.id===fid); if(!f) return;
+    const q=(r.active||0)+(r.spare||0); if(!q) return;
+    out.push(['Fixtures',`${f.manufacturer||''} ${f.name}`,
+      (r.mode||'default'),q,`active ${r.active||0}, spare ${r.spare||0}`]);
+  });
+  ((S.cable&&S.cable.items)||[]).forEach(c=>{
+    Object.entries(S.order.cable[c.id]||{}).forEach(([l,v])=>{
+      if(+v) out.push(['Cable',c.name,l+"'",v,c.connector||'']);
+    });
+  });
+  [['Adapters',S.adapters,'adapters'],['Hardware',S.hardware,'hardware']].forEach(([sec,cat,key])=>{
+    ((cat&&cat.items)||[]).forEach(i=>{ if(S.order[key][i.id])
+      out.push([sec,i.name,'',S.order[key][i.id],i.note||'']); });
+  });
+  return out.map(r=>r.map(v=>{const s=String(v??'');
+    return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');
+}
+async function downloadCSV(){
+  const csv=toCSV();
+  const vendor=S.vendors.find(v=>v.id===S.vendorId);
+  const name=((S.showName||'order')+'-'+(vendor?vendor.shortCode:'shop')+'-shop-order.csv')
+    .replace(/[^\w.-]+/g,'-');
+  try{ const dl=await claude.use('downloads'); if(dl){ await dl.save({filename:name,data:csv}); return; } }catch(e){}
+  try{ await navigator.clipboard.writeText(csv); alert('CSV copied to the clipboard.'); }
+  catch(e){ alert('Could not export: '+e.message); }
+}
+
+$('csvbtn').onclick=downloadCSV;
+$('printbtn').onclick=()=>{ if(S.tab!=='sheet'){S.tab='sheet';render();} setTimeout(()=>window.print(),140); };
+$('savebtn').onclick=save;
+
+(async()=>{ render(); await load(); render(); })();
+</script>
+</body></html>

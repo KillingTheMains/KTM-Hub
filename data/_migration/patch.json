@@ -1,0 +1,604 @@
+{
+  "tool": "patch-plot",
+  "source": "https://claude.ai/code/artifact/7b2cd2cc-8d52-4fab-9e68-1ca89e408461",
+  "fixtures": [
+    {
+      "c": "Moving light",
+      "b": "Robe",
+      "n": "BMFL Blade",
+      "m": [
+        [
+          "Mode 1",
+          49
+        ],
+        [
+          "Mode 2",
+          42
+        ]
+      ],
+      "d": "3+5+net",
+      "id": "L0",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Robe",
+      "n": "MegaPointe",
+      "m": [
+        [
+          "Mode 1",
+          39
+        ],
+        [
+          "Mode 2",
+          34
+        ]
+      ],
+      "d": "3+5+net",
+      "id": "L1",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Robe",
+      "n": "Pointe",
+      "m": [
+        [
+          "Mode 1",
+          24
+        ],
+        [
+          "Mode 2",
+          16
+        ],
+        [
+          "Mode 3",
+          30
+        ]
+      ],
+      "d": "3+5+net",
+      "id": "L2",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Robe",
+      "n": "Spiider",
+      "m": [
+        [
+          "Mode 1 · zones",
+          49
+        ],
+        [
+          "Mode 2",
+          27
+        ],
+        [
+          "Mode 3",
+          33
+        ],
+        [
+          "Mode 4 · pixel RGB",
+          90
+        ],
+        [
+          "Mode 7 · pixel RGB",
+          91
+        ],
+        [
+          "Mode 8 · pixel RGBW",
+          110
+        ],
+        [
+          "Mode 10 · pattern+RGBW",
+          123
+        ]
+      ],
+      "d": "3+5+net",
+      "id": "L3",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Robe",
+      "n": "T1 Profile",
+      "m": [
+        [
+          "Mode 1 · CMY",
+          49
+        ],
+        [
+          "Mode 2 · reduced",
+          33
+        ],
+        [
+          "Mode 3 · five colour",
+          53
+        ]
+      ],
+      "d": "3+5+net",
+      "id": "L4",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Martin",
+      "n": "MAC Aura XB",
+      "m": [
+        [
+          "Extended",
+          25
+        ],
+        [
+          "Standard",
+          14
+        ]
+      ],
+      "d": "5",
+      "id": "L5",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Martin",
+      "n": "MAC Aura PXL",
+      "m": [
+        [
+          "Extended",
+          89
+        ],
+        [
+          "Basic",
+          32
+        ],
+        [
+          "Compact",
+          17
+        ],
+        [
+          "Ludicrous",
+          512
+        ]
+      ],
+      "d": "5+net",
+      "id": "L6",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Martin",
+      "n": "MAC Viper Profile",
+      "m": [
+        [
+          "Extended 16-bit",
+          34
+        ],
+        [
+          "Basic 16-bit",
+          26
+        ]
+      ],
+      "d": "5",
+      "id": "L7",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Martin",
+      "n": "MAC Ultra Performance",
+      "m": [
+        [
+          "Basic",
+          48
+        ],
+        [
+          "Extended",
+          58
+        ]
+      ],
+      "d": "5+net",
+      "id": "L8",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Martin",
+      "n": "MAC Encore Performance",
+      "m": [
+        [
+          "Standard · fw ≥1.6",
+          38
+        ],
+        [
+          "Legacy fw",
+          33
+        ]
+      ],
+      "d": "5",
+      "id": "L9",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Claypaky",
+      "n": "Sharpy",
+      "m": [
+        [
+          "Standard",
+          16
+        ],
+        [
+          "Vector",
+          20
+        ]
+      ],
+      "d": "3+5",
+      "id": "L10",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Claypaky",
+      "n": "Mythos 2",
+      "m": [
+        [
+          "Standard",
+          30
+        ],
+        [
+          "Vector",
+          34
+        ]
+      ],
+      "d": "5+net",
+      "id": "L11",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Claypaky",
+      "n": "Scenius Unico",
+      "m": [
+        [
+          "Standard",
+          40
+        ],
+        [
+          "Vector",
+          44
+        ]
+      ],
+      "d": "5+net",
+      "id": "L12",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Ayrton",
+      "n": "Khamsin-S",
+      "m": [
+        [
+          "Standard",
+          42
+        ],
+        [
+          "Basic",
+          40
+        ],
+        [
+          "Extended",
+          64
+        ]
+      ],
+      "d": "5+net+crmx",
+      "id": "L13",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Ayrton",
+      "n": "Diablo-S",
+      "m": [
+        [
+          "Standard",
+          36
+        ],
+        [
+          "Basic",
+          34
+        ],
+        [
+          "Extended",
+          56
+        ]
+      ],
+      "d": "5+crmx",
+      "id": "L14",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Elation",
+      "n": "Proteus Maximus",
+      "m": [
+        [
+          "Extended",
+          61
+        ],
+        [
+          "Standard",
+          37
+        ]
+      ],
+      "d": "5+net",
+      "id": "L15",
+      "rdm": true
+    },
+    {
+      "c": "Moving light",
+      "b": "Chauvet",
+      "n": "Rogue R2 Wash",
+      "m": [
+        [
+          "22 ch",
+          22
+        ],
+        [
+          "15 ch",
+          15
+        ],
+        [
+          "17 ch",
+          17
+        ],
+        [
+          "33 ch",
+          33
+        ],
+        [
+          "54 ch",
+          54
+        ],
+        [
+          "56 ch · pixel",
+          56
+        ]
+      ],
+      "d": "3+5",
+      "rdm": false,
+      "id": "L16"
+    },
+    {
+      "c": "Moving light",
+      "b": "Chauvet",
+      "n": "Maverick Force S Profile",
+      "m": [
+        [
+          "47 ch",
+          47
+        ],
+        [
+          "31 ch",
+          31
+        ]
+      ],
+      "d": "3+5+net+wdmx",
+      "id": "L17",
+      "rdm": true
+    },
+    {
+      "c": "Wash / bar / strobe",
+      "b": "GLP",
+      "n": "impression X4 Bar 20",
+      "m": [
+        [
+          "Single Pixel",
+          88
+        ],
+        [
+          "Normal",
+          34
+        ],
+        [
+          "Compressed",
+          20
+        ],
+        [
+          "HiRes",
+          35
+        ],
+        [
+          "Dual Pixel",
+          48
+        ],
+        [
+          "Single Pixel HiRes",
+          89
+        ]
+      ],
+      "d": "5",
+      "id": "L18",
+      "rdm": true
+    },
+    {
+      "c": "Wash / bar / strobe",
+      "b": "GLP",
+      "n": "JDC1",
+      "m": [
+        [
+          "SPix Pro",
+          62
+        ],
+        [
+          "Normal",
+          23
+        ],
+        [
+          "Compressed Pro",
+          14
+        ],
+        [
+          "SPix",
+          68
+        ],
+        [
+          "1Pix Pro",
+          17
+        ],
+        [
+          "Easy",
+          11
+        ]
+      ],
+      "d": "5",
+      "id": "L19",
+      "rdm": true
+    },
+    {
+      "c": "Wash / bar / strobe",
+      "b": "SGM",
+      "n": "Q-7",
+      "m": [
+        [
+          "6 ch · CTC",
+          6
+        ],
+        [
+          "3 ch",
+          3
+        ],
+        [
+          "4 ch RAW",
+          4
+        ],
+        [
+          "6 ch RAW",
+          6
+        ],
+        [
+          "8 ch · XC-5",
+          8
+        ]
+      ],
+      "d": "5+crmx",
+      "id": "L20",
+      "rdm": true
+    },
+    {
+      "c": "Conventional",
+      "b": "ETC",
+      "n": "Source Four LED S3 Lustr",
+      "m": [
+        [
+          "Direct",
+          12
+        ],
+        [
+          "Expanded",
+          11
+        ],
+        [
+          "Studio",
+          7
+        ],
+        [
+          "RGB",
+          3
+        ],
+        [
+          "1 ch",
+          1
+        ]
+      ],
+      "d": "5+mv",
+      "id": "L21",
+      "rdm": true
+    },
+    {
+      "c": "Conventional",
+      "b": "ETC",
+      "n": "ColorSource PAR",
+      "m": [
+        [
+          "5 ch",
+          5
+        ],
+        [
+          "Direct",
+          6
+        ],
+        [
+          "RGB",
+          3
+        ],
+        [
+          "1 ch",
+          1
+        ]
+      ],
+      "d": "5",
+      "id": "L22",
+      "rdm": true
+    },
+    {
+      "c": "Conventional",
+      "b": "ETC",
+      "n": "Source Four 750 W",
+      "m": [
+        [
+          "Dimmer",
+          1
+        ]
+      ],
+      "d": "dim",
+      "rdm": false,
+      "id": "L23"
+    },
+    {
+      "c": "Atmospherics",
+      "b": "MDG",
+      "n": "theONE hazer",
+      "m": [
+        [
+          "Standard",
+          5
+        ]
+      ],
+      "d": "5+net",
+      "id": "L24",
+      "rdm": true
+    },
+    {
+      "c": "Atmospherics",
+      "b": "Look",
+      "n": "Viper NT fogger",
+      "m": [
+        [
+          "Output",
+          1
+        ]
+      ],
+      "d": "5",
+      "rdm": false,
+      "id": "L25"
+    },
+    {
+      "c": "Atmospherics",
+      "b": "Martin",
+      "n": "JEM ZR45 fogger",
+      "m": [
+        [
+          "1C",
+          1
+        ],
+        [
+          "2C",
+          2
+        ]
+      ],
+      "d": "5",
+      "id": "L26",
+      "rdm": true
+    }
+  ]
+}

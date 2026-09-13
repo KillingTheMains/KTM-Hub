@@ -1,0 +1,891 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Pull Plot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#666D74;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF; --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#8A9097;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13;
+  --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF; --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF; --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}
+
+*{box-sizing:border-box}
+::selection{background:var(--sel); color:var(--ink)}
+body{margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:14px; line-height:1.5}
+.wrap{max-width:1280px; margin:0 auto; padding:20px 20px 64px; display:flex; flex-direction:column; gap:18px}
+
+h1,h2,h3{margin:0; font-family:"Archivo",sans-serif; text-wrap:balance}
+h1{font-size:26px; font-weight:800; font-stretch:112%; letter-spacing:-.015em; line-height:1}
+h2{font-size:13px; font-weight:700; font-stretch:82%; text-transform:uppercase; letter-spacing:.13em; color:var(--ink-2)}
+.eyebrow{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.16em; color:var(--ink-3)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums}
+
+header.top{display:flex; flex-wrap:wrap; align-items:flex-end; gap:16px 22px; padding-bottom:14px; border-bottom:2px solid var(--ink)}
+.brand{display:flex; flex-direction:column; gap:3px}
+.brand .sub{font-size:12.5px; color:var(--ink-2); max-width:50ch}
+.top .spacer{flex:1 1 auto}
+.setbar{display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end}
+.field{display:flex; flex-direction:column; gap:4px}
+.field > label{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.14em; color:var(--ink-3)}
+select,input[type=number],input[type=text]{
+  font-family:"IBM Plex Mono",monospace; font-size:13px; font-variant-numeric:tabular-nums;
+  background:var(--surface); color:var(--ink); border:1px solid var(--line-strong);
+  border-radius:3px; padding:5px 7px; min-height:30px; caret-color:var(--accent)}
+select{font-family:"IBM Plex Sans",sans-serif}
+input[type=number]{width:82px}
+:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden}
+.tile{background:var(--surface); padding:11px 13px 12px; display:flex; flex-direction:column; gap:2px}
+.tile .k{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.13em; color:var(--ink-3)}
+.tile .v{font-family:"IBM Plex Mono",monospace; font-size:22px; font-weight:600; letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums; line-height:1.15}
+.tile .v small{font-size:12px; font-weight:400; color:var(--ink-3); letter-spacing:0}
+.tile .n{font-size:11.5px; color:var(--ink-3)}
+.tile.flag-ok .v{color:var(--accent)} .tile.flag-warn .v{color:var(--warn)} .tile.flag-crit .v{color:var(--crit)}
+
+.panel{min-width:0; background:var(--surface); border:1px solid var(--line); border-radius:4px; box-shadow:var(--shadow)}
+.panel > .head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 13px; border-bottom:1px solid var(--line)}
+.panel > .head .spacer{flex:1 1 auto}
+.panel > .body{padding:13px}
+.cols{display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:18px; align-items:stretch}
+.duo{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:18px; align-items:start}
+@media (max-width:940px){ .cols{grid-template-columns:minmax(0,1fr)} }
+
+button{font-family:"Archivo",sans-serif; font-stretch:88%; font-weight:600; font-size:12px; letter-spacing:.03em;
+  cursor:pointer; border-radius:3px; border:1px solid var(--line-strong);
+  background:var(--surface-2); color:var(--ink); padding:6px 11px; min-height:30px}
+button:hover{border-color:var(--ink-3)}
+button.primary{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+button.primary:hover{filter:brightness(1.07)}
+button.ghost{background:transparent; border-color:transparent; color:var(--ink-3); padding:4px 6px; min-height:24px}
+button.ghost:hover{color:var(--crit); background:var(--crit-soft)}
+.seg{display:inline-flex; border:1px solid var(--line-strong); border-radius:3px; overflow:hidden}
+.seg button{border:0; border-radius:0; background:var(--surface); padding:5px 10px; min-height:28px; color:var(--ink-3)}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--surface)}
+
+.scroll{overflow-x:auto; scrollbar-color:var(--line-strong) transparent; scrollbar-width:thin}
+table{border-collapse:collapse; width:100%; font-size:13px}
+th{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.12em; color:var(--ink-3); text-align:left; padding:0 8px 6px;
+  border-bottom:1px solid var(--line-strong); white-space:nowrap}
+td{padding:5px 8px; border-bottom:1px solid var(--line); vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.rig-name{font-weight:500; white-space:nowrap}
+.rig-brand{color:var(--ink-3); font-size:11.5px}
+.qty{width:56px; text-align:right}
+td select{font-size:12px; padding:3px 5px; min-height:26px; max-width:190px}
+.empty{padding:26px 10px; text-align:center; color:var(--ink-3); font-size:13px}
+.sw{display:inline-block; width:10px; height:10px; border-radius:2px; vertical-align:-1px; margin-right:6px;
+  border:1px solid rgba(128,128,128,.35)}
+
+
+.legend{display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:12px; font-size:11.5px; color:var(--ink-2)}
+.legend .it{display:flex; align-items:center; gap:6px}
+
+.tag{font-family:"Archivo",sans-serif; font-stretch:82%; font-weight:700; font-size:11px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink-2); background:var(--surface-2); border:1px solid var(--line);
+  border-radius:2px; padding:2px 7px; white-space:nowrap}
+.tag.warn{color:var(--warn); border-color:var(--warn); background:var(--warn-soft)}
+.tag.crit{color:var(--crit); border-color:var(--crit); background:var(--crit-soft)}
+.tag.ok{color:var(--accent); border-color:var(--accent); background:var(--accent-soft)}
+
+.note{display:flex; gap:8px; align-items:flex-start; font-size:12.5px; line-height:1.45; border-radius:3px;
+  padding:8px 10px; border:1px solid transparent}
+.note.warn{background:var(--warn-soft); border-color:var(--warn)}
+.note.crit{background:var(--crit-soft); border-color:var(--crit)}
+.note.ok{background:var(--accent-soft); border-color:var(--accent)}
+.note .m{font-family:"Archivo",sans-serif; font-stretch:85%; font-weight:700; text-transform:uppercase;
+  font-size:11px; letter-spacing:.12em; padding-top:2px; white-space:nowrap}
+.notes{display:flex; flex-direction:column; gap:7px}
+.notes:empty{display:none}
+
+.rows{display:flex; flex-direction:column}
+.rows .r{display:flex; align-items:baseline; gap:10px; padding:6px 0; border-bottom:1px dotted var(--line)}
+.rows .r:last-child{border-bottom:0}
+.rows .r .k{color:var(--ink-2); font-size:12.5px}
+.rows .r .v{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-weight:600; font-variant-numeric:tabular-nums; text-align:right}
+
+
+/* ---------- data riser ---------- */
+.riser{margin:0; display:flex; flex-direction:column; gap:9px}
+.riser svg{width:100%; max-width:960px; height:auto; color:var(--ink); display:block}
+.riser figcaption{font-size:11.5px; color:var(--ink-3); line-height:1.5; max-width:92ch}
+.riser .bx{fill:var(--surface-2); stroke:var(--line-strong)}
+.riser .ttl{font-family:"Archivo",sans-serif; font-size:9.5px; font-weight:700; letter-spacing:.14em; fill:var(--ink-3)}
+.riser .nm{font-family:"IBM Plex Sans",sans-serif; font-size:12.5px; font-weight:500; fill:var(--ink)}
+.riser .dt{font-family:"IBM Plex Mono",monospace; font-size:11px; fill:var(--ink-2)}
+.riser .sm{font-family:"IBM Plex Mono",monospace; font-size:10px; fill:var(--ink-3)}
+.riser .big{font-family:"IBM Plex Mono",monospace; font-size:19px; font-weight:600; fill:var(--ink)}
+.riser .ln{stroke:var(--ink-2); fill:none}
+
+.saved{display:flex; flex-wrap:wrap; gap:6px}
+.chip{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line-strong);
+  background:var(--surface-2); border-radius:14px; padding:3px 5px 3px 11px; font-size:12.5px}
+.chip button{border:0; background:transparent; padding:1px 4px; min-height:0; color:var(--ink-3); font-size:13px; line-height:1}
+.chip button:hover{color:var(--crit)}
+.chip .load-b{cursor:pointer}
+
+footer.fine{font-size:11.5px; color:var(--ink-3); line-height:1.6; max-width:100ch;
+  border-top:1px solid var(--line); padding-top:12px; display:flex; flex-direction:column; gap:7px}
+footer.fine b{color:var(--ink-2); font-weight:600}
+footer.fine a{color:var(--ink-2)}
+.hide{display:none !important}
+
+
+@media print{
+  body{background:#fff; color:#000; font-size:10pt}
+  .wrap{max-width:none; padding:0; gap:12px}
+  .noprint{display:none !important}
+  .panel{box-shadow:none; border:1px solid #999; break-inside:avoid}
+  .tiles{border-color:#999; background:#999}
+  .tile{background:#fff}
+  .pull .dh, .truck{break-inside:avoid}
+  header.top{border-bottom:2px solid #000}
+}
+</style>
+<style>
+/* ---------- truck pack ---------- */
+.truck{margin:0; display:flex; flex-direction:column; gap:9px}
+.truck svg{width:100%; height:auto; display:block; color:var(--ink)}
+.truck figcaption{font-size:11.5px; color:var(--ink-3); line-height:1.5; max-width:92ch}
+.truck .bed{fill:var(--sunken); stroke:var(--ink); stroke-width:1.5}
+.truck .cab{fill:var(--surface-2); stroke:var(--ink-2); stroke-width:1}
+.truck .cs{stroke:var(--surface); stroke-width:1.2}
+.truck .cs:hover{stroke:var(--ink); stroke-width:1.5}
+.truck .lbl{font-family:"IBM Plex Mono",monospace; font-size:8.5px; fill:#fff; pointer-events:none}
+.truck .sm{font-family:"IBM Plex Mono",monospace; font-size:9.5px; fill:var(--ink-3)}
+.truck .ttl{font-family:"Archivo",sans-serif; font-size:9.5px; font-weight:700; letter-spacing:.13em; fill:var(--ink-3)}
+.truck .door{stroke:var(--ink-3); stroke-width:1; stroke-dasharray:3 3}
+.truck .unused{fill:none; stroke:var(--line-strong); stroke-width:1; stroke-dasharray:2 3}
+.dept{display:inline-block; width:10px; height:10px; border-radius:2px; vertical-align:-1px; margin-right:6px; border:1px solid rgba(128,128,128,.35)}
+/* ---------- pull sheet ---------- */
+.pull .dh{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin:16px 0 6px}
+.pull .dh:first-child{margin-top:2px}
+.pull .dh .d{font-family:"Archivo",sans-serif; font-stretch:105%; font-weight:800; font-size:15px}
+.pull .dh hr{flex:1; border:0; border-top:1px solid var(--line); margin:0; min-width:20px}
+.pull table{font-size:12.5px}
+.pull td{padding:3px 8px}
+.pull td.chk{width:22px; color:var(--line-strong); font-size:14px}
+@media print{ .pull td.chk{color:#000} }
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">Pull sheet, cases &amp; truck pack</div>
+      <h1>Pull Plot</h1>
+      <div class="sub">Build the rig by position. It writes the pull sheet by department — fixtures, rigging, power, data,
+        expendables — puts everything in cases, and packs the truck.</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="setbar noprint">
+      <div class="field"><label for="truck">Truck</label><select id="truck"></select></div>
+      <div class="field"><label for="feed">Feeder run (ft)</label><input type="number" id="feed" min="10" max="1000" value="100"></div>
+      <div class="field"><label for="hoist">Hoists</label>
+        <select id="hoist"><option value="1t">Lodestar 1 t</option><option value="half">Lodestar ½ t</option></select></div>
+      <div class="field"><label for="stack">Stack</label>
+        <select id="stack"><option value="2">Two high</option><option value="3">Three high</option><option value="1">Floor only</option></select></div>
+      <div class="field"><label for="shows">Shows</label><input type="number" id="shows" min="1" max="300" value="12"></div>
+    </div>
+  </header>
+
+  <section class="tiles" id="tiles"></section>
+  <div class="notes" id="notes"></div>
+
+  <!-- ===================== RIG ===================== -->
+  <section class="panel">
+    <div class="head">
+      <h2>Rig</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="rigcount"></span>
+    </div>
+    <div class="body" style="display:flex;flex-direction:column;gap:12px">
+      <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end">
+        <div class="field" style="flex:1 1 200px;min-width:170px"><label for="pick">Add fixture</label>
+          <select id="pick"></select></div>
+        <div class="field"><label for="pickqty">Qty</label>
+          <input type="number" id="pickqty" class="qty" min="1" max="999" value="12"></div>
+        <div class="field"><label for="pickpos">Position</label><select id="pickpos"></select></div>
+        <button class="primary" id="addbtn">Add</button>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th>Fixture</th><th class="num">Qty</th><th>Position</th><th>Ships as</th>
+            <th class="num">Cases</th><th class="num">lb ea</th><th class="num">Case lb</th><th class="noprint"></th>
+          </tr></thead>
+          <tbody id="rigbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== POSITIONS ===================== -->
+  <section class="panel">
+    <div class="head">
+      <h2>Positions</h2><span class="spacer"></span>
+      <button id="addpos" class="noprint">Add position</button>
+    </div>
+    <div class="body">
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th>Position</th><th class="num">Run ft</th><th>Truss</th><th class="num">Length ft</th><th class="num">Hoists</th>
+            <th class="num">Fixt</th><th class="num">Ckts</th><th class="num">Looms</th><th class="num">Univ</th><th class="noprint"></th>
+          </tr></thead>
+          <tbody id="posbody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.5">Run is distro/switch to position — it sets the Soca and Cat5e cuts.
+        Circuits are 20 A at 80 % on 208 V line-to-line for movers and 120 V for conventionals and atmospherics; universes hold 512 ch or 24 fixtures.</p>
+    </div>
+  </section>
+
+  <!-- ===================== TRUCK ===================== -->
+  <section class="panel">
+    <div class="head"><h2>Truck pack</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="trucksum"></span></div>
+    <div class="body"><figure class="truck" id="truckfig"></figure><div class="legend" id="legend"></div></div>
+  </section>
+
+  <div class="cols">
+    <!-- ===================== CASES ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Cases</h2><span class="spacer"></span><span class="eyebrow mono" id="casesum"></span></div>
+      <div class="body"><div class="scroll"><table>
+        <thead><tr><th>Case</th><th class="num">Qty</th><th>L × W × H</th><th class="num">lb ea</th><th class="num">Total</th><th>Dept</th></tr></thead>
+        <tbody id="casebody"></tbody></table></div></div>
+    </section>
+
+    <!-- ===================== WEIGHT / SAVE ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Load &amp; saved rigs</h2></div>
+      <div class="body" style="display:flex;flex-direction:column;gap:12px">
+        <div class="rows" id="loadrows"></div>
+        <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;border-top:1px solid var(--line);padding-top:11px">
+          <div class="field" style="flex:1 1 150px"><label for="signame">Save this rig as</label>
+            <input type="text" id="signame" placeholder="Arena A — main truss"></div>
+          <button id="savebtn">Save</button>
+        </div>
+        <div class="saved noprint" id="saved"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== PULL SHEET ===================== -->
+  <section class="panel">
+    <div class="head">
+      <h2>Pull sheet</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="pullsum"></span>
+      <button id="csv" class="noprint">Export CSV</button>
+      <button id="printbtn" class="noprint">Print</button>
+    </div>
+    <div class="body pull" id="pull"></div>
+  </section>
+
+  <footer class="fine">
+    <div><b>Read this before you send it to the shop.</b> Pull Plot writes the first draft of a pull sheet, not the last. Every shop
+    cases gear its own way, so the case library is a rental-house 24″-wide truck-pack family — Standard 48×24×26, Tall
+    Standard 48×24×37¾, half and quarter cases, distro racks, dollies — with fixtures-per-case as a well-known house ships them.
+    Swap the numbers for yours. Fixture, cable and hoist weights are published figures; case weights are that house's
+    published empties plus the contents.</div>
+    <div><b>What the numbers assume.</b> Circuits pack first-fit at 20 A × 80 % — line-to-line 208 V for movers and bars,
+    120 V for conventionals and atmospherics — six to a Soca, cut from 5/10/25/50/75/100/150 ft stock plus one
+    True1 jumper per fixture and a six-way break-out per loom. Universes pack in rig order at 512 channels or 24
+    fixtures per DMX line, one 25 ft node tail per universe and one 10 ft jumper per fixture, a four-port node per
+    four universes on a Cat5e drop. Truss cuts from 10/5/2 ft sections; a dolly carries twelve 12″ sticks or eight 20.5″.
+    Hoists case two to a box with 60 ft of chain. Cable goes in cable cases at about 650 lb apiece. The truck pack is
+    a shelf pack — cases turned 24″ across, four wide in a trailer — stacked to the stack setting and never taller than the
+    door; it's a cube estimate, not a load plan, and it ignores wheel wells, load bars and the fact that your driver
+    has opinions.</div>
+    <div><b>Expendables</b> follow a conventional touring list: one safety per fixture plus ten percent, gaff by fixture
+    count, haze fluid by hazer-shows, spare lamps at ten percent of conventionals. Nothing here is a code.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================ REFERENCE DATA ============================ */
+/* va: published nominal draw · ch: touring-default DMX footprint · lb: published weight · ln: 120 V line-to-neutral load
+   cs: case key from CASES · per: fixtures per case (rental-house "typically ships as") */
+const LIB = [
+  {c:"Moving light", b:"Robe",     n:"BMFL Blade",              va:2000, ch:49, lb:83.6, cs:"tall", per:2},
+  {c:"Moving light", b:"Robe",     n:"MegaPointe",              va:670,  ch:39, lb:48.5, cs:"dual", per:2},
+  {c:"Moving light", b:"Robe",     n:"Pointe",                  va:470,  ch:24, lb:33.0, cs:"quad", per:4},
+  {c:"Moving light", b:"Robe",     n:"Spiider",                 va:660,  ch:49, lb:29.2, cs:"quad", per:4},
+  {c:"Moving light", b:"Robe",     n:"T1 Profile",              va:650,  ch:49, lb:54.0, cs:"dual", per:2},
+  {c:"Moving light", b:"Martin",   n:"MAC Aura XB",             va:400,  ch:25, lb:14.4, cs:"std",  per:6},
+  {c:"Moving light", b:"Martin",   n:"MAC Aura PXL",            va:500,  ch:89, lb:34.4, cs:"std",  per:5},
+  {c:"Moving light", b:"Martin",   n:"MAC Viper Profile",       va:1225, ch:34, lb:82.0, cs:"tall", per:2},
+  {c:"Moving light", b:"Martin",   n:"MAC Ultra Performance",   va:1450, ch:48, lb:97.0, cs:"tall", per:2},
+  {c:"Moving light", b:"Martin",   n:"MAC Encore Performance",  va:600,  ch:38, lb:68.4, cs:"tall", per:2},
+  {c:"Moving light", b:"Claypaky", n:"Sharpy",                  va:440,  ch:16, lb:41.8, cs:"std",  per:3},
+  {c:"Moving light", b:"Claypaky", n:"Mythos 2",                va:700,  ch:30, lb:70.5, cs:"tall", per:2},
+  {c:"Moving light", b:"Claypaky", n:"Scenius Unico",           va:1800, ch:40, lb:92.6, cs:"tall", per:2},
+  {c:"Moving light", b:"Ayrton",   n:"Khamsin-S",               va:1150, ch:42, lb:87.7, cs:"tall", per:2},
+  {c:"Moving light", b:"Ayrton",   n:"Diablo-S",                va:550,  ch:36, lb:48.5, cs:"dual", per:2},
+  {c:"Moving light", b:"Elation",  n:"Proteus Maximus",         va:1400, ch:61, lb:117,  cs:"tall", per:2},
+  {c:"Moving light", b:"Chauvet",  n:"Rogue R2 Wash",           va:339,  ch:22, lb:20.4, cs:"r4",   per:4},
+  {c:"Moving light", b:"Chauvet",  n:"Maverick Force S Profile",va:563,  ch:47, lb:52.9, cs:"dual", per:2},
+  {c:"Wash / bar / strobe", b:"GLP", n:"impression X4 Bar 20",  va:400,  ch:88, lb:35.3, cs:"std",  per:4},
+  {c:"Wash / bar / strobe", b:"GLP", n:"JDC1",                  va:1200, ch:62, lb:25.6, cs:"std",  per:6},
+  {c:"Wash / bar / strobe", b:"SGM", n:"Q-7",                   va:465,  ch:6,  lb:17.9, cs:"sgm4", per:4, ln:true},
+  {c:"Conventional", b:"ETC", n:"Source Four LED S3 Lustr",     va:307,  ch:12, lb:19.6, cs:"tall", per:8, ln:true},
+  {c:"Conventional", b:"ETC", n:"ColorSource PAR",              va:90,   ch:5,  lb:8.3,  cs:"std",  per:8, ln:true},
+  {c:"Conventional", b:"ETC", n:"Source Four 750 W",            va:750,  ch:1,  lb:14.0, cs:"tall", per:8, ln:true},
+  {c:"Atmospherics", b:"MDG",    n:"theONE hazer",              va:1480, ch:5,  lb:74,   cs:"cradle", per:1, ln:true, haze:true},
+  {c:"Atmospherics", b:"Look",   n:"Viper NT fogger",           va:1300, ch:1,  lb:30,   cs:"half", per:2, ln:true, haze:true},
+  {c:"Atmospherics", b:"Martin", n:"JEM ZR45 fogger",           va:1800, ch:1,  lb:50,   cs:"std",  per:2, ln:true, haze:true}
+];
+LIB.forEach(function(f,i){ f.id = "L"+i; });
+
+/* Case family: exterior inches, empty lb, stackable, department colour key */
+const CASES = {
+  std:    {n:"Standard case",          L:48, W:24, H:26,    lb:109, stack:true},
+  tall:   {n:"Tall standard case",     L:48, W:24, H:37.75, lb:150, stack:true},
+  half:   {n:"Half case",              L:24, W:24, H:26,    lb:65,  stack:true},
+  quarter:{n:"Quarter case",           L:24, W:24, H:12.75, lb:40,  stack:true},
+  dual:   {n:"Mover 2-way case",       L:24, W:24, H:35,    lb:115, stack:true},
+  quad:   {n:"Mover 4-way top-loader", L:38, W:24, H:32,    lb:120, stack:true},
+  r4:     {n:"Wash 4-way trunk",       L:30, W:24, H:32.5,  lb:107, stack:true},
+  sgm4:   {n:"SGM 4-way case",         L:28, W:24, H:24,    lb:84,  stack:true},
+  cradle: {n:"theONE touring cradle",  L:30, W:24, H:42,    lb:111, stack:false},
+  cable:  {n:"Tall wide cable case",   L:48, W:32, H:37.75, lb:234, stack:true},
+  trunk:  {n:"Half-pack cable trunk",  L:45, W:30, H:30,    lb:89,  stack:true},
+  distro: {n:"Distro rack, 24 RU",     L:30, W:24, H:51,    lb:152, stack:false},
+  noderk: {n:"Node & switch rack",     L:24, W:24, H:26,    lb:65,  stack:true},
+  motor:  {n:"Motor case, 2-way",      L:48, W:24, H:26,    lb:109, stack:true},
+  motorh: {n:"½-ton motor case, 2-way",L:24, W:24, H:26,    lb:65,  stack:true},
+  dolly12:{n:"Truss dolly, 12″",       L:96, W:24, H:55,    lb:95,  stack:false},
+  dolly20:{n:"Truss dolly, 20.5″",     L:96, W:31, H:89,    lb:125, stack:false},
+  console:{n:"Console case",           L:54, W:34, H:26,    lb:106, stack:false},
+  workbox:{n:"Utility work box",       L:32, W:24, H:52,    lb:136, stack:false},
+  hw:     {n:"Rigging hardware case",  L:24, W:24, H:26,    lb:65,  stack:true}
+};
+const TRUCKS = [
+  {id:"t53", n:"53′ trailer",       L:630, W:99, H:108, pay:44000},
+  {id:"t48", n:"48′ trailer",       L:570, W:98, H:108, pay:45000},
+  {id:"b26", n:"26′ box truck",     L:311, W:97, H:97,  pay:10000},
+  {id:"b22", n:"22′ box truck",     L:263, W:97, H:97,  pay:10000},
+  {id:"bus", n:"Bus trailer, 24′",  L:288, W:96, H:84,  pay:10000},
+  {id:"b16", n:"16′ box truck",     L:192, W:91, H:78,  pay:4300},
+  {id:"spr", n:"Sprinter 170″ HR",  L:174, W:70, H:79,  pay:3800}
+];
+const TRUSS = {none:{n:"—", w:0}, t12:{n:"12″ box", w:6.2, dolly:"dolly12", per:12, sec:[10,5,2]}, t20:{n:"20.5″ box", w:9.2, dolly:"dolly20", per:8, sec:[10,5,2]}};
+const HOIST = {"1t":{n:"Lodestar 1 t", lb:110, chain:1.11, cs:"motor"}, half:{n:"Lodestar ½ t", lb:66, chain:0.81, cs:"motorh"}};
+const CHAIN_FT = 60, BAG_LB = 6;
+const SOCA_STOCK = [150,100,75,50,25,10,5], CAT_STOCK = [300,200,100,50,25], CAM_STOCK = [100,50,25,10,5];
+const SOCA_LBFT = 0.55, SOCA_ENDS = 1, TRUE1_LBFT = 0.1, DMX_LBFT = 0.035, CAT_LBFT = 0.028, CAM_LBFT = 0.95, BREAKOUT_LB = 3.6;
+const JUMPER_FT = 10, DMX_JUMPER_FT = 10, TAIL_FT = 25, TRUE1_ENDS = 0.3, DMX_ENDS = 0.15;
+const CKT_CAP_A = 16, VLL = 208, VLN = 120, UNI_CH = 512, LINE_CAP = 24, NODE_PORTS = 4;
+const CABLE_CASE_LB = 650, TRUNK_LB = 500;
+const DEPT = {fx:"Fixtures", rig:"Rigging", pwr:"Power", data:"Data", ctl:"Control", exp:"Expendables"};
+const DEPT_COL = {fx:"s1", rig:"s2", pwr:"s3", data:"s4", ctl:"s5", exp:"s6"};
+
+/* ============================== STATE ============================== */
+const DEFAULT_POS = [
+  {id:"p1", name:"Downstage truss", dist:90,  truss:"t20", len:50, hoists:2},
+  {id:"p2", name:"Mid truss",       dist:110, truss:"t20", len:50, hoists:2},
+  {id:"p3", name:"Upstage truss",   dist:135, truss:"t20", len:60, hoists:3},
+  {id:"p4", name:"Floor package",   dist:60,  truss:"none", len:0, hoists:0},
+  {id:"p5", name:"FOH truss",       dist:200, truss:"t12", len:40, hoists:2}
+];
+const DEFAULT_ROWS = [
+  {fid:"L6",  qty:12, pos:"p1"}, {fid:"L0",  qty:8,  pos:"p1"},
+  {fid:"L1",  qty:12, pos:"p2"}, {fid:"L6",  qty:12, pos:"p2"},
+  {fid:"L18", qty:16, pos:"p3"}, {fid:"L19", qty:8,  pos:"p3"},
+  {fid:"L24", qty:2,  pos:"p4"}, {fid:"L20", qty:10, pos:"p4"},
+  {fid:"L21", qty:30, pos:"p5"}
+];
+let S = {
+  truck:"t53", feed:100, hoist:"1t", stack:2, shows:12,
+  positions: DEFAULT_POS.map(function(p){ return Object.assign({}, p); }),
+  rows: DEFAULT_ROWS.map(function(r){ return Object.assign({uid:uid()}, r); })
+};
+let DB = null, DOWNLOADS = null, savedRigs = [];
+
+function uid(){ return "r" + Math.random().toString(36).slice(2,9); }
+function fx(id){ return LIB.find(function(f){ return f.id===id; }); }
+function pos(id){ return S.positions.find(function(p){ return p.id===id; }); }
+function truckModel(){ return TRUCKS.find(function(t){ return t.id===S.truck; }) || TRUCKS[0]; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function rowInfo(r){
+  if(r.custom) return {name:r.custom.name, brand:"Custom", va:r.custom.va, ch:r.custom.ch, lb:r.custom.lb, cs:"std", per:r.custom.per||2, ln:false, key:"custom:"+r.custom.name};
+  const f = fx(r.fid);
+  return f ? {name:f.n, brand:f.b, va:f.va, ch:f.ch, lb:f.lb, cs:f.cs, per:f.per, ln:!!f.ln, haze:!!f.haze, key:f.id} : {name:"(missing)", brand:"", va:0, ch:0, lb:0, cs:"std", per:1, key:"x"};
+}
+function cutLengths(dist, stock){
+  const out = []; let left = dist, guard = 0;
+  while(left > 0 && guard++ < 20){
+    const fit = stock.find(function(L){ return L <= left; });
+    if(!fit){ out.push(stock[stock.length-1]); break; }
+    out.push(fit); left -= fit;
+  }
+  const total = out.reduce(function(t,x){ return t+x; }, 0);
+  if(total < dist) out.push(stock[stock.length-1]);
+  return out;
+}
+function cutLabel(arr){
+  const c = {}; arr.forEach(function(L){ c[L]=(c[L]||0)+1; });
+  return Object.keys(c).sort(function(a,b){ return b-a; }).map(function(L){ return (c[L]>1 ? c[L]+"×" : "") + L + "′"; }).join(" + ");
+}
+function addTo(map, key, n){ map[key] = (map[key]||0) + n; }
+
+/* ============================== THE MATH ============================== */
+function compute(){
+  const truck = truckModel(), hoist = HOIST[S.hoist];
+  const cases = [];                           /* {key, dept, n, lbEach, label} */
+  const lines = {fx:[], rig:[], pwr:[], data:[], ctl:[], exp:[]};   /* pull sheet lines: {item, qty, unit, lb} */
+  const socaCuts = {}, catCuts = {};
+  let fixtures = 0, fixtureLb = 0, hoists = 0, hazers = 0, conventionals = 0, universes = 0, circuits = 0, looms = 0, nodes = 0;
+  let cableLb = 0, socaFt = 0;
+
+  /* ---- fixtures → cases ---- */
+  const byType = {};
+  S.rows.forEach(function(r){
+    const i = rowInfo(r);
+    const t = byType[i.key] || (byType[i.key] = {info:i, qty:0});
+    t.qty += r.qty; fixtures += r.qty; fixtureLb += i.lb*r.qty;
+    if(i.haze) hazers += r.qty;
+    if(i.ln && !i.haze) conventionals += r.qty;
+  });
+  Object.keys(byType).forEach(function(k){
+    const t = byType[k], i = t.info, cs = CASES[i.cs] || CASES.std, n = Math.ceil(t.qty/i.per);
+    lines.fx.push({item:i.brand+" "+i.name, qty:t.qty, unit:"ea", lb:i.lb*t.qty});
+    cases.push({key:i.cs, dept:"fx", n:n, lbEach:cs.lb + i.lb*Math.min(i.per, t.qty), label:i.name+" · "+i.per+"-way"});
+  });
+
+  /* ---- per position: power, data, rigging ---- */
+  const positions = S.positions.map(function(p){
+    const rows = S.rows.filter(function(r){ return r.pos===p.id; });
+    let units = [], ch = 0;
+    rows.forEach(function(r){ const i = rowInfo(r); for(let k=0;k<r.qty;k++){ units.push({a:i.va/(i.ln?VLN:VLL), ln:i.ln, ch:i.ch}); ch += i.ch; } });
+    /* circuits: first-fit decreasing, never mixing 120 V and 208 V on a circuit */
+    const bins = [];
+    units.slice().sort(function(a,b){ return b.a-a.a; }).forEach(function(u){
+      let b = bins.find(function(x){ return x.ln===u.ln && x.a + u.a <= CKT_CAP_A + 1e-9; });
+      if(!b){ b = {ln:u.ln, a:0}; bins.push(b); } b.a += u.a;
+    });
+    const ckts = bins.length, lm = Math.ceil(ckts/6);
+    /* universes: rig order, 512 ch or 24 fixtures */
+    let uni = 0, cur = 0, cnt = 0;
+    units.forEach(function(u){ if(cur===0 && cnt===0){ uni++; } if(cur + u.ch > UNI_CH || cnt >= LINE_CAP){ uni++; cur = 0; cnt = 0; } cur += u.ch; cnt++; });
+    const nd = Math.ceil(uni/NODE_PORTS);
+    circuits += ckts; looms += lm; universes += uni; nodes += nd;
+    if(lm){ const cut = cutLengths(p.dist, SOCA_STOCK); cut.forEach(function(L){ addTo(socaCuts, L, lm); }); socaFt += cut.reduce(function(t,x){return t+x;},0)*lm; }
+    if(nd){ const cut = cutLengths(p.dist, CAT_STOCK); cut.forEach(function(L){ addTo(catCuts, L, nd); }); }
+    /* rigging */
+    const tr = TRUSS[p.truss] || TRUSS.none;
+    let sections = [], dollies = 0;
+    if(tr.w && p.len > 0){ sections = cutLengths(p.len, tr.sec); dollies = Math.ceil(sections.length/tr.per); }
+    hoists += tr.w ? (p.hoists|0) : 0;
+    return {p:p, fixtures:units.length, ckts:ckts, looms:lm, uni:uni, nodes:nd, tr:tr, sections:sections, dollies:dollies, ch:ch};
+  });
+
+  /* ---- power lines ---- */
+  Object.keys(socaCuts).sort(function(a,b){ return b-a; }).forEach(function(L){
+    const n = socaCuts[L], lb = (L*SOCA_LBFT + SOCA_ENDS)*n; cableLb += lb;
+    lines.pwr.push({item:"Socapex 12/14, "+L+"′", qty:n, unit:"ea", lb:lb});
+  });
+  if(looms){ lines.pwr.push({item:"Soca break-out, 6× True1", qty:looms, unit:"ea", lb:looms*BREAKOUT_LB}); cableLb += looms*BREAKOUT_LB; }
+  if(fixtures){ const lb = fixtures*(JUMPER_FT*TRUE1_LBFT+TRUE1_ENDS); lines.pwr.push({item:"True1 jumper, "+JUMPER_FT+"′", qty:fixtures, unit:"ea", lb:lb}); cableLb += lb; }
+  const camCut = cutLengths(S.feed, CAM_STOCK);
+  camCut.forEach(function(L){ const lb = 5*L*CAM_LBFT; lines.pwr.push({item:"Cam-Lok 4/0 feeder, "+L+"′ × 5", qty:1, unit:"set", lb:lb}); cableLb += lb; });
+  lines.pwr.push({item:"Distro, 400 A 3ø with Soca outs", qty:1, unit:"rack", lb:400});
+  if(hoists) lines.pwr.push({item:"Motor distro, 8-way", qty:Math.ceil(hoists/8), unit:"ea", lb:45*Math.ceil(hoists/8)});
+  cases.push({key:"distro", dept:"pwr", n:1, lbEach:CASES.distro.lb+400, label:"400 A distro"});
+
+  /* ---- data lines ---- */
+  if(fixtures){ const lb = fixtures*(DMX_JUMPER_FT*DMX_LBFT+DMX_ENDS); lines.data.push({item:"DMX 5-pin jumper, "+DMX_JUMPER_FT+"′", qty:fixtures, unit:"ea", lb:lb}); cableLb += lb; }
+  if(universes){ const lb = universes*(TAIL_FT*DMX_LBFT+DMX_ENDS); lines.data.push({item:"DMX 5-pin node tail, "+TAIL_FT+"′", qty:universes, unit:"ea", lb:lb}); cableLb += lb;
+    lines.data.push({item:"Terminator, 120 Ω", qty:universes, unit:"ea", lb:universes*0.1}); }
+  Object.keys(catCuts).sort(function(a,b){ return b-a; }).forEach(function(L){
+    const n = catCuts[L], lb = L*CAT_LBFT*n + 0.2*n; cableLb += lb; lines.data.push({item:"Cat5e etherCON, "+L+"′", qty:n, unit:"ea", lb:lb}); });
+  if(nodes){ lines.data.push({item:"4-port DMX node", qty:nodes, unit:"ea", lb:nodes*4}); lines.data.push({item:"Gigabit switch, PoE", qty:1, unit:"ea", lb:12});
+    cases.push({key:"noderk", dept:"data", n:Math.ceil(nodes/6), lbEach:CASES.noderk.lb+Math.min(nodes,6)*4+12, label:"nodes & switch"}); }
+  lines.ctl.push({item:"Console, grandMA3 full-size", qty:1, unit:"ea", lb:100});
+  lines.ctl.push({item:"Console monitor & UPS", qty:1, unit:"set", lb:40});
+  cases.push({key:"console", dept:"ctl", n:1, lbEach:CASES.console.lb+140, label:"grandMA3"});
+
+  /* ---- rigging lines ---- */
+  let trussLb = 0;
+  positions.forEach(function(P){
+    if(!P.sections.length) return;
+    const lb = P.p.len*P.tr.w; trussLb += lb;
+    lines.rig.push({item:P.tr.n+" truss — "+P.p.name, qty:P.sections.length, unit:cutLabel(P.sections), lb:lb});
+    cases.push({key:P.tr.dolly, dept:"rig", n:P.dollies, lbEach:CASES[P.tr.dolly].lb + lb/P.dollies, label:P.p.name});
+  });
+  if(hoists){
+    const hl = hoist.lb + hoist.chain*CHAIN_FT + BAG_LB;
+    lines.rig.push({item:hoist.n+" with "+CHAIN_FT+"′ chain & bag", qty:hoists, unit:"ea", lb:hoists*hl});
+    lines.rig.push({item:"Motor control cable, 8-way pendant", qty:Math.ceil(hoists/8), unit:"set", lb:20*Math.ceil(hoists/8)});
+    lines.rig.push({item:"Steel, 5′ GAC-flex", qty:hoists, unit:"ea", lb:hoists*3.75});
+    lines.rig.push({item:"Shackle, ⅝″", qty:hoists*2, unit:"ea", lb:hoists*2*1.37});
+    cases.push({key:hoist.cs, dept:"rig", n:Math.ceil(hoists/2), lbEach:CASES[hoist.cs].lb + 2*hl, label:hoist.n});
+    cases.push({key:"hw", dept:"rig", n:1, lbEach:CASES.hw.lb + hoists*(3.75+2.74) + 20, label:"steel & shackles"});
+  }
+  lines.rig.push({item:"Half-coupler", qty:fixtures*2, unit:"ea", lb:fixtures*2*1.39});
+  lines.rig.push({item:"Safety cable, 30″", qty:Math.ceil(fixtures*1.1), unit:"ea", lb:fixtures*1.1*0.3});
+
+  /* ---- expendables ---- */
+  const gaff = 6 + Math.ceil(fixtures/20);
+  lines.exp.push({item:"Gaff tape, 2″ black", qty:gaff, unit:"roll", lb:gaff*1.2});
+  lines.exp.push({item:"Gaff tape, 2″ white", qty:2, unit:"roll", lb:2.4});
+  lines.exp.push({item:"E-tape, black", qty:6, unit:"roll", lb:1});
+  lines.exp.push({item:"Tie line, black", qty:1, unit:"spool", lb:2});
+  lines.exp.push({item:"Zip ties, 8″ black", qty:2, unit:"bag", lb:1});
+  if(hazers) lines.exp.push({item:"Haze fluid", qty:Math.ceil(hazers*S.shows/10), unit:"gal", lb:Math.ceil(hazers*S.shows/10)*8.5});
+  if(conventionals) lines.exp.push({item:"Spare lamps / drivers", qty:Math.ceil(conventionals*0.1), unit:"ea", lb:0});
+  lines.exp.push({item:"Ground lifts & spare connectors", qty:1, unit:"kit", lb:5});
+  lines.exp.push({item:"Ratchet straps & load bars", qty:1, unit:"set", lb:40});
+  lines.exp.push({item:"Utility work box", qty:1, unit:"ea", lb:0});
+  cases.push({key:"workbox", dept:"exp", n:1, lbEach:CASES.workbox.lb+150, label:"expendables & tools"});
+
+  /* ---- cable cases ---- */
+  const socaLb = Object.keys(socaCuts).reduce(function(t,L){ return t + (L*SOCA_LBFT+SOCA_ENDS)*socaCuts[L]; },0) + looms*BREAKOUT_LB;
+  const otherLb = cableLb - socaLb;
+  if(socaLb) cases.push({key:"cable", dept:"pwr", n:Math.ceil(socaLb/CABLE_CASE_LB), lbEach:CASES.cable.lb + Math.min(socaLb, CABLE_CASE_LB), label:"Soca & break-outs"});
+  if(otherLb) cases.push({key:"trunk", dept:"data", n:Math.ceil(otherLb/TRUNK_LB), lbEach:CASES.trunk.lb + Math.min(otherLb, TRUNK_LB), label:"feeder, jumpers, data"});
+
+  /* ---- truck pack: shelf pack of stacks, cases turned 24″ across ---- */
+  const stacks = [];
+  cases.forEach(function(c){
+    const cs = CASES[c.key]; if(!cs || !c.n) return;
+    const maxH = Math.max(1, Math.floor(truck.H / cs.H));
+    const k = cs.stack ? Math.min(S.stack, maxH) : 1;
+    let left = c.n;
+    while(left > 0){ const m = Math.min(k, left); stacks.push({c:c, cs:cs, m:m, across:cs.W, deep:cs.L, lb:c.lbEach*m}); left -= m; }
+  });
+  stacks.sort(function(a,b){ return b.deep - a.deep || b.across - a.across; });
+  const rows = []; let row = null;
+  stacks.forEach(function(st){
+    if(!row || row.used + st.across > truck.W + 0.01){ row = {used:0, deep:0, items:[]}; rows.push(row); }
+    st.y = row.used; row.items.push(st); row.used += st.across; row.deep = Math.max(row.deep, st.deep);
+  });
+  let x = 0; rows.forEach(function(r){ r.x = x; x += r.deep; });
+  const usedIn = x, usedFt = usedIn/12, trucksNeeded = Math.max(1, Math.ceil(usedIn/truck.L));
+  const gross = cases.reduce(function(t,c){ return t + c.n*c.lbEach; },0);
+  const pieces = cases.reduce(function(t,c){ return t+c.n; },0);
+  const cube = stacks.reduce(function(t,st){ return t + st.cs.L*st.cs.W*st.cs.H*st.m/1728; },0);
+  const truckCube = truck.L*truck.W*truck.H/1728;
+  const heavy = cases.filter(function(c){ return c.lbEach > 400; });
+
+  return {truck:truck, hoist:hoist, cases:cases, lines:lines, positions:positions, fixtures:fixtures, fixtureLb:fixtureLb, hoists:hoists,
+    hazers:hazers, universes:universes, circuits:circuits, looms:looms, nodes:nodes, cableLb:cableLb, socaFt:socaFt, trussLb:trussLb,
+    stacks:stacks, rows:rows, usedIn:usedIn, usedFt:usedFt, trucksNeeded:trucksNeeded, gross:gross, pieces:pieces, cube:cube,
+    truckCube:truckCube, heavy:heavy, socaCuts:socaCuts, catCuts:catCuts, camCut:camCut};
+}
+
+/* ============================== RENDER ============================== */
+const $ = function(id){ return document.getElementById(id); };
+const n0 = function(v){ return Math.round(v).toLocaleString(); };
+const n1 = function(v){ return v.toFixed(1); };
+const plural = function(n, s){ return n+" "+s+(n===1?"":"s"); };
+
+function render(){
+  const R = compute(), T = R.truck;
+  const payPct = R.gross/T.pay*100, lenPct = R.usedIn/T.L*100;
+  const payFlag = payPct>100 ? "flag-crit" : payPct>85 ? "flag-warn" : "flag-ok";
+  const lenFlag = lenPct>100 ? "flag-crit" : lenPct>85 ? "flag-warn" : "flag-ok";
+  $("tiles").innerHTML = [
+    tile("Pieces", String(R.pieces), "", plural(R.fixtures,"fixture")+" · "+plural(R.hoists,"hoist")),
+    tile("Gross weight", n0(R.gross), " lb", n0(R.fixtureLb)+" fixtures · "+n0(R.cableLb)+" cable · "+n0(R.trussLb)+" truss"),
+    tile("Payload", Math.round(payPct)+"", " %", "of "+n0(T.pay)+" lb · "+T.n, payFlag),
+    tile("Floor used", n1(R.usedFt), " ft", Math.round(lenPct)+" % of "+Math.round(T.L/12)+"′ · "+plural(R.rows.length,"row"), lenFlag),
+    tile("Cube", Math.round(R.cube/R.truckCube*100)+"", " %", n0(R.cube)+" ft³ of "+n0(R.truckCube)),
+    tile("Trucks", String(R.trucksNeeded), "", R.trucksNeeded>1 ? "this pack spills over" : "fits in one", R.trucksNeeded>1?"flag-crit":""),
+    tile("Cable", n0(R.socaFt), " ft", "Soca · "+R.looms+" looms · "+R.universes+" universes")
+  ].join("");
+
+  const notes = [];
+  if(!R.fixtures) notes.push(note("ok","Empty","Add fixtures and the pull sheet writes itself."));
+  if(payPct > 100) notes.push(note("crit","Payload", n0(R.gross)+" lb against a "+n0(T.pay)+" lb payload for a "+T.n+". Split the load or step up a truck."));
+  else if(payPct > 85) notes.push(note("warn","Payload", Math.round(payPct)+" % of payload before backline, set or the crew's bags."));
+  if(lenPct > 100) notes.push(note("crit","Floor", "The pack needs "+n1(R.usedFt)+" ft of floor and the "+T.n+" has "+Math.round(T.L/12)+". That's "+R.trucksNeeded+" trucks, or a taller stack."));
+  else if(lenPct > 85) notes.push(note("warn","Floor", n1(R.usedFt)+" ft of "+Math.round(T.L/12)+" — tight once the audio and video packs want their share."));
+  if(R.heavy.length) notes.push(note("warn","Heavy", R.heavy.map(function(c){ return CASES[c.key].n+" ("+n0(c.lbEach)+" lb)"; }).join(", ")+
+    " over 400 lb — two people on the ramp, and a liftgate is rated around 3,000 lb."));
+  if(T.id==="bus") notes.push(note("warn","Bus trailer", "Most coach companies cap the trailer at 10,000 lb and it comes out of the bus's braking, not the driver's opinion."));
+  $("notes").innerHTML = notes.join("");
+
+  /* rig */
+  $("rigcount").textContent = plural(R.fixtures,"fixture")+" · "+n0(R.fixtureLb)+" lb";
+  const body = $("rigbody");
+  if(!S.rows.length) body.innerHTML = '<tr><td colspan="8" class="empty">Nothing on the pull yet.</td></tr>';
+  else body.innerHTML = S.rows.map(function(r){
+    const i = rowInfo(r), cs = CASES[i.cs]||CASES.std, n = Math.ceil(r.qty/i.per);
+    return '<tr>'+
+      '<td><span class="rig-name">'+esc(i.name)+'</span> <span class="rig-brand">'+esc(i.brand)+'</span></td>'+
+      '<td class="num"><input type="number" class="qty" min="1" max="999" value="'+r.qty+'" data-q="'+r.uid+'"></td>'+
+      '<td><select data-p="'+r.uid+'">'+ S.positions.map(function(p){ return '<option value="'+p.id+'"'+(p.id===r.pos?" selected":"")+'>'+esc(p.name)+'</option>'; }).join('') +'</select></td>'+
+      '<td style="font-size:12px;color:var(--ink-2)">'+i.per+' in a '+esc(cs.n.toLowerCase())+'</td>'+
+      '<td class="num">'+n+'</td><td class="num">'+n1(i.lb)+'</td><td class="num">'+n0(cs.lb + i.lb*Math.min(i.per,r.qty))+'</td>'+
+      '<td class="noprint" style="text-align:right"><button class="ghost" data-x="'+r.uid+'" aria-label="Remove '+esc(i.name)+'">✕</button></td></tr>';
+  }).join("");
+
+  /* positions */
+  $("posbody").innerHTML = R.positions.map(function(P){
+    const p = P.p, hasTruss = P.tr.w > 0;
+    return '<tr>'+
+      '<td><input type="text" data-pn="'+p.id+'" value="'+esc(p.name)+'" style="width:100%;min-width:140px;font-family:inherit"></td>'+
+      '<td class="num"><input type="number" data-pd="'+p.id+'" class="qty" min="1" max="1000" value="'+p.dist+'"></td>'+
+      '<td><select data-ptr="'+p.id+'">'+Object.keys(TRUSS).map(function(k){ return '<option value="'+k+'"'+(k===p.truss?" selected":"")+'>'+TRUSS[k].n+'</option>'; }).join("")+'</select></td>'+
+      '<td class="num"><input type="number" data-pl="'+p.id+'" class="qty" min="0" max="200" value="'+(hasTruss?p.len:0)+'"'+(hasTruss?"":" disabled")+'></td>'+
+      '<td class="num"><input type="number" data-ph="'+p.id+'" class="qty" min="0" max="12" value="'+(hasTruss?p.hoists:0)+'"'+(hasTruss?"":" disabled")+'></td>'+
+      '<td class="num">'+P.fixtures+'</td><td class="num">'+P.ckts+'</td><td class="num">'+P.looms+'</td><td class="num">'+P.uni+'</td>'+
+      '<td class="noprint" style="text-align:right">'+(S.positions.length>1 ? '<button class="ghost" data-px="'+p.id+'" aria-label="Remove '+esc(p.name)+'">✕</button>' : '')+'</td></tr>';
+  }).join("");
+
+  /* truck */
+  $("trucksum").textContent = T.n+" · "+n1(R.usedFt)+"′ used · "+n0(R.gross)+" lb";
+  renderTruck(R);
+  $("legend").innerHTML = Object.keys(DEPT).map(function(k){ return '<div class="it"><span class="dept" style="background:var(--'+DEPT_COL[k]+')"></span>'+DEPT[k]+'</div>'; }).join("")+
+    '<div class="it" style="color:var(--ink-3)">Nose on the left · each block is one stack, labelled with its height · rows fill four across</div>';
+
+  /* cases */
+  const caseMap = {};
+  R.cases.forEach(function(c){ const k = c.key+"|"+c.dept+"|"+Math.round(c.lbEach); const e = caseMap[k] || (caseMap[k] = {c:c, n:0, labels:[]}); e.n += c.n; if(e.labels.indexOf(c.label)<0) e.labels.push(c.label); });
+  $("casesum").textContent = plural(R.pieces,"piece")+" · "+n0(R.gross)+" lb";
+  $("casebody").innerHTML = Object.keys(caseMap).map(function(k){ const e = caseMap[k], cs = CASES[e.c.key];
+    return '<tr><td><span class="rig-name"><span class="dept" style="background:var(--'+DEPT_COL[e.c.dept]+')"></span>'+esc(cs.n)+'</span> <span class="rig-brand">'+esc(e.labels.join(", "))+'</span></td>'+
+      '<td class="num">'+e.n+'</td><td class="mono" style="font-size:12px;white-space:nowrap">'+cs.L+' × '+cs.W+' × '+cs.H+'</td>'+
+      '<td class="num">'+n0(e.c.lbEach)+'</td><td class="num">'+n0(e.c.lbEach*e.n)+'</td><td style="font-size:12px;color:var(--ink-2)">'+DEPT[e.c.dept]+'</td></tr>';
+  }).join("") || '<tr><td colspan="6" class="empty">Cases appear once there is a rig.</td></tr>';
+
+  /* load rows */
+  const deptLb = {}; R.cases.forEach(function(c){ addTo(deptLb, c.dept, c.n*c.lbEach); });
+  $("loadrows").innerHTML = Object.keys(DEPT).map(function(k){ return row(DEPT[k], n0(deptLb[k]||0)+" lb"); }).join("")+
+    row("Gross on the truck", n0(R.gross)+" lb", payPct>100?"crit":payPct>85?"warn":"ok")+
+    row("Per linear foot", R.usedFt ? n0(R.gross/R.usedFt)+" lb/ft" : "—");
+
+  /* pull sheet */
+  const total = Object.keys(R.lines).reduce(function(t,k){ return t + R.lines[k].length; },0);
+  $("pullsum").textContent = plural(total,"line")+" · "+plural(R.pieces,"piece");
+  $("pull").innerHTML = Object.keys(DEPT).map(function(k){
+    const L = R.lines[k]; if(!L.length) return "";
+    const lb = L.reduce(function(t,l){ return t+l.lb; },0);
+    return '<div class="dh"><span class="d"><span class="dept" style="background:var(--'+DEPT_COL[k]+')"></span>'+DEPT[k]+'</span><hr>'+
+      '<span class="tag">'+plural(L.length,"line")+(lb?' · '+n0(lb)+' lb':'')+'</span></div>'+
+      '<div class="scroll"><table><thead><tr><th></th><th>Item</th><th class="num">Qty</th><th>Unit</th><th class="num">lb</th></tr></thead><tbody>'+
+      L.map(function(l){ return '<tr><td class="chk">☐</td><td>'+esc(l.item)+'</td><td class="num" style="font-weight:600">'+n0(l.qty)+'</td><td style="color:var(--ink-2);font-size:12px">'+esc(l.unit)+'</td><td class="num">'+(l.lb?n0(l.lb):"—")+'</td></tr>'; }).join("")+
+      '</tbody></table></div>';
+  }).join("");
+
+  renderSaved();
+  window.__R = R;
+}
+
+/* ---------- the truck, top down, nose left ---------- */
+function renderTruck(R){
+  const T = R.truck, W = 920, padL = 44, padR = 16, top = 26, bot = 30;
+  const scale = (W-padL-padR)/T.L, bedH = T.W*scale, H = top + bedH + bot;
+  const sx = function(inches){ return padL + inches*scale; }, sy = function(inches){ return top + inches*scale; };
+  let svg = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Truck pack: '+R.pieces+' pieces in '+n1(R.usedFt)+' feet of a '+esc(T.n)+'">';
+  svg += '<rect class="cab" x="'+(padL-30)+'" y="'+(top+bedH*0.15)+'" width="24" height="'+(bedH*0.7)+'" rx="3"></rect>';
+  svg += '<text class="ttl" x="'+(padL-18)+'" y="'+(top-8)+'" text-anchor="middle">NOSE</text>';
+  svg += '<rect class="bed" x="'+sx(0)+'" y="'+sy(0)+'" width="'+(T.L*scale)+'" height="'+bedH+'"></rect>';
+  svg += '<text class="ttl" x="'+sx(T.L)+'" y="'+(top-8)+'" text-anchor="end">DOORS · '+Math.round(T.L/12)+'′ × '+T.W+'″ × '+T.H+'″</text>';
+  R.rows.forEach(function(r){
+    r.items.forEach(function(st){
+      const x0 = sx(r.x), y0 = sy(st.y), w = st.deep*scale, h = st.across*scale;
+      if(r.x >= T.L) return;
+      svg += '<rect class="cs" x="'+x0+'" y="'+y0+'" width="'+Math.min(w, sx(T.L)-x0)+'" height="'+h+'" fill="var(--'+DEPT_COL[st.c.dept]+')" opacity="'+(0.55+0.45*Math.min(1,st.m/3)).toFixed(2)+'">'+
+        '<title>'+esc(st.m+"× "+st.cs.n+" — "+st.c.label+" · "+n0(st.lb)+" lb")+'</title></rect>';
+      if(w > 22 && h > 12) svg += '<text class="lbl" x="'+(x0+w/2)+'" y="'+(y0+h/2+3)+'" text-anchor="middle">'+(st.m>1?st.m+"×":"")+'</text>';
+    });
+  });
+  if(R.usedIn < T.L){
+    svg += '<rect class="unused" x="'+sx(R.usedIn)+'" y="'+sy(0)+'" width="'+((T.L-R.usedIn)*scale)+'" height="'+bedH+'"></rect>';
+    svg += '<text class="sm" x="'+((sx(R.usedIn)+sx(T.L))/2)+'" y="'+(top+bedH/2+3)+'" text-anchor="middle">'+n1((T.L-R.usedIn)/12)+'′ free</text>';
+  } else {
+    svg += '<line class="door" x1="'+sx(T.L)+'" y1="'+(top-4)+'" x2="'+sx(T.L)+'" y2="'+(top+bedH+4)+'"></line>';
+  }
+  for(let f=0; f*12 <= T.L; f += 10) svg += '<text class="sm" x="'+sx(f*12)+'" y="'+(top+bedH+14)+'" text-anchor="middle">'+f+'′</text>';
+  svg += '<text class="sm" x="'+sx(R.usedIn)+'" y="'+(top+bedH+26)+'" text-anchor="middle" fill="var(--ink)">'+n1(R.usedFt)+'′ · '+n0(R.gross)+' lb</text>';
+  svg += '</svg>';
+  $("truckfig").innerHTML = svg + '<figcaption>A shelf pack: stacks sorted deepest first, laid four across the width, each row as deep as its deepest case. '+
+    'Darker blocks are taller stacks. The floor it uses is what you quote for the lighting share of the truck; the cube figure says how much air is in it.</figcaption>';
+}
+
+function tile(k,v,unit,n,flag){ return '<div class="tile '+(flag||"")+'"><span class="k">'+k+'</span><span class="v">'+v+(unit?'<small>'+unit+'</small>':'')+'</span><span class="n">'+n+'</span></div>'; }
+function note(kind,m,t){ return '<div class="note '+kind+'"><span class="m">'+m+'</span><span>'+t+'</span></div>'; }
+function row(k,v,cls){ const col = cls==="crit"?"color:var(--crit)":cls==="warn"?"color:var(--warn)":(cls==="ok"||cls==="em")?"color:var(--accent)":"";
+  return '<div class="r"><span class="k">'+k+'</span><span class="v" style="'+col+'">'+v+'</span></div>'; }
+
+/* ============================== CONTROLS ============================== */
+function fillPicker(){
+  let html = "", cat = null;
+  LIB.forEach(function(f){ if(f.c!==cat){ if(cat!==null) html += "</optgroup>"; html += '<optgroup label="'+f.c+'">'; cat = f.c; }
+    html += '<option value="'+f.id+'">'+esc(f.b)+" "+esc(f.n)+"</option>"; });
+  $("pick").innerHTML = html + "</optgroup>";
+}
+function fillPositions(){
+  const keep = $("pickpos").value;
+  $("pickpos").innerHTML = S.positions.map(function(p){ return '<option value="'+p.id+'">'+esc(p.name)+'</option>'; }).join("");
+  $("pickpos").value = S.positions.some(function(p){ return p.id===keep; }) ? keep : (S.positions[0]||{}).id;
+}
+function fillTrucks(){ $("truck").innerHTML = TRUCKS.map(function(t){ return '<option value="'+t.id+'">'+esc(t.n)+' · '+n0(t.pay)+' lb</option>'; }).join(""); $("truck").value = S.truck; }
+function bind(){
+  $("truck").addEventListener("change", function(e){ S.truck = e.target.value; render(); });
+  $("feed").addEventListener("input", function(e){ S.feed = Math.max(10, Math.min(1000, +e.target.value||10)); render(); });
+  $("hoist").addEventListener("change", function(e){ S.hoist = e.target.value; render(); });
+  $("stack").addEventListener("change", function(e){ S.stack = +e.target.value; render(); });
+  $("shows").addEventListener("input", function(e){ S.shows = Math.max(1, Math.min(300, +e.target.value||1)); render(); });
+  $("printbtn").addEventListener("click", function(){ window.print(); });
+  $("addbtn").addEventListener("click", function(){
+    const fid = $("pick").value, qty = Math.max(1, +$("pickqty").value||1), p = $("pickpos").value;
+    const hit = S.rows.find(function(r){ return r.fid===fid && r.pos===p; });
+    if(hit) hit.qty += qty; else S.rows.push({uid:uid(), fid:fid, qty:qty, pos:p});
+    render();
+  });
+  $("addpos").addEventListener("click", function(){
+    S.positions.push({id:"p"+Math.random().toString(36).slice(2,7), name:"Position "+(S.positions.length+1), dist:100, truss:"t12", len:40, hoists:2});
+    fillPositions(); render();
+  });
+  $("rigbody").addEventListener("input", function(e){ const q = e.target.getAttribute("data-q"); if(!q) return;
+    const r = S.rows.find(function(x){ return x.uid===q; }); if(r){ r.qty = Math.max(1, Math.min(999, +e.target.value||1)); soft(e.target); } });
+  $("rigbody").addEventListener("change", function(e){ const p = e.target.getAttribute("data-p"); if(!p) return;
+    const r = S.rows.find(function(x){ return x.uid===p; }); if(r){ r.pos = e.target.value; render(); } });
+  $("rigbody").addEventListener("click", function(e){ const b = e.target.closest("[data-x]"); if(!b) return;
+    S.rows = S.rows.filter(function(x){ return x.uid !== b.getAttribute("data-x"); }); render(); });
+  $("posbody").addEventListener("input", function(e){
+    const el = e.target, id = el.getAttribute("data-pn")||el.getAttribute("data-pd")||el.getAttribute("data-pl")||el.getAttribute("data-ph");
+    if(!id) return; const p = pos(id); if(!p) return;
+    if(el.hasAttribute("data-pn")){ p.name = el.value; fillPositions(); }
+    else if(el.hasAttribute("data-pd")) p.dist = Math.max(1, Math.min(1000, +el.value||1));
+    else if(el.hasAttribute("data-pl")) p.len = Math.max(0, Math.min(200, +el.value||0));
+    else p.hoists = Math.max(0, Math.min(12, +el.value||0));
+    soft(el);
+  });
+  $("posbody").addEventListener("change", function(e){ const id = e.target.getAttribute("data-ptr"); if(!id) return;
+    const p = pos(id); if(p){ p.truss = e.target.value; if(p.truss!=="none" && !p.len){ p.len = 40; p.hoists = 2; } render(); } });
+  $("posbody").addEventListener("click", function(e){ const b = e.target.closest("[data-px]"); if(!b) return;
+    const id = b.getAttribute("data-px"); if(S.positions.length<2) return;
+    S.positions = S.positions.filter(function(p){ return p.id!==id; });
+    S.rows.forEach(function(r){ if(r.pos===id) r.pos = S.positions[0].id; }); fillPositions(); render(); });
+  $("csv").addEventListener("click", exportCSV);
+  $("savebtn").addEventListener("click", saveRig);
+}
+let softTimer = null;
+function soft(el){
+  clearTimeout(softTimer);
+  softTimer = setTimeout(function(){
+    const attrs = ["data-pn","data-pd","data-pl","data-ph","data-q"]; const a = document.activeElement; let sel = null;
+    attrs.forEach(function(k){ if(a && a.hasAttribute && a.hasAttribute(k)) sel = '['+k+'="'+a.getAttribute(k)+'"]'; });
+    const start = a && a.selectionStart; render();
+    if(sel){ const n = document.querySelector(sel); if(n){ n.focus(); try{ n.setSelectionRange(start,start); }catch(e){} } }
+  }, 350);
+}
+
+/* ============================== EXPORT ============================== */
+function exportCSV(){
+  const R = window.__R || compute();
+  const L = [["Pull Plot — pull sheet"], ["Truck", R.truck.n, "Floor ft", n1(R.usedFt), "Gross lb", Math.round(R.gross), "Pieces", R.pieces, "Shows", S.shows], []];
+  L.push(["Department","Item","Qty","Unit","lb"]);
+  Object.keys(DEPT).forEach(function(k){ R.lines[k].forEach(function(l){ L.push([DEPT[k], l.item, l.qty, l.unit, Math.round(l.lb)]); }); });
+  L.push([]); L.push(["Cases"]); L.push(["Case","Contents","Qty","L in","W in","H in","lb each","Department"]);
+  R.cases.forEach(function(c){ const cs = CASES[c.key]; L.push([cs.n, c.label, c.n, cs.L, cs.W, cs.H, Math.round(c.lbEach), DEPT[c.dept]]); });
+  L.push([]); L.push(["Truck rows (nose first)"]); L.push(["Row","From ft","Depth in","Stacks"]);
+  R.rows.forEach(function(r,i){ L.push([i+1, n1(r.x/12), r.deep, r.items.map(function(st){ return st.m+"x "+st.cs.n+" ("+st.c.label+")"; }).join(" | ")]); });
+  const csv = L.map(function(r){ return r.map(function(x){ x = String(x==null?"":x); return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(","); }).join("\n");
+  if(DOWNLOADS) DOWNLOADS.save({filename:"pull-plot-sheet.csv", data:csv}).catch(function(){ copyFallback(csv); }); else copyFallback(csv);
+}
+function copyFallback(csv){
+  const b = $("csv"), old = b.textContent;
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(csv).then(function(){ b.textContent = "Copied to clipboard"; setTimeout(function(){ b.textContent = old; },1800); })
+    .catch(function(){ b.textContent = "Copy blocked"; setTimeout(function(){ b.textContent = old; },1800); });
+  else { b.textContent = "Copy blocked"; setTimeout(function(){ b.textContent = old; },1800); }
+}
+
+/* ============================== SAVED RIGS ============================== */
+function snapshot(){ return {truck:S.truck, feed:S.feed, hoist:S.hoist, stack:S.stack, shows:S.shows,
+  positions:S.positions.map(function(p){ return {id:p.id, name:p.name, dist:p.dist, truss:p.truss, len:p.len, hoists:p.hoists}; }),
+  rows:S.rows.map(function(r){ return {fid:r.fid, custom:r.custom, qty:r.qty, pos:r.pos}; })}; }
+function applySnapshot(d){
+  if(!d || !Array.isArray(d.rows)) return;
+  S.truck = d.truck||"t53"; S.feed = d.feed||100; S.hoist = d.hoist||"1t"; S.stack = d.stack||2; S.shows = d.shows||12;
+  S.positions = (Array.isArray(d.positions) && d.positions.length) ? d.positions.map(function(p){ return {id:p.id, name:p.name, dist:p.dist||100, truss:p.truss||"none", len:p.len||0, hoists:p.hoists||0}; })
+    : DEFAULT_POS.map(function(p){ return Object.assign({}, p); });
+  const ids = S.positions.map(function(p){ return p.id; });
+  S.rows = d.rows.map(function(r){ return {uid:uid(), fid:r.fid, custom:r.custom, qty:r.qty||1, pos: ids.indexOf(r.pos)>=0 ? r.pos : ids[0]}; });
+  $("truck").value = S.truck; $("feed").value = S.feed; $("hoist").value = S.hoist; $("stack").value = String(S.stack); $("shows").value = S.shows;
+  fillPositions(); render();
+}
+function saveRig(){
+  const name = ($("signame").value||"").trim(); if(!name){ $("signame").focus(); return; }
+  const key = name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60) || ("rig-"+Date.now());
+  const rec = {name:name, saved:Date.now(), data:snapshot()};
+  savedRigs = savedRigs.filter(function(x){ return x.key!==key; }); savedRigs.push(Object.assign({key:key}, rec)); $("signame").value = "";
+  if(DB) DB.doc("rigs/"+key).set(rec).catch(function(){ localWrite(); }); else localWrite();
+  localWrite(); renderSaved();
+}
+function localWrite(){ try{ localStorage.setItem("pull-plot-rigs", JSON.stringify(savedRigs)); }catch(e){} }
+function removeRig(key){ savedRigs = savedRigs.filter(function(x){ return x.key!==key; }); if(DB) DB.doc("rigs/"+key).delete().catch(function(){}); localWrite(); renderSaved(); }
+function renderSaved(){
+  const el = $("saved");
+  if(!savedRigs.length){ el.innerHTML = '<span style="font-size:12px;color:var(--ink-3)">No saved rigs yet — save one and it comes back next time you open this.</span>'; return; }
+  el.innerHTML = savedRigs.slice().sort(function(a,b){ return b.saved-a.saved; }).map(function(r){
+    return '<span class="chip"><span class="load-b" data-load="'+esc(r.key)+'" role="button" tabindex="0">'+esc(r.name)+'</span><button data-del="'+esc(r.key)+'" aria-label="Delete '+esc(r.name)+'">✕</button></span>'; }).join("");
+}
+document.addEventListener("click", function(e){
+  const l = e.target.closest("[data-load]"); if(l){ const r = savedRigs.find(function(x){ return x.key===l.getAttribute("data-load"); }); if(r) applySnapshot(r.data); return; }
+  const d = e.target.closest("[data-del]"); if(d) removeRig(d.getAttribute("data-del"));
+});
+document.addEventListener("keydown", function(e){ if(e.key!=="Enter" && e.key!==" ") return; const l = e.target.closest && e.target.closest("[data-load]"); if(!l) return; e.preventDefault(); l.click(); });
+
+/* ============================== BOOT ============================== */
+fillPicker(); fillPositions(); fillTrucks(); bind();
+try{ const raw = localStorage.getItem("pull-plot-rigs"); if(raw) savedRigs = JSON.parse(raw)||[]; } catch(e){ savedRigs = []; }
+render();
+if(window.claude && typeof window.claude.use === "function"){
+  window.claude.use("downloads").then(function(d){ DOWNLOADS = d; }).catch(function(){});
+  window.claude.use("db").then(function(db){
+    if(!db) return; DB = db;
+    return db.collection("rigs").get().then(function(snap){
+      const docs = (snap && snap.docs) ? snap.docs : [];
+      const remote = docs.map(function(doc){ const v = typeof doc.data === "function" ? doc.data() : doc.data; return Object.assign({key:doc.id}, v||{}); }).filter(function(x){ return x.name && x.data; });
+      if(remote.length){ const seen = {}; savedRigs = remote.concat(savedRigs).filter(function(x){ if(seen[x.key]) return false; seen[x.key]=1; return true; }); renderSaved(); }
+    });
+  }).catch(function(){});
+}
+})();
+</script>
+
+</body></html>

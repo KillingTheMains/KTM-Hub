@@ -1,0 +1,93 @@
+[
+ {
+  "file": "SGM_Light@Q7@BETA_1.1.gdtf",
+  "dataVersion": "1.2",
+  "name": "Q7",
+  "longName": "SGM Q7",
+  "shortName": "LED PAR",
+  "manufacturer": "SGM Light",
+  "description": "",
+  "fixtureTypeID": "9B293A60-AA9A-41DA-9741-2B876C193084",
+  "revisions": [
+   {
+    "date": "2023-10-24T06:50:06",
+    "text": "New fixture type based on Basic LED PAR from GDTF Template",
+    "user": "0"
+   },
+   {
+    "date": "2023-10-24T07:38:42",
+    "text": "Basic Info Only",
+    "user": "19831"
+   },
+   {
+    "date": "2023-10-24T08:09:59",
+    "text": "Mid Mesh Upload",
+    "user": "0"
+   },
+   {
+    "date": "2023-10-24T08:25:17",
+    "text": "Mesh Done",
+    "user": "0"
+   },
+   {
+    "date": "2023-10-24T10:07:46",
+    "text": "BETA 1",
+    "user": "0"
+   },
+   {
+    "date": "2023-10-24T10:15:47",
+    "text": "BETA 1",
+    "user": "0"
+   },
+   {
+    "date": "2023-10-24T10:15:47",
+    "text": "BETA 1.1",
+    "user": "19831"
+   }
+  ],
+  "official": false,
+  "provenanceStatus": "interpreted",
+  "modes": [
+   {
+    "name": "3Ch",
+    "footprint": 3,
+    "channelNodes": 3,
+    "breaks": [
+     1
+    ]
+   },
+   {
+    "name": "4Ch",
+    "footprint": 4,
+    "channelNodes": 4,
+    "breaks": [
+     1
+    ]
+   }
+  ],
+  "weightKg": 8.1,
+  "weightLb": 17.9,
+  "operatingTempC": [
+   "-40.000000",
+   "50.000000"
+  ],
+  "legHeightM": 0.173,
+  "power": null,
+  "connectors": [],
+  "dimensions": {
+   "model": "Base",
+   "lengthM": 0.496,
+   "widthM": 0.119,
+   "heightM": 0.2
+  },
+  "gaps": [
+   "power draw",
+   "connectors"
+  ],
+  "archive": {
+   "entries": 5,
+   "bytes": 1190878,
+   "xmlBytes": 11051
+  }
+ }
+]

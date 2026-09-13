@@ -1,0 +1,896 @@
+<!doctype html><html><head><meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Net Plot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#5C636A;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF;
+  --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#71787F;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+  --rail:#B9BDB5; --rail-2:#A2A79E;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630; --rail:#343B41; --rail-2:#454E56;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630; --rail:#343B41; --rail-2:#454E56;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);overflow:hidden;
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;
+  line-height:1.45;display:flex;flex-direction:column}
+button,input,select,textarea{font:inherit;color:var(--ink)}
+option{color:var(--ink);background:var(--surface)}
+table,.card,.note,.stat{color:var(--ink)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+.bar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:9px 15px;background:var(--surface);
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.bar h1{font-family:"Archivo",sans-serif;font-size:15px;font-weight:700;margin:0;letter-spacing:.03em;white-space:nowrap}
+.grow{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--surface);border:0;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--sel);color:var(--ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:8px;padding:7px 13px;
+  font-size:12.5px;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--ink-2);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink);filter:none}
+.btn.danger{background:none;color:var(--crit);border:1px solid var(--line)}
+.btn.danger:hover{background:var(--crit-soft);filter:none}
+.btn.sm{padding:4px 9px;font-size:11.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+input[type=text],input[type=number],select{background:var(--surface-2);border:1px solid var(--line);
+  border-radius:7px;padding:6px 9px}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}
+
+main{flex:1;overflow-y:auto;padding:16px 18px 70px}
+.wrap{max-width:1280px;margin:0 auto}
+.cols{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}
+h3{font-family:"Archivo",sans-serif;font-size:12px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--accent);margin:20px 0 8px}
+h4{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700;margin:0 0 8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:9px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.stat .v{font-family:"Archivo",sans-serif;font-size:21px;font-weight:700;line-height:1.15;margin-top:1px}
+.stat .v small{font-size:10.5px;font-weight:500;color:var(--ink-3)}
+.stat.flag{border-color:var(--warn);background:var(--warn-soft)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 15px;
+  box-shadow:var(--shadow);margin-bottom:12px}
+.note{border-radius:10px;padding:11px 14px;font-size:12.5px;border:1px solid var(--line);
+  background:var(--surface);margin-bottom:13px}
+.note.warn{background:var(--warn-soft);border-color:transparent}
+.note.crit{background:var(--crit-soft);border-color:transparent}
+.muted{color:var(--ink-3)}
+.chip{display:inline-block;padding:1px 6px;border-radius:5px;font-size:10px;font-weight:600;white-space:nowrap}
+.chip.ok{background:var(--accent-soft);color:var(--accent)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.crit{background:var(--crit-soft);color:var(--crit)}
+.chip.dim{background:var(--sunken);color:var(--ink-3)}
+.empty{text-align:center;padding:40px 20px;color:var(--ink-3)}
+.empty .big{font-family:"Archivo",sans-serif;font-size:15px;font-weight:600;color:var(--ink-2);margin-bottom:4px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th{text-align:left;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;padding:7px 9px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:5px 9px;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* rack list */
+.racktab{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;
+  border:1px solid transparent;border-radius:8px;padding:7px 9px;cursor:pointer;color:var(--ink-2);font-size:13px}
+.racktab:hover{background:var(--surface-2);color:var(--ink)}
+.racktab.on{background:var(--sel);color:var(--ink);font-weight:600;border-color:var(--line)}
+.racktab .sq{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+.racktab .n{margin-left:auto;font-size:10.5px;color:var(--ink-3);font-weight:500}
+
+/* the elevation */
+.elev{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px 16px;
+  box-shadow:var(--shadow)}
+.elevhead{display:flex;align-items:baseline;gap:11px;margin-bottom:10px;flex-wrap:wrap}
+.elevhead b{font-family:"Archivo",sans-serif;font-size:15px}
+.elevhead .m{font-size:11.5px;color:var(--ink-3)}
+svg{display:block;width:100%;height:auto}
+
+/* port editor */
+.ports{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px;margin-top:9px}
+.port{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.port .pn{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.pdot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+.pdot.output{background:var(--s3)} .pdot.input{background:var(--s2)}
+.pdot.network{background:var(--s1)} .pdot.power{background:var(--s7)}
+.port input{width:100%;font-size:11.5px;padding:3px 6px;background:var(--surface);margin-bottom:3px}
+.port input:last-child{margin-bottom:0}
+.port.used{border-color:var(--accent)}
+
+@media print{
+  .bar,.side{display:none} main{overflow:visible;padding:0}
+  body{overflow:visible;background:#fff}
+  .cols{grid-template-columns:1fr}
+  .elev{box-shadow:none;border:0;padding:0;break-inside:avoid}
+  .ports{display:none}
+}
+@media(max-width:960px){ .cols{grid-template-columns:1fr} }
+
+/* ── net-specific ──────────────────────────────────────────────────────── */
+.devtab{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;
+  border:1px solid transparent;border-radius:8px;padding:7px 9px;cursor:pointer;color:var(--ink-2);font-size:13px}
+.devtab:hover{background:var(--surface-2);color:var(--ink)}
+.devtab.on{background:var(--sel);color:var(--ink);font-weight:600;border-color:var(--line)}
+.devtab .n{margin-left:auto;font-size:10.5px;color:var(--ink-3);font-weight:500}
+.devtab .sq{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+
+td.tight{padding:3px 5px}
+td.tight input,td.tight select{width:100%;min-width:0;background:transparent;border:1px solid transparent;
+  border-radius:5px;padding:3px 5px;font-size:12px}
+td.tight input:hover,td.tight select:hover{border-color:var(--line)}
+td.tight input:focus,td.tight select:focus{background:var(--surface-2);outline:2px solid var(--accent);outline-offset:-1px}
+td.tight input.dirty{background:var(--accent-soft)}
+td.tight input.bad{background:var(--crit-soft);border-color:var(--crit)}
+
+.rowbtns{display:flex;gap:3px;justify-content:flex-end}
+.iconbtn{background:none;border:1px solid transparent;border-radius:5px;color:var(--ink-3);
+  font-size:11px;padding:2px 6px;cursor:pointer;font-weight:600}
+.iconbtn:hover{border-color:var(--line);color:var(--ink);background:var(--surface-2)}
+.iconbtn.danger:hover{color:var(--crit);background:var(--crit-soft)}
+
+.findings{display:grid;gap:8px;margin-bottom:14px}
+.finding{border-radius:10px;padding:10px 13px;font-size:12.5px;border:1px solid var(--line);background:var(--surface)}
+.finding.crit{background:var(--crit-soft);border-color:transparent}
+.finding.warn{background:var(--warn-soft);border-color:transparent}
+.finding b{font-family:"Archivo",sans-serif}
+.finding ul{margin:5px 0 0;padding-left:17px}
+.finding li{margin:2px 0}
+
+.plan{display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end}
+.plan label{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:700;margin-bottom:3px}
+.plan input{width:150px}
+.plan input.short{width:96px}
+
+.pill{display:inline-block;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:700;
+  border:1px solid var(--line);color:var(--ink-2);background:var(--surface-2)}
+.pill.copper{border-color:var(--s1);color:var(--s1)}
+.pill.fiber{border-color:var(--s5);color:var(--s5)}
+
+.portgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:5px;margin-top:8px}
+.pbox{background:var(--surface-2);border:1px solid var(--line);border-radius:7px;padding:5px 7px;font-size:11px}
+.pbox .pl{font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.pbox .pv{font-size:11.5px;margin-top:1px}
+.pbox.used{border-color:var(--accent);background:var(--accent-soft)}
+.pbox.dupe{border-color:var(--crit);background:var(--crit-soft)}
+.pbox .free{color:var(--ink-3)}
+.legend{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.legend b{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-right:2px}
+</style></head><body>
+
+<div class="bar">
+  <h1>Net&nbsp;Plot</h1>
+  <div class="seg" id="tabs"></div>
+  <div class="grow"></div>
+  <button class="btn ghost sm" id="csvbtn">CSV</button>
+  <button class="btn ghost sm" id="printbtn">Print</button>
+  <button class="btn sm" id="savebtn">Save plan</button>
+</div>
+<main><div class="wrap" id="root"></div></main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   Net Plot — the switch fabric, the IP plan, and the links between them.
+
+   Patch Plot decides which universes exist. Rack Plot decides which
+   physical port each one leaves from. Nothing until now planned the
+   network those ports actually talk over — which is the layer that, when
+   it is wrong, takes the whole rig dark rather than one fixture.
+
+   It was on the legacy suite's roadmap and never built. Zero matches for
+   it anywhere in that codebase.
+
+   The design principle carried from Rack Plot: THE TOOL'S JOB IS TO FIND
+   THINGS, not to refuse them. Every check below reports and names; none
+   of them block an entry. Four checks, each one a real load-in failure:
+
+     1. Duplicate IP        two devices, one address — the classic
+     2. Outside the subnet  an address that cannot route to anything
+     3. Double-patched port one port claimed by two links
+     4. Unreachable device  no path back to the root; a dark node
+
+   Check 4 is why links are stored as a graph rather than a list. An
+   isolated switch looks perfectly fine on a spreadsheet — every field
+   filled, every IP valid — and is still dark. Only walking the graph
+   from the root finds it.
+
+   Port counts come from gear/network, which stores them as counts by
+   kind ({etherconFront:4, fiberSfp:2}) rather than named lists. They
+   expand to named ports here, because a link has to land somewhere
+   specific and "one of the four front ports" is not a plan.
+
+   Universe capacity is deliberately NOT asserted anywhere. A node's
+   universe count is a property of its licence and firmware, not its
+   connector count, and the catalogue says so.
+   ═══════════════════════════════════════════════════════════════════════ */
+const $  = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+/* Only these port kinds carry network. dmxOut and dmxBidirectional are
+   Rack Plot's business — they are shown as context on a device and never
+   offered as a link endpoint. */
+const NET_PORTS = {
+  ethercon:'etherCON', etherconFront:'etherCON front', etherconRear:'etherCON rear',
+  fiberSfp:'Fiber SFP', rj45:'RJ45',
+};
+const isFiber = kind => /fiber/i.test(kind);
+const prettyKind = k => NET_PORTS[k] || k.replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase());
+
+const S = { tab:'devices', loaded:false, show:null, showName:'',
+            catalog:[], positions:[], plans:[], cur:null, dirty:false };
+
+const plan   = () => S.plans.find(p=>p.id===S.cur);
+const cat    = id => S.catalog.find(c=>c.id===id);
+const devOf  = (p,key) => (p.devices||[]).find(d=>d.key===key);
+
+/* Expand a catalogue device's port COUNTS into named ports a link can
+   actually land on. {etherconFront:4} becomes four addressable ports. */
+function netPorts(gearId){
+  const c = cat(gearId); if(!c) return [];
+  const out = [];
+  Object.entries(c.ports||{}).forEach(([kind,n])=>{
+    if(!NET_PORTS[kind]) return;
+    for(let i=1;i<=n;i++) out.push({id:kind+'-'+i, kind, n:i,
+                                    name:prettyKind(kind)+' '+i, fiber:isFiber(kind)});
+  });
+  return out;
+}
+/* The DMX side, shown as context so a device reads completely, but never
+   linkable here. */
+function dmxSummary(gearId){
+  const c = cat(gearId); if(!c) return '';
+  return Object.entries(c.ports||{}).filter(([k])=>!NET_PORTS[k])
+    .map(([k,n])=>`${n}× ${prettyKind(k)}`).join(' · ');
+}
+
+async function load(){
+  const K = window.KTM;
+  if(!K){ S.loaded=true; return; }
+  const gear = await K.list('gear');
+  const net = gear.find(g=>g.kind==='network');
+  S.catalog = (net && net.items) || [];
+
+  S.show = K.activeShow ? K.activeShow() : null;
+  if(S.show){
+    const sh = await K.get(K.P.show(S.show));
+    S.showName = (sh && sh.name) || S.show;
+    S.positions = await K.list(K.P.sub(S.show,'positions'));
+    S.plans = await K.list(K.P.sub(S.show,'network'));
+  }
+  S.plans.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
+  S.cur = S.plans[0] ? S.plans[0].id : null;
+  S.loaded = true;
+}
+
+async function save(){
+  const K=window.KTM;
+  if(!K) return alert('No store available.');
+  if(!S.show) return alert('Pick a show in the Hub first — a network plan belongs to a show.');
+  const b=$('savebtn'); b.disabled=true; b.textContent='Saving…';
+  try{
+    for(const p of S.plans){
+      const {id, ...body} = p;
+      body.kind = 'networkPlan';
+      await K.set(K.P.subDoc(S.show,'network',id), body);
+    }
+    S.dirty=false; b.textContent='Saved';
+    document.querySelectorAll('input.dirty').forEach(i=>i.classList.remove('dirty'));
+    setTimeout(()=>{b.textContent='Save plan';b.disabled=false;},1400);
+  }catch(e){ b.textContent='Save plan'; b.disabled=false; alert('Could not save: '+e.message); }
+}
+
+function newPlan(name){
+  /* 2.x.x.x/8 is the Art-Net legacy default and still the most common
+     lighting plane in the field. It is a starting point, not an
+     assertion — every field here is editable. */
+  return {id:uid(), name:name||'Lighting network', kind:'networkPlan',
+          subnet:'2.0.0.0', mask:8, gateway:'', vlan:'', notes:'',
+          devices:[], links:[]};
+}
+
+/* ── addressing ───────────────────────────────────────────────────────── */
+function ipInt(ip){
+  const m = String(ip||'').trim().match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if(!m) return null;
+  const o = m.slice(1).map(Number);
+  if(o.some(x=>x>255)) return null;
+  return ((o[0]<<24)>>>0) + (o[1]<<16) + (o[2]<<8) + o[3];
+}
+const intIp = n => [n>>>24, (n>>>16)&255, (n>>>8)&255, n&255].join('.');
+
+function subnetInfo(p){
+  const base = ipInt(p.subnet), bits = Math.max(0, Math.min(32, +p.mask||0));
+  if(base===null) return null;
+  const size = bits===0 ? 4294967296 : Math.pow(2, 32-bits);
+  const maskInt = bits===0 ? 0 : (0xFFFFFFFF << (32-bits)) >>> 0;
+  const net = (base & maskInt) >>> 0;
+  return {net, bits, size, maskInt,
+          first: net + 1, last: net + size - 2,
+          maskDotted: intIp(maskInt),
+          label: intIp(net) + '/' + bits};
+}
+function inSubnet(ip, si){
+  const n = ipInt(ip); if(n===null || !si) return false;
+  return ((n & si.maskInt) >>> 0) === si.net;
+}
+
+/* ── the four checks ──────────────────────────────────────────────────── */
+
+/* 1 + 2. Addresses. A duplicate IP is the classic show-killer: both
+   devices answer, neither works, and the symptom looks like a bad cable. */
+function addressFindings(p){
+  const si = subnetInfo(p);
+  const byIp = {}, bad = [], outside = [];
+  (p.devices||[]).forEach(d=>{
+    const ip = (d.ip||'').trim(); if(!ip) return;
+    if(ipInt(ip)===null){ bad.push(d); return; }
+    (byIp[ip] = byIp[ip]||[]).push(d);
+    if(si && !inSubnet(ip, si)) outside.push(d);
+  });
+  const dupes = Object.entries(byIp).filter(([,ds])=>ds.length>1);
+  return {dupes, bad, outside, si};
+}
+
+/* 3. Ports. One port, one link. A port claimed twice is a plan that
+   cannot be built, and it is invisible on any per-device view — it only
+   shows when every link is indexed together. */
+function portIndex(p){
+  const idx = {};
+  (p.links||[]).forEach(l=>{
+    [['a',l.aKey,l.aPort],['b',l.bKey,l.bPort]].forEach(([end,key,port])=>{
+      if(!key || !port) return;
+      const k = key+'::'+port;
+      (idx[k] = idx[k]||[]).push({link:l, end});
+    });
+  });
+  return idx;
+}
+const portDupes = p => Object.entries(portIndex(p)).filter(([,u])=>u.length>1);
+
+/* 4. Reachability. Walk the graph from the root. A device with every
+   field filled and no path home is still dark, and nothing else in the
+   suite would catch it. */
+function reachable(p){
+  const root = (p.devices||[]).find(d=>d.root) || (p.devices||[])[0];
+  if(!root) return {root:null, seen:new Set(), orphans:[]};
+  const adj = {};
+  (p.links||[]).forEach(l=>{
+    if(!l.aKey || !l.bKey) return;
+    (adj[l.aKey]=adj[l.aKey]||[]).push(l.bKey);
+    (adj[l.bKey]=adj[l.bKey]||[]).push(l.aKey);
+  });
+  const seen = new Set([root.key]);
+  const q = [root.key];
+  const depth = {[root.key]:0};
+  while(q.length){
+    const k = q.shift();
+    (adj[k]||[]).forEach(n=>{
+      if(seen.has(n)) return;
+      seen.add(n); depth[n] = depth[k]+1; q.push(n);
+    });
+  }
+  return {root, seen, depth,
+          orphans:(p.devices||[]).filter(d=>!seen.has(d.key))};
+}
+
+function findings(p){
+  const out = [];
+  const {dupes, bad, outside, si} = addressFindings(p);
+  const pd = portDupes(p);
+  const {root, orphans, seen} = reachable(p);
+
+  if(dupes.length) out.push({tone:'crit', title:'Duplicate IP addresses',
+    body:'Two devices answering on one address. Both appear online and neither works reliably; '
+      + 'the symptom on a show floor looks like a bad cable.',
+    items: dupes.map(([ip,ds])=>`<span class="mono">${esc(ip)}</span> — `
+      + ds.map(d=>esc(d.name||d.key)).join(', '))});
+
+  if(bad.length) out.push({tone:'crit', title:'Not a valid address',
+    items: bad.map(d=>`${esc(d.name||d.key)} — <span class="mono">${esc(d.ip)}</span>`)});
+
+  if(outside.length && si) out.push({tone:'warn',
+    title:'Outside the subnet', body:`These sit outside <span class="mono">${esc(si.label)}</span> `
+      + 'and cannot route to the rest of the plane without help.',
+    items: outside.map(d=>`${esc(d.name||d.key)} — <span class="mono">${esc(d.ip)}</span>`)});
+
+  if(pd.length) out.push({tone:'crit', title:'Port claimed twice',
+    body:'One port cannot carry two links. This never shows on a per-device view — only '
+      + 'indexing every link together finds it.',
+    items: pd.map(([k,uses])=>{
+      const [key,port] = k.split('::');
+      const d = devOf(p,key);
+      return `${esc((d&&d.name)||key)} · ${esc(port)} — ${uses.length} links`;
+    })});
+
+  if(orphans.length) out.push({tone:'crit', title:'No path to the root',
+    body: root ? `Nothing links these back to <b>${esc(root.name||root.key)}</b>. Every field can `
+      + 'be filled and the device is still dark.' : 'No root device set.',
+    items: orphans.map(d=>esc(d.name||d.key))});
+
+  if(!out.length && (p.devices||[]).length)
+    out.push({tone:'ok', title:'No findings',
+      body:`${seen.size} of ${(p.devices||[]).length} devices reachable from the root, no duplicate `
+        + 'addresses, no port claimed twice.'});
+  return out;
+}
+
+function counts(){
+  const p = plan();
+  if(!p) return {devices:0, links:0, fiber:0, ft:0, findings:0};
+  const fiber = (p.links||[]).filter(l=>l.media==='fiber').length;
+  const ft = (p.links||[]).reduce((a,l)=>a+(parseFloat(l.ft)||0),0);
+  const f = findings(p).filter(x=>x.tone!=='ok').length;
+  return {devices:(p.devices||[]).length, links:(p.links||[]).length, fiber, ft, findings:f};
+}
+
+/* ── render ───────────────────────────────────────────────────────────── */
+const TABS = [['devices','Devices'],['links','Links'],['topo','Topology'],['ip','IP plan']];
+
+function render(){
+  $('tabs').innerHTML = TABS.map(([k,l])=>
+    `<button data-tab="${k}"${S.tab===k?' class="on"':''}>${l}</button>`).join('');
+  $('tabs').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();});
+
+  const r=$('root');
+  if(!S.loaded){ r.innerHTML='<div class="empty"><div class="big">Loading…</div></div>'; return; }
+  if(!window.KTM){
+    r.innerHTML='<div class="note crit"><b>No shared data layer.</b> Net Plot reads the network '
+      +'device catalogue from the Hub. Open it from inside the KTM Hub rather than on its own.</div>'; return;
+  }
+  if(!S.show){
+    r.innerHTML='<div class="empty"><div class="big">No active show</div>'
+      +'<div>A network plan belongs to a show. Pick one in the Hub, then come back.</div></div>'; return;
+  }
+  if(!S.catalog.length){
+    r.innerHTML='<div class="empty"><div class="big">Network catalogue is empty</div>'
+      +'<div>Seed <span class="mono">gear/network</span> in the Hub first.</div></div>'; return;
+  }
+  if(!S.plans.length){
+    r.innerHTML='<div class="empty"><div class="big">No network plan yet</div>'
+      +'<div style="margin-bottom:12px">A plan is one network plane — lighting, media, or comms.</div>'
+      +'<button class="btn" id="firstplan">+ New plan</button></div>';
+    $('firstplan').onclick=()=>{ S.plans.push(newPlan()); S.cur=S.plans[0].id; S.dirty=true; render(); };
+    return;
+  }
+  r.innerHTML = S.tab==='devices' ? viewDevices()
+              : S.tab==='links'   ? viewLinks()
+              : S.tab==='topo'    ? viewTopo()
+              :                     viewIP();
+  wireCommon();
+  if(S.tab==='devices') wireDevices();
+  if(S.tab==='links')   wireLinks();
+  if(S.tab==='ip')      wireIP();
+}
+
+function statbar(){
+  const c = counts();
+  const cell=(k,v,sub,flag)=>`<div class="stat${flag?' flag':''}"><div class="k">${k}</div>`
+    +`<div class="v">${v}${sub?` <small>${sub}</small>`:''}</div></div>`;
+  return '<div class="stats">'
+    + cell('Devices', c.devices) + cell('Links', c.links)
+    + cell('Fiber runs', c.fiber) + cell('Cable', c.ft.toLocaleString(), 'ft')
+    + cell('Findings', c.findings, '', c.findings>0) + '</div>';
+}
+
+function planRail(){
+  const rows = S.plans.map(p=>{
+    const bad = findings(p).filter(f=>f.tone!=='ok').length;
+    return `<button class="devtab${p.id===S.cur?' on':''}" data-plan="${p.id}">`
+      + `<span class="sq" style="background:${bad?'var(--crit)':'var(--accent)'}"></span>`
+      + `<span>${esc(p.name||p.id)}</span>`
+      + `<span class="n">${(p.devices||[]).length}</span></button>`;
+  }).join('');
+  return `<div class="card"><h4>Network planes</h4>${rows}
+    <div style="margin-top:12px;display:flex;gap:6px">
+      <button class="btn ghost sm" id="newplan">+ Plane</button>
+      ${S.cur?'<button class="btn danger sm" id="delplan">Delete</button>':''}
+    </div></div>`;
+}
+
+function findingsBlock(){
+  const p = plan(); if(!p) return '';
+  return '<div class="findings">' + findings(p).map(f=>
+    `<div class="finding ${f.tone==='ok'?'':f.tone}"><b>${esc(f.title)}</b>`
+    + (f.body?`<div style="margin-top:2px">${f.body}</div>`:'')
+    + (f.items&&f.items.length?`<ul>${f.items.map(i=>`<li>${i}</li>`).join('')}</ul>`:'')
+    + '</div>').join('') + '</div>';
+}
+
+/* ── devices ──────────────────────────────────────────────────────────── */
+function viewDevices(){
+  const p = plan();
+  const si = subnetInfo(p);
+  const rows = (p.devices||[]).map(d=>{
+    const c = cat(d.gearId)||{};
+    const ipOK = !d.ip || (ipInt(d.ip)!==null && (!si || inSubnet(d.ip,si)));
+    const dmx = dmxSummary(d.gearId);
+    const free = netPorts(d.gearId).length - (p.links||[]).filter(l=>l.aKey===d.key||l.bKey===d.key).length;
+    return `<tr data-row="${d.key}">
+      <td class="tight" style="min-width:120px"><input data-d="${d.key}" data-f="name" value="${esc(d.name||'')}" placeholder="Name"></td>
+      <td class="tight" style="min-width:150px"><select data-d="${d.key}" data-f="gearId">`
+        + S.catalog.map(x=>`<option value="${x.id}"${x.id===d.gearId?' selected':''}>${esc(x.name)}</option>`).join('')
+        + `</select></td>
+      <td class="tight" style="min-width:120px"><input class="mono${ipOK?'':' bad'}" data-d="${d.key}" data-f="ip" value="${esc(d.ip||'')}" placeholder="—"></td>
+      <td class="tight" style="min-width:88px"><input data-d="${d.key}" data-f="vlan" value="${esc(d.vlan||'')}" placeholder="—"></td>
+      <td class="tight" style="min-width:120px"><select data-d="${d.key}" data-f="positionId">`
+        + '<option value="">—</option>'
+        + S.positions.map(x=>`<option value="${x.id}"${x.id===d.positionId?' selected':''}>${esc(x.name||x.id)}</option>`).join('')
+        + `</select></td>
+      <td style="text-align:center"><input type="radio" name="rootpick" data-root="${d.key}"${d.root?' checked':''}></td>
+      <td class="num mono" style="color:var(--ink-3)">${free}</td>
+      <td class="muted" style="font-size:11px;white-space:nowrap">${esc(dmx)}</td>
+      <td><div class="rowbtns">
+        <button class="iconbtn" data-dup="${d.key}" title="Duplicate">⧉</button>
+        <button class="iconbtn danger" data-del="${d.key}" title="Delete">✕</button>
+      </div></td></tr>`;
+  }).join('');
+
+  return `<div class="cols"><div class="side">${planRail()}</div><div>
+    ${statbar()}${findingsBlock()}
+    <div class="card"><div class="plan">
+      <div><label>Plane</label><input id="pname" value="${esc(p.name||'')}"></div>
+      <div><label>Subnet</label><input id="psub" class="mono" value="${esc(p.subnet||'')}"></div>
+      <div><label>Mask bits</label><input id="pmask" class="short mono" value="${esc(p.mask??'')}"></div>
+      <div><label>Gateway</label><input id="pgw" class="mono" value="${esc(p.gateway||'')}" placeholder="—"></div>
+      <div><label>VLAN</label><input id="pvlan" class="short" value="${esc(p.vlan||'')}" placeholder="—"></div>
+      <div class="grow"></div>
+      <button class="btn sm" id="adddev">+ Device</button>
+    </div>
+    ${si?`<div class="muted" style="font-size:11.5px;margin-top:8px">
+      <span class="mono">${esc(si.label)}</span> · mask <span class="mono">${esc(si.maskDotted)}</span>
+      · usable <span class="mono">${esc(intIp(si.first))}–${esc(intIp(si.last))}</span></div>`:''}
+    </div>
+    <div class="tablewrap"><table><thead><tr>
+      <th>Name</th><th>Device</th><th>IP</th><th>VLAN</th><th>Position</th>
+      <th style="text-align:center">Root</th><th class="num">Free</th><th>DMX side</th><th></th>
+      </tr></thead><tbody>${rows||'<tr><td colspan="9" class="muted" style="padding:16px">No devices yet.</td></tr>'}</tbody></table></div>
+    <div class="muted" style="font-size:11.5px;margin-top:7px">
+      The <b>root</b> is where the console or core switch lives — reachability is measured from it.
+      The DMX side is shown for context and is Rack Plot's business, not a link endpoint here.</div>
+    </div></div>`;
+}
+
+/* ── links ────────────────────────────────────────────────────────────── */
+function viewLinks(){
+  const p = plan();
+  const pidx = portIndex(p);
+  const devOpts = sel => '<option value="">—</option>'
+    + (p.devices||[]).map(d=>`<option value="${d.key}"${d.key===sel?' selected':''}>${esc(d.name||d.key)}</option>`).join('');
+  const portOpts = (key, sel) => {
+    const d = devOf(p,key); if(!d) return '<option value="">—</option>';
+    return '<option value="">—</option>' + netPorts(d.gearId).map(pt=>{
+      const dupe = (pidx[key+'::'+pt.id]||[]).length>1;
+      return `<option value="${pt.id}"${pt.id===sel?' selected':''}>${esc(pt.name)}${dupe?' ⚠':''}</option>`;
+    }).join('');
+  };
+  const rows = (p.links||[]).map(l=>{
+    const dupeA = (pidx[l.aKey+'::'+l.aPort]||[]).length>1;
+    const dupeB = (pidx[l.bKey+'::'+l.bPort]||[]).length>1;
+    return `<tr data-lrow="${l.id}">
+      <td class="tight" style="min-width:130px"><select data-l="${l.id}" data-f="aKey">${devOpts(l.aKey)}</select></td>
+      <td class="tight" style="min-width:130px"><select data-l="${l.id}" data-f="aPort"${dupeA?' style="background:var(--crit-soft)"':''}>${portOpts(l.aKey,l.aPort)}</select></td>
+      <td class="tight" style="min-width:130px"><select data-l="${l.id}" data-f="bKey">${devOpts(l.bKey)}</select></td>
+      <td class="tight" style="min-width:130px"><select data-l="${l.id}" data-f="bPort"${dupeB?' style="background:var(--crit-soft)"':''}>${portOpts(l.bKey,l.bPort)}</select></td>
+      <td class="tight" style="min-width:96px"><select data-l="${l.id}" data-f="media">`
+        + ['copper','fiber'].map(m=>`<option value="${m}"${m===l.media?' selected':''}>${m}</option>`).join('')
+        + `</select></td>
+      <td class="tight" style="min-width:70px"><input data-l="${l.id}" data-f="ft" value="${esc(l.ft||'')}" placeholder="—" inputmode="decimal" style="text-align:right"></td>
+      <td class="tight" style="min-width:110px"><input data-l="${l.id}" data-f="notes" value="${esc(l.notes||'')}" placeholder="—"></td>
+      <td><div class="rowbtns"><button class="iconbtn danger" data-ldel="${l.id}" title="Delete">✕</button></div></td></tr>`;
+  }).join('');
+
+  return `<div class="cols"><div class="side">${planRail()}</div><div>
+    ${statbar()}${findingsBlock()}
+    <div class="card" style="display:flex;align-items:center;gap:9px">
+      <b>Links</b><span class="muted" style="font-size:12px">port to port, both ends named</span>
+      <div class="grow"></div><button class="btn sm" id="addlink">+ Link</button></div>
+    <div class="tablewrap"><table><thead><tr>
+      <th>From</th><th>Port</th><th>To</th><th>Port</th><th>Media</th>
+      <th class="num">Feet</th><th>Notes</th><th></th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="8" class="muted" style="padding:16px">No links yet.</td></tr>'}</tbody></table></div>
+    <div class="muted" style="font-size:11.5px;margin-top:7px">
+      Fiber runs feed the loom list as a type, and the footage here is real cut length, not a guess.</div>
+    </div></div>`;
+}
+
+/* ── topology ─────────────────────────────────────────────────────────────
+   Tiered by hop count from the root, which is the only layout that makes
+   a fabric readable without asking anyone to drag boxes around: tier 0 is
+   the core, tier 1 is what plugs into it, and an orphan has no tier at all
+   so it lands in its own row and cannot be missed. */
+function viewTopo(){
+  const p = plan();
+  const {root, depth, orphans, seen} = reachable(p);
+  if(!root) return statbar() + '<div class="empty"><div class="big">No devices yet</div></div>';
+
+  const tiers = {};
+  (p.devices||[]).forEach(d=>{
+    if(!seen.has(d.key)) return;
+    const t = depth[d.key] || 0;
+    (tiers[t] = tiers[t]||[]).push(d);
+  });
+  const maxT = Math.max(...Object.keys(tiers).map(Number));
+  const W = 1000, BW = 148, BH = 46, VGAP = 92, PAD = 22;
+  const H = PAD*2 + (maxT+1)*BH + maxT*(VGAP-BH) + (orphans.length?VGAP:0);
+
+  const pos = {};
+  Object.entries(tiers).forEach(([t,ds])=>{
+    const n = ds.length, span = W - PAD*2;
+    ds.forEach((d,i)=>{
+      pos[d.key] = { x: PAD + span*((i+0.5)/n) - BW/2, y: PAD + (+t)*VGAP };
+    });
+  });
+  orphans.forEach((d,i)=>{
+    const n = orphans.length, span = W - PAD*2;
+    pos[d.key] = { x: PAD + span*((i+0.5)/n) - BW/2, y: PAD + (maxT+1)*VGAP, orphan:true };
+  });
+
+  const lines = (p.links||[]).map(l=>{
+    const a = pos[l.aKey], b = pos[l.bKey];
+    if(!a || !b) return '';
+    const fiber = l.media==='fiber';
+    const x1=a.x+BW/2, y1=a.y+BH, x2=b.x+BW/2, y2=b.y;
+    const my=(y1+y2)/2;
+    return `<path d="M${x1} ${y1} C${x1} ${my} ${x2} ${my} ${x2} ${y2}" fill="none" `
+      + `stroke="${fiber?'var(--s5)':'var(--s1)'}" stroke-width="${fiber?2.2:1.6}"`
+      + `${fiber?'':' stroke-dasharray="0"'} opacity=".8"/>`;
+  }).join('');
+
+  const boxes = (p.devices||[]).map(d=>{
+    const q = pos[d.key]; if(!q) return '';
+    const c = cat(d.gearId)||{};
+    const isRoot = d.key===root.key;
+    const stroke = q.orphan ? 'var(--crit)' : isRoot ? 'var(--accent)' : 'var(--line-strong)';
+    const fill = q.orphan ? 'var(--crit-soft)' : isRoot ? 'var(--accent-soft)' : 'var(--surface)';
+    return `<g><rect x="${q.x}" y="${q.y}" width="${BW}" height="${BH}" rx="8"
+        fill="${fill}" stroke="${stroke}" stroke-width="${isRoot||q.orphan?2:1}"/>
+      <text x="${q.x+BW/2}" y="${q.y+19}" text-anchor="middle" font-size="12.5" font-weight="600"
+        fill="var(--ink)" font-family="Archivo,sans-serif">${esc((d.name||d.key).slice(0,20))}</text>
+      <text x="${q.x+BW/2}" y="${q.y+33}" text-anchor="middle" font-size="10"
+        fill="var(--ink-3)">${esc((d.ip||c.name||'').slice(0,24))}</text></g>`;
+  }).join('');
+
+  const tierLabels = Object.keys(tiers).map(t=>
+    `<text x="4" y="${PAD + (+t)*VGAP + 14}" font-size="9" fill="var(--ink-3)"
+      font-weight="700" letter-spacing="1">${t==='0'?'CORE':'HOP '+t}</text>`).join('')
+    + (orphans.length?`<text x="4" y="${PAD+(maxT+1)*VGAP+14}" font-size="9" fill="var(--crit)"
+      font-weight="700" letter-spacing="1">DARK</text>`:'');
+
+  return statbar() + findingsBlock()
+    + `<div class="elev"><div class="elevhead"><b>${esc(p.name||'')}</b>
+        <span class="m">${seen.size} of ${(p.devices||[]).length} reachable · root ${esc(root.name||root.key)}</span></div>
+      <svg viewBox="0 0 ${W} ${H}" role="img">${lines}${boxes}${tierLabels}</svg>
+      <div class="legend" style="margin-top:10px">
+        <b>Media</b><span class="pill copper">copper</span><span class="pill fiber">fiber</span>
+      </div></div>`;
+}
+
+/* ── IP plan ──────────────────────────────────────────────────────────── */
+function viewIP(){
+  const p = plan();
+  const si = subnetInfo(p);
+  const {dupes} = addressFindings(p);
+  const dupeSet = new Set(dupes.flatMap(([,ds])=>ds.map(d=>d.key)));
+
+  const rows = (p.devices||[]).slice().sort((a,b)=>{
+    const x=ipInt(a.ip), y=ipInt(b.ip);
+    if(x===null&&y===null) return String(a.name||'').localeCompare(String(b.name||''));
+    if(x===null) return 1; if(y===null) return -1; return x-y;
+  }).map(d=>{
+    const c = cat(d.gearId)||{};
+    const n = ipInt(d.ip);
+    const state = !d.ip ? '<span class="chip dim">unassigned</span>'
+      : n===null ? '<span class="chip crit">invalid</span>'
+      : dupeSet.has(d.key) ? '<span class="chip crit">duplicate</span>'
+      : si && !inSubnet(d.ip,si) ? '<span class="chip warn">outside subnet</span>'
+      : '<span class="chip ok">ok</span>';
+    const pos = S.positions.find(x=>x.id===d.positionId);
+    return `<tr><td class="mono">${esc(d.ip||'—')}</td><td>${esc(d.name||d.key)}</td>
+      <td class="muted">${esc(c.name||'')}</td><td>${esc(d.vlan||'—')}</td>
+      <td class="muted">${esc(pos?(pos.name||pos.id):'—')}</td><td>${state}</td></tr>`;
+  }).join('');
+
+  /* Next free address, offered rather than assigned. Scanning a table by
+     eye for the next gap is exactly the kind of thing that produces a
+     duplicate at 2am. */
+  let next = '—';
+  if(si){
+    const used = new Set((p.devices||[]).map(d=>ipInt(d.ip)).filter(n=>n!==null));
+    const gw = ipInt(p.gateway); if(gw!==null) used.add(gw);
+    for(let n=si.first; n<=si.last && n<si.first+65536; n++)
+      if(!used.has(n)){ next = intIp(n); break; }
+  }
+
+  return `<div class="cols"><div class="side">${planRail()}
+    <div class="card"><h4>Next free</h4>
+      <div class="mono" style="font-size:17px;font-weight:600">${esc(next)}</div>
+      <div class="muted" style="font-size:11px;margin-top:4px">First unused address in the subnet,
+        gateway excluded. Offered, not assigned.</div></div></div><div>
+    ${statbar()}${findingsBlock()}
+    <div class="tablewrap"><table><thead><tr>
+      <th>Address</th><th>Name</th><th>Device</th><th>VLAN</th><th>Position</th><th>State</th>
+      </tr></thead><tbody>${rows||'<tr><td colspan="6" class="muted" style="padding:16px">No devices yet.</td></tr>'}</tbody></table></div>
+    </div></div>`;
+}
+
+/* ── wiring ───────────────────────────────────────────────────────────────
+   Same rule as Rack Plot and Loom Plot: text inputs write the model and
+   repaint nothing. Selects that change the shape of another control
+   (a device choice changes which ports exist) DO re-render, because there
+   the DOM genuinely has to change. Everything else stays put. */
+function wireCommon(){
+  $('root').querySelectorAll('[data-plan]').forEach(b=>b.onclick=()=>{S.cur=b.dataset.plan;render();});
+  const np=$('newplan'); if(np) np.onclick=()=>{
+    S.plans.push(newPlan('Plane '+(S.plans.length+1)));
+    S.cur=S.plans[S.plans.length-1].id; S.dirty=true; render();
+  };
+  const dp=$('delplan'); if(dp) dp.onclick=()=>{
+    if(!confirm('Delete this network plane, its devices and its links?')) return;
+    S.plans=S.plans.filter(x=>x.id!==S.cur);
+    S.cur=S.plans[0]?S.plans[0].id:null; S.dirty=true; render();
+  };
+}
+
+function wireDevices(){
+  const p = plan();
+  const bind = (id, field, repaint) => {
+    const el=$(id); if(!el) return;
+    el.oninput = e => { p[field] = e.target.value; S.dirty=true; e.target.classList.add('dirty'); };
+    if(repaint) el.onchange = () => render();   // subnet edits re-run every address check
+  };
+  bind('pname','name'); bind('psub','subnet',true); bind('pmask','mask',true);
+  bind('pgw','gateway'); bind('pvlan','vlan');
+
+  $('adddev').onclick=()=>{
+    p.devices = p.devices||[];
+    p.devices.push({key:uid(), gearId:S.catalog[0].id, name:'', ip:'', vlan:'',
+                    positionId:'', root:!p.devices.length});
+    S.dirty=true; render();
+  };
+  $('root').querySelectorAll('[data-d][data-f]').forEach(el=>{
+    const d = devOf(p, el.dataset.d); if(!d) return;
+    const f = el.dataset.f;
+    if(el.tagName==='SELECT'){
+      /* Changing the device model changes which ports exist, so links
+         pointing at ports that no longer exist have to be caught. */
+      el.onchange = e => {
+        d[f] = e.target.value; S.dirty=true;
+        if(f==='gearId'){
+          const valid = new Set(netPorts(d.gearId).map(x=>x.id));
+          (p.links||[]).forEach(l=>{
+            if(l.aKey===d.key && !valid.has(l.aPort)) l.aPort='';
+            if(l.bKey===d.key && !valid.has(l.bPort)) l.bPort='';
+          });
+          render();
+        }
+      };
+    } else {
+      el.oninput = e => { d[f]=e.target.value; S.dirty=true; e.target.classList.add('dirty'); };
+      if(f==='ip') el.onchange = () => render();   // re-run the address checks
+    }
+  });
+  $('root').querySelectorAll('[data-root]').forEach(el=>el.onchange=()=>{
+    (p.devices||[]).forEach(d=>d.root = d.key===el.dataset.root);
+    S.dirty=true; render();
+  });
+  $('root').querySelectorAll('[data-dup]').forEach(b=>b.onclick=()=>{
+    const d=devOf(p,b.dataset.dup); if(!d) return;
+    const i=p.devices.indexOf(d);
+    p.devices.splice(i+1,0,{...d, key:uid(), name:(d.name||'')+' 2', ip:'', root:false});
+    S.dirty=true; render();
+  });
+  $('root').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    p.devices = (p.devices||[]).filter(d=>d.key!==b.dataset.del);
+    /* A deleted device takes its links with it — a link to nothing is a
+       silent orphan-maker. */
+    p.links = (p.links||[]).filter(l=>l.aKey!==b.dataset.del && l.bKey!==b.dataset.del);
+    if(p.devices.length && !p.devices.some(d=>d.root)) p.devices[0].root = true;
+    S.dirty=true; render();
+  });
+}
+
+function wireLinks(){
+  const p = plan();
+  $('addlink').onclick=()=>{
+    p.links = p.links||[];
+    p.links.push({id:uid(), aKey:'', aPort:'', bKey:'', bPort:'', media:'copper', ft:'', notes:''});
+    S.dirty=true; render();
+  };
+  $('root').querySelectorAll('[data-l][data-f]').forEach(el=>{
+    const l = (p.links||[]).find(x=>x.id===el.dataset.l); if(!l) return;
+    const f = el.dataset.f;
+    if(el.tagName==='SELECT'){
+      el.onchange = e => {
+        l[f]=e.target.value; S.dirty=true;
+        if(f==='aKey') l.aPort='';
+        if(f==='bKey') l.bPort='';
+        /* Picking a fiber port on either end sets the media, because a
+           fiber port cannot carry copper and typing it twice is a
+           chance to get it wrong. */
+        if(f==='aPort'||f==='bPort'){
+          const d = devOf(p, f==='aPort'?l.aKey:l.bKey);
+          const pt = d && netPorts(d.gearId).find(x=>x.id===e.target.value);
+          if(pt && pt.fiber) l.media='fiber';
+        }
+        render();
+      };
+    } else {
+      el.oninput = e => { l[f]=e.target.value; S.dirty=true; e.target.classList.add('dirty'); };
+    }
+  });
+  $('root').querySelectorAll('[data-ldel]').forEach(b=>b.onclick=()=>{
+    p.links = (p.links||[]).filter(l=>l.id!==b.dataset.ldel);
+    S.dirty=true; render();
+  });
+}
+function wireIP(){}
+
+/* ── exports ──────────────────────────────────────────────────────────── */
+const csvCell = v => { const s=String(v??''); return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; };
+function toCSV(){
+  const rows = [['Plane','Section','A','A port','B','B port','Media','Feet','IP','VLAN','Position','Notes']];
+  S.plans.forEach(p=>{
+    (p.devices||[]).forEach(d=>{
+      const pos = S.positions.find(x=>x.id===d.positionId);
+      rows.push([p.name,'device', d.name||d.key, (cat(d.gearId)||{}).name||'', '', '', '', '',
+                 d.ip||'', d.vlan||'', pos?(pos.name||pos.id):'', d.root?'root':'']);
+    });
+    (p.links||[]).forEach(l=>{
+      const a=devOf(p,l.aKey), b=devOf(p,l.bKey);
+      const pt=(d,id)=>{ const x=d&&netPorts(d.gearId).find(y=>y.id===id); return x?x.name:(id||''); };
+      rows.push([p.name,'link', (a&&a.name)||l.aKey||'', pt(a,l.aPort), (b&&b.name)||l.bKey||'',
+                 pt(b,l.bPort), l.media||'', l.ft||'', '', '', '', l.notes||'']);
+    });
+  });
+  return rows.map(r=>r.map(csvCell).join(',')).join('\n');
+}
+async function put(name, text){
+  try{ const dl=await claude.use('downloads'); if(dl){ await dl.save({filename:name,data:text}); return; } }catch(e){}
+  try{ await navigator.clipboard.writeText(text); alert(name+' copied to the clipboard.'); }
+  catch(e){ alert('Could not export: '+e.message); }
+}
+$('csvbtn').onclick  = () => put(String(S.showName||'network').replace(/[^\w.-]+/g,'-')+'-network.csv', toCSV());
+$('printbtn').onclick= () => { setTimeout(()=>window.print(),120); };
+$('savebtn').onclick = save;
+
+(async()=>{ render(); await load(); render(); })();
+</script>
+</body></html>

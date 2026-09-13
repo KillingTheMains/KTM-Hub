@@ -1,0 +1,1007 @@
+<title>KTM Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#5C636A;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF; --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#71787F;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13;
+  --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF; --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF; --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:14px;line-height:1.45;display:flex;flex-direction:column;overflow:hidden}
+button,input,select,textarea{font:inherit;color:var(--ink)}
+option{color:var(--ink);background:var(--surface)}
+table,.card,.modal,.note,.stat,.empty{color:var(--ink)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+/* ── top bar ───────────────────────────────────────────────────────── */
+.topbar{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:0 16px;height:52px;
+  background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{font-family:"Archivo",sans-serif;font-weight:800;font-stretch:112%;letter-spacing:.13em;
+  font-size:13px;text-transform:uppercase;white-space:nowrap}
+.brand span{color:var(--accent)}
+.showsel{display:flex;align-items:center;gap:8px;min-width:0}
+.showsel select{background:var(--surface-2);border:1px solid var(--line);border-radius:7px;
+  padding:5px 9px;max-width:280px;font-size:13px;font-weight:500}
+.grow{flex:1}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;
+  font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.pill.ok{background:var(--accent-soft);color:var(--accent)}
+.pill.bad{background:var(--crit-soft);color:var(--crit)}
+.pill.warnp{background:var(--warn-soft);color:var(--warn)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.iconbtn{background:none;border:1px solid var(--line);border-radius:7px;padding:5px 9px;
+  cursor:pointer;color:var(--ink-2);font-size:12px}
+.iconbtn:hover{background:var(--surface-2);color:var(--ink)}
+
+/* ── layout ────────────────────────────────────────────────────────── */
+.shell{flex:1;display:flex;min-height:0}
+.rail{flex:0 0 208px;background:var(--surface);border-right:1px solid var(--line);
+  overflow-y:auto;padding:14px 10px;display:flex;flex-direction:column;gap:18px}
+.railgrp>h4{margin:0 0 7px 8px;font-size:10px;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3)}
+.navitem{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:none;
+  border:0;border-radius:7px;padding:7px 9px;cursor:pointer;color:var(--ink-2);font-size:13px}
+.navitem:hover{background:var(--surface-2);color:var(--ink)}
+.navitem.on{background:var(--sel);color:var(--ink);font-weight:600}
+.navitem.soon{opacity:.42;cursor:default}
+.navitem.soon:hover{background:none;color:var(--ink-2)}
+.navitem .sq{width:9px;height:9px;border-radius:2.5px;flex:0 0 auto}
+.tag{margin-left:auto;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600}
+main{flex:1;overflow-y:auto;padding:22px 26px 60px;position:relative}
+main.toolmode{padding:0;overflow:hidden}
+main.toolmode .wrap{display:none}
+#frames{display:none;position:absolute;inset:0}
+main.toolmode #frames{display:block}
+#frames iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:var(--ground)}
+#frames iframe.on{display:block}
+.framewait{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:13px}
+.wrap{max-width:1080px;margin:0 auto}
+h1{font-family:"Archivo",sans-serif;font-weight:700;font-size:22px;margin:0 0 3px}
+.sub{color:var(--ink-3);font-size:13px;margin:0 0 20px}
+h3{font-family:"Archivo",sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-2);margin:26px 0 10px}
+
+/* ── surfaces ──────────────────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;
+  padding:15px 17px;box-shadow:var(--shadow)}
+.cards{display:grid;gap:11px}
+.row{display:flex;align-items:center;gap:12px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:11px;margin-bottom:6px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat .k{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.stat .v{font-family:"Archivo",sans-serif;font-size:25px;font-weight:700;line-height:1.15;margin-top:2px}
+.stat .v small{font-size:12px;font-weight:500;color:var(--ink-3);letter-spacing:0}
+
+/* ── buttons + inputs ──────────────────────────────────────────────── */
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:8px;
+  padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--ink-2);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink);filter:none}
+.btn.danger{background:none;color:var(--crit);border:1px solid var(--line)}
+.btn.danger:hover{background:var(--crit-soft);filter:none}
+.btn.sm{padding:5px 10px;font-size:12px}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.fld{display:flex;flex-direction:column;gap:4px}
+.fld label{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+input[type=text],input[type=date],input[type=number],select,textarea{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:7px;padding:7px 9px;width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px}
+
+/* ── table ─────────────────────────────────────────────────────────── */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{text-align:left;font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;padding:9px 11px;background:var(--surface-2);border-bottom:1px solid var(--line);
+  position:sticky;top:0;white-space:nowrap}
+td{padding:8px 11px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.chip{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10.5px;font-weight:600;
+  letter-spacing:.03em;white-space:nowrap}
+.chip.verified{background:var(--accent-soft);color:var(--accent)}
+.chip.interpreted{background:var(--warn-soft);color:var(--warn)}
+.chip.conflicting{background:var(--crit-soft);color:var(--crit)}
+.chip.observed{background:var(--sunken);color:var(--ink-3)}
+.muted{color:var(--ink-3)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:11px}
+.filters input[type=text]{width:230px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--surface);border:0;padding:6px 11px;font-size:12px;cursor:pointer;color:var(--ink-2)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--sel);color:var(--ink);font-weight:600}
+
+/* ── notices ───────────────────────────────────────────────────────── */
+.note{border-radius:10px;padding:12px 15px;font-size:13px;border:1px solid var(--line);
+  background:var(--surface);margin-bottom:16px}
+.note.warn{background:var(--warn-soft);border-color:transparent;color:var(--ink)}
+.note.crit{background:var(--crit-soft);border-color:transparent;color:var(--ink)}
+.note b{font-weight:700}
+.empty{text-align:center;padding:46px 20px;color:var(--ink-3)}
+.empty .big{font-family:"Archivo",sans-serif;font-size:16px;font-weight:600;color:var(--ink-2);margin-bottom:5px}
+
+/* ── modal ─────────────────────────────────────────────────────────── */
+.scrim{position:fixed;inset:0;background:rgba(10,14,16,.5);display:flex;align-items:center;
+  justify-content:center;padding:20px;z-index:50}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:13px;
+  box-shadow:var(--shadow);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;padding:20px 22px}
+.modal h2{font-family:"Archivo",sans-serif;font-size:17px;margin:0 0 14px}
+.modalfoot{display:flex;gap:9px;justify-content:flex-end;margin-top:18px}
+.stack{display:flex;flex-direction:column;gap:11px}
+
+@media(max-width:820px){
+  .rail{flex-basis:64px;padding:12px 6px}
+  .railgrp>h4,.navitem span.lbl,.tag{display:none}
+  .navitem{justify-content:center;padding:9px 0}
+  main{padding:18px 14px 50px}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .brand{font-size:11px}
+}
+</style>
+
+<header class="topbar">
+  <div class="brand">KTM&nbsp;<span>Hub</span></div>
+  <div class="showsel">
+    <select id="showsel" title="Active show"></select>
+  </div>
+  <div class="grow"></div>
+  <span class="pill" id="dbpill"><span class="dot"></span><span id="dbtxt">connecting</span></span>
+  <button class="iconbtn" id="themebtn" title="Toggle theme">◐</button>
+</header>
+
+<div class="shell">
+  <nav class="rail" id="rail"></nav>
+  <main id="pane">
+    <div class="wrap" id="main"></div>
+    <div id="frames"></div>
+  </main>
+</div>
+
+<div id="modalroot"></div>
+
+<script>
+/*__TOOLSRC__*/
+/* ═════════════════════════════════════════════════════════════════════
+   KTM — shared data layer. Every tool in the suite goes through this.
+   1. Path builders live here so segment parity is right, once.
+   2. Reads hit the localStorage cache first; the UI never blocks and
+      still opens when the store is unreachable.
+   3. One writer per collection (OWNERS). Not enforced by the store —
+      last-writer-wins, no transactions — so it is enforced by convention.
+   ═════════════════════════════════════════════════════════════════════ */
+const KTM = (() => {
+  let db = null, booted = false, bootErr = null;
+
+  const OWNERS = {
+    fixtures:'hub', gear:'hub', meta:'hub', shows:'hub', positions:'hub', derived:'hub',
+    power:'distro', patch:'patch', racks:'rack', looms:'loom',
+    network:'net', cases:'pull', trucks:'truck', orders:'order'
+  };
+
+  const LS = 'ktm:';
+  const cacheGet = k => { try{ const v=localStorage.getItem(LS+k); return v?JSON.parse(v):null; }catch{ return null; } };
+  const cacheSet = (k,v) => { try{ localStorage.setItem(LS+k, JSON.stringify(v)); }catch{} };
+  const cacheDel = k => { try{ localStorage.removeItem(LS+k); }catch{} };
+
+  async function boot(){
+    if (booted) return db;
+    booted = true;
+    try { db = await claude.use('db'); }
+    catch(e){ db = null; bootErr = e && e.message; }
+    return db;
+  }
+
+  // Global docs are 2 segments; show subdocs are 4. Collections are odd.
+  const P = {
+    fixture:  id => 'fixtures/'+id,
+    gear:     id => 'gear/'+id,
+    meta:     id => 'meta/'+id,
+    show:     sid => 'shows/'+sid,
+    sub:     (sid,c) => 'shows/'+sid+'/'+c,
+    subDoc:  (sid,c,id) => 'shows/'+sid+'/'+c+'/'+id
+  };
+
+  async function list(collPath){
+    const d = await boot();
+    if (!d) return cacheGet(collPath) || [];
+    try{
+      const snap = await d.collection(collPath).get();
+      const rows = snap.docs.map(x => ({ id:x.id, ...x.data() }));
+      cacheSet(collPath, rows);
+      return rows;
+    }catch(e){ return cacheGet(collPath) || []; }
+  }
+
+  async function get(docPath){
+    const d = await boot();
+    if (!d) return cacheGet(docPath);
+    try{
+      const s = await d.doc(docPath).get();
+      if (!s.exists) return null;
+      const row = { id:s.id, ...s.data() };
+      cacheSet(docPath, row);
+      return row;
+    }catch(e){ return cacheGet(docPath); }
+  }
+
+  async function set(docPath, body){
+    const d = await boot();
+    if (!d) throw new Error('No store available — changes cannot be saved.');
+    const clean = Object.assign({}, body);
+    delete clean.id;                       // the id lives in the path, never the body
+    clean.updatedAt = new Date().toISOString();
+    await d.doc(docPath).set(clean);
+    cacheSet(docPath, Object.assign({ id: docPath.split('/').pop() }, clean));
+    return clean;
+  }
+
+  async function del(docPath){
+    const d = await boot();
+    if (!d) throw new Error('No store available.');
+    await d.doc(docPath).delete();
+    cacheDel(docPath);
+  }
+
+  const activeShow = () => cacheGet('activeShow');
+  const setActive  = sid => cacheSet('activeShow', sid);
+
+  return { boot, P, list, get, set, del, activeShow, setActive, OWNERS,
+           cacheGet, cacheSet, get db(){ return db; }, get bootErr(){ return bootErr; } };
+})();
+
+/* ═════════════════════════════════════════════════════════════════════
+   Suite definition — the nine tools and where each one stands.
+   ═════════════════════════════════════════════════════════════════════ */
+const TOOLS = [
+  { key:'distro', name:'Distro Plot', color:'var(--s2)', status:'ready', writes:'power',
+    blurb:'Three-phase power — leg balance, circuit packing, Soca cuts, voltage drop.' },
+  { key:'patch',  name:'Patch Plot',  color:'var(--s1)', status:'ready', writes:'patch',
+    blurb:'DMX universe packing and node planning.' },
+  { key:'truss',  name:'Truss Plot',  color:'var(--s4)', status:'ready', writes:'derived',
+    blurb:'Rigging loads and point weights.' },
+  { key:'pull',   name:'Pull Plot',   color:'var(--s5)', status:'ready', writes:'cases',
+    blurb:'Pull sheet, case counts, shop order.' },
+  { key:'rack',   name:'Rack Plot',   color:'var(--s3)', status:'ready', writes:'racks',
+    blurb:'Rack elevations and port-level patching.' },
+  { key:'loom',   name:'Loom Plot',   color:'var(--s6)', status:'ready', writes:'looms',
+    blurb:'Cable and loom list with real segment lengths.' },
+  { key:'net',    name:'Net Plot',    color:'var(--s8)', status:'ready', writes:'network',
+    blurb:'Switch fabric, VLANs, IP scheme, fiber runs.' },
+  { key:'truck',  name:'Truck Plot',  color:'var(--s7)', status:'ready', writes:'trucks',
+    blurb:'Trailer pack planning — truck count, layout, weight and cube.' },
+  { key:'label',  name:'Label Plot',  color:'var(--s0)', status:'ready', writes:'—',
+    blurb:'Thermal case labels and truss end labels.' },
+  { key:'order',  name:'Shop Order',  color:'var(--accent)', status:'ready', writes:'orders',
+    blurb:'What you send the vendor — fixtures, cable by length, adapters, hardware.' }
+];
+
+const SHOW_COLLECTIONS = ['positions','power','patch','racks','looms','network','cases','trucks','orders','derived'];
+const DOC_BUDGET = 5000;
+
+/* ═════════════════════════════════════════════════════════════════════
+   State + helpers
+   ═════════════════════════════════════════════════════════════════════ */
+const S = {
+  section: 'shows',
+  shows: [], fixtures: [], gear: [],
+  activeShow: null,
+  libQuery: '', libStatus: 'all',
+  gearCat: null, gearQuery: '',
+  counts: null,
+  modal: null,
+  loading: true
+};
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const slug = s => String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const fmtDate = d => { if(!d) return '—'; try{ return new Date(d).toLocaleDateString(undefined,
+  {year:'numeric',month:'short',day:'numeric'}); }catch{ return d; } };
+
+// A fixture attribute's provenance status. "observed" is our fourth state:
+// asserted by the shipped tools, no source attached yet. Never treat as verified.
+const provStatus = a => (a && a.status) ? a.status : 'observed';
+const STATUS_LABEL = { verified:'Verified', interpreted:'Interpreted',
+                       conflicting:'Conflict', observed:'Unverified' };
+
+function toast(msg, kind){
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:99;'
+    + 'background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);'
+    + 'border-radius:9px;padding:10px 16px;font-size:13px;max-width:min(560px,90vw);'
+    + (kind==='bad' ? 'color:var(--crit);' : '');
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 4200);
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   Boot
+   ═════════════════════════════════════════════════════════════════════ */
+(function initTheme(){
+  const saved = KTM.cacheGet('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+})();
+
+$('themebtn').onclick = () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : cur === 'light' ? '' : 'dark';
+  if (next) document.documentElement.setAttribute('data-theme', next);
+  else document.documentElement.removeAttribute('data-theme');
+  KTM.cacheSet('theme', next);
+  applyThemeAll();
+};
+
+async function refresh(){
+  const [shows, fixtures, gear] = await Promise.all([
+    KTM.list('shows'), KTM.list('fixtures'), KTM.list('gear')
+  ]);
+  S.shows = shows.sort((a,b)=> (b.updatedAt||'').localeCompare(a.updatedAt||''));
+  S.fixtures = fixtures.sort((a,b)=>
+    (a.manufacturer+' '+a.name).localeCompare(b.manufacturer+' '+b.name));
+  S.gear = gear.sort((a,b)=> String(a.id||'').localeCompare(String(b.id||'')));
+  const act = KTM.activeShow();
+  S.activeShow = S.shows.find(x => x.id === act) || S.shows[0] || null;
+  if (S.activeShow) KTM.setActive(S.activeShow.id);
+  S.loading = false;
+}
+
+async function start(){
+  render();
+  const db = await KTM.boot();
+  const pill = $('dbpill'), txt = $('dbtxt');
+  if (db){ pill.className = 'pill ok'; txt.textContent = 'store live'; }
+  else   { pill.className = 'pill bad'; txt.textContent = 'store offline'; }
+  await refresh();
+  render();
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   Render
+   ═════════════════════════════════════════════════════════════════════ */
+function render(){ renderRail(); renderShowSel(); renderMain(); renderModal(); }
+
+function renderRail(){
+  const sections = [
+    ['shows','Shows','var(--accent)'],
+    ['library','Fixture library','var(--s1)'],
+    ['gear','Gear library','var(--s4)'],
+    ['store','Store','var(--s0)']
+  ];
+  $('rail').innerHTML =
+    '<div class="railgrp"><h4>Hub</h4>' +
+    sections.map(([k,label,c]) =>
+      '<button class="navitem'+(S.section===k?' on':'')+'" data-sec="'+k+'">'
+      + '<span class="sq" style="background:'+c+'"></span>'
+      + '<span class="lbl">'+label+'</span></button>').join('')
+    + '</div>'
+    + '<div class="railgrp"><h4>Tools</h4>' +
+    TOOLS.map(t => {
+      const ready = t.status === 'ready';
+      return '<button class="navitem'+(ready?'':' soon')+(S.section==='tool:'+t.key?' on':'')+'"'
+      + (ready ? ' data-tool="'+t.key+'"' : '')
+      + ' title="'+esc(t.blurb)+'">'
+      + '<span class="sq" style="background:'+t.color+'"></span>'
+      + '<span class="lbl">'+esc(t.name)+'</span>'
+      + '<span class="tag">'+(ready?'':'soon')+'</span></button>';
+    }).join('')
+    + '</div>';
+  $('rail').querySelectorAll('[data-sec]').forEach(b =>
+    b.onclick = () => { S.section = b.dataset.sec; render(); });
+  $('rail').querySelectorAll('[data-tool]').forEach(b =>
+    b.onclick = () => { S.section = 'tool:' + b.dataset.tool; render(); });
+}
+
+function renderShowSel(){
+  const sel = $('showsel');
+  if (!S.shows.length){
+    sel.innerHTML = '<option>No shows yet</option>';
+    sel.disabled = true; return;
+  }
+  sel.disabled = false;
+  sel.innerHTML = S.shows.map(s =>
+    '<option value="'+esc(s.id)+'"'+(S.activeShow && s.id===S.activeShow.id?' selected':'')+'>'
+    + esc(s.name) + (s.venue ? ' · '+esc(s.venue) : '') + '</option>').join('');
+  sel.onchange = () => {
+    KTM.setActive(sel.value);
+    S.activeShow = S.shows.find(x=>x.id===sel.value) || null;
+    render();
+  };
+}
+
+function renderMain(){
+  const m = $('main'), pane = $('pane');
+  if (S.section.startsWith('tool:')){
+    pane.classList.add('toolmode');
+    mountTool(S.section.slice(5));
+    return;
+  }
+  pane.classList.remove('toolmode');
+  document.querySelectorAll('#frames iframe').forEach(f => f.classList.remove('on'));
+  if (S.loading){ m.innerHTML = '<div class="empty"><div class="big">Loading…</div></div>'; return; }
+  if (S.section === 'shows')   return void (m.innerHTML = viewShows(), wireShows());
+  if (S.section === 'library') return void (m.innerHTML = viewLibrary(), wireLibrary());
+  if (S.section === 'gear')    return void (m.innerHTML = viewGear(), wireGear());
+  if (S.section === 'store')   return void (m.innerHTML = viewStore(), wireStore());
+}
+
+/* ── Shows ─────────────────────────────────────────────────────────── */
+function viewShows(){
+  const a = S.activeShow;
+  let h = '<h1>Shows</h1><p class="sub">A show is the unit every tool works inside. '
+        + 'Switching the show at the top switches it for the whole suite.</p>';
+
+  if (!KTM.db) h += '<div class="note crit"><b>The store is not reachable in this view.</b> '
+    + 'You can read whatever was cached here, but nothing will save. '
+    + 'Reload; if it persists the artifact may not have been granted database access.</div>';
+
+  h += '<div class="row" style="margin-bottom:16px"><button class="btn" id="newshow">New show</button></div>';
+
+  if (!S.shows.length){
+    h += '<div class="empty"><div class="big">No shows yet</div>'
+       + '<div>Create one to give the suite something to hang data off.</div></div>';
+    return h;
+  }
+
+  if (a){
+    h += '<div class="stats">'
+      + stat('Positions', a.stat_positions ?? '—')
+      + stat('Fixtures', a.stat_fixtures ?? '—')
+      + stat('Load in', fmtDate(a.loadIn))
+      + stat('Load out', fmtDate(a.loadOut))
+      + '</div>';
+  }
+
+  h += '<h3>All shows</h3><div class="tablewrap"><table><thead><tr>'
+     + '<th>Show</th><th>Client</th><th>Venue</th><th>Load in</th><th>Updated</th><th></th>'
+     + '</tr></thead><tbody>'
+     + S.shows.map(s =>
+        '<tr'+(a && s.id===a.id?' style="background:var(--sel)"':'')+'>'
+        + '<td><b>'+esc(s.name)+'</b><br><span class="muted mono" style="font-size:11px">'+esc(s.id)+'</span></td>'
+        + '<td>'+esc(s.client||'—')+'</td><td>'+esc(s.venue||'—')+'</td>'
+        + '<td class="mono">'+fmtDate(s.loadIn)+'</td>'
+        + '<td class="mono muted" style="font-size:11.5px">'+fmtDate(s.updatedAt)+'</td>'
+        + '<td style="white-space:nowrap;text-align:right">'
+        + '<button class="btn ghost sm" data-edit="'+esc(s.id)+'">Edit</button> '
+        + '<button class="btn danger sm" data-delshow="'+esc(s.id)+'">Delete</button></td></tr>').join('')
+     + '</tbody></table></div>';
+  return h;
+}
+
+function wireShows(){
+  const nb = $('newshow'); if (nb) nb.onclick = () => { S.modal = {type:'show', data:{}}; render(); };
+  document.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => {
+    S.modal = {type:'show', data: Object.assign({}, S.shows.find(x=>x.id===b.dataset.edit))};
+    render();
+  });
+  document.querySelectorAll('[data-delshow]').forEach(b => b.onclick = async () => {
+    const s = S.shows.find(x=>x.id===b.dataset.delshow);
+    if (!confirm('Delete "'+s.name+'"?\n\nThe show record goes away. Data nested under it '
+      + '(positions, racks, trucks…) is NOT deleted by this — nested documents survive a parent '
+      + 'delete in this store, by design.')) return;
+    try { await KTM.del(KTM.P.show(s.id)); toast('Deleted "'+s.name+'"'); await refresh(); render(); }
+    catch(e){ toast(e.message, 'bad'); }
+  });
+}
+
+/* ── Fixture library ───────────────────────────────────────────────── */
+function viewLibrary(){
+  const rows = S.fixtures.filter(f => {
+    if (S.libStatus !== 'all'){
+      const st = [provStatus(f.power), provStatus(f.weight)];
+      if (S.libStatus === 'unverified' && !st.includes('observed') && !st.includes('interpreted')) return false;
+      if (S.libStatus === 'verified' && st.some(x => x !== 'verified')) return false;
+    }
+    if (!S.libQuery) return true;
+    const q = S.libQuery.toLowerCase();
+    return ((f.manufacturer||'')+' '+(f.name||'')+' '+(f.aliases||[]).join(' ')+' '
+      +((f.powerIn&&f.powerIn.connector)||'')).toLowerCase().includes(q);
+  });
+
+  const total = S.fixtures.length;
+  const verified = S.fixtures.filter(f => provStatus(f.power)==='verified').length;
+
+  let h = '<h1>Fixture library</h1><p class="sub">Canonical across every tool. '
+        + 'One fixture, one record, one set of numbers.</p>';
+
+  h += '<div class="note warn"><b>Provenance is the blocking task.</b> These records were '
+     + 'extracted from what the four shipped tools currently assert — they agree with each other, '
+     + 'but no figure has a source attached. Nine of Distro Plot’s first-pass wattages were wrong, '
+     + 'and both traps were labelling traps: LED-engine wattage read as fixture draw, lamp wattage '
+     + 'read as fixture draw. Nothing here is <b>verified</b> until a manufacturer PDF says so and '
+     + 'the record carries what that source <i>calls</i> the number.</div>';
+
+  const thruYes = S.fixtures.filter(f => f.powerOut && f.powerOut.present === true).length;
+  const thruNo  = S.fixtures.filter(f => f.powerOut && f.powerOut.present === false).length;
+  const thruUnk = total - thruYes - thruNo;
+  h += '<div class="stats">'
+     + stat('Fixtures', total)
+     + stat('Draw verified', verified + '<small> / '+total+'</small>')
+     + stat('Daisy-chains', thruYes)
+     + stat('Needs a two-fer', thruNo)
+     + (thruUnk ? stat('Pass-thru unknown', thruUnk) : '')
+     + '</div>';
+
+  h += '<div class="filters">'
+     + '<input type="text" id="libq" placeholder="Search make, model, alias…" value="'+esc(S.libQuery)+'">'
+     + '<div class="seg">'
+     + ['all','unverified','verified'].map(k =>
+        '<button data-st="'+k+'"'+(S.libStatus===k?' class="on"':'')+'>'
+        + (k==='all'?'All':k==='unverified'?'Needs source':'Verified')+'</button>').join('')
+     + '</div><div class="grow"></div>'
+     + '<button class="btn ghost sm" id="addfix">Add fixture</button></div>';
+
+  if (!rows.length){
+    h += '<div class="empty"><div class="big">'
+       + (total ? 'Nothing matches' : 'Library is empty')+'</div><div>'
+       + (total ? 'Try a different search.' : 'Seed it from the session, or add a fixture by hand.')
+       + '</div></div>';
+    return h;
+  }
+
+  h += '<div class="tablewrap"><table><thead><tr>'
+     + '<th>Fixture</th><th style="text-align:right">Draw</th><th>Source</th>'
+     + '<th>Power in</th><th>Pass-thru</th>'
+     + '<th style="text-align:right">Weight</th><th style="text-align:right">Default ch</th>'
+     + '<th>Case</th><th></th></tr></thead><tbody>'
+     + rows.map(f => {
+        const ps = provStatus(f.power), ws = provStatus(f.weight);
+        const modes = (f.dmx && f.dmx.footprints) || [];
+        const pw = f.power || {}, pin = f.powerIn || {}, po = f.powerOut || {};
+        return '<tr>'
+        + '<td><b>'+esc(f.name)+'</b><br><span class="muted" style="font-size:11.5px">'
+          + esc(f.manufacturer||'')+' · '+esc(f.category||'')+'</span></td>'
+        + '<td class="num">'+(pw.value!=null ? pw.value+' <span class="muted" style="font-size:10px">'
+          +esc(pw.unit||'')+'</span>' : '<span class="muted">—</span>')+'</td>'
+        + '<td><span class="chip '+ps+'">'+STATUS_LABEL[ps]+'</span></td>'
+        + '<td>'+connCell(pin)+'</td>'
+        + '<td>'+thruCell(po)+'</td>'
+        + '<td class="num">'+(f.weight && f.weight.value!=null ? f.weight.value+' lb' : '—')
+          + (ws!=='verified' && f.weight && f.weight.value!=null
+             ? ' <span class="chip '+ws+'" style="font-size:9px">'+STATUS_LABEL[ws][0]+'</span>' : '')+'</td>'
+        + '<td class="num">'+((f.dmx && f.dmx.default) || '—')
+          + (modes.length>1 ? ' <span class="muted" style="font-size:10px">+'+(modes.length-1)+'</span>':'')+'</td>'
+        + '<td class="muted" style="font-size:11.5px">'
+          + (f.case ? esc(f.case.family||'—')+(f.case.perCase?' · '+f.case.perCase+'/case':'') : '—')+'</td>'
+        + '<td style="text-align:right"><button class="btn ghost sm" data-fix="'+esc(f.id)+'">Open</button></td>'
+        + '</tr>';
+       }).join('')
+     + '</tbody></table></div>';
+  return h;
+}
+
+/* The connector is what the electrician has to physically have in the truck,
+   so it is shown in full rather than truncated to a family name. */
+function connCell(pin){
+  if (!pin || !pin.connector)
+    return '<span class="muted" style="font-size:11.5px">not published</span>';
+  const st = provStatus(pin);
+  return '<span class="mono" style="font-size:11px">' + esc(pin.connector) + '</span>'
+    + (st !== 'verified' ? ' <span class="chip '+st+'" style="font-size:9px">'
+       + STATUS_LABEL[st][0] + '</span>' : '');
+}
+
+/* Pass-thru decides whether a fixture daisy-chains or needs its own home run
+   or a two-fer. A confirmed NO is as useful as a yes, so it is stated plainly
+   rather than left blank. */
+function thruCell(po){
+  if (!po || po.present === null || po.present === undefined)
+    return '<span class="chip observed">unknown</span>';
+  const st = provStatus(po);
+  if (po.present === false)
+    return '<span class="chip conflicting">no · two-fer</span>'
+      + (st !== 'verified' ? ' <span class="chip '+st+'" style="font-size:9px">'+STATUS_LABEL[st][0]+'</span>' : '');
+  const ml = (po.maxLinked || []).map(([v,n]) => n+' @ '+v+'V').join(', ');
+  return '<span class="chip verified">yes</span>'
+    + (ml ? ' <span class="muted mono" style="font-size:10px">'+esc(ml)+'</span>' : '');
+}
+
+function wireLibrary(){
+  const q = $('libq');
+  if (q) q.oninput = () => { S.libQuery = q.value;
+    const m=$('main'); m.innerHTML = viewLibrary(); wireLibrary();
+    const nq=$('libq'); if(nq){ nq.focus(); nq.setSelectionRange(nq.value.length,nq.value.length); } };
+  document.querySelectorAll('[data-st]').forEach(b => b.onclick = () => {
+    S.libStatus = b.dataset.st; renderMain(); });
+  const af = $('addfix');
+  if (af) af.onclick = () => { S.modal = {type:'fixture', data:{ power:{}, weight:{}, dmx:{}, case:{} }}; render(); };
+  document.querySelectorAll('[data-fix]').forEach(b => b.onclick = () => {
+    S.modal = {type:'fixture', data: JSON.parse(JSON.stringify(S.fixtures.find(x=>x.id===b.dataset.fix)))};
+    render();
+  });
+}
+
+/* ── Gear library ──────────────────────────────────────────────────── */
+function viewGear(){
+  let h = '<h1>Gear library</h1><p class="sub">Everything that is not a fixture — cases, truss '
+        + 'products, rack equipment, trailer pack footprints. Shared the same way.</p>';
+
+  if (!S.gear.length){
+    h += '<div class="empty"><div class="big">Not seeded yet</div>'
+       + '<div>The catalogs live here: cases with real weights and dimensions, truss products '
+       + 'with weight per foot, rack equipment with port maps, and trailer pack footprints.</div></div>';
+    return h;
+  }
+
+  const cats = S.gear.slice().sort((a,b) => String(a.id).localeCompare(String(b.id)));
+  const cur  = cats.find(c => c.id === S.gearCat) || cats[0];
+  const items = (cur.items || []).filter(it => {
+    if (!S.gearQuery) return true;
+    return JSON.stringify(it).toLowerCase().includes(S.gearQuery.toLowerCase());
+  });
+
+  h += '<div class="filters">'
+     + '<div class="seg">' + cats.map(c =>
+        '<button data-gcat="'+esc(c.id)+'"'+(c.id===cur.id?' class="on"':'')+'>'
+        + esc(c.name || c.id) + ' <span class="muted">'+((c.items||[]).length)+'</span>'
+        + '</button>').join('') + '</div>'
+     + '<input type="text" id="gearq" placeholder="Search this catalog…" value="'+esc(S.gearQuery)+'">'
+     + '</div>';
+
+  if (cur.note)
+    h += '<div class="note"><b>'+esc(cur.name)+'.</b> '+esc(cur.note)
+       + '<div class="muted mono" style="font-size:11px;margin-top:6px">'+esc(cur.source||'')+'</div></div>';
+
+  // Columns follow the catalog. Each kind is a different kind of fact.
+  const COLS = {
+    'case':           [['Case','name'],['Type','caseType'],['W','wIn','n'],['L','lIn','n'],
+                       ['H','hIn','n'],['Weight lb','weightLb','n'],['Cube ft³','cubeFt','n']],
+    'truss':          [['Product','name'],['Manufacturer','manufacturer'],['Profile','profile'],
+                       ['Sections (ft)','sections'],['lb / ft','weightPerFt','n']],
+    'rack-equipment': [['Device','name'],['Manufacturer','manufacturer'],['RU','ruHeight','n'],
+                       ['Ports','portCount','n'],['Port map','portSummary']],
+    'pack-item':      [['Item','name'],['Category','cat'],['W ft','wFt','n'],['D ft','hFt','n']]
+  };
+  const cols = COLS[cur.kind] || [['Name','name']];
+
+  const cell = (it, c) => {
+    let v = it[c[1]];
+    if (Array.isArray(v)) v = v.join(' · ');
+    if (v === null || v === undefined || v === '') v = '—';
+    return '<td'+(c[2]==='n'?' class="num"':'')+'>'+esc(v)+'</td>';
+  };
+
+  h += '<div class="tablewrap"><table><thead><tr>'
+     + cols.map(c => '<th'+(c[2]==='n'?' style="text-align:right"':'')+'>'+esc(c[0])+'</th>').join('')
+     + '</tr></thead><tbody>'
+     + (items.length
+        ? items.map(it => '<tr>' + cols.map(c => cell(it, c)).join('') + '</tr>').join('')
+        : '<tr><td colspan="'+cols.length+'" class="muted" style="text-align:center;padding:26px">'
+          + 'Nothing matches</td></tr>')
+     + '</tbody></table></div>';
+
+  if (cur.kind === 'case'){
+    const withCube = (cur.items||[]).filter(i => typeof i.cubeFt === 'number');
+    const lb = (cur.items||[]).reduce((a,i) => a + (Number(i.weightLb)||0), 0);
+    h += '<h3>Catalog totals</h3><div class="stats">'
+       + stat('Case types', (cur.items||[]).length)
+       + stat('With dimensions', withCube.length)
+       + stat('Mean weight', Math.round(lb / Math.max(1,(cur.items||[]).length)) + '<small> lb</small>')
+       + '</div>';
+  }
+  return h;
+}
+
+function wireGear(){
+  document.querySelectorAll('[data-gcat]').forEach(b => b.onclick = () => {
+    S.gearCat = b.dataset.gcat; S.gearQuery = ''; renderMain(); });
+  const q = $('gearq');
+  if (q) q.oninput = () => { S.gearQuery = q.value;
+    const m = $('main'); m.innerHTML = viewGear(); wireGear();
+    const nq = $('gearq'); if (nq){ nq.focus(); nq.setSelectionRange(nq.value.length, nq.value.length); } };
+}
+
+/* ── Store ─────────────────────────────────────────────────────────── */
+function viewStore(){
+  let h = '<h1>Store</h1><p class="sub">What is actually in the database, and what it costs '
+        + 'against the caps.</p>';
+
+  const c = S.counts;
+  h += '<div class="stats">'
+     + stat('Shows', S.shows.length)
+     + stat('Fixtures', S.fixtures.length)
+     + stat('Gear', S.gear.length)
+     + stat('Documents', c ? c.total + '<small> / '+DOC_BUDGET+'</small>' : '—')
+     + '</div>';
+
+  h += '<div class="note"><b>Two caps worth designing around.</b> The store holds at most '
+     + DOC_BUDGET.toLocaleString() + ' documents in total, and any one document must stay under '
+     + '256&nbsp;KiB. That is why the schema aggregates: a position document carries its units in an '
+     + 'array rather than spending one document per hung fixture, and a truck carries its placements '
+     + 'the same way. One document per thing a person names — a show, a position, a rack, a loom, '
+     + 'a truck, a fixture type — and arrays inside for everything that belongs to it.</div>';
+
+  h += '<div class="row" style="margin-bottom:16px">'
+     + '<button class="btn ghost" id="countbtn">Count documents</button>'
+     + '<button class="btn ghost" id="exportbtn"'+(S.activeShow?'':' disabled')+'>Export active show</button>'
+     + '</div>';
+
+  if (c){
+    h += '<h3>By collection</h3><div class="tablewrap"><table><thead><tr>'
+       + '<th>Collection</th><th>Owner</th><th style="text-align:right">Documents</th>'
+       + '</tr></thead><tbody>'
+       + c.rows.map(r => '<tr><td class="mono" style="font-size:12px">'+esc(r.path)+'</td>'
+         + '<td class="muted" style="font-size:12px">'+esc(r.owner)+'</td>'
+         + '<td class="num">'+r.n+'</td></tr>').join('')
+       + '</tbody></table></div>';
+  }
+
+  h += '<h3>Schema</h3><div class="card"><pre class="mono" style="margin:0;font-size:11.5px;'
+     + 'line-height:1.6;overflow-x:auto;color:var(--ink-2)">'
+     + 'meta/{docId}                      tokens, constants\n'
+     + 'fixtures/{fixtureId}              canonical fixture library\n'
+     + 'gear/{gearId}                     racks, cases, truss, trailers\n'
+     + '\n'
+     + 'shows/{showId}                    identity\n'
+     + 'shows/{showId}/positions/{posId}  position + units[]  ← the takeoff lands here\n'
+     + SHOW_COLLECTIONS.filter(x=>x!=='positions').map(cn =>
+        ('shows/{showId}/'+cn+'/{id}').padEnd(34) + (KTM.OWNERS[cn]||'') ).join('\n')
+     + '</pre></div>';
+
+  h += '<h3>Suite</h3><div class="cards">'
+     + TOOLS.map(t => '<div class="card"><div class="row">'
+       + '<span class="sq" style="width:9px;height:9px;border-radius:2.5px;background:'+t.color+'"></span>'
+       + '<b>'+esc(t.name)+'</b>'
+       + '<span class="pill '+(t.status==='ready'?'ok':'')+'" style="margin-left:auto">'
+       + (t.status==='ready'?'in the hub':'not built')+'</span></div>'
+       + '<div class="muted" style="font-size:12.5px;margin-top:5px">'+esc(t.blurb)+'</div></div>').join('')
+     + '</div>';
+  return h;
+}
+
+function wireStore(){
+  const cb = $('countbtn');
+  if (cb) cb.onclick = async () => {
+    cb.disabled = true; cb.textContent = 'Counting…';
+    const rows = [];
+    for (const p of ['shows','fixtures','gear','meta']){
+      rows.push({ path:p, owner:KTM.OWNERS[p]||'hub', n:(await KTM.list(p)).length });
+    }
+    if (S.activeShow){
+      for (const cn of SHOW_COLLECTIONS){
+        const n = (await KTM.list(KTM.P.sub(S.activeShow.id, cn))).length;
+        if (n) rows.push({ path:'shows/'+S.activeShow.id+'/'+cn, owner:KTM.OWNERS[cn]||'—', n });
+      }
+    }
+    S.counts = { rows, total: rows.reduce((a,r)=>a+r.n, 0) };
+    renderMain();
+  };
+
+  const eb = $('exportbtn');
+  if (eb) eb.onclick = async () => {
+    if (!S.activeShow) return;
+    eb.disabled = true; eb.textContent = 'Exporting…';
+    const bundle = { _format:'ktm-show', _version:1, exported:new Date().toISOString(),
+                     show:S.activeShow, fixtures:S.fixtures, gear:S.gear, collections:{} };
+    for (const cn of SHOW_COLLECTIONS){
+      const rows = await KTM.list(KTM.P.sub(S.activeShow.id, cn));
+      if (rows.length) bundle.collections[cn] = rows;
+    }
+    const json = JSON.stringify(bundle, null, 2);
+    let saved = false;
+    try {
+      const dl = await claude.use('downloads');
+      if (dl){ await dl.save({ filename: slug(S.activeShow.name)+'-ktm.json', data: json }); saved = true; }
+    } catch(e){}
+    if (!saved){
+      try { await navigator.clipboard.writeText(json);
+            toast('Export copied to the clipboard (' + Math.round(json.length/1024) + ' KB)'); }
+      catch(e){ toast('Could not export: ' + e.message, 'bad'); }
+    }
+    eb.disabled = false; eb.textContent = 'Export active show';
+  };
+}
+
+function stat(k, v){
+  return '<div class="stat"><div class="k">'+esc(k)+'</div><div class="v">'+v+'</div></div>';
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   Tool frames
+
+   Each ported tool runs in its own same-origin srcdoc frame. That is not
+   decoration: the four were written independently and share 22 top-level
+   function names (render, compute, save, esc, uid, exportCSV, snapshot…),
+   so one global scope would clobber all of them. A frame each means they
+   port unmodified and keep behaving exactly as they were verified.
+
+   Frames are built once and kept alive — switching tools hides and shows
+   them rather than reloading, so half-entered work survives a tab switch.
+   ═════════════════════════════════════════════════════════════════════ */
+const mounted = {};
+
+function mountTool(key){
+  const host = $('frames');
+  document.querySelectorAll('#frames iframe').forEach(f => f.classList.remove('on'));
+
+  if (mounted[key]){ mounted[key].classList.add('on'); return; }
+
+  const src = (typeof TOOLSRC !== 'undefined') && TOOLSRC[key];
+  if (!src){
+    host.insertAdjacentHTML('beforeend',
+      '<div class="framewait">' + esc(key) + ' is not bundled in this build.</div>');
+    return;
+  }
+  const f = document.createElement('iframe');
+  f.title = (TOOLS.find(t => t.key === key) || {}).name || key;
+  f.className = 'on';
+  f.addEventListener('load', () => applyThemeTo(f));
+  host.appendChild(f);
+  f.srcdoc = src;                    // set after append so load fires
+  mounted[key] = f;
+}
+
+function applyThemeTo(f){
+  const t = document.documentElement.getAttribute('data-theme') || '';
+  try { if (f.contentWindow && f.contentWindow.__ktmTheme) f.contentWindow.__ktmTheme(t); }
+  catch(e){}
+}
+function applyThemeAll(){ Object.values(mounted).forEach(applyThemeTo); }
+
+/* ═════════════════════════════════════════════════════════════════════
+   Modals
+   ═════════════════════════════════════════════════════════════════════ */
+function renderModal(){
+  const root = $('modalroot');
+  if (!S.modal){ root.innerHTML = ''; return; }
+  if (S.modal.type === 'show')    root.innerHTML = modalShow(S.modal.data);
+  if (S.modal.type === 'fixture') root.innerHTML = modalFixture(S.modal.data);
+  root.querySelectorAll('[data-close]').forEach(b => b.onclick = () => { S.modal = null; render(); });
+  root.querySelector('.scrim').onclick = e => {
+    if (e.target === root.querySelector('.scrim')){ S.modal = null; render(); } };
+  const save = root.querySelector('[data-save]');
+  if (save) save.onclick = () => (S.modal.type==='show' ? saveShow() : saveFixture());
+}
+
+function modalShow(d){
+  const isNew = !d.id;
+  return '<div class="scrim"><div class="modal"><h2>'+(isNew?'New show':'Edit show')+'</h2>'
+    + '<div class="stack">'
+    + fld('Show name','m_name', d.name||'', 'text', isNew?'':'')
+    + '<div class="grid2">'+fld('Client','m_client',d.client||'')+fld('Venue','m_venue',d.venue||'')+'</div>'
+    + '<div class="grid2">'+fld('Load in','m_in',d.loadIn||'','date')+fld('Load out','m_out',d.loadOut||'','date')+'</div>'
+    + '<div class="fld"><label>Notes</label><textarea id="m_notes" rows="3">'+esc(d.notes||'')+'</textarea></div>'
+    + (isNew ? '' : '<div class="muted mono" style="font-size:11px">id: '+esc(d.id)+'</div>')
+    + '</div><div class="modalfoot">'
+    + '<button class="btn ghost" data-close>Cancel</button>'
+    + '<button class="btn" data-save>'+(isNew?'Create':'Save')+'</button></div></div></div>';
+}
+
+async function saveShow(){
+  const d = S.modal.data;
+  const name = $('m_name').value.trim();
+  if (!name){ toast('A show needs a name.', 'bad'); return; }
+  const id = d.id || (slug(name) + '-' + uid().slice(-4));
+  const body = { name, client:$('m_client').value.trim(), venue:$('m_venue').value.trim(),
+                 loadIn:$('m_in').value||null, loadOut:$('m_out').value||null,
+                 notes:$('m_notes').value.trim(),
+                 createdAt: d.createdAt || new Date().toISOString() };
+  try {
+    await KTM.set(KTM.P.show(id), body);
+    KTM.setActive(id);
+    S.modal = null; toast('Saved "'+name+'"');
+    await refresh(); render();
+  } catch(e){ toast(e.message, 'bad'); }
+}
+
+function modalFixture(d){
+  const isNew = !d.id;
+  const p = d.power||{}, w = d.weight||{}, x = d.dmx||{}, cs = d.case||{};
+  const statusSel = (idAttr, cur) => '<div class="fld"><label>Status</label><select id="'+idAttr+'">'
+    + ['observed','interpreted','verified','conflicting'].map(s =>
+       '<option value="'+s+'"'+(provStatus({status:cur})===s?' selected':'')+'>'+STATUS_LABEL[s]+'</option>').join('')
+    + '</select></div>';
+  return '<div class="scrim"><div class="modal"><h2>'+(isNew?'Add fixture':esc(d.name||'Fixture'))+'</h2>'
+    + '<div class="stack">'
+    + '<div class="grid2">'+fld('Make','f_make',d.manufacturer||'')+fld('Model','f_name',d.name||'')+'</div>'
+    + fld('Category','f_cat', d.category||'')
+    + '<h3 style="margin:8px 0 0">Power</h3>'
+    + '<div class="grid3">'+fld('VA','f_va', p.value!=null?p.value:'', 'number')
+    + '<div class="fld"><label>Unit</label><input type="text" id="f_vau" value="'+esc(p.unit||'VA')+'"></div>'
+    + statusSel('f_vastat', p.status)+'</div>'
+    + '<div class="fld"><label>What the source calls it — verbatim</label>'
+    + '<input type="text" id="f_valabel" value="'+esc(p.sourceLabel||'')+'" '
+    + 'placeholder="Max power consumption / LED engine wattage / Lamp wattage"></div>'
+    + fld('Source URL','f_vaurl', p.sourceUrl||'')
+    + '<h3 style="margin:8px 0 0">Weight</h3>'
+    + '<div class="grid3">'+fld('Weight (lb)','f_lb', w.value!=null?w.value:'', 'number')
+    + '<div class="fld"><label>Unit</label><input type="text" id="f_lbu" value="'+esc(w.unit||'lb')+'"></div>'
+    + statusSel('f_lbstat', w.status)+'</div>'
+    + fld('Source URL','f_lburl', w.sourceUrl||'')
+    + '<h3 style="margin:8px 0 0">Data + case</h3>'
+    + '<div class="grid3">'+fld('Default ch','f_ch', x.default!=null?x.default:'', 'number')
+    + fld('Connector','f_conn', x.connector||'')
+    + '<div class="fld"><label>RDM</label><select id="f_rdm">'
+    + ['','true','false'].map(v=>'<option value="'+v+'"'+(String(x.rdm)===v?' selected':'')+'>'
+       +(v===''?'—':v==='true'?'Yes':'No')+'</option>').join('')+'</select></div></div>'
+    + '<div class="grid2">'+fld('Case family','f_csf', cs.family||'')
+    + fld('Per case','f_csp', cs.perCase!=null?cs.perCase:'', 'number')+'</div>'
+    + (x.footprints && x.footprints.length
+        ? '<div class="fld"><label>Modes on record</label><div class="mono muted" style="font-size:11.5px">'
+          + x.footprints.map(m => Array.isArray(m) ? esc(m[0])+' · '+m[1] : esc(m)).join(' &nbsp;·&nbsp; ')
+          + '</div></div>' : '')
+    + '</div><div class="modalfoot">'
+    + '<button class="btn ghost" data-close>Cancel</button>'
+    + '<button class="btn" data-save>Save</button></div></div></div>';
+}
+
+async function saveFixture(){
+  const d = S.modal.data;
+  const make = $('f_make').value.trim(), name = $('f_name').value.trim();
+  if (!name){ toast('A fixture needs a model name.', 'bad'); return; }
+  const id = d.id || slug(make + ' ' + name);
+  const num = el => { const v = $(el).value.trim(); return v === '' ? null : Number(v); };
+  const rdmv = $('f_rdm').value;
+  const body = {
+    name, manufacturer: make, aliases: d.aliases||[], category: $('f_cat').value.trim(),
+    power: { value:num('f_va'), unit:$('f_vau').value.trim()||'VA',
+             sourceLabel:$('f_valabel').value.trim()||null, sourceUrl:$('f_vaurl').value.trim()||null,
+             status:$('f_vastat').value, retrieved:(d.power&&d.power.retrieved)||null,
+             assertedBy:(d.power&&d.power.assertedBy)||null },
+    weight:{ value:num('f_lb'), unit:$('f_lbu').value.trim()||'lb',
+             sourceLabel:(d.weight&&d.weight.sourceLabel)||null, sourceUrl:$('f_lburl').value.trim()||null,
+             status:$('f_lbstat').value, retrieved:(d.weight&&d.weight.retrieved)||null,
+             assertedBy:(d.weight&&d.weight.assertedBy)||null },
+    dmx:   { footprints:(d.dmx&&d.dmx.footprints)||[], default:num('f_ch'),
+             connector:$('f_conn').value.trim()||null, rdm: rdmv===''?null:rdmv==='true' },
+    case:  { family:$('f_csf').value.trim()||null, perCase:num('f_csp') },
+    hang:  d.hang || null, flags: d.flags || {}
+  };
+  // A figure claimed as verified must say what its source calls it. The label is the finding.
+  if (body.power.status === 'verified' && !body.power.sourceLabel){
+    toast('A verified figure needs the source’s own words for it. That label is the finding.', 'bad');
+    return;
+  }
+  try {
+    await KTM.set(KTM.P.fixture(id), body);
+    S.modal = null; toast('Saved '+name);
+    await refresh(); render();
+  } catch(e){ toast(e.message, 'bad'); }
+}
+
+function fld(label, id, val, type, ph){
+  return '<div class="fld"><label>'+esc(label)+'</label>'
+    + '<input type="'+(type||'text')+'" id="'+id+'" value="'+esc(val)+'"'
+    + (ph?' placeholder="'+esc(ph)+'"':'')+'></div>';
+}
+
+start();
+</script>

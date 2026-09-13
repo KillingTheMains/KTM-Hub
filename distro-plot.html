@@ -1,0 +1,1243 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Distro Plot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#787F86;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --pA:#22262A; --pB:#B03A2B; --pC:#2A5CA0;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+}
+:root[data-system="480"]{ --pA:#6B4A2B; --pB:#C07A1E; --pC:#A8912A; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#79828A;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13;
+  --crit:#E2705F; --crit-soft:#3A1E19;
+  --pA:#C2C8CC; --pB:#E0685A; --pC:#6597DD;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+}
+:root:not([data-theme="light"])[data-system="480"]{ --pA:#C4A183; --pB:#E5A044; --pC:#D6C158; }}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#79828A;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --pA:#C2C8CC; --pB:#E0685A; --pC:#6597DD;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+}
+:root[data-theme="dark"][data-system="480"]{ --pA:#C4A183; --pB:#E5A044; --pC:#D6C158; }
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:14px; line-height:1.5}
+.wrap{max-width:1280px; margin:0 auto; padding:20px 20px 64px; display:flex; flex-direction:column; gap:18px}
+
+h1,h2,h3{margin:0; font-family:"Archivo",sans-serif; text-wrap:balance}
+h1{font-size:26px; font-weight:800; font-stretch:112%; letter-spacing:-.015em; line-height:1}
+h2{font-size:13px; font-weight:700; font-stretch:82%; text-transform:uppercase; letter-spacing:.13em; color:var(--ink-2)}
+.eyebrow{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.16em; color:var(--ink-3)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums}
+
+header.top{display:flex; flex-wrap:wrap; align-items:flex-end; gap:16px 22px; padding-bottom:14px; border-bottom:2px solid var(--ink)}
+.brand{display:flex; flex-direction:column; gap:3px}
+.brand .sub{font-size:12.5px; color:var(--ink-2); max-width:48ch}
+.top .spacer{flex:1 1 auto}
+.setbar{display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end}
+.field{display:flex; flex-direction:column; gap:4px}
+.field > label{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:10.5px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.14em; color:var(--ink-3)}
+select,input[type=number],input[type=text]{
+  font-family:"IBM Plex Mono",monospace; font-size:13px; font-variant-numeric:tabular-nums;
+  background:var(--surface); color:var(--ink); border:1px solid var(--line-strong);
+  border-radius:3px; padding:5px 7px; min-height:30px}
+select{font-family:"IBM Plex Sans",sans-serif}
+input[type=number]{width:82px}
+:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden}
+.tile{background:var(--surface); padding:11px 13px 12px; display:flex; flex-direction:column; gap:2px}
+.tile .k{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:10.5px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.13em; color:var(--ink-3)}
+.tile .v{font-family:"IBM Plex Mono",monospace; font-size:22px; font-weight:600; letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums; line-height:1.15}
+.tile .v small{font-size:12px; font-weight:400; color:var(--ink-3); letter-spacing:0}
+.tile .n{font-size:11.5px; color:var(--ink-3)}
+.tile.flag-ok .v{color:var(--accent)} .tile.flag-warn .v{color:var(--warn)} .tile.flag-crit .v{color:var(--crit)}
+
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:4px; box-shadow:var(--shadow)}
+.panel > .head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 13px; border-bottom:1px solid var(--line)}
+.panel > .head .spacer{flex:1 1 auto}
+.panel > .body{padding:13px}
+.cols{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:18px; align-items:stretch}
+.duo{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:18px; align-items:start}
+@media (max-width:940px){ .cols{grid-template-columns:1fr} }
+
+button{font-family:"Archivo",sans-serif; font-stretch:88%; font-weight:600; font-size:12px; letter-spacing:.03em;
+  cursor:pointer; border-radius:3px; border:1px solid var(--line-strong);
+  background:var(--surface-2); color:var(--ink); padding:6px 11px; min-height:30px}
+button:hover{border-color:var(--ink-3)}
+button.primary{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+button.primary:hover{filter:brightness(1.07)}
+button.ghost{background:transparent; border-color:transparent; color:var(--ink-3); padding:4px 6px; min-height:24px}
+button.ghost:hover{color:var(--crit); background:var(--crit-soft)}
+.seg{display:inline-flex; border:1px solid var(--line-strong); border-radius:3px; overflow:hidden}
+.seg button{border:0; border-radius:0; background:var(--surface); padding:5px 10px; min-height:28px; color:var(--ink-3)}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--surface)}
+
+.scroll{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font-size:13px}
+th{font-family:"Archivo",sans-serif; font-stretch:80%; font-size:10.5px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.12em; color:var(--ink-3); text-align:left; padding:0 8px 6px;
+  border-bottom:1px solid var(--line-strong); white-space:nowrap}
+td{padding:5px 8px; border-bottom:1px solid var(--line); vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.rig-name{font-weight:500; white-space:nowrap}
+.rig-brand{color:var(--ink-3); font-size:11.5px}
+.qty{width:56px; text-align:right}
+td select{font-size:12px; padding:3px 5px; min-height:26px}
+.empty{padding:26px 10px; text-align:center; color:var(--ink-3); font-size:13px}
+
+.phases{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; align-items:end}
+.ph{display:flex; flex-direction:column; gap:6px; justify-content:flex-end}
+.ph .stackwrap{position:relative; background:var(--sunken); border:1px solid var(--line);
+  border-radius:3px 3px 0 0; height:212px; display:flex; flex-direction:column-reverse; overflow:hidden}
+.ph .seg-block{position:relative; min-height:2px; display:flex; align-items:center; justify-content:center;
+  overflow:hidden; border-top:1px solid var(--surface)}
+.ph .seg-block span{font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--surface);
+  white-space:nowrap; padding:0 4px; opacity:.95}
+.ph .cap{position:absolute; left:0; right:0; border-top:1.5px dashed var(--ink-3); pointer-events:none}
+.ph .cap b{position:absolute; right:2px; top:3px; font-family:"IBM Plex Mono",monospace; font-size:9.5px;
+  font-weight:500; color:var(--ink-3); background:var(--surface); padding:0 3px}
+.ph .foot{display:flex; align-items:baseline; gap:6px; border-top:3px solid var(--ph); padding-top:5px}
+.ph .foot .id{font-family:"Archivo",sans-serif; font-stretch:110%; font-weight:800; font-size:16px; color:var(--ph)}
+.ph .foot .amps{font-family:"IBM Plex Mono",monospace; font-size:14px; font-weight:600; margin-left:auto}
+.ph .foot .wire{font-size:10.5px; color:var(--ink-3); letter-spacing:.04em}
+.neutral{display:flex; align-items:baseline; gap:8px; margin-top:11px; padding-top:9px; border-top:1px dashed var(--line-strong)}
+.neutral .id{font-family:"Archivo",sans-serif; font-stretch:110%; font-weight:800; font-size:15px; color:var(--ink-2)}
+.neutral .wire{font-size:10.5px; color:var(--ink-3)}
+.neutral .amps{font-family:"IBM Plex Mono",monospace; font-size:14px; font-weight:600; margin-left:auto}
+.neutral .hint{flex-basis:100%; font-size:11.5px; color:var(--ink-3); line-height:1.45; margin-top:2px}
+
+.legend{display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:12px; font-size:11.5px; color:var(--ink-2)}
+.legend .it{display:flex; align-items:center; gap:6px}
+.legend .sw{width:11px; height:11px; border-radius:2px; border:1px solid rgba(128,128,128,.4)}
+
+.ckt-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:8px}
+.ckt{border:1px solid var(--line); border-left:3px solid var(--ph); border-radius:3px;
+  background:var(--surface-2); padding:7px 9px; display:flex; flex-direction:column; gap:3px}
+.ckt .cid{display:flex; align-items:baseline; gap:6px}
+.ckt .cid .n{font-family:"Archivo",sans-serif; font-stretch:85%; font-weight:700; font-size:11px;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-2)}
+.ckt .cid .a{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:12.5px; font-weight:600}
+.ckt .load{font-size:12px; color:var(--ink-2); line-height:1.35}
+.ckt .vd{font-size:10.5px; color:var(--ink-3); font-family:"IBM Plex Mono",monospace}
+.ckt .bar{height:3px; background:var(--sunken); border-radius:2px; overflow:hidden}
+.ckt .bar i{display:block; height:100%; background:var(--ph)}
+.grp{margin-bottom:4px}
+.grp .gh{display:flex; align-items:center; gap:8px; margin:14px 0 7px; flex-wrap:wrap}
+.grp .gh:first-child{margin-top:2px}
+.grp .gh .pos{font-family:"Archivo",sans-serif; font-stretch:95%; font-weight:700; font-size:13px; color:var(--ink)}
+.grp .gh hr{flex:1; border:0; border-top:1px solid var(--line); margin:0; min-width:20px}
+.tag{font-family:"Archivo",sans-serif; font-stretch:82%; font-weight:700; font-size:10.5px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink-2); background:var(--surface-2); border:1px solid var(--line);
+  border-radius:2px; padding:2px 7px; white-space:nowrap}
+.tag.warn{color:var(--warn); border-color:var(--warn); background:var(--warn-soft)}
+.tag.crit{color:var(--crit); border-color:var(--crit); background:var(--crit-soft)}
+.loomrow{display:flex; align-items:center; gap:7px; margin:8px 0 5px}
+.loomrow .lbl{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-3); letter-spacing:.04em}
+.loomrow hr{flex:1; border:0; border-top:1px dotted var(--line); margin:0}
+
+.note{display:flex; gap:8px; align-items:flex-start; font-size:12.5px; line-height:1.45; border-radius:3px;
+  padding:8px 10px; border:1px solid transparent}
+.note.warn{background:var(--warn-soft); border-color:var(--warn)}
+.note.crit{background:var(--crit-soft); border-color:var(--crit)}
+.note.ok{background:var(--accent-soft); border-color:var(--accent)}
+.note .m{font-family:"Archivo",sans-serif; font-stretch:85%; font-weight:700; text-transform:uppercase;
+  font-size:10.5px; letter-spacing:.12em; padding-top:2px; white-space:nowrap}
+.notes{display:flex; flex-direction:column; gap:7px}
+.notes:empty{display:none}
+
+.rows{display:flex; flex-direction:column}
+.rows .r{display:flex; align-items:baseline; gap:10px; padding:6px 0; border-bottom:1px dotted var(--line)}
+.rows .r:last-child{border-bottom:0}
+.rows .r .k{color:var(--ink-2); font-size:12.5px}
+.rows .r .v{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-weight:600; font-variant-numeric:tabular-nums}
+
+.riser{margin:0; display:flex; flex-direction:column; gap:9px}
+.riser svg{width:100%; max-width:960px; height:auto; color:var(--ink); display:block}
+.riser figcaption{font-size:11.5px; color:var(--ink-3); line-height:1.5; max-width:92ch}
+.riser .bx{fill:var(--surface-2); stroke:var(--line-strong)}
+.riser .ttl{font-family:"Archivo",sans-serif; font-size:9.5px; font-weight:700; letter-spacing:.14em; fill:var(--ink-3)}
+.riser .nm{font-family:"IBM Plex Sans",sans-serif; font-size:12.5px; font-weight:500; fill:var(--ink)}
+.riser .dt{font-family:"IBM Plex Mono",monospace; font-size:11px; fill:var(--ink-2)}
+.riser .sm{font-family:"IBM Plex Mono",monospace; font-size:10px; fill:var(--ink-3)}
+.riser .big{font-family:"IBM Plex Mono",monospace; font-size:19px; font-weight:600; fill:var(--ink)}
+.riser .ln{stroke:var(--ink-2); fill:none}
+
+.saved{display:flex; flex-wrap:wrap; gap:6px}
+.chip{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line-strong);
+  background:var(--surface-2); border-radius:14px; padding:3px 5px 3px 11px; font-size:12.5px}
+.chip button{border:0; background:transparent; padding:1px 4px; min-height:0; color:var(--ink-3); font-size:13px; line-height:1}
+.chip button:hover{color:var(--crit)}
+.chip .load-b{cursor:pointer}
+
+footer.fine{font-size:11.5px; color:var(--ink-3); line-height:1.6; max-width:100ch;
+  border-top:1px solid var(--line); padding-top:12px; display:flex; flex-direction:column; gap:7px}
+footer.fine b{color:var(--ink-2); font-weight:600}
+.hide{display:none !important}
+@media (prefers-reduced-motion:no-preference){ .ph .seg-block,.ckt .bar i{transition:height .28s ease, width .28s ease} }
+
+@media print{
+  body{background:#fff; color:#000; font-size:10pt}
+  .wrap{max-width:none; padding:0; gap:12px}
+  .noprint{display:none !important}
+  .panel{box-shadow:none; border:1px solid #999; break-inside:avoid}
+  .ckt{background:#fff; border:1px solid #999; break-inside:avoid}
+  .ckt-grid{grid-template-columns:repeat(3,1fr)}
+  .tiles{border-color:#999; background:#999}
+  .tile{background:#fff}
+  .grp{break-inside:avoid}
+  header.top{border-bottom:2px solid #000}
+}
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">Three-phase load balancing &amp; distro schedule</div>
+      <h1>Distro Plot</h1>
+      <div class="sub">Build the rig by position. It balances the legs, packs the circuits, cuts the looms,
+        and tells you what the voltage looks like out at the fixture.</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="setbar noprint">
+      <div class="field"><label for="sys">Service</label>
+        <select id="sys"><option value="208">208Y/120 V</option><option value="480">480Y/277 V</option></select></div>
+      <div class="field"><label for="brk">Branch breaker</label>
+        <select id="brk"><option value="20">20 A · 12 AWG</option><option value="15">15 A · 14 AWG</option><option value="30">30 A · 10 AWG</option></select></div>
+      <div class="field"><label for="der">Load rule</label>
+        <select id="der"><option value="1">Continuous (80 %)</option><option value="0">Full breaker (100 %)</option></select></div>
+    </div>
+  </header>
+
+  <section class="tiles" id="tiles"></section>
+  <div class="notes" id="notes"></div>
+
+  <!-- ===================== RIG ===================== -->
+  <section class="panel">
+    <div class="head">
+      <h2>Rig</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="rigcount"></span>
+    </div>
+    <div class="body" style="display:flex;flex-direction:column;gap:12px">
+      <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end">
+        <div class="field" style="flex:1 1 200px;min-width:170px"><label for="pick">Add fixture</label>
+          <select id="pick"></select></div>
+        <div class="field"><label for="pickqty">Qty</label>
+          <input type="number" id="pickqty" class="qty" min="1" max="999" value="12"></div>
+        <div class="field"><label for="pickmode">Connection</label><select id="pickmode"></select></div>
+        <div class="field"><label for="pickpos">Position</label><select id="pickpos"></select></div>
+        <button class="primary" id="addbtn">Add</button>
+      </div>
+
+      <div class="scroll">
+        <table>
+          <thead><tr>
+            <th>Fixture</th><th class="num">Qty</th><th>Position</th><th>Connection</th>
+            <th class="num">VA ea</th><th class="num">A ea</th><th class="num">Total VA</th><th class="noprint"></th>
+          </tr></thead>
+          <tbody id="rigbody"></tbody>
+        </table>
+      </div>
+
+      <details class="noprint">
+        <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-2)">Add something not in the library</summary>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-top:9px">
+          <div class="field" style="flex:1 1 160px"><label for="cname">Name</label>
+            <input type="text" id="cname" placeholder="Shop-built practical"></div>
+          <div class="field"><label for="cva">VA each</label><input type="number" id="cva" min="1" max="20000" value="500"></div>
+          <div class="field"><label for="cqty">Qty</label><input type="number" id="cqty" class="qty" min="1" max="999" value="4"></div>
+          <button id="addcustom">Add</button>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <div class="cols">
+    <!-- ===================== PANEL ===================== -->
+    <section class="panel">
+      <div class="head">
+        <h2>Panel</h2><span class="spacer"></span>
+        <div class="seg noprint" role="group" aria-label="Balance mode">
+          <button id="mAuto" aria-pressed="true">Auto-balance</button>
+          <button id="mLock" aria-pressed="false">Group by fixture</button>
+        </div>
+      </div>
+      <div class="body">
+        <div class="phases" id="phases"></div>
+        <div class="neutral" id="neutral"></div>
+        <div class="legend" id="legend"></div>
+      </div>
+    </section>
+
+    <!-- ===================== POSITIONS ===================== -->
+    <section class="panel">
+      <div class="head">
+        <h2>Positions</h2><span class="spacer"></span>
+        <button id="addpos" class="noprint">Add position</button>
+      </div>
+      <div class="body">
+        <div class="scroll">
+          <table>
+            <thead><tr>
+              <th>Position</th><th class="num">Run ft</th><th class="num">kVA</th>
+              <th class="num">Ckts</th><th class="num">Looms</th><th class="num">Drop @ fixture</th><th class="noprint"></th>
+            </tr></thead>
+            <tbody id="posbody"></tbody>
+          </table>
+        </div>
+        <p style="font-size:11.5px;color:var(--ink-3);margin:10px 0 0;line-height:1.5">
+          Run length is distro to position — the Soca run, not the feeder. Drop at fixture is the feeder
+          drop plus the branch drop on the position's worst circuit.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== RISER ===================== -->
+  <section class="panel">
+    <div class="head"><h2>One-line riser</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="risersum"></span></div>
+    <div class="body"><figure class="riser" id="riser"></figure></div>
+  </section>
+
+  <!-- ===================== CIRCUITS ===================== -->
+  <section class="panel">
+    <div class="head">
+      <h2>Circuit schedule</h2><span class="spacer"></span>
+      <span class="eyebrow mono" id="cktsum"></span>
+      <button id="csv" class="noprint">Export CSV</button>
+      <button id="printbtn" class="noprint">Print</button>
+    </div>
+    <div class="body" id="circuits"></div>
+  </section>
+
+  <div class="duo">
+    <!-- ===================== FEEDER ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Feeder run</h2></div>
+      <div class="body" style="display:flex;flex-direction:column;gap:12px">
+        <div class="noprint" style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end">
+          <div class="field"><label for="len">Run length (ft)</label><input type="number" id="len" min="1" max="2000" value="100"></div>
+          <div class="field"><label for="awg">Conductor</label><select id="awg"></select></div>
+          <div class="field"><label for="mat">Material</label>
+            <select id="mat"><option value="cu">Copper</option><option value="al">Aluminum</option></select></div>
+          <div class="field"><label for="sets">Sets</label><input type="number" id="sets" min="1" max="6" value="1"></div>
+        </div>
+        <div class="rows" id="feedrows"></div>
+      </div>
+    </section>
+
+    <!-- ===================== SERVICE ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Service &amp; generator</h2></div>
+      <div class="body" style="display:flex;flex-direction:column;gap:12px">
+        <div class="rows" id="genrows"></div>
+        <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;border-top:1px solid var(--line);padding-top:11px">
+          <div class="field" style="flex:1 1 150px"><label for="signame">Save this rig as</label>
+            <input type="text" id="signame" placeholder="Arena A — main truss"></div>
+          <button id="savebtn">Save</button>
+        </div>
+        <div class="saved noprint" id="saved"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="duo">
+    <!-- ===================== CHAIN LIMITS ===================== -->
+    <section class="panel">
+      <div class="head"><h2>How many per circuit</h2><span class="spacer"></span>
+        <span class="eyebrow mono" id="chainrule"></span></div>
+      <div class="body">
+        <div class="scroll"><table>
+          <thead><tr><th>Fixture</th><th class="num">VA</th>
+            <th class="num" id="chA"></th><th class="num" id="chB"></th></tr></thead>
+          <tbody id="chainbody"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ===================== PACK LIST ===================== -->
+    <section class="panel">
+      <div class="head"><h2>Pack list</h2><span class="spacer"></span>
+        <span class="eyebrow mono" id="packweight"></span></div>
+      <div class="body"><div class="rows" id="packrows"></div></div>
+    </section>
+  </div>
+
+  <footer class="fine">
+    <div><b>Read this before you pull cable.</b> Distro Plot is a planning aid, not a design document, and it is not
+    a substitute for a licensed electrician or the AHJ. Fixture draws are published nominal maximums — a fixture in a
+    hot room, at low line voltage, or running a pixel-mapped chase can pull more.</div>
+    <div><b>What the numbers assume.</b> Ampacity follows NEC 310.16 (75 °C column). Voltage drop uses the K-factor
+    approximation — K&nbsp;=&nbsp;12.9&nbsp;Cu / 21.2&nbsp;Al, VD&nbsp;=&nbsp;K·I·L·multiplier&nbsp;÷&nbsp;circular mils,
+    ×2 for a two-wire branch and ×√3 for a three-phase feeder — which ignores conductor temperature, power factor
+    angle and raceway effects. The 3 % branch / 5 % combined drop figures are NEC Informational Notes
+    (210.19(A) IN No. 4, 215.2(A)(1) IN No. 2), non-enforceable under 90.5(C) — but some AHJs adopt them locally, and
+    110.3(B) makes a fixture's own minimum-voltage spec enforceable regardless.</div>
+    <div><b>Neutral current</b> is the fundamental-only unbalance of line-to-neutral loads,
+    Iₙ&nbsp;=&nbsp;√(Iₐ²+I_b²+I_c²−IₐI_b−I_bI_c−I_cIₐ). Line-to-line loads have no neutral connection and are excluded.
+    This ignores triplen harmonics, which on non-linear LED loads add arithmetically in the shared neutral rather than
+    cancelling. Portable cable falls under NEC Article 400, not 310.16. Motor inrush of 3–6× is not modelled.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================ REFERENCE DATA ============================ */
+/* Fixture figures are published nominal maximum apparent power (VA) at nominal line voltage. */
+const LIB = [
+  {c:"Moving light", b:"Robe",     n:"BMFL Blade",               va:2000},
+  {c:"Moving light", b:"Robe",     n:"MegaPointe",               va:670},
+  {c:"Moving light", b:"Robe",     n:"Pointe",                   va:470},
+  {c:"Moving light", b:"Robe",     n:"Spiider",                  va:660},
+  {c:"Moving light", b:"Robe",     n:"T1 Profile",               va:650},
+  {c:"Moving light", b:"Martin",   n:"MAC Aura XB",              va:400},
+  {c:"Moving light", b:"Martin",   n:"MAC Aura PXL",             va:500},
+  {c:"Moving light", b:"Martin",   n:"MAC Viper Profile",        va:1225},
+  {c:"Moving light", b:"Martin",   n:"MAC Ultra Performance",    va:1450},
+  {c:"Moving light", b:"Martin",   n:"MAC Encore Performance",   va:600},
+  {c:"Moving light", b:"Claypaky", n:"Sharpy",                   va:440},
+  {c:"Moving light", b:"Claypaky", n:"Mythos 2",                 va:700},
+  {c:"Moving light", b:"Claypaky", n:"Scenius Unico",            va:1800},
+  {c:"Moving light", b:"Ayrton",   n:"Khamsin-S",                va:1150},
+  {c:"Moving light", b:"Ayrton",   n:"Diablo-S",                 va:550},
+  {c:"Moving light", b:"Elation",  n:"Proteus Maximus",          va:1400},
+  {c:"Moving light", b:"Chauvet",  n:"Rogue R2 Wash",            va:339},
+  {c:"Moving light", b:"Chauvet",  n:"Maverick Force S Profile", va:563},
+  {c:"Wash / bar / strobe", b:"GLP", n:"impression X4 Bar 20",   va:400},
+  {c:"Wash / bar / strobe", b:"GLP", n:"JDC1",                   va:1200},
+  {c:"Wash / bar / strobe", b:"SGM", n:"Q-7",                    va:465},
+  {c:"Conventional", b:"ETC", n:"Source Four LED S3 Lustr",      va:307},
+  {c:"Conventional", b:"ETC", n:"ColorSource PAR",               va:90},
+  {c:"Conventional", b:"ETC", n:"Source Four 750 W",             va:750},
+  {c:"Atmospherics", b:"MDG",    n:"theONE hazer",               va:1480},
+  {c:"Atmospherics", b:"Look",   n:"Viper NT fogger",            va:1300},
+  {c:"Atmospherics", b:"Martin", n:"JEM ZR45 fogger",            va:1800},
+  {c:"Control & rigging", b:"MA Lighting", n:"grandMA3 full-size", va:300},
+  {c:"Control & rigging", b:"CM", n:"Lodestar 1-ton hoist",      va:1450, motor:true, mode:"3ph"}
+];
+LIB.forEach(function(f,i){ f.id = "L"+i; });
+
+const AMPACITY_CU = {"14":20,"12":25,"10":35,"8":50,"6":65,"4":85,"3":100,"2":115,"1":130,
+  "1/0":150,"2/0":175,"3/0":200,"4/0":230,"250":255,"350":310,"500":380};
+const AMPACITY_AL = {"14":0,"12":20,"10":30,"8":40,"6":50,"4":65,"3":75,"2":90,"1":100,
+  "1/0":120,"2/0":135,"3/0":155,"4/0":180,"250":205,"350":250,"500":310};
+const CMIL = {"14":4110,"12":6530,"10":10380,"8":16510,"6":26240,"4":41740,"3":52620,"2":66360,"1":83690,
+  "1/0":105600,"2/0":133100,"3/0":167800,"4/0":211600,"250":250000,"350":350000,"500":500000};
+/* Single-conductor Type W / SC portable cable, lb per foot */
+const LBFT = {"6":0.192,"4":0.263,"2":0.367,"1":0.459,"1/0":0.536,"2/0":0.641,"3/0":0.760,
+  "4/0":0.934,"250":1.073,"350":1.513,"500":2.083};
+const SOCA_LBFT = {"14":0.40,"12":0.55,"10":0.75};
+const GAUGES = ["6","4","2","1","1/0","2/0","3/0","4/0","250","350","500"];
+const SOCA_LEN = [150,100,75,50,25,10,5];
+const CAM_LEN  = [100,50,25,10,5];
+const K = {cu:12.9, al:21.2};
+const SERVICES = [100,200,400,600,800,1200];
+const GENSETS  = [25,45,60,100,125,150,200,250,300,400,500,600];
+const BRK_WIRE = {"15":"14","20":"12","30":"10"};   /* branch breaker -> Soca conductor */
+const SQRT3 = Math.sqrt(3);
+const SYS = {
+  "208": {vll:208, vln:120, label:"208Y/120", wires:["Black","Red","Blue"]},
+  "480": {vll:480, vln:277, label:"480Y/277", wires:["Brown","Orange","Yellow"]}
+};
+const PH = ["A","B","C"];
+
+/* ============================== STATE ============================== */
+const DEFAULT_POS = [
+  {id:"p1", name:"Downstage truss", dist:90},
+  {id:"p2", name:"Mid truss",       dist:110},
+  {id:"p3", name:"Upstage truss",   dist:135},
+  {id:"p4", name:"Floor package",   dist:60},
+  {id:"p5", name:"FOH",             dist:200}
+];
+const DEFAULT_ROWS = [
+  {fid:"L6",  qty:12, mode:"ll", pos:"p1"},   // MAC Aura PXL
+  {fid:"L0",  qty:8,  mode:"ll", pos:"p1"},   // BMFL Blade
+  {fid:"L1",  qty:12, mode:"ll", pos:"p2"},   // MegaPointe
+  {fid:"L6",  qty:12, mode:"ll", pos:"p2"},   // MAC Aura PXL
+  {fid:"L18", qty:16, mode:"ll", pos:"p3"},   // X4 Bar 20
+  {fid:"L19", qty:8,  mode:"ll", pos:"p3"},   // JDC1
+  {fid:"L24", qty:2,  mode:"ln", pos:"p4"},   // theONE hazer
+  {fid:"L20", qty:10, mode:"ln", pos:"p4"},   // SGM Q-7
+  {fid:"L21", qty:12, mode:"ln", pos:"p5"},   // S4 LED S3
+  {fid:"L27", qty:1,  mode:"ln", pos:"p5"}    // grandMA3
+];
+let S = {
+  sys:"208", brk:20, cont:true, group:false,
+  len:100, awg:"4/0", mat:"cu", sets:1,
+  positions: DEFAULT_POS.map(function(p){ return Object.assign({}, p); }),
+  rows: DEFAULT_ROWS.map(function(r){ return Object.assign({uid:uid()}, r); })
+};
+let DB = null, DOWNLOADS = null, savedRigs = [];
+
+function uid(){ return "r" + Math.random().toString(36).slice(2,9); }
+function fx(id){ return LIB.find(function(f){ return f.id===id; }); }
+function pos(id){ return S.positions.find(function(p){ return p.id===id; }); }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function rowInfo(r){
+  if(r.custom) return {name:r.custom.name, brand:"Custom", va:r.custom.va, motor:false};
+  const f = fx(r.fid);
+  return f ? {name:f.n, brand:f.b, va:f.va, motor:!!f.motor} : {name:"(missing)", brand:"", va:0, motor:false};
+}
+function modes(){
+  const s = SYS[S.sys];
+  return [{v:"ln", t:s.vln+" V (1 leg)"},{v:"ll", t:s.vll+" V (2 legs)"},{v:"3ph", t:s.vll+" V 3ø (3 legs)"}];
+}
+function legAmps(va, mode){
+  const s = SYS[S.sys];
+  if(mode==="ln")  return va / s.vln;
+  if(mode==="3ph") return va / (SQRT3 * s.vll);
+  return va / s.vll;
+}
+function cktCap(){ return S.cont ? S.brk * 0.8 : S.brk; }
+function socaAwg(){ return BRK_WIRE[String(S.brk)] || "12"; }
+/* greedy fill from stock lengths to cover a run */
+function cutLengths(dist, stock){
+  const out = []; let left = dist, guard = 0;
+  while(left > 0 && guard++ < 12){
+    const fit = stock.find(function(L){ return L <= left; });
+    if(!fit){ out.push(stock[stock.length-1]); break; }
+    out.push(fit); left -= fit;
+  }
+  const total = out.reduce(function(t,x){ return t+x; }, 0);
+  if(total < dist) out.push(stock[stock.length-1]);
+  return out;
+}
+function cutLabel(arr){
+  const c = {}; arr.forEach(function(L){ c[L]=(c[L]||0)+1; });
+  return Object.keys(c).sort(function(a,b){ return b-a; })
+    .map(function(L){ return (c[L]>1 ? c[L]+"×" : "") + L + "′"; }).join(" + ");
+}
+
+/* ============================== THE MATH ============================== */
+function compute(){
+  const legs   = {A:0,B:0,C:0};      // every conductor
+  const legsLN = {A:0,B:0,C:0};      // line-to-neutral only — this is what returns on the neutral
+  const s = SYS[S.sys];
+  const cap = cktCap();
+  const sAwg = socaAwg();
+
+  // Build units, grouped by position so a position's load stays on its own looms.
+  const byPos = {};
+  S.positions.forEach(function(p){ byPos[p.id] = []; });
+  S.rows.forEach(function(r){
+    const info = rowInfo(r);
+    const a = legAmps(info.va, r.mode);
+    const bucket = byPos[r.pos] || (byPos[r.pos] = []);
+    for(let i=0;i<r.qty;i++) bucket.push({row:r, name:info.name, va:info.va, mode:r.mode, a:a});
+  });
+
+  const posOrder = {}; S.rows.forEach(function(r,i){ if(!(r.uid in posOrder)) posOrder[r.uid]=i; });
+  const positions = [], allCircuits = [], allMotors = [];
+  let cktNum = 0;
+
+  S.positions.forEach(function(p){
+    const units = (byPos[p.id]||[]).slice();
+    if(S.group) units.sort(function(x,y){ return (posOrder[x.row.uid]-posOrder[y.row.uid]) || (y.a-x.a); });
+    else        units.sort(function(x,y){ return y.a - x.a; });
+
+    // Assign each unit to the globally least-loaded leg (or leg pair). Working position by
+    // position keeps each Soca internally balanced as well as the service overall.
+    const assigned = [];
+    units.forEach(function(u){
+      let conn;
+      if(u.mode==="3ph") conn = ["A","B","C"];
+      else {
+        const sorted = PH.slice().sort(function(a,b){ return legs[a]-legs[b]; });
+        conn = u.mode==="ln" ? [sorted[0]] : [sorted[0],sorted[1]].sort();
+      }
+      conn.forEach(function(ph){ legs[ph] += u.a; if(u.mode==="ln") legsLN[ph] += u.a; });
+      assigned.push(Object.assign({conn:conn, key:conn.join("-")}, u));
+    });
+
+    // First-fit-decreasing into branch circuits, never mixing leg pairs on one circuit.
+    const byKey = {};
+    assigned.forEach(function(u){
+      if(u.mode==="3ph"){ allMotors.push(Object.assign({posName:p.name}, u)); return; }
+      (byKey[u.key] = byKey[u.key] || []).push(u);
+    });
+    const circuits = [];
+    Object.keys(byKey).sort().forEach(function(key){
+      const bins = [];
+      byKey[key].slice().sort(function(x,y){ return y.a-x.a; }).forEach(function(u){
+        let bin = bins.find(function(b){ return b.a + u.a <= cap + 1e-9; });
+        if(!bin){ bin = {conn:u.conn, mode:u.mode, a:0, items:{}, pid:p.id, posName:p.name}; bins.push(bin); }
+        bin.a += u.a; bin.items[u.name] = (bin.items[u.name]||0) + 1;
+      });
+      bins.forEach(function(b){ circuits.push(b); });
+    });
+    circuits.sort(function(x,y){ return x.conn.join("").localeCompare(y.conn.join("")) || y.a-x.a; });
+
+    // Branch voltage drop over the Soca run — two-wire, so the ×2 multiplier either way.
+    circuits.forEach(function(c){
+      c.num = ++cktNum;
+      c.vd  = 2 * K.cu * c.a * p.dist / CMIL[sAwg];
+      c.vdPct = c.vd / (c.mode==="ln" ? s.vln : s.vll) * 100;
+      allCircuits.push(c);
+    });
+
+    const kva = units.reduce(function(t,u){ return t + u.va; }, 0) / 1000;
+    const worst = circuits.reduce(function(m,c){ return c.vdPct > m ? c.vdPct : m; }, 0);
+    positions.push({p:p, circuits:circuits, looms:Math.ceil(circuits.length/6), kva:kva,
+      units:units.length, worstBranchPct:worst});
+  });
+
+  const maxLeg = Math.max(legs.A, legs.B, legs.C);
+  const minLeg = Math.min(legs.A, legs.B, legs.C);
+  const avgLeg = (legs.A+legs.B+legs.C)/3;
+  const imbalance = avgLeg > 0 ? (maxLeg-minLeg)/avgLeg*100 : 0;
+  const a1=legsLN.A, b1=legsLN.B, c1=legsLN.C;
+  const neutral = Math.sqrt(Math.max(0, a1*a1 + b1*b1 + c1*c1 - a1*b1 - b1*c1 - c1*a1));
+  const kva = SQRT3 * s.vll * avgLeg / 1000;
+  const totalVA = S.rows.reduce(function(t,r){ return t + rowInfo(r).va*r.qty; }, 0);
+
+  const cm = CMIL[S.awg] * S.sets;
+  const vd = SQRT3 * K[S.mat] * maxLeg * S.len / cm;
+  const vdPct = vd / s.vll * 100;
+  const amp1 = (S.mat==="cu" ? AMPACITY_CU : AMPACITY_AL)[S.awg] * S.sets;
+
+  let minAwg = null;
+  for(let i=0;i<GAUGES.length;i++){
+    const g = GAUGES[i];
+    const d = SQRT3 * K[S.mat] * maxLeg * S.len / (CMIL[g]*S.sets) / s.vll * 100;
+    const amp = (S.mat==="cu"?AMPACITY_CU:AMPACITY_AL)[g] * S.sets;
+    if(d <= 3 && amp >= maxLeg){ minAwg = g; break; }
+  }
+  positions.forEach(function(P){ P.totalPct = vdPct + P.worstBranchPct; });
+  const worstTotal = positions.reduce(function(m,P){ return P.totalPct > m.pct ?
+    {pct:P.totalPct, name:P.p.name} : m; }, {pct:vdPct, name:"feeder only"});
+
+  const contDemand = maxLeg * 1.25;
+  const service = SERVICES.find(function(x){ return x >= contDemand; }) || null;
+  const genPick = GENSETS.find(function(x){ return x >= kva*0.9*1.25; }) || null;
+
+  /* ---- pack list ---- */
+  const socaW = SOCA_LBFT[sAwg] || 0.55;
+  let socaFeet = 0, looms = 0;
+  const socaCuts = [];
+  positions.forEach(function(P){
+    if(!P.looms) return;
+    const cut = cutLengths(P.p.dist, SOCA_LEN);
+    const feet = cut.reduce(function(t,x){ return t+x; }, 0);
+    socaFeet += feet * P.looms; looms += P.looms;
+    socaCuts.push({name:P.p.name, looms:P.looms, label:cutLabel(cut), feet:feet});
+  });
+  const camCut = cutLengths(S.len, CAM_LEN);
+  const camFeet = camCut.reduce(function(t,x){ return t+x; }, 0);
+  const camCond = 5 * S.sets;                                    // 3 hot + neutral + ground
+  const camWeight = camFeet * camCond * (LBFT[S.awg]||0.6);
+  const socaWeight = socaFeet * socaW;
+
+  return {legs:legs, legsLN:legsLN, neutral:neutral, positions:positions, circuits:allCircuits,
+    motors:allMotors, maxLeg:maxLeg, minLeg:minLeg, avgLeg:avgLeg, imbalance:imbalance, kva:kva,
+    totalVA:totalVA, vd:vd, vdPct:vdPct, amp1:amp1, minAwg:minAwg, contDemand:contDemand,
+    service:service, genPick:genPick, looms:looms, socaFeet:socaFeet, socaCuts:socaCuts,
+    socaWeight:socaWeight, camCut:camCut, camFeet:camFeet, camCond:camCond, camWeight:camWeight,
+    sAwg:sAwg, worstTotal:worstTotal,
+    units:S.rows.reduce(function(t,r){ return t+r.qty; },0)};
+}
+
+/* ============================== RENDER ============================== */
+const $ = function(id){ return document.getElementById(id); };
+const n1 = function(v){ return v.toFixed(1); };
+const n0 = function(v){ return Math.round(v).toLocaleString(); };
+function phaseVar(p){ return "var(--p"+p+")"; }
+
+function render(){
+  document.documentElement.setAttribute("data-system", S.sys);
+  const R = compute(), s = SYS[S.sys];
+
+  /* ---------- tiles ---------- */
+  const imbFlag = R.imbalance>15 ? "flag-crit" : R.imbalance>7 ? "flag-warn" : "flag-ok";
+  const vdFlag  = R.worstTotal.pct>5 ? "flag-crit" : R.worstTotal.pct>3 ? "flag-warn" : "flag-ok";
+  const nRatio  = R.maxLeg>0 ? R.neutral/R.maxLeg : 0;
+  $("tiles").innerHTML = [
+    tile("Connected load", n1(R.totalVA/1000), " kVA", R.units+" units · "+S.positions.length+" positions"),
+    tile("Heaviest leg", n1(R.maxLeg), " A", "avg "+n1(R.avgLeg)+" A per leg"),
+    tile("Imbalance", n1(R.imbalance), " %", n1(R.maxLeg-R.minLeg)+" A spread", imbFlag),
+    tile("Neutral", n1(R.neutral), " A", n0(nRatio*100)+" % of heaviest leg"),
+    tile("Service @125 %", R.service?n0(R.service):"—", " A",
+      R.service ? n1(R.contDemand)+" A demand" : "exceeds 1200 A", R.service?"":"flag-crit"),
+    tile("Branch circuits", String(R.circuits.length), "",
+      R.looms+" loom"+(R.looms===1?"":"s")+(R.motors.length?" + "+R.motors.length+" motor":"")),
+    tile("Worst drop", n1(R.worstTotal.pct), " %", "at "+R.worstTotal.name, vdFlag)
+  ].join("");
+
+  /* ---------- notices ---------- */
+  const notes = [];
+  if(!R.units) notes.push(note("ok","Empty","Add fixtures and the panel fills in."));
+  if(R.imbalance > 15)
+    notes.push(note("crit","Imbalance", n1(R.imbalance)+" % between legs. Past about 10 % you are putting real "+
+      "current on the neutral and making a genset hunt. Try auto-balance, or split the heavy fixture type across leg pairs."));
+  else if(R.imbalance > 7)
+    notes.push(note("warn","Imbalance", n1(R.imbalance)+" % between the heaviest and lightest leg — workable, but "+
+      "there is room to move a circuit."));
+  const badPos = R.positions.filter(function(P){ return P.totalPct > 5 && P.circuits.length; });
+  if(badPos.length)
+    notes.push(note("crit","Volt drop", badPos.map(function(P){
+      return P.p.name+" ("+n1(P.totalPct)+" %)"; }).join(", ")+" exceed"+(badPos.length===1?"s":"")+
+      " 5 % at the fixture. The feeder is "+n1(R.vdPct)+" % of that — the rest is "+R.sAwg+" AWG Soca on a long run. "+
+      "Shorten the run, split the position across two looms, or move the distro closer."));
+  else {
+    const warnPos = R.positions.filter(function(P){ return P.totalPct > 3 && P.circuits.length; });
+    if(warnPos.length)
+      notes.push(note("warn","Volt drop", warnPos.map(function(P){
+        return P.p.name+" ("+n1(P.totalPct)+" %)"; }).join(", ")+" past 3 % at the fixture. Under the 5 % combined "+
+        "recommendation, so this is a watch item, not a problem."));
+  }
+  if(R.maxLeg > R.amp1)
+    notes.push(note("crit","Ampacity", n1(R.maxLeg)+" A on the heaviest leg exceeds the "+n0(R.amp1)+" A ampacity of "+
+      (S.sets>1?S.sets+" sets of ":"")+S.awg+" "+(S.mat==="cu"?"copper":"aluminum")+"."));
+  if(nRatio > 0.6)
+    notes.push(note("warn","Neutral", "The neutral is carrying "+n0(nRatio*100)+" % of the heaviest leg before any "+
+      "harmonic content. LED drivers are non-linear — run a full-size neutral and do not share one."));
+  if(R.motors.length)
+    notes.push(note("warn","Motors", R.motors.length+" three-phase motor load"+(R.motors.length===1?"":"s")+
+      " on their own distro. Running current is counted; starting inrush of 3–6× is not."));
+  $("notes").innerHTML = notes.join("");
+
+  /* ---------- rig ---------- */
+  $("rigcount").textContent = R.units+" units · "+n0(R.totalVA)+" VA";
+  const body = $("rigbody");
+  if(!S.rows.length) body.innerHTML = '<tr><td colspan="8" class="empty">Nothing hung yet.</td></tr>';
+  else body.innerHTML = S.rows.map(function(r){
+    const i = rowInfo(r), a = legAmps(i.va, r.mode);
+    return '<tr>'+
+      '<td><div class="rig-name">'+esc(i.name)+'</div><div class="rig-brand">'+esc(i.brand)+'</div></td>'+
+      '<td class="num"><input type="number" class="qty" min="1" max="999" value="'+r.qty+'" data-q="'+r.uid+'"></td>'+
+      '<td><select data-p="'+r.uid+'">'+ S.positions.map(function(p){
+          return '<option value="'+p.id+'"'+(p.id===r.pos?" selected":"")+'>'+esc(p.name)+'</option>'; }).join('') +'</select></td>'+
+      '<td><select data-m="'+r.uid+'">'+ modes().map(function(m){
+          return '<option value="'+m.v+'"'+(m.v===r.mode?" selected":"")+'>'+m.t+'</option>'; }).join('') +'</select></td>'+
+      '<td class="num">'+n0(i.va)+'</td><td class="num">'+a.toFixed(2)+'</td>'+
+      '<td class="num">'+n0(i.va*r.qty)+'</td>'+
+      '<td class="noprint" style="text-align:right"><button class="ghost" data-x="'+r.uid+'" aria-label="Remove '+esc(i.name)+'">✕</button></td></tr>';
+  }).join("") + (S.rows.length>1 ?
+    '<tr><td colspan="6" style="text-align:right;color:var(--ink-3);font-size:12px;border-top:1px solid var(--line-strong)">Connected total</td>'+
+    '<td class="num" style="font-weight:600;border-top:1px solid var(--line-strong)">'+n0(R.totalVA)+'</td>'+
+    '<td class="noprint" style="border-top:1px solid var(--line-strong)"></td></tr>' : "");
+
+  /* ---------- phase columns ---------- */
+  const contrib = {A:{},B:{},C:{}};
+  R.positions.forEach(function(P){
+    P.circuits.forEach(function(c){
+      Object.keys(c.items).forEach(function(nm){
+        // split the circuit's amps back out across its legs, by item share
+        const share = c.a * (c.items[nm] / Object.keys(c.items).reduce(function(t,k){ return t+c.items[k]; },0));
+        c.conn.forEach(function(ph){ contrib[ph][nm] = (contrib[ph][nm]||0) + share; });
+      });
+    });
+  });
+  R.motors.forEach(function(m){ PH.forEach(function(ph){ contrib[ph][m.name] = (contrib[ph][m.name]||0) + m.a; }); });
+  const names = []; S.rows.forEach(function(r){ const n = rowInfo(r).name; if(names.indexOf(n)<0) names.push(n); });
+  const scaleTop = Math.max(R.maxLeg*1.10, R.service ? R.service*1.04 : 0, 10);
+  $("phases").innerHTML = PH.map(function(p,idx){
+    const blocks = names.filter(function(nm){ return contrib[p][nm]; }).map(function(nm,j){
+      const amps = contrib[p][nm], h = amps/scaleTop*100;
+      const shade = 0.32 + 0.60*(1 - j/Math.max(names.length,1));
+      return '<div class="seg-block" style="height:'+h.toFixed(2)+'%;background:'+phaseVar(p)+';opacity:'+shade.toFixed(2)+'"'+
+        ' title="'+esc(nm)+' — '+n1(amps)+' A">'+(h>7?'<span>'+n1(amps)+' A</span>':'')+'</div>';
+    }).join("");
+    const capPct = R.service ? Math.min(R.service/scaleTop*100,100) : null;
+    return '<div class="ph" style="--ph:'+phaseVar(p)+'"><div class="stackwrap">'+blocks+
+      (capPct!==null && capPct<100 ? '<div class="cap" style="bottom:'+capPct.toFixed(2)+'%"><b>'+R.service+' A service</b></div>' : '')+
+      '</div><div class="foot"><span class="id">Ø'+p+'</span><span class="wire">'+s.wires[idx]+'</span>'+
+      '<span class="amps">'+n1(R.legs[p])+' A</span></div></div>';
+  }).join("");
+
+  const harmonic = R.neutral > 0
+    ? "Fundamental only. LED drivers are non-linear loads whose triplen harmonics add in the neutral instead of "+
+      "cancelling — typically pushing it to 1.7× a phase, 3× in theory. Full-size neutral, never shared."
+    : "Every load here is line-to-line, so nothing returns on the neutral. Still pull one for the distro.";
+  $("neutral").innerHTML = '<span class="id">N</span><span class="wire">White</span>'+
+    '<span class="amps">'+n1(R.neutral)+' A</span><span class="hint">'+harmonic+'</span>';
+
+  $("legend").innerHTML = names.map(function(nm,j){
+    const shade = 0.32 + 0.60*(1 - j/Math.max(names.length,1));
+    return '<div class="it"><span class="sw" style="background:var(--pC);opacity:'+shade.toFixed(2)+'"></span>'+esc(nm)+'</div>';
+  }).join("") + '<div class="it" style="color:var(--ink-3)">Shade = fixture · Column = '+s.label+' wire code</div>';
+
+  /* ---------- positions ---------- */
+  $("posbody").innerHTML = R.positions.map(function(P){
+    const cls = P.totalPct>5 ? "crit" : P.totalPct>3 ? "warn" : "";
+    return '<tr>'+
+      '<td><input type="text" data-pn="'+P.p.id+'" value="'+esc(P.p.name)+'" style="width:100%;min-width:110px;font-family:inherit"></td>'+
+      '<td class="num"><input type="number" data-pd="'+P.p.id+'" class="qty" min="1" max="1000" value="'+P.p.dist+'"></td>'+
+      '<td class="num">'+n1(P.kva)+'</td><td class="num">'+P.circuits.length+'</td><td class="num">'+P.looms+'</td>'+
+      '<td class="num" style="'+(cls==="crit"?"color:var(--crit);font-weight:600":cls==="warn"?"color:var(--warn)":"")+'">'+
+        (P.circuits.length ? n1(P.totalPct)+" %" : "—")+'</td>'+
+      '<td class="noprint" style="text-align:right">'+(S.positions.length>1 ?
+        '<button class="ghost" data-px="'+P.p.id+'" aria-label="Remove '+esc(P.p.name)+'">✕</button>' : '')+'</td></tr>';
+  }).join("");
+
+  /* ---------- circuits ---------- */
+  $("cktsum").textContent = R.circuits.length+" × "+S.brk+" A on "+R.sAwg+" AWG"+
+    (S.cont?" @ "+n1(cktCap())+" A cont.":"")+" · "+R.looms+" loom"+(R.looms===1?"":"s");
+  const c = $("circuits");
+  if(!R.circuits.length && !R.motors.length)
+    c.innerHTML = '<div class="empty">Circuits appear once there is a rig to feed.</div>';
+  else {
+    let html = "";
+    R.positions.forEach(function(P){
+      if(!P.circuits.length) return;
+      const cls = P.totalPct>5 ? "crit" : P.totalPct>3 ? "warn" : "";
+      html += '<div class="grp"><div class="gh"><span class="pos">'+esc(P.p.name)+'</span>'+
+        '<span class="tag">'+P.p.dist+'′ run</span>'+
+        '<span class="tag '+cls+'">'+n1(P.totalPct)+' % at fixture</span>'+
+        '<hr><span class="tag">'+P.circuits.length+' ckt · '+P.looms+' loom'+(P.looms===1?"":"s")+'</span></div>';
+      for(let L=0; L<P.looms; L++){
+        const slice = P.circuits.slice(L*6, L*6+6);
+        html += '<div class="loomrow"><span class="lbl">SOCA '+(L+1)+'</span><hr>'+
+          '<span class="lbl">'+n1(slice.reduce(function(t,x){return t+x.a;},0))+' A</span></div>'+
+          '<div class="ckt-grid">'+ slice.map(function(k){
+            const pct = Math.min(k.a/S.brk*100,100), over = k.a > cktCap()+1e-9;
+            return '<div class="ckt" style="--ph:'+phaseVar(k.conn[0])+'">'+
+              '<div class="cid"><span class="n">Ckt '+k.num+'</span>'+
+                '<span class="n" style="color:var(--ph)">Ø'+k.conn.join("")+'</span>'+
+                '<span class="a"'+(over?' style="color:var(--crit)"':'')+'>'+n1(k.a)+' A</span></div>'+
+              '<div class="load">'+Object.keys(k.items).map(function(nm){
+                  return k.items[nm]+'× '+esc(nm); }).join("<br>")+'</div>'+
+              '<div class="vd">−'+n1(k.vd)+' V on the run</div>'+
+              '<div class="bar"><i style="width:'+pct.toFixed(1)+'%"></i></div></div>';
+          }).join("")+'</div>';
+      }
+      html += '</div>';
+    });
+    if(R.motors.length){
+      const g = {};
+      R.motors.forEach(function(m){ const k = m.posName+"|"+m.name; g[k]=(g[k]||{c:0,a:m.a,n:m.name,p:m.posName}); g[k].c++; });
+      html += '<div class="grp"><div class="gh"><span class="pos">Motor distro</span>'+
+        '<span class="tag">3ø · own feed</span><hr>'+
+        '<span class="tag">'+n1(R.motors.reduce(function(t,m){return t+m.a;},0))+' A per leg</span></div><div class="ckt-grid">'+
+        Object.keys(g).map(function(k){ const v = g[k];
+          return '<div class="ckt" style="--ph:var(--ink-3)">'+
+            '<div class="cid"><span class="n">3ø</span><span class="a">'+n1(v.a*v.c)+' A</span></div>'+
+            '<div class="load">'+v.c+'× '+esc(v.n)+'</div>'+
+            '<div class="vd">'+esc(v.p)+' · '+n1(v.a)+' A ea · inrush not modelled</div></div>';
+        }).join("")+'</div></div>';
+    }
+    c.innerHTML = html;
+  }
+
+  /* ---------- feeder ---------- */
+  $("feedrows").innerHTML = [
+    row("Conductor ampacity", n0(R.amp1)+" A", R.maxLeg>R.amp1 ? "crit":""),
+    row("Load on heaviest leg", n1(R.maxLeg)+" A"),
+    row("Feeder drop", n1(R.vd)+" V  ("+n1(R.vdPct)+" %)", R.vdPct>3 ? (R.vdPct>5?"crit":"warn") : "ok"),
+    row("Voltage at the distro", n1(s.vll-R.vd)+" V"),
+    row("Smallest conductor ≤3 %", R.minAwg || "none in table"),
+    row("Cable in the run", n0(R.camFeet*R.camCond)+" ft — "+R.camCond+" conductors")
+  ].join("");
+
+  /* ---------- service ---------- */
+  $("genrows").innerHTML = [
+    row("Apparent power", n1(R.kva)+" kVA"),
+    row("Real power @ 0.9 PF", n1(R.kva*0.9)+" kW"),
+    row("Demand @125 % continuous", n1(R.contDemand)+" A"),
+    row("Camlock service", R.service ? R.service+" A" : "over 1200 A", R.service?"em":"crit"),
+    row("Genset with 25 % headroom", R.genPick ? R.genPick+" kW" : "over 600 kW", R.genPick?"em":"crit"),
+    row("Distro tie-in", s.label+" · 4-wire + ground")
+  ].join("");
+
+  /* ---------- chain limits ---------- */
+  const cap = cktCap();
+  $("chainrule").textContent = S.brk+" A"+(S.cont?" @ 80 %":"")+" = "+n1(cap)+" A per circuit";
+  $("chA").textContent = "per "+s.vln+" V ckt";
+  $("chB").textContent = "per "+s.vll+" V ckt";
+  const seen = {}, chain = [];
+  S.rows.forEach(function(r){ const i = rowInfo(r);
+    if(seen[i.name] || !i.va) return; seen[i.name]=1; chain.push(i); });
+  $("chainbody").innerHTML = chain.length ? chain.sort(function(a,b){ return b.va-a.va; }).map(function(i){
+    const nLn = Math.floor(cap / (i.va/s.vln)), nLl = Math.floor(cap / (i.va/s.vll));
+    const f = function(v){ return v<1 ? '<span style="color:var(--crit)">over</span>' : v; };
+    return '<tr><td><span class="rig-name">'+esc(i.name)+'</span> <span class="rig-brand">'+esc(i.brand)+'</span></td>'+
+      '<td class="num">'+n0(i.va)+'</td><td class="num">'+f(nLn)+'</td><td class="num">'+f(nLl)+'</td></tr>';
+  }).join("") : '<tr><td colspan="4" class="empty">Add fixtures to see chain limits.</td></tr>';
+
+  /* ---------- pack list ---------- */
+  const packRows = R.socaCuts.map(function(x){
+    return row(x.looms+" × Soca — "+x.name, x.label+"  ("+n0(x.feet*x.looms)+"′)"); });
+  packRows.push(row("Soca total", R.looms+" loom"+(R.looms===1?"":"s")+" · "+n0(R.socaFeet)+"′ of "+R.sAwg+" AWG"));
+  packRows.push(row("Break-outs / fan-ins", (R.looms*2)+" ends"));
+  packRows.push(row("Feeder", (S.sets>1?S.sets+" sets · ":"")+cutLabel(R.camCut)+" × "+R.camCond+" conductors"));
+  packRows.push(row("Cable weight, approx.", n0(R.socaWeight+R.camWeight)+" lb"));
+  $("packrows").innerHTML = packRows.join("");
+  $("packweight").textContent = n0(R.socaFeet + R.camFeet*R.camCond)+" ft total";
+
+  renderRiser(R, s);
+  renderSaved();
+  window.__R = R;
+}
+
+/* ---------- one-line riser: where the power goes and where the volts go ---------- */
+function renderRiser(R, s){
+  const rows = R.positions.filter(function(P){ return P.circuits.length; }).map(function(P){
+    const sev = P.totalPct>5 ? "var(--crit)" : P.totalPct>3 ? "var(--warn)" : "var(--accent)";
+    return {name:P.p.name, sev:sev,
+      sub:P.looms+"× Soca "+R.sAwg+" AWG · "+P.p.dist+"′",
+      r1:P.circuits.length+" ckt · "+n1(P.kva)+" kVA",
+      r2:n1(P.totalPct)+" % at fixture"};
+  });
+  if(R.motors.length) rows.push({name:"Motor distro", sev:"var(--ink-3)", sub:"3ø direct feed",
+    r1:R.motors.length+" hoist"+(R.motors.length===1?"":"s"), r2:"inrush not modelled"});
+
+  $("risersum").textContent = (R.service ? R.service+" A · " : "") + R.circuits.length + " circuits · " +
+    rows.length + " drop" + (rows.length===1?"":"s");
+
+  if(!rows.length){
+    $("riser").innerHTML = '<div class="empty">The riser draws itself once a position has circuits on it.</div>';
+    return;
+  }
+
+  const W=920, rowH=46, gap=9, top=26, bot=24, disH=128, srcH=92;
+  const contentH = rows.length*rowH + (rows.length-1)*gap;
+  const bandH = Math.max(contentH, disH);
+  const H = top + bandH + bot;
+  const cy = top + bandH/2;
+  const rowTop = cy - contentH/2;
+  const rcy = function(i){ return rowTop + i*(rowH+gap) + rowH/2; };
+  const srcX=8, srcW=152, disX=296, disW=176, busX=516, posX=592, posW=320;
+  const srcY = cy - srcH/2, disY = cy - disH/2;
+
+  const feederTop = S.len+"′ · "+S.awg+" "+(S.mat==="cu"?"Cu":"Al")+(S.sets>1 ? " ×"+S.sets+" sets" : "");
+  const feederBot = "−"+n1(R.vd)+" V · "+n1(R.vdPct)+" %";
+  const fSev = R.vdPct>3 ? (R.vdPct>5 ? "var(--crit)" : "var(--warn)") : "var(--ink-3)";
+
+  const legRow = function(lbl, amps, fill, y){
+    return '<rect x="'+(disX+13)+'" y="'+(y-7)+'" width="8" height="8" rx="1" fill="'+fill+
+      '" stroke="var(--line-strong)" stroke-width="0.75"></rect>'+
+      '<text class="dt" x="'+(disX+27)+'" y="'+y+'">'+lbl+'</text>'+
+      '<text class="dt" x="'+(disX+disW-13)+'" y="'+y+'" text-anchor="end">'+amps+' A</text>';
+  };
+  const trunc = function(t){ return t.length>26 ? t.slice(0,25)+"…" : t; };
+
+  const svg =
+  '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="One-line riser: '+
+    (R.service||"—")+' amp service through the distro to '+rows.length+' positions, with voltage drop at each">'+
+  '<defs><marker id="rsr-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">'+
+    '<path d="M0,0 L8,4 L0,8 z" fill="var(--ink-2)"></path></marker></defs>'+
+
+  /* source */
+  '<rect class="bx" x="'+srcX+'" y="'+srcY+'" width="'+srcW+'" height="'+srcH+'" rx="3"></rect>'+
+  '<text class="ttl" x="'+(srcX+13)+'" y="'+(srcY+20)+'">SERVICE</text>'+
+  '<text class="big" x="'+(srcX+13)+'" y="'+(srcY+45)+'">'+(R.service ? R.service+" A" : "—")+'</text>'+
+  '<text class="sm" x="'+(srcX+13)+'" y="'+(srcY+64)+'">'+s.label+' · 3ø 4-wire</text>'+
+  '<text class="sm" x="'+(srcX+13)+'" y="'+(srcY+79)+'">or '+(R.genPick ? R.genPick+" kW genset" : "genset over 600 kW")+'</text>'+
+
+  /* feeder */
+  '<line class="ln" x1="'+(srcX+srcW)+'" y1="'+cy+'" x2="'+(disX-4)+'" y2="'+cy+'" stroke-width="2.5" marker-end="url(#rsr-arrow)"></line>'+
+  '<text class="sm" x="'+((srcX+srcW+disX)/2)+'" y="'+(cy-10)+'" text-anchor="middle">'+feederTop+'</text>'+
+  '<text class="sm" x="'+((srcX+srcW+disX)/2)+'" y="'+(cy+19)+'" text-anchor="middle" fill="'+fSev+'">'+feederBot+'</text>'+
+
+  /* distro */
+  '<rect class="bx" x="'+disX+'" y="'+disY+'" width="'+disW+'" height="'+disH+'" rx="3"></rect>'+
+  '<text class="ttl" x="'+(disX+13)+'" y="'+(disY+20)+'">DISTRO</text>'+
+  legRow("ØA", n1(R.legs.A), "var(--pA)", disY+42)+
+  legRow("ØB", n1(R.legs.B), "var(--pB)", disY+61)+
+  legRow("ØC", n1(R.legs.C), "var(--pC)", disY+80)+
+  '<line class="ln" x1="'+(disX+13)+'" y1="'+(disY+89)+'" x2="'+(disX+disW-13)+'" y2="'+(disY+89)+'" stroke-width="1" stroke-dasharray="2 2"></line>'+
+  legRow("N", n1(R.neutral), "var(--surface)", disY+105)+
+  '<text class="sm" x="'+(disX+13)+'" y="'+(disY+120)+'">'+R.circuits.length+' ckt · '+R.looms+' loom'+(R.looms===1?"":"s")+'</text>'+
+
+  /* bus + taps */
+  '<line class="ln" x1="'+(disX+disW)+'" y1="'+cy+'" x2="'+busX+'" y2="'+cy+'" stroke-width="2.5"></line>'+
+  (rows.length>1 ? '<line class="ln" x1="'+busX+'" y1="'+rcy(0)+'" x2="'+busX+'" y2="'+rcy(rows.length-1)+'" stroke-width="2.5"></line>' : '')+
+  rows.map(function(r,i){
+    return '<line class="ln" x1="'+busX+'" y1="'+rcy(i)+'" x2="'+(posX-4)+'" y2="'+rcy(i)+'" stroke-width="1.5" marker-end="url(#rsr-arrow)"></line>'+
+      '<circle cx="'+busX+'" cy="'+rcy(i)+'" r="2.5" fill="var(--ink-2)"></circle>';
+  }).join("")+
+
+  /* positions */
+  rows.map(function(r,i){
+    const y = rcy(i) - rowH/2;
+    return '<rect class="bx" x="'+posX+'" y="'+y+'" width="'+posW+'" height="'+rowH+'" rx="3"></rect>'+
+      '<rect x="'+posX+'" y="'+y+'" width="3.5" height="'+rowH+'" fill="'+r.sev+'"></rect>'+
+      '<text class="nm" x="'+(posX+15)+'" y="'+(y+20)+'">'+esc(trunc(r.name))+'</text>'+
+      '<text class="sm" x="'+(posX+15)+'" y="'+(y+36)+'">'+esc(r.sub)+'</text>'+
+      '<text class="dt" x="'+(posX+posW-13)+'" y="'+(y+20)+'" text-anchor="end">'+esc(r.r1)+'</text>'+
+      '<text class="dt" x="'+(posX+posW-13)+'" y="'+(y+36)+'" text-anchor="end" fill="'+r.sev+'">'+esc(r.r2)+'</text>';
+  }).join("")+
+  '</svg>';
+
+  $("riser").innerHTML = svg +
+    '<figcaption>Volts leave on the left and are spent on the way to the right: the feeder drop is shared by everything, '+
+    'then each position adds its own branch drop over the Soca run. The stripe on each position is that total at the fixture — '+
+    'green under 3 %, amber to 5 %, red past the NEC combined recommendation.</figcaption>';
+}
+
+function tile(k,v,unit,n,flag){
+  return '<div class="tile '+(flag||"")+'"><span class="k">'+k+'</span><span class="v">'+v+
+    (unit?'<small>'+unit+'</small>':'')+'</span><span class="n">'+n+'</span></div>';
+}
+function note(kind,m,t){ return '<div class="note '+kind+'"><span class="m">'+m+'</span><span>'+t+'</span></div>'; }
+function row(k,v,cls){
+  const col = cls==="crit"?"color:var(--crit)":cls==="warn"?"color:var(--warn)":
+              (cls==="ok"||cls==="em")?"color:var(--accent)":"";
+  return '<div class="r"><span class="k">'+k+'</span><span class="v" style="'+col+'">'+v+'</span></div>';
+}
+
+/* ============================== CONTROLS ============================== */
+function fillPicker(){
+  let html = "", cat = null;
+  LIB.forEach(function(f){
+    if(f.c!==cat){ if(cat!==null) html += "</optgroup>"; html += '<optgroup label="'+f.c+'">'; cat = f.c; }
+    html += '<option value="'+f.id+'">'+esc(f.b)+" "+esc(f.n)+" — "+f.va+" VA</option>";
+  });
+  $("pick").innerHTML = html + "</optgroup>";
+}
+function fillModes(){
+  const keep = $("pickmode").value;
+  $("pickmode").innerHTML = modes().map(function(m){ return '<option value="'+m.v+'">'+m.t+'</option>'; }).join("");
+  $("pickmode").value = modes().some(function(m){ return m.v===keep; }) ? keep : "ll";
+}
+function fillPositions(){
+  const keep = $("pickpos").value;
+  $("pickpos").innerHTML = S.positions.map(function(p){
+    return '<option value="'+p.id+'">'+esc(p.name)+'</option>'; }).join("");
+  $("pickpos").value = S.positions.some(function(p){ return p.id===keep; }) ? keep : (S.positions[0]||{}).id;
+}
+function fillGauges(){
+  $("awg").innerHTML = GAUGES.map(function(g){
+    return '<option value="'+g+'">'+g+(/^\d{3}$/.test(g)?" kcmil":" AWG")+'</option>'; }).join("");
+  $("awg").value = S.awg;
+}
+
+function bind(){
+  $("sys").addEventListener("change", function(e){ S.sys = e.target.value; fillModes(); render(); });
+  $("brk").addEventListener("change", function(e){ S.brk = +e.target.value; render(); });
+  $("der").addEventListener("change", function(e){ S.cont = e.target.value==="1"; render(); });
+  $("len").addEventListener("input", function(e){ S.len = Math.max(1, +e.target.value||1); render(); });
+  $("awg").addEventListener("change", function(e){ S.awg = e.target.value; render(); });
+  $("mat").addEventListener("change", function(e){ S.mat = e.target.value; render(); });
+  $("sets").addEventListener("input", function(e){ S.sets = Math.max(1, Math.min(6, +e.target.value||1)); render(); });
+  $("mAuto").addEventListener("click", function(){ S.group=false; setSeg(); render(); });
+  $("mLock").addEventListener("click", function(){ S.group=true;  setSeg(); render(); });
+  $("printbtn").addEventListener("click", function(){ window.print(); });
+
+  $("addbtn").addEventListener("click", function(){
+    const fid = $("pick").value, qty = Math.max(1, +$("pickqty").value||1);
+    const f = fx(fid), m = (f && f.mode) ? f.mode : $("pickmode").value, p = $("pickpos").value;
+    const hit = S.rows.find(function(r){ return r.fid===fid && r.mode===m && r.pos===p; });
+    if(hit) hit.qty += qty; else S.rows.push({uid:uid(), fid:fid, qty:qty, mode:m, pos:p});
+    render();
+  });
+  $("addcustom").addEventListener("click", function(){
+    const name = ($("cname").value||"").trim() || "Custom load";
+    S.rows.push({uid:uid(), custom:{name:name, va:Math.max(1,+$("cva").value||1)},
+      qty:Math.max(1,+$("cqty").value||1), mode:$("pickmode").value, pos:$("pickpos").value});
+    $("cname").value = ""; render();
+  });
+  $("addpos").addEventListener("click", function(){
+    const id = "p"+Math.random().toString(36).slice(2,7);
+    S.positions.push({id:id, name:"Position "+(S.positions.length+1), dist:100});
+    fillPositions(); render();
+  });
+
+  $("rigbody").addEventListener("input", function(e){
+    const q = e.target.getAttribute("data-q"); if(!q) return;
+    const r = S.rows.find(function(x){ return x.uid===q; });
+    if(r){ r.qty = Math.max(1, Math.min(999, +e.target.value||1)); render(); }
+  });
+  $("rigbody").addEventListener("change", function(e){
+    const m = e.target.getAttribute("data-m"), p = e.target.getAttribute("data-p");
+    const key = m || p; if(!key) return;
+    const r = S.rows.find(function(x){ return x.uid===key; });
+    if(!r) return;
+    if(m) r.mode = e.target.value; else r.pos = e.target.value;
+    render();
+  });
+  $("rigbody").addEventListener("click", function(e){
+    const btn = e.target.closest("[data-x]"); if(!btn) return;
+    S.rows = S.rows.filter(function(x){ return x.uid !== btn.getAttribute("data-x"); });
+    render();
+  });
+
+  $("posbody").addEventListener("input", function(e){
+    const nm = e.target.getAttribute("data-pn"), d = e.target.getAttribute("data-pd");
+    if(nm){ const p = pos(nm); if(p){ p.name = e.target.value; fillPositions(); repaintSoft(); } }
+    else if(d){ const p = pos(d); if(p){ p.dist = Math.max(1, Math.min(1000, +e.target.value||1)); render(); } }
+  });
+  $("posbody").addEventListener("click", function(e){
+    const btn = e.target.closest("[data-px]"); if(!btn) return;
+    const id = btn.getAttribute("data-px");
+    if(S.positions.length<2) return;
+    S.positions = S.positions.filter(function(p){ return p.id!==id; });
+    const fallback = S.positions[0].id;
+    S.rows.forEach(function(r){ if(r.pos===id) r.pos = fallback; });
+    fillPositions(); render();
+  });
+
+  $("csv").addEventListener("click", exportCSV);
+  $("savebtn").addEventListener("click", saveRig);
+}
+/* renaming a position shouldn't steal focus from the input being typed in */
+let softTimer = null;
+function repaintSoft(){ clearTimeout(softTimer); softTimer = setTimeout(function(){
+  const a = document.activeElement, id = a && a.getAttribute && a.getAttribute("data-pn");
+  const selStart = id && a.selectionStart;
+  render();
+  if(id){ const el = document.querySelector('[data-pn="'+id+'"]');
+    if(el){ el.focus(); try{ el.setSelectionRange(selStart, selStart); }catch(e){} } }
+}, 450); }
+
+function setSeg(){
+  $("mAuto").setAttribute("aria-pressed", String(!S.group));
+  $("mLock").setAttribute("aria-pressed", String(S.group));
+}
+
+/* ============================== EXPORT ============================== */
+function exportCSV(){
+  const R = window.__R || compute(), s = SYS[S.sys];
+  const L = [
+    ["Distro Plot — circuit schedule"],
+    ["Service", s.label, "Breaker", S.brk+" A on "+R.sAwg+" AWG", "Rule", S.cont?"80% continuous":"100%"],
+    ["Feeder", S.len+" ft", S.awg+" "+(S.mat==="cu"?"Cu":"Al"), S.sets+" set(s)", "Feeder drop", n1(R.vdPct)+" %"],
+    ["Heaviest leg", n1(R.maxLeg)+" A", "Imbalance", n1(R.imbalance)+" %", "Neutral", n1(R.neutral)+" A",
+     "Service", (R.service||"—")+" A"],
+    [],
+    ["Position","Run ft","Loom","Circuit","Phase","Volts","Amps","% breaker","Branch drop V","Total drop %","Load"]
+  ];
+  R.positions.forEach(function(P){
+    P.circuits.forEach(function(k,i){
+      L.push([P.p.name, P.p.dist, "Soca "+(Math.floor(i/6)+1), k.num, "Ø"+k.conn.join(""),
+        k.mode==="ln"?s.vln:s.vll, n1(k.a), Math.round(k.a/S.brk*100), n1(k.vd),
+        n1(R.vdPct + k.vdPct),
+        Object.keys(k.items).map(function(nm){ return k.items[nm]+"x "+nm; }).join(" + ")]);
+    });
+  });
+  R.motors.forEach(function(m,i){
+    L.push([m.posName, "", "Motor distro", "M"+(i+1), "Ø3", s.vll, n1(m.a), "", "", "", "1x "+m.name]);
+  });
+  L.push([]); L.push(["Pack list"]);
+  R.socaCuts.forEach(function(x){ L.push([x.name, x.looms+" loom(s)", x.label, n0(x.feet*x.looms)+" ft"]); });
+  L.push(["Feeder", S.sets+" set(s)", cutLabel(R.camCut), R.camCond+" conductors", n0(R.camFeet*R.camCond)+" ft"]);
+  L.push(["Cable weight approx", n0(R.socaWeight+R.camWeight)+" lb"]);
+
+  const csv = L.map(function(r){ return r.map(function(x){
+    x = String(x==null?"":x); return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(","); }).join("\n");
+
+  if(DOWNLOADS) DOWNLOADS.save({filename:"distro-plot-schedule.csv", data:csv}).catch(function(){ copyFallback(csv); });
+  else copyFallback(csv);
+}
+function copyFallback(csv){
+  const b = $("csv"), old = b.textContent;
+  if(navigator.clipboard && navigator.clipboard.writeText)
+    navigator.clipboard.writeText(csv).then(function(){
+      b.textContent = "Copied to clipboard"; setTimeout(function(){ b.textContent = old; },1800);
+    }).catch(function(){ b.textContent = "Copy blocked"; setTimeout(function(){ b.textContent = old; },1800); });
+  else { b.textContent = "Copy blocked"; setTimeout(function(){ b.textContent = old; },1800); }
+}
+
+/* ============================== SAVED RIGS ============================== */
+function snapshot(){
+  return {sys:S.sys, brk:S.brk, cont:S.cont, group:S.group, len:S.len, awg:S.awg, mat:S.mat, sets:S.sets,
+    positions:S.positions.map(function(p){ return {id:p.id, name:p.name, dist:p.dist}; }),
+    rows:S.rows.map(function(r){ return {fid:r.fid, custom:r.custom, qty:r.qty, mode:r.mode, pos:r.pos}; })};
+}
+function applySnapshot(d){
+  if(!d || !Array.isArray(d.rows)) return;
+  S.sys = d.sys||"208"; S.brk = d.brk||20; S.cont = d.cont!==false; S.group = !!d.group;
+  S.len = d.len||150; S.awg = d.awg||"2/0"; S.mat = d.mat||"cu"; S.sets = d.sets||1;
+  S.positions = (Array.isArray(d.positions) && d.positions.length)
+    ? d.positions.map(function(p){ return {id:p.id, name:p.name, dist:p.dist}; })
+    : DEFAULT_POS.map(function(p){ return Object.assign({}, p); });
+  const ids = S.positions.map(function(p){ return p.id; });
+  S.rows = d.rows.map(function(r){
+    return {uid:uid(), fid:r.fid, custom:r.custom, qty:r.qty||1, mode:r.mode||"ll",
+      pos: ids.indexOf(r.pos)>=0 ? r.pos : ids[0]}; });
+  $("sys").value = S.sys; $("brk").value = String(S.brk); $("der").value = S.cont?"1":"0";
+  $("len").value = S.len; $("mat").value = S.mat; $("sets").value = S.sets;
+  fillModes(); fillPositions(); fillGauges(); setSeg(); render();
+}
+function saveRig(){
+  const name = ($("signame").value||"").trim();
+  if(!name){ $("signame").focus(); return; }
+  const key = name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60) || ("rig-"+Date.now());
+  const rec = {name:name, saved:Date.now(), data:snapshot()};
+  savedRigs = savedRigs.filter(function(x){ return x.key!==key; });
+  savedRigs.push(Object.assign({key:key}, rec));
+  $("signame").value = "";
+  if(DB) DB.doc("rigs/"+key).set(rec).catch(function(){ localWrite(); }); else localWrite();
+  localWrite(); renderSaved();
+}
+function localWrite(){ try{ localStorage.setItem("distro-plot-rigs", JSON.stringify(savedRigs)); }catch(e){} }
+function removeRig(key){
+  savedRigs = savedRigs.filter(function(x){ return x.key!==key; });
+  if(DB) DB.doc("rigs/"+key).delete().catch(function(){});
+  localWrite(); renderSaved();
+}
+function renderSaved(){
+  const el = $("saved");
+  if(!savedRigs.length){
+    el.innerHTML = '<span style="font-size:12px;color:var(--ink-3)">No saved rigs yet — save one and it comes back next time you open this.</span>';
+    return;
+  }
+  el.innerHTML = savedRigs.slice().sort(function(a,b){ return b.saved-a.saved; }).map(function(r){
+    return '<span class="chip"><span class="load-b" data-load="'+esc(r.key)+'" role="button" tabindex="0">'+esc(r.name)+
+      '</span><button data-del="'+esc(r.key)+'" aria-label="Delete '+esc(r.name)+'">✕</button></span>';
+  }).join("");
+}
+document.addEventListener("click", function(e){
+  const l = e.target.closest("[data-load]");
+  if(l){ const r = savedRigs.find(function(x){ return x.key===l.getAttribute("data-load"); });
+    if(r) applySnapshot(r.data); return; }
+  const d = e.target.closest("[data-del]");
+  if(d) removeRig(d.getAttribute("data-del"));
+});
+
+/* ============================== BOOT ============================== */
+fillPicker(); fillModes(); fillPositions(); fillGauges(); setSeg(); bind();
+try{ const raw = localStorage.getItem("distro-plot-rigs"); if(raw) savedRigs = JSON.parse(raw)||[]; }
+catch(e){ savedRigs = []; }
+render();
+
+if(window.claude && typeof window.claude.use === "function"){
+  window.claude.use("downloads").then(function(d){ DOWNLOADS = d; }).catch(function(){});
+  window.claude.use("db").then(function(db){
+    if(!db) return; DB = db;
+    return db.collection("rigs").get().then(function(snap){
+      const docs = (snap && snap.docs) ? snap.docs : [];
+      const remote = docs.map(function(doc){
+        const v = typeof doc.data === "function" ? doc.data() : doc.data;
+        return Object.assign({key:doc.id}, v||{});
+      }).filter(function(x){ return x.name && x.data; });
+      if(remote.length){
+        const seen = {};
+        savedRigs = remote.concat(savedRigs).filter(function(x){
+          if(seen[x.key]) return false; seen[x.key]=1; return true; });
+        renderSaved();
+      }
+    });
+  }).catch(function(){});
+}
+})();
+</script>
+
+</body></html>

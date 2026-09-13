@@ -1,0 +1,152 @@
+{
+ "acme-sana-profile": {
+  "rid": 133005,
+  "uploader": "Manuf.",
+  "revision": " ACME SANA PROFILE (XA 300 BSWF IP)"
+ },
+ "ayrton-diablo-s": {
+  "rid": 159108,
+  "uploader": "Manuf.",
+  "revision": "V2.61 Add_Emitter_Dimmer"
+ },
+ "ayrton-khamsin-s": {
+  "rid": 149945,
+  "uploader": "Manuf.",
+  "revision": "V12.3 Add_RDM_Personality"
+ },
+ "ayrton-rivale-profile": {
+  "rid": 159103,
+  "uploader": "Manuf.",
+  "revision": "V1.71 Add_Emitter_Dimmer"
+ },
+ "ayrton-zonda-9-fx": {
+  "rid": 149977,
+  "uploader": "Manuf.",
+  "revision": "V1.7 Add_RDM_Personality"
+ },
+ "chauvet-maverick-force-s-profile": {
+  "rid": 103148,
+  "uploader": "Manuf.",
+  "revision": "Beta 1.0.1"
+ },
+ "chauvet-rogue-r2-wash": {
+  "rid": 159216,
+  "uploader": "User",
+  "revision": "R2V1"
+ },
+ "claypaky-scenius-unico": {
+  "rid": 128859,
+  "uploader": "User",
+  "revision": "fixed shaper rot and grandmaster - still needs colorwheelfix"
+ },
+ "claypaky-sharpy": {
+  "rid": 75541,
+  "uploader": "Manuf.",
+  "revision": "ClayPaky Official File Fw Ver 2_25_006"
+ },
+ "elation-proteus-maximus": {
+  "rid": 53888,
+  "uploader": "Manuf.",
+  "revision": "2023-26-12 Release"
+ },
+ "etc-colorsource-par": {
+  "rid": 156557,
+  "uploader": "User",
+  "revision": "added photo-public"
+ },
+ "etc-source-four-led-s3-lustr": {
+  "rid": 61816,
+  "uploader": "Manuf.",
+  "revision": "v1.3.0"
+ },
+ "glp-impression-x4-bar-20": {
+  "rid": 34774,
+  "uploader": "User",
+  "revision": "Final. Based of X4 Bar 10"
+ },
+ "glp-jdc1": {
+  "rid": 103537,
+  "uploader": "Manuf.",
+  "revision": "20250711_JDC1_byRG_prelim05"
+ },
+ "martin-jem-zr45-fogger": {
+  "rid": 93933,
+  "uploader": "User",
+  "revision": "InitialV1"
+ },
+ "martin-mac-aura-pxl": {
+  "rid": 159073,
+  "uploader": "Manuf.",
+  "revision": "20260823"
+ },
+ "martin-mac-aura-xb": {
+  "rid": 40784,
+  "uploader": "Manuf.",
+  "revision": "20230201NoMeas"
+ },
+ "martin-mac-encore-performance": {
+  "rid": 36845,
+  "uploader": "Manuf.",
+  "revision": "20230316NoMeas"
+ },
+ "martin-mac-ultra-performance": {
+  "rid": 131139,
+  "uploader": "Manuf.",
+  "revision": "20260228"
+ },
+ "martin-mac-viper-profile": {
+  "rid": 146138,
+  "uploader": "Manuf.",
+  "revision": "20230516NoMeas"
+ },
+ "martin-rush-par-2-rgbw-zoom": {
+  "rid": 95021,
+  "uploader": "User",
+  "revision": "add 5Channel"
+ },
+ "mdg-theone-hazer": {
+  "rid": 72554,
+  "uploader": "Manuf.",
+  "revision": "Release_1.0"
+ },
+ "robe-bmfl-blade": {
+  "rid": 135524,
+  "uploader": "Manuf.",
+  "revision": "2026-03-26 Color macro empty wheel slots revision"
+ },
+ "robe-megapointe": {
+  "rid": 138392,
+  "uploader": "Manuf.",
+  "revision": "2026-04-13 Shutter channel sets revision"
+ },
+ "robe-pointe": {
+  "rid": 62324,
+  "uploader": "Manuf.",
+  "revision": "2024-04-22  Gobos revision"
+ },
+ "robe-robin-esprite": {
+  "rid": 116608,
+  "uploader": "Manuf.",
+  "revision": "2025-11-07 Personality RDM number revision"
+ },
+ "robe-robin-ispiider": {
+  "rid": 119733,
+  "uploader": "Manuf.",
+  "revision": "2025-12-03 Reupload to share"
+ },
+ "robe-spiider": {
+  "rid": 119729,
+  "uploader": "Manuf.",
+  "revision": "2025-12-03  Reupload to share"
+ },
+ "robe-t1-profile": {
+  "rid": 151546,
+  "uploader": "Manuf.",
+  "revision": "2026-07-20 Color Control channel update 2"
+ },
+ "sgm-q-7": {
+  "rid": 49563,
+  "uploader": "User",
+  "revision": "BETA 1.1"
+ }
+}
