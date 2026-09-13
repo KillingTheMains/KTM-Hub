@@ -134,6 +134,52 @@ svg{display:block;width:100%;height:auto}
 .port input:last-child{margin-bottom:0}
 .port.used{border-color:var(--accent)}
 
+/* clickable gaps */
+.slot{cursor:pointer}
+.slot rect{fill:var(--accent);fill-opacity:0;stroke:var(--line-strong);stroke-width:1;
+  stroke-dasharray:3 3;stroke-opacity:0;transition:fill-opacity .12s,stroke-opacity .12s}
+.slot text{fill:var(--ink-3);opacity:0;font-family:"IBM Plex Sans",sans-serif;font-weight:600;
+  transition:opacity .12s;pointer-events:none}
+.slot:hover rect{fill-opacity:.12;stroke-opacity:.9}
+.slot:hover text{opacity:.85}
+.dev{cursor:pointer}
+.dev.sel rect{stroke:var(--ink);stroke-width:2}
+.card.sel{outline:2px solid var(--accent);outline-offset:-1px}
+
+/* the picker */
+.scrim{position:fixed;inset:0;background:rgba(10,14,16,.46);display:flex;align-items:flex-start;
+  justify-content:center;padding:6vh 16px;z-index:60}
+.picker{background:var(--surface);border:1px solid var(--line);border-radius:13px;
+  box-shadow:var(--shadow);width:100%;max-width:520px;max-height:82vh;display:flex;
+  flex-direction:column;overflow:hidden}
+.pickhead{display:flex;align-items:baseline;gap:10px;padding:14px 16px 10px;flex-wrap:wrap}
+.pickhead b{font-family:"Archivo",sans-serif;font-size:15px}
+.pickhead .m{font-size:11.5px;color:var(--ink-3)}
+.pickhead .grow{flex:1}
+.picker>input{margin:0 16px 10px;width:calc(100% - 32px)}
+.picklist{overflow-y:auto;padding:0 10px 6px;flex:1}
+.pickcat{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);padding:10px 6px 5px;position:sticky;top:0;background:var(--surface)}
+.pickrow{display:flex;align-items:baseline;gap:10px;width:100%;text-align:left;background:none;
+  border:0;border-radius:8px;padding:7px 9px;cursor:pointer;color:var(--ink);font-size:13px}
+.pickrow:hover{background:var(--sel)}
+.pickrow .nm{flex:1;min-width:0}
+.pickrow .sp{font-size:11px;color:var(--ink-3);font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+.pickfoot{border-top:1px solid var(--line);padding:10px 16px 12px}
+
+/* checks + face selector */
+.chks{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.chks .note{margin:0}
+.note.info{background:var(--surface);border:1px solid var(--line);color:var(--ink-2)}
+.elevhead .grow{flex:1}
+.facesel button{font-size:11.5px;padding:4px 10px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font-size:11px;color:var(--ink-3)}
+.legend .sw{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;
+  vertical-align:-1px;border:1px dashed var(--line-strong);background:repeating-linear-gradient(
+  45deg,var(--line-strong) 0 1.5px,transparent 1.5px 4px)}
+.legend .sw.solid{background:var(--s0);opacity:.42;border-style:dashed}
+.port .pf{margin-left:auto;font-size:8.5px;letter-spacing:.06em;color:var(--ink-3);font-weight:600}
+
 @media print{
   .bar,.side{display:none} main{overflow:visible;padding:0}
   body{overflow:visible;background:#fff}
@@ -158,23 +204,49 @@ svg{display:block;width:100%;height:auto}
 /* ═══════════════════════════════════════════════════════════════════════
    Rack Plot — rack elevations and port-level patching.
 
-   The largest thing the legacy Pre-Pro suite did that this one had no
-   answer for, and the natural downstream of Patch Plot: Patch decides
-   which universes exist, Rack decides which physical port carries each
-   one and what leaves that port.
+   Patch decides which universes exist, Rack decides which physical port
+   carries each one and what leaves that port.
 
-   Equipment comes from gear/rack-equipment — 8 devices with real RU
-   heights and full port maps, harvested from Pre-Pro's own BUILTIN_TYPES
-   (which differ from what its documentation claimed; the code was right).
+   ── 2026-09-11: the geometry rebuild ─────────────────────────────────
+   The first version modelled a rack as a stack of whole U's, one device
+   per U, one face. Research against the standards and against real
+   touring gear says that is wrong in four ways at once, and every one of
+   them is expensive to retrofit later:
 
-   Two patterns carried over deliberately from Pre-Pro, both scar tissue:
+   1. HALF-U IS REAL. NetBox stores u_height as a multiple of 0.5 and the
+      EIA panel formula (h = 1.750n − 0.031 in) has nothing to say about
+      whole numbers. Stored here in HALF-U integers, because floating
+      point in a grid is a bug farm.
 
-   1. NEVER re-render on an input event. Pre-Pro's hardest-won lesson was
-      that a full render() on blur destroys the DOM and kills keyboard
-      navigation mid-edit. Port fields here write to the model and repaint
-      nothing; the elevation redraws only on structural change.
-   2. RU positions are 1-indexed from the BOTTOM, the way a rack is
-      actually counted and labelled.
+   2. HALF-RACK IS THE NORMAL CASE, not the exception. ETC sells the
+      Response Mk2 gateway as "eight DMX ports in 1U" — meaning two side
+      by side. LumiNodes, the GigaCore 10t and Enttec's Storm are all
+      half-width. A node rack drawn one-device-per-U is not that rack.
+      NetBox cannot do this; ConnectCAD and D-Tools can. We follow the AV
+      tools. Width is counted in SIXTHS of the face so a half-rack and a
+      third-rack device can share a U without the grid lying.
+
+   3. A RACK HAS TWO FACES. A device that is not full depth leaves the
+      other side of that U free, which is how PDUs and patch fields live
+      behind the gear. Front and rear are separate elevations; a
+      full-depth device blocks both.
+
+   4. DEPTH IS THE BINDING CONSTRAINT IN TOURING, not U count. SKB's 8U
+      24-inch shock rack gives 23.75 in rail to rail inside a 28.5 in
+      case; ProX charges a flat 2.5 in for front and rear lids. A
+      Hippotizer is 24.8 in deep. So the rack references a CASE from
+      gear/rack-cases and the fit check is against that case's rackable
+      depth, not against a generic "will it hold".
+
+   Two patterns carried over from Pre-Pro, both scar tissue, both intact:
+
+   * NEVER re-render on an input event. A full render() on blur destroys
+     the DOM and kills keyboard navigation mid-edit. Port fields write to
+     the model and repaint nothing.
+   * RU 1 IS THE BOTTOM, the way a rack is counted in front of a road case.
+
+   Old documents load unchanged: a missing face reads front, a missing
+   col reads 0, a missing rackWidth reads full. Nothing is migrated.
    ═══════════════════════════════════════════════════════════════════════ */
 
 const $  = id => document.getElementById(id);
@@ -183,15 +255,30 @@ const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
 const COLORS = ['--s1','--s2','--s3','--s4','--s5','--s6','--s7','--s8','--s0'];
 
-const S = { tab:'build', loaded:false, show:null, showName:'',
-            equip:[], racks:[], cur:null, dirty:false };
+/* ── the two grid units ──────────────────────────────────────────────── */
+const HU = 2;                                    /* half-U per rack unit  */
+const WU = 6;                                    /* width units per face  */
+const WIDTHS = { full:6, half:3, third:2 };
+const WIDTH_LABEL = { full:'Full 19″', half:'Half rack', third:'Third rack' };
+const FILL_LIMIT = 0.80;   /* F502-derived: 80 % of rack space used, blanks fill the rest */
+
+const S = { tab:'build', face:'front', loaded:false, show:null, showName:'',
+            equip:[], cases:[], racks:[], cur:null, dirty:false,
+            place:null, placeQ:'', sel:null };
 
 async function load(){
   const K = window.KTM;
   if(!K){ S.loaded=true; return; }
   const gear = await K.list('gear');
   const re = gear.find(g=>g.kind==='rack-equipment');
-  S.equip = (re && re.items) || [];
+  const rp = gear.find(g=>g.kind==='rack-panels');
+  const rc = gear.find(g=>g.kind==='rack-cases');
+  /* Panels are equipment as far as the grid is concerned — a blank takes a U
+     exactly like a switch does, and the 80 % fill rule is only actionable if
+     the thing that fills the rest is in the same picker. */
+  S.equip = ((re && re.items) || []).map(e=>Object.assign({category:'gear'}, e))
+    .concat(((rp && rp.items) || []).map(e=>Object.assign({}, e, {category:e.category||'panel'})));
+  S.cases = (rc && rc.items) || [];
   S.show = K.activeShow ? K.activeShow() : null;
   if(S.show){
     const sh = await K.get(K.P.show(S.show));
@@ -220,29 +307,155 @@ async function save(){
 
 const rack = () => S.racks.find(r=>r.id===S.cur);
 const eq   = id => S.equip.find(e=>e.id===id);
+const kase = r => S.cases.find(c=>c.id===(r||{}).caseId);
+const other = f => f==='front' ? 'rear' : 'front';
+
+/* ── accessors that default old documents into the new shape ─────────── */
+const hOf    = e  => Math.max(1, Math.round((e.ruHeight||1)*HU));      /* half-U tall */
+const wKeyOf = e  => (e.rackWidth && WIDTHS[e.rackWidth]) ? e.rackWidth : 'full';
+const wOf    = e  => WIDTHS[wKeyOf(e)];
+const deepOf = e  => e.fullDepth !== false;   /* absent means full depth — the safe read */
+const isPanel = e => !!e && (e.category||'gear')!=='gear';
+const faceOf = it => it.face==='rear' ? 'rear' : 'front';
+const colOf  = it => Math.max(0, Math.min(WU-1, it.col|0));
+const h0Of   = it => Math.max(0, Math.round(((it.ru||1)-1)*HU));
+const ruLabel = it => { const e=eq(it.gearId)||{}, h=hOf(e), b=it.ru||1;
+  return h===1 ? String(b)+'½' : (h/HU===1 ? String(b) : b+'–'+(b+h/HU-1)); };
 
 /* ── occupancy ────────────────────────────────────────────────────────────
-   RU 1 is the bottom. An item at ru=3 with ruHeight=2 occupies 3 and 4. */
-function occupancy(r){
+   A cell is one half-U by one sixth of the face, keyed "h|w" with h counted
+   up from the floor. A device that is NOT full depth occupies its own face
+   only; a full-depth one occupies the cell on both faces, which is the whole
+   reason the flag exists. */
+function occupancy(r, face){
   const map = {};
   (r.items||[]).forEach(it=>{
     const e = eq(it.gearId); if(!e) return;
-    for(let u=it.ru; u<it.ru+(e.ruHeight||1); u++) map[u] = it;
+    if(faceOf(it)!==face && !deepOf(e)) return;
+    const h0=h0Of(it), hh=hOf(e), c0=colOf(it), ww=wOf(e);
+    for(let h=h0; h<h0+hh; h++) for(let w=c0; w<c0+ww; w++) map[h+'|'+w] = it;
   });
   return map;
 }
-function fits(r, ru, height, ignoreKey){
-  if(ru<1 || ru+height-1 > (r.ru||12)) return false;
-  const occ = occupancy(r);
-  for(let u=ru; u<ru+height; u++){
-    const at = occ[u];
-    if(at && at.key !== ignoreKey) return false;
+
+function fits(r, ru, col, e, face, ignoreKey){
+  const hh=hOf(e), ww=wOf(e), h0=Math.round((ru-1)*HU);
+  if(h0<0 || col<0 || col+ww>WU) return false;
+  if(h0+hh > (r.ru||12)*HU) return false;
+  /* A whole-U device mounts on a U boundary. The EIA hole pattern repeats per
+     unit — 0.5 / 0.625 / 0.625 in — so there is nowhere to put the screws half
+     a unit up. Only half-U gear may sit on a half offset. This lives here and
+     not only in firstFit because the add path walks positions directly. */
+  if(hh % HU === 0 && h0 % HU !== 0) return false;
+  const near = occupancy(r, face);
+  /* a full-depth device has to clear the far face as well, where a shallow
+     device may be sitting that the near-face map never showed */
+  const far  = deepOf(e) ? occupancy(r, other(face)) : null;
+  for(let h=h0; h<h0+hh; h++) for(let w=col; w<col+ww; w++){
+    const a=near[h+'|'+w]; if(a && a.key!==ignoreKey) return false;
+    if(far){ const b=far[h+'|'+w]; if(b && b.key!==ignoreKey) return false; }
   }
   return true;
 }
-function firstFit(r, height){
-  for(let u=1; u+height-1 <= (r.ru||12); u++) if(fits(r,u,height)) return u;
+
+/* Lowest slot that takes it: up the rack, then left to right. A whole-U
+   device is kept on a U boundary — half-U offsets are for half-U gear. */
+function firstFit(r, e, face){
+  const hh=hOf(e), ww=wOf(e), maxH=(r.ru||12)*HU;
+  for(let h0=0; h0+hh<=maxH; h0++){
+    if(hh % HU === 0 && h0 % HU !== 0) continue;
+    for(let c=0; c+ww<=WU; c+=ww){
+      if(fits(r, h0/HU+1, c, e, face)) return {ru: h0/HU+1, col:c};
+    }
+  }
   return null;
+}
+
+/* ── fill ──────────────────────────────────────────────────────────────
+   Reported as a fraction of the face's cells rather than as whole U's,
+   because with half-rack gear "8 of 12 RU" stopped being true. */
+function fill(r, face){
+  const occ=occupancy(r, face), total=(r.ru||12)*HU*WU;
+  const cells=Object.keys(occ).length;
+  return { cells, total, pct: total ? cells/total : 0, ru: cells/(HU*WU) };
+}
+
+/* ── the checks ───────────────────────────────────────────────────────────
+   Every one of these reports; none of them block. Net Plot's rule, and the
+   same reason: a deliberate exception happens, and the tool's job is to make
+   it visible rather than to refuse it. Each check goes quiet when the data
+   it needs is absent, so an unresearched device is never a false alarm. */
+/* Depth precedence: what you measured beats what the catalogue claims, and a
+   shell known only as "16 RU" has nothing to claim. One number, typed once,
+   turns the fit check on for a rack whose shell has no model number. */
+function depthOf(r){
+  if(r && r.railToRailIn) return {in:r.railToRailIn, from:'measured on this rack'};
+  const c=kase(r);
+  if(c && c.railToRailIn)  return {in:c.railToRailIn, from:esc(c.name)};
+  return null;
+}
+
+function checks(r){
+  const out=[], c=kase(r), items=(r.items||[]), d=depthOf(r);
+
+  if(d){
+    items.forEach(it=>{
+      const e=eq(it.gearId); if(!e || !e.depthIn) return;
+      if(e.depthIn > d.in)
+        out.push({k:'crit', t:`<b>${esc(it.label||e.name)} does not fit this rack.</b> `
+          +`${e.depthIn}″ deep against ${d.in}″ rail to rail — ${d.from}.`});
+    });
+  }else{
+    /* Not a nag — a statement of what is not being checked, and how to turn it
+       on. Most shells arrive from a rental vendor as a height and nothing else;
+       and where a maker does publish a depth it is not always comparable —
+       Gator define theirs as front rail to the inside of the rear lid, which is
+       larger than the usable span. Either way: no figure, no check. */
+    const why = c && c.generic ? `${esc(c.name)} is a vendor shell with no published depth`
+              : c && c.depthLabel ? `${esc(c.name)} publishes “${esc(c.depthLabel)}”, which is not a rail-to-rail span`
+              : c ? `${esc(c.name)} publishes no depth figure`
+              : 'no case is set';
+    const deepest = items.map(it=>eq(it.gearId)).filter(e=>e&&e.depthIn)
+                         .sort((a,b)=>b.depthIn-a.depthIn)[0];
+    out.push({k:'info', t:`<b>Depth is not being checked.</b> ${why}. `
+      +`Measure rail to rail once and put it in the Rack panel — that is all it needs.`
+      +(deepest?` The deepest thing in here is ${esc(deepest.name)} at ${deepest.depthIn}″.`:'')});
+  }
+
+  const wt = items.reduce((a,it)=>a+((eq(it.gearId)||{}).weightLb||0),0);
+  const unweighed = items.filter(it=>!((eq(it.gearId)||{}).weightLb)).length;
+  if(c && wt && !unweighed){
+    if(c.payloadMaxLb && wt > c.payloadMaxLb)
+      out.push({k:'crit', t:`<b>Over the case payload.</b> ${wt.toFixed(0)} lb of gear against `
+        +`${c.payloadMaxLb} lb. `+(c.shock?'Shock mounts are rated, not advisory.':'')});
+    else if(c.shock && c.payloadMinLb && wt < c.payloadMinLb)
+      out.push({k:'warn', t:`<b>Under the isolator band.</b> ${wt.toFixed(0)} lb against a `
+        +`${c.payloadMinLb}–${c.payloadMaxLb} lb rating. A shock rack below its band does not `
+        +`isolate — it bottoms out.`});
+  }
+
+  const f=fill(r,'front');
+  if(f.pct > FILL_LIMIT)
+    out.push({k:'warn', t:`<b>Front face is ${Math.round(f.pct*100)} % full.</b> AVIXA F502 `
+      +`practice caps a rack at ${FILL_LIMIT*100} % with blanks filling the rest, for airflow and `
+      +`for the next revision.`});
+
+  /* Only DIRECTIONS can conflict. A convection-cooled device has no direction
+     and fights nothing, so it is excluded rather than counted as a third camp. */
+  const DIRECTED={'front-to-rear':1,'rear-to-front':1,'side-vented':1};
+  const flows={};
+  items.forEach(it=>{ const e=eq(it.gearId);
+    if(e && e.airflow && DIRECTED[e.airflow]) (flows[e.airflow]=flows[e.airflow]||[]).push(it.label||e.name); });
+  if(Object.keys(flows).length>1)
+    out.push({k:'warn', t:`<b>Mixed airflow in one case.</b> `
+      +Object.entries(flows).map(([k,v])=>esc(k)+' — '+v.length+(v.length===1?' device':' devices')).join('; ')
+      +`. One device is eating another's exhaust.`});
+
+  const watts = items.reduce((a,it)=>a+((eq(it.gearId)||{}).powerW||0),0);
+  if(watts) out.push({k:'info', t:`<b>${watts} W maximum draw</b> — ${Math.round(watts*3.412)} BTU/hr, `
+    +`${(watts/120).toFixed(1)} A at 120 V. A 20 A circuit runs continuous to 16 A.`});
+
+  return out;
 }
 
 /* Every universe assigned anywhere, and where. Duplicates are the finding —
@@ -260,19 +473,24 @@ function universeIndex(){
 }
 
 function counts(){
-  let items=0, ru=0, used=0, ports=0, patched=0;
+  let items=0, ru=0, usedCells=0, totalCells=0, ports=0, patched=0, halfw=0, rear=0;
   S.racks.forEach(r=>{
     ru += (r.ru||12);
+    totalCells += (r.ru||12)*HU*WU;
+    usedCells  += fill(r,'front').cells;
     (r.items||[]).forEach(it=>{
       const e=eq(it.gearId); if(!e) return;
-      items++; used += (e.ruHeight||1);
+      items++;
+      if(wKeyOf(e)!=='full') halfw++;
+      if(faceOf(it)==='rear') rear++;
       const out=(e.ports||[]).filter(p=>p.type==='output');
       ports += out.length;
       out.forEach(p=>{ const pp=(it.ports||{})[p.id]; if(pp && (pp.universe||pp.label)) patched++; });
     });
   });
   const dupes = Object.values(universeIndex()).filter(a=>a.length>1).length;
-  return {racks:S.racks.length, items, ru, used, ports, patched, dupes};
+  return {racks:S.racks.length, items, ru, ports, patched, dupes, halfw, rear,
+          used: usedCells/(HU*WU), pct: totalCells ? usedCells/totalCells : 0};
 }
 
 /* ── render ───────────────────────────────────────────────────────────── */
@@ -305,8 +523,10 @@ function viewBuild(){
 
   h+='<div class="stats">'
    + st('Racks',c.racks) + st('Devices',c.items)
-   + st('RU used',c.used+'<small> / '+c.ru+'</small>')
+   + st('Face used',c.used.toFixed(1)+'<small> / '+c.ru+' RU</small>')
    + st('Outputs',c.ports) + st('Patched',c.patched)
+   + (c.halfw?st('Part width',c.halfw):'')
+   + (c.rear?st('Rear mounted',c.rear):'')
    + (c.dupes?st('Duplicate universes',c.dupes,'flag'):'')
    + '</div>';
 
@@ -335,79 +555,312 @@ function viewBuild(){
 
   const r=rack();
   if(r){
-    h+='<div class="card"><h4>Add device to '+esc(r.name||'rack')+'</h4>'
-     + '<select id="eqpick" style="width:100%;margin-bottom:7px">'
-     + S.equip.map(e=>`<option value="${esc(e.id)}">${esc(e.name)} · ${e.ruHeight||1}RU · ${e.portCount} ports</option>`).join('')
-     + '</select>'
-     + '<div style="display:flex;gap:6px"><input type="text" id="eqlabel" placeholder="Label (e.g. NODE 1)" style="flex:1;min-width:0">'
-     + '<button class="btn sm" id="addeq">Add</button></div>'
-     + '<div class="muted" style="font-size:11px;margin-top:7px">Dropped into the lowest RU it fits.</div>'
-     + '</div>'
+    h+='<div class="card"><h4>Adding gear</h4>'
+     + '<div class="muted" style="font-size:12px;line-height:1.55">'
+     + '<b style="color:var(--ink)">Click any empty space in the rack.</b> It asks what goes '
+     + 'there and offers only what actually fits that slot on that face. Click a device to '
+     + 'jump to its ports.</div></div>'
+
      + '<div class="card"><h4>Rack</h4>'
      + `<div style="display:flex;gap:6px;margin-bottom:6px"><input type="text" id="rkname" value="${esc(r.name||'')}" style="flex:1;min-width:0">`
      + `<input type="number" id="rkru" value="${r.ru||12}" min="1" max="45" style="width:62px"></div>`
+     + '<select id="rkcase" style="width:100%;margin-bottom:6px">'
+     + `<option value=""${!r.caseId?' selected':''}>No case — open frame</option>`
+     + caseOptions(r)
+     + '</select>'
+     + '<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">'
+     + `<input type="number" id="rkdepth" value="${r.railToRailIn||''}" min="4" max="48" step="0.25" `
+     + `placeholder="—" style="width:72px" title="Rail to rail, inches">`
+     + '<span class="muted" style="font-size:11px;line-height:1.35">Rail-to-rail depth, if you '
+     + 'have measured it. Overrides the case.</span></div>'
+     + caseFacts(r)
      + '<button class="btn danger sm" id="delrack">Delete rack</button></div>';
   }
   h+='</div><div>';
 
-  // the elevation
   if(!r){
     h+='<div class="empty"><div class="big">No rack selected</div>'
-     + '<div>Add one on the left. Equipment comes from the shared catalog, so RU heights and '
-     + 'port maps are the same numbers every tool uses.</div></div>';
+     + '<div>Add one on the left. Equipment comes from the shared catalog, so RU heights, widths '
+     + 'and port maps are the same numbers every tool uses.</div></div>';
   }else{
+    const chk=checks(r);
+    if(chk.length) h+='<div class="chks">'+chk.map(x=>`<div class="note ${x.k}">${x.t}</div>`).join('')+'</div>';
+
+    const f=fill(r,S.face);
     h+=`<div class="elev"><div class="elevhead"><b>${esc(r.name||'Rack')}</b>`
      + `<span class="m">${r.ru||12} RU</span>`
      + `<span class="m">${(r.items||[]).length} devices</span>`
-     + `<span class="m mono">${ruUsed(r)} RU used</span></div>`
-     + elevationSVG(r) + '</div>';
-    (r.items||[]).slice().sort((a,b)=>b.ru-a.ru).forEach(it=>{ h+=deviceCard(r,it); });
+     + `<span class="m mono">${f.ru.toFixed(1)} RU of face used · ${Math.round(f.pct*100)} %</span>`
+     + `<span class="grow"></span>`
+     + `<div class="seg facesel">`
+     + `<button data-face="front"${S.face==='front'?' class="on"':''}>Front</button>`
+     + `<button data-face="rear"${S.face==='rear'?' class="on"':''}>Rear</button></div>`
+     + `</div>`
+     + elevationSVG(r, S.face)
+     + `<div class="legend">`
+     + `<span><i class="sw"></i>Hatched — free, but shallow gear only: the ${other(S.face)} face `
+     + `is occupied behind it, so nothing full-depth will fit</span>`
+     + `<span><i class="sw solid"></i>Faded with a dashed edge — a full-depth device mounted on the `
+     + `${other(S.face)} face, seen from behind</span></div>`
+     + '</div>';
+
+    (r.items||[]).slice()
+      .sort((a,b)=> (h0Of(b)-h0Of(a)) || (colOf(a)-colOf(b)))
+      .forEach(it=>{ h+=deviceCard(r,it); });
   }
-  return h+'</div></div>';
+  return h+'</div></div>'+placeModal();
 }
 
-const ruUsed = r => (r.items||[]).reduce((a,it)=>a+((eq(it.gearId)||{}).ruHeight||1),0);
 
-/* Rack elevation. Cage-nut rails, RU numbers up the left, devices as blocks.
-   Drawn bottom-up because that is how a rack is counted. */
-function elevationSVG(r){
-  const RU=r.ru||12, UH=21, W=560, RAIL=17, PAD=26;
-  const H=RU*UH, occ=occupancy(r);
-  let s=`<svg viewBox="0 0 ${W+PAD*2} ${H+PAD*2}" role="img" aria-label="Rack elevation, ${RU} RU">`;
-  // carcass
+/* ── free space, as something you can click ───────────────────────────────
+   The grid is half-U by sixths, which on a 16 RU rack is 192 cells. That is
+   not a click target — a gap is. So empty cells are merged into runs across,
+   then into blocks down, and each block is cut into thirds so a click lands
+   somewhere meaningful: left, middle, right. The chosen device then snaps to
+   its own slot grid inside that block. */
+function freeBlocks(r, face){
+  const occ=occupancy(r,face), maxH=(r.ru||12)*HU, out=[];
+  const free=(h,c)=> h>=0 && h<maxH && !occ[h+'|'+c];
+  /* the horizontal free run containing (h,c) */
+  const run=(h,c)=>{ let a=c; while(a>0 && free(h,a-1)) a--;
+                     let b=c; while(b<WU && free(h,b)) b++; return [a,b]; };
+  for(let u=0; u*HU<maxH; u++){
+    for(let c=0; c<WU; c+=2){                 /* thirds: left, middle, right */
+      const lo=u*HU, hi=lo+1;
+      const loFree = free(lo,c) && free(lo,c+1);
+      const hiFree = free(hi,c) && free(hi,c+1);
+      if(loFree && hiFree){                   /* a whole free U — one target */
+        const [a0,b0]=run(lo,c), [a1,b1]=run(hi,c);
+        out.push({h:lo, hh:HU, c0:c, c1:c+2, bc0:Math.max(a0,a1), bc1:Math.min(b0,b1)});
+      }else{                                  /* only half of it — two targets */
+        if(loFree){ const [a,b]=run(lo,c); out.push({h:lo, hh:1, c0:c, c1:c+2, bc0:a, bc1:b}); }
+        if(hiFree){ const [a,b]=run(hi,c); out.push({h:hi, hh:1, c0:c, c1:c+2, bc0:a, bc1:b}); }
+      }
+    }
+  }
+  return out;
+}
+
+/* What could go in the slot you clicked. Runs the real fits() rather than a
+   size comparison, so a full-depth device is excluded when the far face is
+   occupied behind it — the same rule that governs placement. */
+function candidatesAt(r, t, face){
+  return S.equip.filter(e=>{
+    const ww=wOf(e);
+    for(let c=t.bc0; c+ww<=t.bc1; c+=ww)
+      if(fits(r, t.h/HU+1, c, e, face)) return true;
+    /* also allow a device whose own slot grid starts before the block */
+    const snap=Math.floor(t.c0/ww)*ww;
+    return snap>=0 && fits(r, t.h/HU+1, snap, e, face);
+  });
+}
+function colFor(r, t, e, face){
+  const ww=wOf(e), ru=t.h/HU+1;
+  const snap=Math.floor(t.c0/ww)*ww;
+  if(fits(r, ru, snap, e, face)) return snap;
+  for(let c=t.bc0; c+ww<=t.bc1; c+=ww) if(fits(r, ru, c, e, face)) return c;
+  return null;
+}
+
+/* ── the picker ───────────────────────────────────────────────────────────
+   Opened by clicking a gap, and it only ever offers what actually fits there.
+   Nothing that would not go in is listed, so there is no way to pick a thing
+   and be told no. */
+function placeModal(){
+  const t=S.place; if(!t) return '';
+  const r=rack(); if(!r) return '';
+  const face=t.face, ru=t.h/HU+1;
+  const all=candidatesAt(r, t, face);
+  const q=(S.placeQ||'').toLowerCase();
+  const list=q ? all.filter(e=>(e.name+' '+(e.manufacturer||'')+' '+(e.model||'')).toLowerCase().includes(q)) : all;
+
+  const top = Math.floor((t.h+t.hh-1)/HU)+1;
+  const half = t.hh===1 && t.h%HU;
+  const where = `RU ${half ? ru-0.5+'\u00bd' : ru}${top>ru ? '\u2013'+top : ''}`
+    + ` \u00b7 ${face} face \u00b7 ${Math.round((t.bc1-t.bc0)/WU*100)}% of the width free`;
+
+  const by={};
+  list.forEach(e=>{ const c=e.category||'gear'; (by[c]=by[c]||[]).push(e); });
+
+  return '<div class="scrim" id="placescrim"><div class="picker">'
+   + `<div class="pickhead"><b>What goes here?</b><span class="m">${esc(where)}</span>`
+   + `<span class="grow"></span><button class="btn ghost sm" id="placeclose">Close</button></div>`
+   + `<input type="text" id="placeq" placeholder="Search the library…" value="${esc(S.placeQ||'')}" autofocus>`
+   + (list.length
+      ? '<div class="picklist">' + CAT_ORDER.filter(c=>by[c]).map(c=>
+          `<div class="pickcat">${esc(CAT_LABEL[c]||c)}</div>`
+          + by[c].map(e=>`<button class="pickrow" data-put="${esc(e.id)}">`
+             + `<span class="nm">${esc(e.name)}</span>`
+             + `<span class="sp">${e.ruHeight||1}RU`
+             + (wKeyOf(e)!=='full' ? ' · '+WIDTH_LABEL[wKeyOf(e)] : '')
+             + (e.depthIn ? ' · '+e.depthIn+'″' : '')
+             + (deepOf(e) ? '' : ' · shallow')
+             + `</span></button>`).join('')).join('')
+        + '</div>'
+      : `<div class="empty" style="padding:26px"><div class="big">Nothing fits here</div>`
+        + `<div>${all.length ? 'Nothing matches that search.' : 'This gap is too small for anything in the library.'}</div></div>`)
+   + `<div class="pickfoot"><input type="text" id="placelabel" placeholder="Label, e.g. NODE 1 (optional)">`
+   + `</div></div></div>`;
+}
+
+const CAT_LABEL = { gear:'Gear', blank:'Blanking panels', vent:'Vent panels', fan:'Fan panels',
+                    shelf:'Shelves', din:'DIN rail panels', connector:'Connector panels',
+                    pdu:'Power', ups:'UPS', panel:'Panels' };
+const CAT_ORDER = ['gear','connector','pdu','ups','shelf','din','vent','fan','blank','panel'];
+
+function eqOptions(sel){
+  const by={};
+  S.equip.forEach(e=>{ const c=e.category||'gear'; (by[c]=by[c]||[]).push(e); });
+  return CAT_ORDER.filter(c=>by[c]).map(c=>
+    `<optgroup label="${esc(CAT_LABEL[c]||c)}">`
+    + by[c].map(e=>`<option value="${esc(e.id)}"${sel&&e.id===sel.id?' selected':''}>`
+       + `${esc(e.name)} · ${e.ruHeight||1}RU`
+       + (wKeyOf(e)!=='full' ? ' · '+WIDTH_LABEL[wKeyOf(e)] : '')
+       + (deepOf(e) ? '' : ' · shallow')
+       + (e.depthIn ? ' · '+e.depthIn+'″' : '')
+       + (e.portCount ? ' · '+e.portCount+' ports' : '')
+       + `</option>`).join('')
+    + '</optgroup>').join('');
+}
+
+/* Slot picker. Offers only the columns a device of this width can start in,
+   so a half-rack device gets left/right and a third gets three — rather than
+   six positions, four of which straddle. */
+function slotSelect(r, e){
+  if(!e) return '';
+  const ww=wOf(e);
+  if(ww===WU) return '<input type="hidden" id="eqcol" value="0">';
+  const n=Math.floor(WU/ww), names = n===2 ? ['Left','Right'] : ['Left','Centre','Right'];
+  let s='<select id="eqcol" style="flex:1">';
+  for(let i=0;i<n;i++) s+=`<option value="${i*ww}">${names[i]||('Slot '+(i+1))}</option>`;
+  return s+'</select>';
+}
+
+/* Shells first. A rack shell usually arrives as a height and nothing else, so
+   that is the top of the list; an identified case is the exception, not the
+   default, and its figures are worth having when you do know the model. */
+function caseOptions(r){
+  const gen = S.cases.filter(c=>c.generic), rest = S.cases.filter(c=>!c.generic);
+  const opt = c => `<option value="${esc(c.id)}"${r.caseId===c.id?' selected':''}>`
+    + esc(c.name) + (c.railToRailIn?' · '+c.railToRailIn+'″':'') + '</option>';
+  let h = gen.length ? '<optgroup label="Rental stock — by height">'+gen.map(opt).join('')+'</optgroup>' : '';
+  const byBrand={};
+  rest.forEach(c=>{ (byBrand[c.brand||'Other']=byBrand[c.brand||'Other']||[]).push(c); });
+  Object.keys(byBrand).sort().forEach(b=>{
+    h += `<optgroup label="${esc(b)}">` + byBrand[b].map(opt).join('') + '</optgroup>';
+  });
+  return h;
+}
+
+function caseFacts(r){
+  const c=kase(r); if(!c) return '';
+  if(c.generic) return '<div class="muted" style="font-size:11px;margin-bottom:8px;line-height:1.5">'
+    + 'Height only — nothing asserted about depth, weight or payload.</div>';
+  const bits=[];
+  if(c.railToRailIn)    bits.push(c.railToRailIn+'″ rail to rail');
+  else if(c.depthLabel) bits.push('depth: '+c.depthLabel);
+  if(c.outsideDepthIn)  bits.push(c.outsideDepthIn+'″ outside');
+  if(c.emptyLb)         bits.push(c.emptyLb+' lb empty');
+  if(c.payloadMaxLb)    bits.push('payload '+(c.payloadMinLb?c.payloadMinLb+'–':'≤ ')+c.payloadMaxLb+' lb');
+  if(!bits.length) return '';
+  return '<div class="muted" style="font-size:11px;margin-bottom:8px;line-height:1.5">'
+    + bits.join(' · ') + (c.status?` <span class="chip ${esc(c.status)}">${esc(c.status)}</span>`:'') + '</div>';
+}
+
+/* Rack elevation for one face. Cage-nut rails, RU numbers up the left,
+   devices as blocks. Drawn bottom-up because that is how a rack is counted,
+   and in half-U rows because half-U devices exist. Geometry is expressed in
+   the viewBox, never in fixed pixels — NetBox's own elevation bugs were all
+   pixel-rounding at fractional unit heights. */
+function elevationSVG(r, face){
+  const RU=r.ru||12, UH=22, HH=UH/2, W=560, RAIL=17, PAD=26;
+  const H=RU*UH, IW=W-RAIL*2, X0=PAD+RAIL;
+  const colX = c => X0 + (c/WU)*IW;
+  const near = occupancy(r, face);
+
+  let s=`<svg viewBox="0 0 ${W+PAD*2} ${H+PAD*2}" role="img" `
+   + `aria-label="Rack elevation, ${face} face, ${RU} RU">`
+   + `<defs><pattern id="gh" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">`
+   + `<line x1="0" y1="0" x2="0" y2="6" stroke="var(--line-strong)" stroke-width="1.6"/></pattern></defs>`;
+
   s+=`<rect x="${PAD}" y="${PAD}" width="${W}" height="${H}" fill="var(--sunken)" stroke="var(--line-strong)" stroke-width="1.5" rx="3"/>`;
-  // rails
+
   [PAD, PAD+W-RAIL].forEach(x=>{
     s+=`<rect x="${x}" y="${PAD}" width="${RAIL}" height="${H}" fill="var(--rail)"/>`;
+    /* Three holes per U at the EIA 0.5 / 0.625 / 0.625 in pitch, not evenly
+       spaced — the wide gap is the boundary between units. */
     for(let u=0;u<RU;u++){
-      const cy=PAD+H-(u*UH)-UH/2;
-      [-6,0,6].forEach(dy=>{ s+=`<rect x="${x+RAIL/2-2}" y="${cy+dy-1.6}" width="4" height="3.2" rx="1" fill="var(--rail-2)"/>`; });
+      const base=PAD+H-(u*UH);
+      [0.25,0.875,1.5].forEach(o=>{
+        s+=`<rect x="${x+RAIL/2-2}" y="${base-(o/1.75)*UH-1.6}" width="4" height="3.2" rx="1" fill="var(--rail-2)"/>`;
+      });
     }
   });
-  // RU numbers
+
   for(let u=1;u<=RU;u++){
     const cy=PAD+H-((u-1)*UH)-UH/2;
     s+=`<text x="${PAD-5}" y="${cy+3.4}" font-size="8.5" fill="var(--ink-3)" text-anchor="end" `
      + `font-family="IBM Plex Mono,monospace">${u}</text>`;
-    if(!occ[u])
-      s+=`<line x1="${PAD+RAIL}" y1="${cy+UH/2}" x2="${PAD+W-RAIL}" y2="${cy+UH/2}" `
+    const h0=(u-1)*HU;
+    let empty=true;
+    for(let h=h0;h<h0+HU;h++) for(let w=0;w<WU;w++) if(near[h+'|'+w]) empty=false;
+    if(empty)
+      s+=`<line x1="${X0}" y1="${cy+UH/2}" x2="${PAD+W-RAIL}" y2="${cy+UH/2}" `
        + `stroke="var(--line)" stroke-width="0.5" stroke-dasharray="2 3"/>`;
   }
-  // devices
+
+  /* Ghosts first, so a real device always draws over them. A hatched slot is
+     NOT occupied — a shallow device on the far face leaves this one free. What
+     it means is that the far face is spoken for, so only shallow gear can go
+     here: a full-depth device would have to clear both faces and fits() will
+     refuse it. Drawn light, because free-but-constrained is not the same as
+     taken, and a hatch that reads as "occupied" would be a lie. */
+  (r.items||[]).forEach(it=>{
+    const e=eq(it.gearId); if(!e) return;
+    if(faceOf(it)===face || deepOf(e)) return;
+    const hh=hOf(e), y=PAD+H-(h0Of(it)+hh)*HH, x=colX(colOf(it)), w=(wOf(e)/WU)*IW;
+    s+=`<g opacity="0.34"><rect x="${x+1}" y="${y+1}" width="${w-2}" height="${hh*HH-2}" rx="2.5" `
+     + `fill="url(#gh)" fill-opacity="0.35" stroke="var(--line-strong)" stroke-width="1" stroke-dasharray="3 2"/>`
+     + `<title>${esc(it.label||e.name)} is on the ${other(face)} face and is shallow — `
+     + `this slot is free, but only for shallow gear</title></g>`;
+  });
+
+  /* Gaps are the primary input: one target per third of each free block. */
+  freeBlocks(r, face).forEach(t=>{
+    const y=PAD+H-(t.h+t.hh)*HH, x=colX(t.c0), w=((t.c1-t.c0)/WU)*IW;
+    s+=`<g class="slot" data-slot="${t.h}|${t.hh}|${t.c0}|${t.c1}|${t.bc0}|${t.bc1}">`
+     + `<rect x="${x+1}" y="${y+1}" width="${w-2}" height="${t.hh*HH-2}" rx="2.5"/>`
+     + `<text x="${x+w/2}" y="${y+t.hh*HH/2+4}" text-anchor="middle" font-size="12">+</text>`
+     + `<title>Add something here</title></g>`;
+  });
+
   (r.items||[]).forEach((it,i)=>{
     const e=eq(it.gearId); if(!e) return;
-    const hgt=(e.ruHeight||1), y=PAD+H-((it.ru-1)*UH)-hgt*UH;
+    if(faceOf(it)!==face && !deepOf(e)) return;
+    const hh=hOf(e), ww=wOf(e);
+    const y=PAD+H-(h0Of(it)+hh)*HH, x=colX(colOf(it)), w=(ww/WU)*IW;
+    const behind = faceOf(it)!==face;            /* full depth, seen from its back */
     const col=`var(${it.color||COLORS[i%COLORS.length]})`;
     const outs=(e.ports||[]).filter(p=>p.type==='output');
     const done=outs.filter(p=>{const pp=(it.ports||{})[p.id]; return pp&&(pp.universe||pp.label);}).length;
-    s+=`<g><rect x="${PAD+RAIL}" y="${y+1}" width="${W-RAIL*2}" height="${hgt*UH-2}" rx="2.5" `
-     + `fill="${col}" fill-opacity="0.86" stroke="var(--surface)" stroke-width="1"/>`
-     + `<text x="${PAD+RAIL+9}" y="${y+hgt*UH/2+3.6}" font-size="10.5" fill="#fff" `
-     + `font-family="IBM Plex Sans,sans-serif" font-weight="600">${esc(it.label||e.name)}</text>`
-     + `<text x="${PAD+W-RAIL-9}" y="${y+hgt*UH/2+3.4}" font-size="8.5" fill="#fff" fill-opacity="0.9" `
-     + `text-anchor="end" font-family="IBM Plex Mono,monospace">${esc(e.name)}`
-     + (outs.length?`  ${done}/${outs.length}`:'')+`</text>`
-     + `<title>${esc(e.name)} at RU ${it.ru}${hgt>1?'–'+(it.ru+hgt-1):''}</title></g>`;
+    const tight = hh===1 || ww<=2;
+    const fs = tight ? 8.5 : 10.5;
+    s+=`<g class="dev${S.sel===it.key?' sel':''}" data-dev="${esc(it.key)}">`
+     + `<rect x="${x+1}" y="${y+1}" width="${w-2}" height="${hh*HH-2}" rx="2.5" `
+     + `fill="${col}" fill-opacity="${behind?0.42:0.86}" stroke="var(--surface)" stroke-width="1"`
+     + (behind?' stroke-dasharray="4 2"':'')+`/>`
+     + `<text x="${x+8}" y="${y+hh*HH/2+fs/3}" font-size="${fs}" fill="#fff" `
+     + `font-family="IBM Plex Sans,sans-serif" font-weight="600">${esc(it.label||e.name)}</text>`;
+    /* An unlabelled item falls back to the catalog name on the left, so don't
+       print the same string again on the right. */
+    const rhs = (it.label && it.label !== e.name) ? e.name
+              : (outs.length ? '' : null);
+    if(!tight && rhs !== null)
+      s+=`<text x="${x+w-8}" y="${y+hh*HH/2+3.4}" font-size="8.5" fill="#fff" fill-opacity="0.9" `
+       + `text-anchor="end" font-family="IBM Plex Mono,monospace">${esc(rhs)}`
+       + (outs.length?`  ${done}/${outs.length}`:'')+`</text>`;
+    s+=`<title>${esc(e.name)} · RU ${ruLabel(it)} · ${WIDTH_LABEL[wKeyOf(e)]} · ${faceOf(it)} face`
+     + (deepOf(e)?' · full depth':'')+(e.depthIn?` · ${e.depthIn}″`:'')+`</title></g>`;
   });
   return s+'</svg>';
 }
@@ -417,21 +870,31 @@ function elevationSVG(r){
 function deviceCard(r,it){
   const e=eq(it.gearId); if(!e) return '';
   const outs=(e.ports||[]);
-  return `<div class="card"><div style="display:flex;align-items:center;gap:9px;margin-bottom:2px">`
+  const ww=wOf(e), canSlide = ww<WU;
+  const meta=[esc(e.name), 'RU '+ruLabel(it), WIDTH_LABEL[wKeyOf(e)], faceOf(it)+' face'];
+  if(!deepOf(e)) meta.push('shallow');
+  if(e.depthIn) meta.push(e.depthIn+'″ deep');
+  if(e.weightLb) meta.push(e.weightLb+' lb');
+  return `<div class="card${S.sel===it.key?' sel':''}" id="card-${esc(it.key)}">`
+   + `<div style="display:flex;align-items:center;gap:9px;margin-bottom:2px;flex-wrap:wrap">`
    + `<b style="font-family:Archivo,sans-serif;font-size:13.5px">${esc(it.label||e.name)}</b>`
-   + `<span class="muted" style="font-size:11.5px">${esc(e.name)} · RU ${it.ru} · ${e.ruHeight||1}RU</span>`
+   + `<span class="muted" style="font-size:11.5px">${meta.join(' · ')}</span>`
    + (e.hasIp?`<input type="text" data-ip="${esc(it.key)}" value="${esc(it.ip||'')}" placeholder="IP" `
       + `class="mono" style="width:118px;font-size:11.5px;padding:3px 6px">`:'')
    + `<span class="grow"></span>`
-   + `<button class="btn ghost sm" data-mv="${esc(it.key)}" data-d="1">▲</button>`
-   + `<button class="btn ghost sm" data-mv="${esc(it.key)}" data-d="-1">▼</button>`
+   + `<button class="btn ghost sm" data-fc="${esc(it.key)}" title="Flip to the other face">⇄ ${faceOf(it)==='front'?'rear':'front'}</button>`
+   + (canSlide?`<button class="btn ghost sm" data-sl="${esc(it.key)}" data-d="-1" title="Slide left">◀</button>`
+      + `<button class="btn ghost sm" data-sl="${esc(it.key)}" data-d="1" title="Slide right">▶</button>`:'')
+   + `<button class="btn ghost sm" data-mv="${esc(it.key)}" data-d="1" title="Up a half U">▲</button>`
+   + `<button class="btn ghost sm" data-mv="${esc(it.key)}" data-d="-1" title="Down a half U">▼</button>`
    + `<button class="btn danger sm" data-rm="${esc(it.key)}">Remove</button></div>`
    + `<div class="ports">`
    + outs.map(p=>{
       const pp=(it.ports||{})[p.id]||{};
       const used=!!(pp.universe||pp.label);
       return `<div class="port${used?' used':''}">`
-       + `<div class="pn"><span class="pdot ${esc(p.type||'output')}"></span>${esc(p.name||p.id)}</div>`
+       + `<div class="pn"><span class="pdot ${esc(p.type||'output')}"></span>${esc(p.name||p.id)}`
+       + (p.face?`<span class="pf">${esc(p.face)}</span>`:'')+`</div>`
        + (p.type==='output'||p.type==='input'
           ? `<input type="text" data-pu="${esc(it.key)}|${esc(p.id)}" value="${esc(pp.universe||'')}" placeholder="Universe" class="mono">` : '')
        + `<input type="text" data-pl="${esc(it.key)}|${esc(p.id)}" value="${esc(pp.label||'')}" placeholder="Goes to…">`
@@ -446,30 +909,73 @@ function wireBuild(){
     const nm=($('newrack').value||'').trim()||('Rack '+(S.racks.length+1));
     const ru=Math.max(1,Math.min(45,parseInt($('newru').value||'12',10)||12));
     const id='rack-'+uid();
-    S.racks.push({id, name:nm, ru, color:COLORS[S.racks.length%COLORS.length], items:[]});
+    S.racks.push({id, name:nm, ru, caseId:null, color:COLORS[S.racks.length%COLORS.length], items:[]});
     S.cur=id; S.dirty=true; render();
   };
   document.querySelectorAll('[data-rk]').forEach(b=>b.onclick=()=>{S.cur=b.dataset.rk;render();});
+  document.querySelectorAll('[data-face]').forEach(b=>b.onclick=()=>{S.face=b.dataset.face;render();});
 
-  const ae=$('addeq');
-  if(ae) ae.onclick=()=>{
-    const r=rack(); if(!r) return;
-    const gid=$('eqpick').value, e=eq(gid); if(!e) return;
-    const at=firstFit(r,e.ruHeight||1);
-    if(at===null){ alert('No free space in this rack for a '+(e.ruHeight||1)+'RU device.'); return; }
+  /* ── click a gap ─────────────────────────────────────────────────────── */
+  document.querySelectorAll('[data-slot]').forEach(g=>g.onclick=()=>{
+    const [h,hh,c0,c1,bc0,bc1]=g.dataset.slot.split('|').map(Number);
+    S.place={h,hh,c0,c1,bc0,bc1,face:S.face}; S.placeQ=''; render();
+    const q=$('placeq'); if(q) q.focus();
+  });
+
+  /* ── click a device: jump to its ports ───────────────────────────────── */
+  document.querySelectorAll('[data-dev]').forEach(g=>g.onclick=()=>{
+    S.sel = S.sel===g.dataset.dev ? null : g.dataset.dev;
+    render();
+    const c=$('card-'+S.sel);
+    if(c) c.scrollIntoView({block:'nearest', behavior:'smooth'});
+  });
+
+  /* ── the picker ──────────────────────────────────────────────────────── */
+  const close=()=>{ S.place=null; S.placeQ=''; render(); };
+  const pc=$('placeclose'); if(pc) pc.onclick=close;
+  const ps=$('placescrim'); if(ps) ps.onclick=ev=>{ if(ev.target===ps) close(); };
+  const pq=$('placeq'); if(pq){
+    pq.oninput=()=>{ S.placeQ=pq.value; const at=pq.selectionStart; render();
+      const n=$('placeq'); if(n){ n.focus(); n.setSelectionRange(at,at); } };
+    pq.onkeydown=ev=>{ if(ev.key==='Escape') close(); };
+  }
+  document.querySelectorAll('[data-put]').forEach(b=>b.onclick=()=>{
+    const r=rack(), t=S.place; if(!r||!t) return;
+    const e=eq(b.dataset.put); if(!e) return;
+    const col=colFor(r, t, e, t.face);
+    if(col===null){ alert('That no longer fits here.'); return; }
+    const label=(($('placelabel')||{}).value||'').trim()||null;
+    const key='i-'+uid();
     r.items=r.items||[];
-    r.items.push({key:'i-'+uid(), gearId:gid, ru:at,
-                  label:($('eqlabel').value||'').trim()||null,
+    r.items.push({key, gearId:e.id, ru:t.h/HU+1, col, face:t.face, label,
                   color:COLORS[r.items.length%COLORS.length], ip:null, ports:{}});
-    S.dirty=true; render();
-  };
+    S.place=null; S.placeQ=''; S.sel=key; S.dirty=true; render();
+  });
 
   const rn=$('rkname'); if(rn) rn.onchange=()=>{const r=rack(); if(r){r.name=rn.value;S.dirty=true;render();}};
+  const rc=$('rkcase'); if(rc) rc.onchange=()=>{
+    const r=rack(); if(!r) return;
+    r.caseId = rc.value || null;
+    const c=kase(r);
+    /* A shell's height is the one thing it does know. Adopt it unless that
+       would evict something already mounted. */
+    if(c && c.ru){
+      const tallest=(r.items||[]).reduce((a,it)=>Math.max(a, h0Of(it)+hOf(eq(it.gearId)||{})),0)/HU;
+      if(c.ru >= tallest) r.ru=c.ru;
+    }
+    S.dirty=true; render();
+  };
+  const rd=$('rkdepth'); if(rd) rd.onchange=()=>{
+    const r=rack(); if(!r) return;
+    const v=parseFloat(rd.value);
+    r.railToRailIn = (isFinite(v) && v>0) ? v : null;
+    S.dirty=true; render();
+  };
   const rr=$('rkru');   if(rr) rr.onchange=()=>{
     const r=rack(); if(!r) return;
     const v=Math.max(1,Math.min(45,parseInt(rr.value||'12',10)||12));
-    const tallest=(r.items||[]).reduce((a,it)=>Math.max(a,it.ru+((eq(it.gearId)||{}).ruHeight||1)-1),0);
-    if(v<tallest){ alert('Cannot shrink below RU '+tallest+' — a device is mounted there.'); rr.value=r.ru; return; }
+    const tallest=(r.items||[]).reduce((a,it)=>Math.max(a, h0Of(it)+hOf(eq(it.gearId)||{})),0)/HU;
+    if(v<tallest){ alert('Cannot shrink below RU '+Math.ceil(tallest)+' — a device is mounted there.'); rr.value=r.ru; return; }
     r.ru=v; S.dirty=true; render();
   };
   const dr=$('delrack'); if(dr) dr.onclick=()=>{
@@ -481,10 +987,26 @@ function wireBuild(){
   document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{
     const r=rack(); r.items=r.items.filter(x=>x.key!==b.dataset.rm); S.dirty=true; render();
   });
+  /* Vertical moves step a HALF U, so half-rack gear can sit against either
+     half of a unit and whole-U gear still lands on a boundary. */
   document.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{
     const r=rack(), it=(r.items||[]).find(x=>x.key===b.dataset.mv); if(!it) return;
-    const e=eq(it.gearId), h=(e&&e.ruHeight)||1, d=+b.dataset.d;
-    if(fits(r, it.ru+d, h, it.key)){ it.ru+=d; S.dirty=true; render(); }
+    const e=eq(it.gearId); if(!e) return;
+    const step = hOf(e)%HU===0 ? 1 : 0.5, d=+b.dataset.d*step;
+    if(fits(r, (it.ru||1)+d, colOf(it), e, faceOf(it), it.key)){ it.ru=(it.ru||1)+d; S.dirty=true; render(); }
+  });
+  document.querySelectorAll('[data-sl]').forEach(b=>b.onclick=()=>{
+    const r=rack(), it=(r.items||[]).find(x=>x.key===b.dataset.sl); if(!it) return;
+    const e=eq(it.gearId); if(!e) return;
+    const c=colOf(it)+(+b.dataset.d)*wOf(e);
+    if(fits(r, it.ru||1, c, e, faceOf(it), it.key)){ it.col=c; S.dirty=true; render(); }
+  });
+  document.querySelectorAll('[data-fc]').forEach(b=>b.onclick=()=>{
+    const r=rack(), it=(r.items||[]).find(x=>x.key===b.dataset.fc); if(!it) return;
+    const e=eq(it.gearId); if(!e) return;
+    const f=other(faceOf(it));
+    if(!fits(r, it.ru||1, colOf(it), e, f, it.key)){ alert('That slot is taken on the '+f+' face.'); return; }
+    it.face=f; S.face=f; S.dirty=true; render();
   });
 
   /* No re-render on these. Pre-Pro's lesson: a render() on input destroys the
@@ -514,6 +1036,7 @@ function viewPatch(){
       const pp=(it.ports||{})[p.id]||{};
       if(!pp.universe && !pp.label) return;
       rows.push({rack:r.name, device:it.label||e.name, model:e.name, ip:it.ip,
+                 ru:ruLabel(it), face:faceOf(it),
                  port:p.name||p.id, type:p.type, universe:pp.universe||'', dest:pp.label||''});
     });
   }));
@@ -524,11 +1047,12 @@ function viewPatch(){
   let h=`<div class="elev"><div class="elevhead"><b>Patch sheet</b>`
    + `<span class="m">${esc(S.showName||'no show')}</span>`
    + `<span class="m">${rows.length} ports</span></div>`;
-  h+='<div class="tablewrap"><table><thead><tr><th>Rack</th><th>Device</th><th>IP</th>'
-   + '<th>Port</th><th>Universe</th><th>Goes to</th></tr></thead><tbody>'
+  h+='<div class="tablewrap"><table><thead><tr><th>Rack</th><th class="num">RU</th><th>Face</th>'
+   + '<th>Device</th><th>IP</th><th>Port</th><th>Universe</th><th>Goes to</th></tr></thead><tbody>'
    + rows.map(r=>{
       const dup=r.universe && (idx[r.universe.trim()]||[]).length>1;
-      return `<tr><td>${esc(r.rack)}</td><td><b>${esc(r.device)}</b> `
+      return `<tr><td>${esc(r.rack)}</td><td class="num">${esc(r.ru)}</td>`
+       + `<td style="font-size:11.5px">${esc(r.face)}</td><td><b>${esc(r.device)}</b> `
        + `<span class="muted" style="font-size:11px">${esc(r.model)}</span></td>`
        + `<td class="mono" style="font-size:11px">${esc(r.ip||'—')}</td>`
        + `<td class="mono" style="font-size:11.5px">${esc(r.port)}</td>`
@@ -543,14 +1067,14 @@ function viewPatch(){
 const st=(k,v,cls)=>`<div class="stat${cls?' '+cls:''}"><div class="k">${esc(k)}</div><div class="v">${v}</div></div>`;
 
 function toCSV(){
-  const out=[['Rack','Device','Model','IP','Port','Type','Universe','Goes to']];
+  const out=[['Rack','RU','Face','Device','Model','IP','Port','Type','Universe','Goes to']];
   S.racks.forEach(r=>(r.items||[]).forEach(it=>{
     const e=eq(it.gearId); if(!e) return;
     (e.ports||[]).forEach(p=>{
       const pp=(it.ports||{})[p.id]||{};
       if(!pp.universe && !pp.label) return;
-      out.push([r.name, it.label||e.name, e.name, it.ip||'', p.name||p.id, p.type||'',
-                pp.universe||'', pp.label||'']);
+      out.push([r.name, ruLabel(it), faceOf(it), it.label||e.name, e.name, it.ip||'',
+                p.name||p.id, p.type||'', pp.universe||'', pp.label||'']);
     });
   }));
   return out.map(r=>r.map(v=>{const s=String(v??'');

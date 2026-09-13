@@ -285,6 +285,21 @@ const KTM = (() => {
            cacheGet, cacheSet, get db(){ return db; }, get bootErr(){ return bootErr; } };
 })();
 
+/* ── Publish the data layer to the frames ─────────────────────────────────
+   `const KTM` at the top level of a classic script is NOT a property of
+   window — it lives in the script's own scope. Every tool frame reads
+   `window.parent.KTM` through its shim, so without this line all ten tools
+   get null and the six native ones render "No shared data layer" instead of
+   their UI. The four ported tools appeared to work only because they reach
+   the store through the shim's wrapped `claude.use('db')` and never touch
+   KTM at all, which is precisely why this went unnoticed.
+
+   Frames capture this once, at frame-script time. That is safe because this
+   assignment runs while the Hub's own script is parsed, and no frame is
+   mounted until a tool is clicked. */
+window.KTM = KTM;
+
+
 /* ═════════════════════════════════════════════════════════════════════
    Suite definition — the nine tools and where each one stands.
    ═════════════════════════════════════════════════════════════════════ */
@@ -687,13 +702,29 @@ function viewGear(){
     'truss':          [['Product','name'],['Manufacturer','manufacturer'],['Profile','profile'],
                        ['Sections (ft)','sections'],['lb / ft','weightPerFt','n']],
     'rack-equipment': [['Device','name'],['Manufacturer','manufacturer'],['RU','ruHeight','n'],
-                       ['Ports','portCount','n'],['Port map','portSummary']],
+                       ['Width','rackWidth'],['Depth in','depthIn','n'],['Weight lb','weightLb','n'],
+                       ['W','powerW','n'],['Ports','portCount','n'],['Source','status','s']],
+    'rack-cases':     [['Shell','name'],['RU','ru','n'],['Rail to rail in','railToRailIn','n'],
+                       ['Empty lb','emptyLb','n'],['Payload lb','payloadBand','n'],
+                       ['Shock','shock','b'],['Source','status','s']],
+    'rack-panels':    [['Panel','name'],['Category','category'],['RU','ruHeight','n'],
+                       ['Width','rackWidth'],['Depth in','depthIn','n'],['Weight lb','weightLb','n'],
+                       ['Source','status','s']],
     'pack-item':      [['Item','name'],['Category','cat'],['W ft','wFt','n'],['D ft','hFt','n']]
   };
   const cols = COLS[cur.kind] || [['Name','name']];
 
   const cell = (it, c) => {
     let v = it[c[1]];
+    /* Payload is a band, not a number — and its floor is the half nobody else
+       publishes, so it must not be flattened to a ceiling. */
+    if (c[1] === 'payloadBand')
+      v = it.payloadMaxLb ? (it.payloadMinLb ? it.payloadMinLb+'–'+it.payloadMaxLb : '≤ '+it.payloadMaxLb) : null;
+    if (c[2] === 'b') return '<td>'+(v === true ? 'yes' : v === false ? 'no' : '—')+'</td>';
+    if (c[2] === 's'){
+      const st = v || 'observed';
+      return '<td><span class="chip '+esc(st)+'">'+esc(STATUS_LABEL[st] || st)+'</span></td>';
+    }
     if (Array.isArray(v)) v = v.join(' · ');
     if (v === null || v === undefined || v === '') v = '—';
     return '<td'+(c[2]==='n'?' class="num"':'')+'>'+esc(v)+'</td>';
