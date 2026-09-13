@@ -31,11 +31,7 @@ PP = Path(
     "/My Drive/Cowork Playground/Pre-Pro Paperwork"
 )
 PP_REPO = Path("/Users/jasonbielsker/Developer/Pre-Pro-Paperwork")
-SCRATCH_DB = Path(
-    "/private/tmp/claude-501/-Users-jasonbielsker-Library-CloudStorage-GoogleDrive-"
-    "jason-killingthemains-com-My-Drive-Cowork-Playground/"
-    "e55582bd-10cc-41d6-9f03-8ac0609afee8/scratchpad/db"
-)
+CATALOG_DIR = Path(__file__).parent.parent / "data" / "catalog"
 
 LOOM_LIST_JSON = PP / "BMW ABBS 2026.json"
 RACK_BUILDER_HTML = PP_REPO / "rack-builder" / "index.html"
@@ -147,11 +143,11 @@ console.log(JSON.stringify(bmw2026Trusses()));
 # ── catalogs ─────────────────────────────────────────────────────────────
 
 def load_catalog(name):
-    return json.loads((SCRATCH_DB / "gear" / name).read_text())
+    return json.loads((CATALOG_DIR / "gear" / name).read_text())
 
 
 def load_tokens():
-    return json.loads((SCRATCH_DB / "meta" / "tokens.json").read_text())
+    return json.loads((CATALOG_DIR / "meta" / "tokens.json").read_text())
 
 
 def slug(s):
@@ -305,6 +301,20 @@ def main():
         if token is None:
             errors.append(f"snake color hex has no token match: {sn.get('color')!r} (snake {sn['name']})")
             token = ""
+
+        lines_out = [
+            {
+                "n": ln["lineNum"],
+                "position": ln.get("position") or "",
+                "universe": ln.get("universe") or "",
+                "firstFixture": ln.get("firstFixture") or "",
+            }
+            for ln in sn.get("lines", [])
+        ]
+        # Loom Plot only has 6 physical part-position columns; lines 7/8 of a
+        # CPC8 snake live only in `lines`, not in partPositions.
+        part_positions = pad6([ln["position"] for ln in lines_out[:6]])
+
         sheets[sid]["cables"].append({
             "id": f"cable_snake_{slug(sn['name'])}",
             "label": sn["name"],
@@ -313,9 +323,10 @@ def main():
             "color": token,
             "secColor": "",
             "parts": pad6([]),
-            "partPositions": pad6([]),
+            "partPositions": part_positions,
             "loomId": "",
             "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": lines_out,
         })
 
     looms_out = list(sheets.values())

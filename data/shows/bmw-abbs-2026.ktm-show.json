@@ -1,7 +1,7 @@
 {
   "_format": "ktm-show",
   "_version": 1,
-  "exported": "2026-09-13T22:40:31.775195Z",
+  "exported": "2026-09-13T22:44:46.791078Z",
   "show": {
     "id": "bmw-abbs-2026",
     "name": "BMW ABBS 2026",
@@ -4166,15 +4166,65 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
+              "TRUSS A",
+              "TRUSS A",
+              "TRUSS B",
+              "TRUSS B",
+              "TRUSS B",
+              "TRUSS C"
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "TRUSS A",
+                "universe": "UNIV 1",
+                "firstFixture": "FX 2001"
+              },
+              {
+                "n": 2,
+                "position": "TRUSS A",
+                "universe": "U1 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "TRUSS B",
+                "universe": "UNIV 2",
+                "firstFixture": "FX 27"
+              },
+              {
+                "n": 4,
+                "position": "TRUSS B",
+                "universe": "UNIV 3",
+                "firstFixture": "FX 2104"
+              },
+              {
+                "n": 5,
+                "position": "TRUSS B",
+                "universe": "B SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 6,
+                "position": "TRUSS C",
+                "universe": "UNIV 4",
+                "firstFixture": "FX 2201"
+              },
+              {
+                "n": 7,
+                "position": "TRUSS C",
+                "universe": "UNIV 5",
+                "firstFixture": "FX 2205"
+              },
+              {
+                "n": 8,
+                "position": "TRUSS C",
+                "universe": "C SP",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_j",
@@ -4192,15 +4242,65 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
+              "TRUSS J",
+              "TRUSS J",
+              "TRUSS J",
+              "TRUSS J",
+              "TRUSS J",
+              "TRUSS J"
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "TRUSS J",
+                "universe": "UNIV 22",
+                "firstFixture": "FX 182"
+              },
+              {
+                "n": 2,
+                "position": "TRUSS J",
+                "universe": "U22 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "TRUSS J",
+                "universe": "UNIV 23",
+                "firstFixture": "FX 785"
+              },
+              {
+                "n": 4,
+                "position": "TRUSS J",
+                "universe": "U23 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 5,
+                "position": "TRUSS J",
+                "universe": "UNIV 24",
+                "firstFixture": "FX 442"
+              },
+              {
+                "n": 6,
+                "position": "TRUSS J",
+                "universe": "U24 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 7,
+                "position": "J LINE 7",
+                "universe": "",
+                "firstFixture": ""
+              },
+              {
+                "n": 8,
+                "position": "J LINE 8",
+                "universe": "",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_m",
@@ -4218,15 +4318,65 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
+              "TRUSS M",
+              "TRUSS M",
+              "TRUSS M",
+              "TRUSS M",
+              "TRUSS M",
+              "TRUSS M"
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "TRUSS M",
+                "universe": "UNIV 29",
+                "firstFixture": ""
+              },
+              {
+                "n": 2,
+                "position": "TRUSS M",
+                "universe": "U29 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "TRUSS M",
+                "universe": "UNIV 30",
+                "firstFixture": ""
+              },
+              {
+                "n": 4,
+                "position": "TRUSS M",
+                "universe": "U30 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 5,
+                "position": "TRUSS M",
+                "universe": "UNIV 31",
+                "firstFixture": ""
+              },
+              {
+                "n": 6,
+                "position": "TRUSS M",
+                "universe": "U31 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 7,
+                "position": "TRUSS M",
+                "universe": "UNIV 32",
+                "firstFixture": ""
+              },
+              {
+                "n": 8,
+                "position": "TRUSS M",
+                "universe": "U32 SP",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_f",
@@ -4244,15 +4394,65 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
+              "TRUSS F",
+              "TRUSS F",
+              "TRUSS F",
+              "TRUSS F",
+              "TRUSS F",
+              "TRUSS F"
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "TRUSS F",
+                "universe": "UNIV 11",
+                "firstFixture": "FX 727"
+              },
+              {
+                "n": 2,
+                "position": "TRUSS F",
+                "universe": "U11 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "TRUSS F",
+                "universe": "UNIV 12",
+                "firstFixture": "FX 824"
+              },
+              {
+                "n": 4,
+                "position": "TRUSS F",
+                "universe": "U12 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 5,
+                "position": "TRUSS F",
+                "universe": "UNIV 13",
+                "firstFixture": "FX 436"
+              },
+              {
+                "n": 6,
+                "position": "TRUSS F",
+                "universe": "U13 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 7,
+                "position": "TRUSS F",
+                "universe": "UNIV 14",
+                "firstFixture": "FX 46"
+              },
+              {
+                "n": 8,
+                "position": "TRUSS F",
+                "universe": "U14 SP",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_g",
@@ -4270,15 +4470,65 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
+              "TRUSS G",
+              "TRUSS G",
+              "TRUSS G",
+              "TRUSS G",
+              "TRUSS G",
+              "TRUSS G"
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "TRUSS G",
+                "universe": "UNIV 15",
+                "firstFixture": "FX 883"
+              },
+              {
+                "n": 2,
+                "position": "TRUSS G",
+                "universe": "U15 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "TRUSS G",
+                "universe": "UNIV 16",
+                "firstFixture": "FX 523"
+              },
+              {
+                "n": 4,
+                "position": "TRUSS G",
+                "universe": "U16 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 5,
+                "position": "TRUSS G",
+                "universe": "UNIV 17",
+                "firstFixture": "FX 431"
+              },
+              {
+                "n": 6,
+                "position": "TRUSS G",
+                "universe": "U17 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 7,
+                "position": "G LINE 7",
+                "universe": "",
+                "firstFixture": ""
+              },
+              {
+                "n": 8,
+                "position": "G LINE 8",
+                "universe": "",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_h",
@@ -4296,15 +4546,65 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
+              "TRUSS H",
+              "TRUSS H",
+              "TRUSS H",
+              "TRUSS H",
+              "TRUSS H",
+              "H LINE 6"
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "TRUSS H",
+                "universe": "UNIV 18",
+                "firstFixture": "FX 882"
+              },
+              {
+                "n": 2,
+                "position": "TRUSS H",
+                "universe": "U18 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "TRUSS H",
+                "universe": "UNIV 19",
+                "firstFixture": "FX 194"
+              },
+              {
+                "n": 4,
+                "position": "TRUSS H",
+                "universe": "U19 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 5,
+                "position": "TRUSS H",
+                "universe": "UNIV 20",
+                "firstFixture": "FX 540"
+              },
+              {
+                "n": 6,
+                "position": "H LINE 6",
+                "universe": "U20 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 7,
+                "position": "H LINE 7",
+                "universe": "UNIV 21",
+                "firstFixture": "FX 732"
+              },
+              {
+                "n": 8,
+                "position": "H LINE 8",
+                "universe": "U21 SP",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_wall",
@@ -4322,15 +4622,65 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
+              "VERT 1",
+              "VERT 2",
+              "VERT 3",
+              "VERT 4",
+              "VERT 5",
+              "VERT 6"
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "VERT 1",
+                "universe": "UNIV 61",
+                "firstFixture": ""
+              },
+              {
+                "n": 2,
+                "position": "VERT 2",
+                "universe": "UNIV 62",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "VERT 3",
+                "universe": "UNIV 63",
+                "firstFixture": ""
+              },
+              {
+                "n": 4,
+                "position": "VERT 4",
+                "universe": "UNIV 64",
+                "firstFixture": ""
+              },
+              {
+                "n": 5,
+                "position": "VERT 5",
+                "universe": "UNIV 65",
+                "firstFixture": ""
+              },
+              {
+                "n": 6,
+                "position": "VERT 6",
+                "universe": "UNIV 66",
+                "firstFixture": ""
+              },
+              {
+                "n": 7,
+                "position": "",
+                "universe": "",
+                "firstFixture": ""
+              },
+              {
+                "n": 8,
+                "position": "",
+                "universe": "",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_d",
@@ -4348,15 +4698,41 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
+              "TRUSS D",
+              "TRUSS D",
+              "TRUSS D",
+              "TRUSS D",
               "",
               ""
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "TRUSS D",
+                "universe": "UNIV 6",
+                "firstFixture": "FX 525"
+              },
+              {
+                "n": 2,
+                "position": "TRUSS D",
+                "universe": "U6 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "TRUSS D",
+                "universe": "UNIV 7",
+                "firstFixture": "FX 321"
+              },
+              {
+                "n": 4,
+                "position": "TRUSS D",
+                "universe": "U7 SP",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_usr",
@@ -4374,15 +4750,41 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
+              "US RIGHT",
+              "US RIGHT",
+              "US RIGHT",
+              "US RIGHT",
               "",
               ""
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "US RIGHT",
+                "universe": "UNIV 42",
+                "firstFixture": ""
+              },
+              {
+                "n": 2,
+                "position": "US RIGHT",
+                "universe": "UNIV 42",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "US RIGHT",
+                "universe": "UNIV 42",
+                "firstFixture": ""
+              },
+              {
+                "n": 4,
+                "position": "US RIGHT",
+                "universe": "UNIV 42",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_l",
@@ -4400,15 +4802,41 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
+              "TRUSS L",
+              "TRUSS L",
+              "TRUSS L",
+              "TRUSS L",
               "",
               ""
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "TRUSS L",
+                "universe": "UNIV 27",
+                "firstFixture": "FX 936"
+              },
+              {
+                "n": 2,
+                "position": "TRUSS L",
+                "universe": "U27 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "TRUSS L",
+                "universe": "UNIV 28",
+                "firstFixture": "FX 518"
+              },
+              {
+                "n": 4,
+                "position": "TRUSS L",
+                "universe": "U28 SP",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_e",
@@ -4426,15 +4854,41 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
+              "TRUSS E",
+              "TRUSS E",
+              "TRUSS E",
+              "TRUSS E",
               "",
               ""
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "TRUSS E",
+                "universe": "UNIV 9",
+                "firstFixture": "FX 862"
+              },
+              {
+                "n": 2,
+                "position": "TRUSS E",
+                "universe": "U9 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "TRUSS E",
+                "universe": "UNIV 10",
+                "firstFixture": "FX 41"
+              },
+              {
+                "n": 4,
+                "position": "TRUSS E",
+                "universe": "U10 SP",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_k",
@@ -4452,15 +4906,41 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
+              "TRUSS K",
+              "TRUSS K",
+              "TRUSS K",
+              "TRUSS K",
               "",
               ""
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "TRUSS K",
+                "universe": "UNIV 25",
+                "firstFixture": "FX 201"
+              },
+              {
+                "n": 2,
+                "position": "TRUSS K",
+                "universe": "U25 SP",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "TRUSS K",
+                "universe": "UNIV 26",
+                "firstFixture": "FX 156"
+              },
+              {
+                "n": 4,
+                "position": "TRUSS K",
+                "universe": "U26 SP",
+                "firstFixture": ""
+              }
+            ]
           },
           {
             "id": "cable_snake_usl",
@@ -4478,15 +4958,41 @@
               ""
             ],
             "partPositions": [
-              "",
-              "",
-              "",
-              "",
+              "US LEFT",
+              "US LEFT",
+              "US LEFT",
+              "US LEFT",
               "",
               ""
             ],
             "loomId": "",
-            "notes": "added: rack-builder snake with no matching loom cable"
+            "notes": "added: rack-builder snake with no matching loom cable",
+            "lines": [
+              {
+                "n": 1,
+                "position": "US LEFT",
+                "universe": "UNIV 42",
+                "firstFixture": ""
+              },
+              {
+                "n": 2,
+                "position": "US LEFT",
+                "universe": "UNIV 42",
+                "firstFixture": ""
+              },
+              {
+                "n": 3,
+                "position": "US LEFT",
+                "universe": "UNIV 42",
+                "firstFixture": ""
+              },
+              {
+                "n": 4,
+                "position": "US LEFT",
+                "universe": "UNIV 42",
+                "firstFixture": ""
+              }
+            ]
           }
         ]
       }
