@@ -247,8 +247,9 @@ const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const MM_PX = 96/25.4;              // CSS pixels per millimetre at 96dpi
 
 const S = { tab:'build', loaded:false, show:null, showName:'',
-            formats:[], colors:{}, fmt:null, src:'manual',
-            racks:[], looms:[], nets:[], labels:[], dirty:false };
+            formats:[], colors:{}, fmt:null, src:'manual', fmtAuto:true,
+            racks:[], looms:[], nets:[], trusses:[], positions:[], equipment:[],
+            labels:[], groups:null, dirty:false, manualType:'free', manual:{} };
 
 const fmt = () => S.formats.find(f=>f.id===S.fmt) || S.formats[0];
 
@@ -259,6 +260,8 @@ async function load(){
   const lf = gear.find(g=>g.kind==='label-format');
   S.formats = (lf && lf.items) || [];
   S.fmt = S.formats[0] ? S.formats[0].id : null;
+  const req = gear.find(g=>g.kind==='rack-equipment');
+  S.equipment = (req && req.items) || [];
 
   const meta = await K.list('meta');
   const tok = meta.find(m=>m.id==='tokens' || m.colors);
@@ -268,12 +271,15 @@ async function load(){
   if(S.show){
     const sh = await K.get(K.P.show(S.show));
     S.showName = (sh && sh.name) || S.show;
-    S.racks = await K.list(K.P.sub(S.show,'racks'));
-    S.looms = await K.list(K.P.sub(S.show,'looms'));
-    S.nets  = await K.list(K.P.sub(S.show,'network'));
+    S.racks     = await K.list(K.P.sub(S.show,'racks'));
+    S.looms     = await K.list(K.P.sub(S.show,'looms'));
+    S.nets      = await K.list(K.P.sub(S.show,'network'));
+    S.trusses   = await K.list(K.P.sub(S.show,'truss'));
+    S.positions = await K.list(K.P.sub(S.show,'positions'));
   }
   S.loaded = true;
 }
+const eq = id => S.equipment.find(e=>e.id===id);
 
 /* ── ink ──────────────────────────────────────────────────────────────────
    The multi-colour rule, carried over intact. A label's readability is a
@@ -333,12 +339,60 @@ function fitFont(text, boxW, boxH, weight){
    Each source turns a tool's saved records into label rows. The colour
    bands come from what the record already carries — a loom cable knows
    its own tape colours, so the label does not ask twice. */
+const LINE_COUNTS = {CPC4:4, CPC8:8, SOCA:6};
+
+/* Total labels one truss run will emit: two joint labels per internal
+   joint (one per face) plus the end labels its endType implies. */
+function trussCount(t){
+  const total = Object.values(t.pieces||{}).reduce((a,c)=>a+Number(c||0),0);
+  const joints = Math.max(0, total-1)*2;
+  const et = t.endType||'uds';
+  let ends;
+  if(et==='uds' || et==='srsl') ends=2;
+  else ends=(t.customEnds||[]).filter(x=>String(x||'').trim()).length;
+  return joints+ends;
+}
+function qualifyingCables(){
+  const out=[];
+  S.looms.forEach(s=>(s.cables||[]).forEach(c=>{
+    if(LINE_COUNTS[c.breakout]) out.push({c, sheetName:s.name});
+  }));
+  return out;
+}
+function fixtureGroups(){
+  const groups=[];
+  S.positions.forEach(pos=>{
+    const byName={};
+    (pos.units||[]).forEach(u=>{
+      const fname = u.fixture ?? u.fixtureName ?? u.name ?? '';
+      const num   = u.unit ?? u.channel ?? u.id ?? '';
+      if(!fname) return;
+      (byName[fname]=byName[fname]||[]).push(num);
+    });
+    Object.entries(byName).forEach(([fname,nums])=>groups.push({fname, nums, posName:pos.name||''}));
+  });
+  return groups;
+}
+
 const SOURCES = [
-  {key:'manual', name:'Manual',      count:()=>0},
-  {key:'rack',   name:'Racks',       count:()=>S.racks.length},
-  {key:'loom',   name:'Loom cables', count:()=>S.looms.reduce((a,s)=>a+((s.cables||[]).length),0)},
-  {key:'case',   name:'Loom cases',  count:()=>Object.keys(loomCases()).length},
-  {key:'net',    name:'Network',     count:()=>S.nets.reduce((a,p)=>a+((p.devices||[]).length),0)},
+  {key:'manual',   name:'Manual',         fmt:'rollo-6x4', count:()=>0},
+  {key:'rack',     name:'Racks',          count:()=>S.racks.length},
+  {key:'loom',     name:'Loom cables',    count:()=>S.looms.reduce((a,s)=>a+((s.cables||[]).length),0)},
+  {key:'case',     name:'Loom cases',     count:()=>Object.keys(loomCases()).length},
+  {key:'net',      name:'Network',        count:()=>S.nets.reduce((a,p)=>a+((p.devices||[]).length),0)},
+  {key:'truss',    name:'Truss runs',     fmt:'ol1159lp', count:()=>S.trusses.reduce((a,t)=>a+trussCount(t),0)},
+  {key:'cpc',      name:'Snake lines',    fmt:'ol285',    count:()=>qualifyingCables().reduce((a,{c})=>a+LINE_COUNTS[c.breakout]+1,0)},
+  {key:'port',     name:'Rack ports',     fmt:'ol285',    count:()=>S.racks.reduce((a,r)=>a+(r.items||[]).reduce((b,it)=>{
+      const e=eq(it.gearId); if(!e) return b;
+      return b+Object.entries(it.ports||{}).filter(([pid,pp])=>{
+        if(!(pp.universe||pp.label)) return false;
+        const p=(e.ports||[]).find(x=>x.id===pid);
+        if(p && p.type==='input' && !pp.label) return false;
+        return true;
+      }).length;
+    },0),0)},
+  {key:'rackeq',   name:'Rack equipment', fmt:'ol875',    count:()=>S.racks.reduce((a,r)=>a+(r.items||[]).length,0)},
+  {key:'fixtures', name:'Fixture IDs',    fmt:'rollo-6x4',count:()=>fixtureGroups().length},
 ];
 function loomCases(){
   const m={};
@@ -349,10 +403,26 @@ function loomCases(){
   return m;
 }
 const hexOf = tok => S.colors[tok] || null;
+/* Rack Plot stores a rack's colour as a bare CSS custom-property name
+   (`--s3`), not a token or a hex string — resolve it to the actual painted
+   colour before it reaches labelInk()/lum(), which only understand hex. */
+function resolveBand(v){
+  if(!v) return null;
+  if(String(v).startsWith('--')){
+    try{ return getComputedStyle(document.documentElement).getPropertyValue(v).trim() || null; }
+    catch(e){ return null; }
+  }
+  return hexOf(v) || v;
+}
 
 function pull(src){
   const out=[];
   const mk=(main,sub,bands,note)=>out.push({id:uid(), main, sub, bands:bands.filter(Boolean), note:note||''});
+  /* Only the column-per-group sources (cpc, port) set S.groups, and only
+     interleaveIfSheet below repopulates it — every other source produces
+     a flat, non-interleaved list, so the grid tracking must not survive
+     into it. */
+  S.groups = null;
   if(src==='rack'){
     S.racks.forEach(r=>mk(r.name||'RACK', S.showName, [], `${(r.items||[]).length} devices`));
   }
@@ -377,7 +447,138 @@ function pull(src){
     S.nets.forEach(p=>(p.devices||[]).forEach(d=>
       mk(d.name||d.key, d.ip||p.name||'', [], p.name||'')));
   }
+  if(src==='truss'){
+    S.trusses.forEach(t=>{
+      const total = Object.values(t.pieces||{}).reduce((a,c)=>a+Number(c||0),0);
+      const bands = (t.colors||[]).map(hexOf).filter(Boolean).slice(0,3);
+      for(let j=1;j<total;j++){
+        const text = `${t.name}-${j} / ${t.name}-${j+1}`;
+        mk(text, '', bands, t.typeName); mk(text, '', bands, t.typeName);
+      }
+      const et = t.endType||'uds';
+      let ends;
+      if(et==='uds') ends=[`${t.name} US`, `${t.name} DS`];
+      else if(et==='srsl') ends=[`${t.name} SR`, `${t.name} SL`];
+      else { const ce=t.customEnds||[]; ends=[ce[0],ce[1]].filter(x=>String(x||'').trim()).map(x=>`${t.name} ${x}`); }
+      ends.forEach(text=>mk(text, '', bands, t.typeName));
+    });
+  }
+  if(src==='cpc'){
+    /* The universe for a given snake line is found by scanning every rack
+       port for a loom link that names this cable and line — Rack Plot
+       writes the link, Label Plot only reads it. */
+    const universeFor = (cable, n) => {
+      for(const r of S.racks) for(const it of (r.items||[])) for(const pid in (it.ports||{})){
+        const pp = it.ports[pid];
+        if(pp && pp.link && pp.link.kind==='loom' && pp.link.cableId===cable.id && pp.link.line===n)
+          return pp.universe || '';
+      }
+      /* No rack port has claimed this line yet — the BMW import writes the
+         universe straight onto the cable's own `lines[]`, so fall back to
+         that before giving up. */
+      const ln = (cable.lines||[])[n-1];
+      return (ln && ln.universe) || '';
+    };
+    const groups=[];
+    qualifyingCables().forEach(({c, sheetName})=>{
+      const lc = LINE_COUNTS[c.breakout];
+      const bands = [hexOf(c.color), hexOf(c.secColor)].filter(Boolean);
+      const rows=[];
+      mk(c.label||'—', sheetName||'', bands, ''); rows.push(out[out.length-1]);
+      for(let n=1;n<=lc;n++){
+        mk(`${c.label||'—'}-${n}`, universeFor(c, n), bands, ''); rows.push(out[out.length-1]);
+      }
+      groups.push(rows);
+    });
+    return interleaveIfSheet(out, groups);
+  }
+  if(src==='port'){
+    const groups=[];
+    S.racks.forEach(r=>{
+      const rows=[];
+      (r.items||[]).forEach(it=>{
+        const e = eq(it.gearId); if(!e) return;
+        Object.entries(it.ports||{}).forEach(([pid,pp])=>{
+          if(!(pp.universe||pp.label)) return;
+          const p = (e.ports||[]).find(x=>x.id===pid);
+          if(p && p.type==='input' && !pp.label) return; // opto-input filter
+          mk(pp.universe||'', `${r.name} · ${it.label||e.name} · ${(p&&p.name)||pid}`, [resolveBand(r.color)], '');
+          rows.push(out[out.length-1]);
+        });
+      });
+      if(rows.length) groups.push(rows);
+    });
+    return interleaveIfSheet(out, groups);
+  }
+  if(src==='rackeq'){
+    S.racks.forEach(r=>(r.items||[]).forEach(it=>{
+      const e = eq(it.gearId), gearName = e ? e.name : '';
+      mk(it.label||gearName, `${r.name} · ${gearName}`+(it.ip?` · ${it.ip}`:''), [resolveBand(r.color)], '');
+    }));
+  }
+  if(src==='fixtures'){
+    fixtureGroups().forEach(({fname,nums,posName})=>{
+      const asNum = nums.map(Number).filter(n=>!Number.isNaN(n));
+      const sub = asNum.length===nums.length && nums.length
+        ? (nums.length===1 ? String(asNum[0]) : `${Math.min(...asNum)}–${Math.max(...asNum)}`)
+        : (nums.length===1 ? String(nums[0]) : nums.join(', '));
+      mk(fname, sub, [], posName);
+    });
+  }
   return out;
+}
+
+/* ── column-per-group interleave ─────────────────────────────────────────
+   Each source group (one snake, one rack) fills a whole sheet column top
+   to bottom before the next group starts, rather than the default
+   row-major fill that would scatter one snake's lines across every
+   column on the page. Groups take it in turns of `cols` at a time; a
+   group that outruns one column continues in the SAME column index on
+   the pages that follow. */
+function interleaveColumns(groups, cols, rows){
+  const chunksOf = g => {
+    const out=[];
+    for(let i=0;i<g.length;i+=rows) out.push(g.slice(i,i+rows));
+    if(!out.length) out.push([]);
+    return out;
+  };
+  const allChunks = groups.map(chunksOf);
+  const pages=[];
+  let pageOffset=0;
+  for(let cs=0; cs<groups.length; cs+=cols){
+    const cluster = allChunks.slice(cs, cs+cols);
+    const pagesNeeded = Math.max(1, ...cluster.map(c=>c.length));
+    for(let p=0; p<pagesNeeded; p++){
+      const pageIdx = pageOffset+p;
+      if(!pages[pageIdx]) pages[pageIdx] = Array.from({length:cols}, ()=>Array(rows).fill(null));
+      cluster.forEach((chunks, ci)=>{
+        const chunk = chunks[p] || [];
+        pages[pageIdx][ci] = chunk.concat(Array(rows-chunk.length).fill(null));
+      });
+    }
+    pageOffset += pagesNeeded;
+  }
+  const flat=[];
+  pages.forEach(page=>{
+    for(let r=0;r<rows;r++) for(let c=0;c<cols;c++) flat.push(page[c][r]);
+  });
+  return flat;
+}
+/* Only sheet formats (not thermal rolls) have columns/rows to interleave
+   into — a thermal source falls back to plain emission order. */
+function interleaveIfSheet(rowsOut, groups){
+  const f = fmt();
+  if(!f || f.kind==='thermal'){ S.groups = null; return rowsOut; }
+  S.groups = groups;
+  return interleaveColumns(groups, f.cols||1, f.rows||1);
+}
+/* Re-run the column-per-group interleave against the CURRENT surviving
+   rows in S.groups — used after a delete so the print grid never carries
+   a stale hole where a removed row used to sit. */
+function reflowGroups(){
+  if(!S.groups) return;
+  const f = fmt();
+  S.labels = interleaveColumns(S.groups, (f&&f.cols)||1, (f&&f.rows)||1);
 }
 
 /* ── one label ────────────────────────────────────────────────────────────
@@ -385,15 +586,15 @@ function pull(src){
    print are the same object at two sizes rather than two drawings that
    have to be kept in agreement. */
 function labelHTML(l, wPx, hPx, scale){
+  const W = wPx*scale, H = hPx*scale;
+  if(!l){
+    /* An interleaved padding cell — same footprint, nothing printed on it. */
+    return `<div class="lbl" style="width:${W}px;height:${H}px"></div>`;
+  }
   const bands = (l.bands||[]).filter(Boolean);
   const {ink, halo, haloColor} = labelInk(bands);
-  const W = wPx*scale, H = hPx*scale;
   const pad = Math.max(3, W*0.035);
   const boxW = W - pad*2;
-  const hasSub = !!(l.sub||'').trim();
-  const mainH = hasSub ? H*0.60 : H*0.80;
-  const mainPx = fitFont(l.main||'', boxW, mainH, 800);
-  const subPx  = hasSub ? Math.min(fitFont(l.sub, boxW, H*0.24, 600), mainPx*0.42) : 0;
 
   /* The 0.15mm seam overlap: each band reaches 0.15mm past its own inner
      edge so rounding cannot leave a hairline of white between two bands. */
@@ -403,6 +604,28 @@ function labelHTML(l, wPx, hPx, scale){
         `<div class="band" style="background:${b};margin-top:${i?-ov:0}px;`
         + `padding-bottom:${i<bands.length-1?ov:0}px"></div>`).join('') + `</div>`
     : '';
+
+  if(l.lines && l.lines.length){
+    /* A stacked-line label (thermal manual types, snake headers, shipping
+       blocks…) is fitted as ONE block — the longest line sets the width
+       search, the line count sets the height search — so every line comes
+       out the same size instead of each shrinking to fit itself. */
+    const lines = l.lines.slice(0,5);
+    /* "Longest" means widest when actually measured, not most characters —
+       the font fitter's whole point is that character count lies. */
+    const longest = lines.reduce((a,s)=>measure(String(s||''),100,800)>measure(String(a||''),100,800)?s:a, '');
+    const linePx = fitFont(longest, boxW, H*0.86/Math.max(1,lines.length), 800);
+    const align = l.align==='left' ? 'left' : 'center';
+    const items = lines.map(s=>`<div style="font-size:${linePx}px">${esc(s||'')}</div>`).join('');
+    return `<div class="lbl" style="width:${W}px;height:${H}px">${bandDivs}
+      <div class="txt" style="color:${ink};text-shadow:${haloShadow(ink,halo,haloColor)};`
+      + `align-items:${align==='left'?'flex-start':'center'};text-align:${align}">${items}</div></div>`;
+  }
+
+  const hasSub = !!(l.sub||'').trim();
+  const mainH = hasSub ? H*0.60 : H*0.80;
+  const mainPx = fitFont(l.main||'', boxW, mainH, 800);
+  const subPx  = hasSub ? Math.min(fitFont(l.sub, boxW, H*0.24, 600), mainPx*0.42) : 0;
   return `<div class="lbl" style="width:${W}px;height:${H}px">${bandDivs}
     <div class="txt" style="color:${ink};text-shadow:${haloShadow(ink,halo,haloColor)}">
       <div style="font-size:${mainPx}px">${esc(l.main||'')}</div>
@@ -429,10 +652,11 @@ function sheetHTML(page, scale){
      legacy builder printed from, so a sheet that lined up there lines up
      here. */
   const PW=215.9, PH=279.4;
-  const mt=f.marginTopMm ?? 12.7, ms=f.marginSideMm ?? ((PW-(f.cols*f.wMm)-((f.cols-1)*(f.gapMm||0)))/2);
+  const colGap = f.colGapMm ?? f.gapMm ?? 0, rowGap = f.rowGapMm ?? f.gapMm ?? 0;
+  const mt=f.marginTopMm ?? 12.7, ms=f.marginSideMm ?? ((PW-(f.cols*f.wMm)-((f.cols-1)*colGap))/2);
   const cells = page.map((l,i)=>{
     const c=i%f.cols, r=Math.floor(i/f.cols);
-    const x=ms + c*(f.wMm+(f.gapMm||0)), y=mt + r*(f.hMm+(f.gapMm||0));
+    const x=ms + c*(f.wMm+colGap), y=mt + r*(f.hMm+rowGap);
     return `<div style="position:absolute;left:${x*MM_PX*scale}px;top:${y*MM_PX*scale}px">`
       + labelHTML(l, f.wMm*MM_PX, f.hMm*MM_PX, scale)
       + `</div><div class="cutline" style="left:${x*MM_PX*scale}px;top:${y*MM_PX*scale}px;`
@@ -482,7 +706,80 @@ function rail(){
       <button class="btn ghost sm" id="pullbtn" style="margin-top:10px;width:100%"
         ${S.src==='manual'?'disabled':''}>Load ${S.src==='manual'?'—':esc((SOURCES.find(s=>s.key===S.src)||{}).name)}</button>
       <div class="muted" style="font-size:11px;margin-top:7px">Loading replaces the list. Edit freely
-        afterwards — labels are not saved back to the source.</div></div>`;
+        afterwards — labels are not saved back to the source.</div></div>
+    ${S.src==='manual' ? manualCard() : ''}`;
+}
+
+/* ── Manual thermal types ─────────────────────────────────────────────────
+   Pre-Pro's fixed-shape forms — free text, fixture, case #, device,
+   shipping, rack — each appends one row to the same S.labels list the
+   plain Manual source already appends to. */
+const MANUAL_TYPES = [
+  ['free','Free text'], ['fixture','Fixture'], ['case','Case #'],
+  ['device','Device'], ['shipping','Shipping'], ['rack','Rack'],
+];
+function manualCard(){
+  const t = S.manualType, m = S.manual;
+  const v = (k,d)=>esc(m[k]!=null?m[k]:(d||''));
+  const seg = MANUAL_TYPES.map(([k,l])=>
+    `<button class="fmtbtn${t===k?' on':''}" data-mtype="${k}" style="flex:1;text-align:center">${l}</button>`).join('');
+  let fields = '';
+  if(t==='free'){
+    fields = `<textarea data-mf="text" rows="4" placeholder="1–5 lines" style="width:100%;font:inherit;
+      background:var(--surface-2);border:1px solid var(--line);border-radius:7px;padding:6px 9px">${v('text')}</textarea>`;
+  } else if(t==='fixture'){
+    fields = `<input data-mf="type" placeholder="Type" value="${v('type')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="from" placeholder="ID from" value="${v('from')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="to" placeholder="ID to" value="${v('to')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="loc" placeholder="Location" value="${v('loc')}" style="width:100%">`;
+  } else if(t==='case'){
+    fields = `<input data-mf="prefix" placeholder="Prefix" value="${v('prefix')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="number" placeholder="Number" value="${v('number')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="suffix" placeholder="Suffix" value="${v('suffix')}" style="width:100%">`;
+  } else if(t==='device'){
+    fields = `<input data-mf="name" placeholder="Name" value="${v('name')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="unitId" placeholder="Unit ID" value="${v('unitId')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="address" placeholder="Address" value="${v('address')}" style="width:100%">`;
+  } else if(t==='shipping'){
+    fields = `<input data-mf="attn" placeholder="Attn" value="${v('attn')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="company" placeholder="Company" value="${v('company')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="addr1" placeholder="Address 1" value="${v('addr1')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="addr2" placeholder="Address 2" value="${v('addr2')}" style="width:100%;margin-bottom:5px">
+      <input data-mf="citystatezip" placeholder="City, State ZIP" value="${v('citystatezip')}" style="width:100%">`;
+  } else if(t==='rack'){
+    fields = `<input data-mf="rackName" placeholder="Rack name" value="${v('rackName')}" style="width:100%">`;
+  }
+  return `<div class="card"><h4>Manual — type</h4>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px">${seg}</div>
+    ${fields}
+    <button class="btn sm" id="manualaddbtn" style="margin-top:9px;width:100%">Add</button></div>`;
+}
+function manualBuild(){
+  const t = S.manualType, m = S.manual;
+  if(t==='free'){
+    const lines = String(m.text||'').split('\n').map(s=>s.trim()).filter(Boolean).slice(0,5);
+    if(!lines.length) return null;
+    return {id:uid(), lines, align:'center', bands:[]};
+  }
+  if(t==='fixture'){
+    return {id:uid(), main:m.type||'', sub:[m.from,m.to].filter(Boolean).join('–'), note:m.loc||'', bands:[]};
+  }
+  if(t==='case'){
+    return {id:uid(), main:`${m.prefix||''}${m.number||''}${m.suffix||''}`, sub:'', bands:[]};
+  }
+  if(t==='device'){
+    return {id:uid(), lines:[m.name||'', m.unitId||'', m.address||''], align:'center', bands:[]};
+  }
+  if(t==='shipping'){
+    const lines=[m.attn,m.company,m.addr1,m.addr2,m.citystatezip].filter(s=>String(s||'').trim());
+    if(!lines.length) return null;
+    return {id:uid(), lines, align:'left', bands:[]};
+  }
+  if(t==='rack'){
+    if(!String(m.rackName||'').trim()) return null;
+    return {id:uid(), main:m.rackName||'', sub:'', bands:[]};
+  }
+  return null;
 }
 
 function bandPicker(l, i){
@@ -498,14 +795,17 @@ function bandPicker(l, i){
 function viewBuild(){
   const f = fmt();
   const rows = S.labels.map((l,idx)=>{
+    if(!l) return `<tr class="lblrow"><td class="muted mono" style="width:26px">${idx+1}</td>
+      <td colspan="5" class="muted" style="font-size:11px">— empty (column-fill padding) —</td></tr>`;
     const bands=(l.bands||[]);
+    const mainVal = l.lines ? l.lines.join(' / ') : (l.main||'');
     const swatches = bands.length
       ? bands.map(b=>`<span class="swatch" style="display:inline-block;width:13px;height:13px;
           border-radius:3px;border:1px solid var(--line-strong);background:${b};vertical-align:-2px"></span>`).join(' ')
       : '<span class="muted" style="font-size:11px">none</span>';
     return `<tr class="lblrow">
       <td class="muted mono" style="width:26px">${idx+1}</td>
-      <td class="tight" style="min-width:130px"><input data-l="${l.id}" data-f="main" value="${esc(l.main||'')}" placeholder="MAIN"></td>
+      <td class="tight" style="min-width:130px"><input data-l="${l.id}" data-f="main" value="${esc(mainVal)}" placeholder="MAIN"${l.lines?' readonly title="Lines label — edit via Manual add-form"':''}></td>
       <td class="tight" style="min-width:120px"><input data-l="${l.id}" data-f="sub" value="${esc(l.sub||'')}" placeholder="sub-line"></td>
       <td style="white-space:nowrap">${swatches}
         <button class="iconbtn" data-addband="${l.id}">+</button>
@@ -561,21 +861,42 @@ function viewSheet(){
 
 /* ── wiring ───────────────────────────────────────────────────────────── */
 function wire(){
-  $('root').querySelectorAll('[data-fmt]').forEach(b=>b.onclick=()=>{S.fmt=b.dataset.fmt;render();});
-  $('root').querySelectorAll('[data-src]').forEach(b=>b.onclick=()=>{S.src=b.dataset.src;render();});
+  $('root').querySelectorAll('[data-fmt]').forEach(b=>b.onclick=()=>{S.fmt=b.dataset.fmt;S.fmtAuto=false;if(S.groups)reflowGroups();render();});
+  $('root').querySelectorAll('[data-src]').forEach(b=>b.onclick=()=>{
+    S.src=b.dataset.src;
+    /* A source's default format applies only if the user hasn't picked a
+       format themselves since the last source switch — and switching
+       sources always re-arms that default for the NEXT switch too. */
+    if(S.fmtAuto){
+      const def = (SOURCES.find(s=>s.key===S.src)||{}).fmt;
+      if(def && S.formats.some(f=>f.id===def)) S.fmt = def;
+    }
+    S.fmtAuto = true;
+    render();
+  });
+  $('root').querySelectorAll('[data-mtype]').forEach(b=>b.onclick=()=>{S.manualType=b.dataset.mtype;render();});
+  $('root').querySelectorAll('[data-mf]').forEach(el=>{
+    el.oninput = e => { S.manual[el.dataset.mf]=e.target.value; };
+  });
+  const mab=$('manualaddbtn'); if(mab) mab.onclick=()=>{
+    const row = manualBuild();
+    if(!row) return alert('Fill in the form first.');
+    S.groups = null; S.labels.push(row); render();
+  };
   const pb=$('pullbtn'); if(pb) pb.onclick=()=>{
     const got = pull(S.src);
     if(!got.length) return alert('Nothing to pull — that tool has no saved records for this show yet.');
     S.labels = got; S.tab='build'; render();
   };
   const ab=$('addbtn'); if(ab) ab.onclick=()=>{
+    S.groups = null;
     S.labels.push({id:uid(), main:'', sub:'', bands:[]}); render();
     const ins=$('root').querySelectorAll('[data-f="main"]');
     const last=ins[ins.length-1]; if(last){ last.focus(); last.scrollIntoView({block:'center'}); }
   };
-  const cb=$('clearbtn'); if(cb) cb.onclick=()=>{ if(confirm('Clear every label?')){ S.labels=[]; render(); } };
+  const cb=$('clearbtn'); if(cb) cb.onclick=()=>{ if(confirm('Clear every label?')){ S.labels=[]; S.groups=null; render(); } };
 
-  const find = id => S.labels.find(l=>l.id===id);
+  const find = id => S.labels.find(l=>l && l.id===id);
   /* Text writes the model and repaints nothing. The preview is one label
      behind until a structural change, which is the right trade — a live
      repaint on every keystroke would rebuild the table and eat the
@@ -601,11 +922,22 @@ function wire(){
   });
   $('root').querySelectorAll('[data-dup]').forEach(b=>b.onclick=()=>{
     const l=find(b.dataset.dup); if(!l) return;
+    S.groups = null;
     S.labels.splice(S.labels.indexOf(l)+1, 0, {...l, id:uid(), bands:[...(l.bands||[])]});
     render();
   });
   $('root').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
-    S.labels=S.labels.filter(l=>l.id!==b.dataset.del); render();
+    const delId = b.dataset.del;
+    if(S.groups){
+      /* Drop the row from its group, then re-lay the whole grid — deleting
+         from the flat list alone would leave the OTHER groups' columns
+         shifted against a hole that no longer needs padding. */
+      S.groups = S.groups.map(g=>g.filter(l=>l && l.id!==delId));
+      reflowGroups();
+    } else {
+      S.labels = S.labels.filter(l=>l && l.id!==delId);
+    }
+    render();
   });
 }
 
@@ -613,7 +945,11 @@ function wire(){
 const csvCell=v=>{const s=String(v??''); return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;};
 function toCSV(){
   const rows=[['#','Main','Sub','Bands','Note']];
-  S.labels.forEach((l,i)=>rows.push([i+1, l.main||'', l.sub||'', (l.bands||[]).join(' '), l.note||'']));
+  S.labels.forEach((l,i)=>{
+    if(!l) return;
+    const main = l.lines ? l.lines.join(' / ') : (l.main||'');
+    rows.push([i+1, main, l.sub||'', (l.bands||[]).join(' '), l.note||'']);
+  });
   return rows.map(r=>r.map(csvCell).join(',')).join('\n');
 }
 $('csvbtn').onclick = async () => {
@@ -629,5 +965,25 @@ $('printbtn').onclick = () => {
 };
 
 (async()=>{ render(); await load(); render(); })();
+
+/* ── self-test ────────────────────────────────────────────────────────────
+   Guarded by the hash so it never runs for a real user; opened as
+   label-plot.working.html#selftest it checks the two pure functions the
+   spec calls out without touching any collection. */
+if(location.hash==='#selftest'){
+  const icGot = interleaveColumns([[1,2,3],[4,5]],2,2);
+  const icWant = [1,4,2,5,3,null,null,null];
+  const icOk = JSON.stringify(icGot)===JSON.stringify(icWant);
+
+  S.trusses = [{name:'B1', pieces:{"10":3}, endType:'uds'}];
+  const trussGot = pull('truss').map(r=>r.main);
+  const trussWant = ['B1-1 / B1-2','B1-1 / B1-2','B1-2 / B1-3','B1-2 / B1-3','B1 US','B1 DS'];
+  const trussOk = JSON.stringify(trussGot)===JSON.stringify(trussWant);
+  S.trusses = [];
+
+  console.log('[selftest] interleaveColumns', icOk?'PASS':'FAIL', JSON.stringify(icGot));
+  console.log('[selftest] truss labels', trussOk?'PASS':'FAIL', JSON.stringify(trussGot));
+  document.title = (icOk && trussOk ? 'SELFTEST PASS' : 'SELFTEST FAIL');
+}
 </script>
 </body></html>

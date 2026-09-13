@@ -8,6 +8,13 @@ Running list. Added to as things come up; nothing here is committed to a date.
 - **Distro / Patch / Truss / Pull Plot** — ported in as frames, unmodified.
 - **Truck Plot** — trailer pack planning: load list, first-fit pack onto 53 × 8.5 ft decks,
   per-truck weight and cube, deck plan SVG, CSV and print.
+- **Truss List** (2026-09-13) — per-show truss inventory: runs, type, length, piece auto-fill,
+  colours, ends, weight roll-up. The Pre-Pro Truss Builder concept, native.
+- **Pre-Pro port** (2026-09-13) — Rack Plot port links (rack↔rack, rack→loom line), splitter
+  propagation, copy-to-spare; Loom Plot breakout + Pre-Pro CSV; Label Plot truss / snake-line /
+  rack-port / rack-equipment / fixture-ID sources and the six thermal manual types on OL1159LP,
+  OL285, OL875 and Rollo 6×4; Hub `ktm-show` import; BMW ABBS 2026 converted to a bundle at
+  `data/shows/`. Map of what was taken and left: `docs/prepro-port-map.md`.
 
 ---
 
