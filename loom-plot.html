@@ -193,6 +193,7 @@ td.tight input.dirty{background:var(--accent-soft)}
   <div class="grow"></div>
   <button class="btn ghost sm" id="lwbtn">Lightwright</button>
   <button class="btn ghost sm" id="csvbtn">CSV</button>
+  <button class="btn ghost sm" id="csvprepbtn">CSV (Pre-Pro)</button>
   <button class="btn ghost sm" id="printbtn">Print</button>
   <button class="btn sm" id="savebtn">Save cables</button>
 </div>
@@ -323,6 +324,18 @@ async function save(){
 /* Total cut feet for one cable — the sum of its segments, not a single
    run length. */
 const cableFeet = c => (c.parts||[]).reduce((a,p)=>a+num(p),0);
+
+/* Multi-cable line count implied by a breakout choice. Label Plot
+   re-derives this itself; kept local, not exported. */
+const BREAKOUT_OPTS = ['','CPC4','CPC8','SOCA','OTHER'];
+function lineCount(c){
+  switch(c.breakout){
+    case 'CPC4': return 4;
+    case 'CPC8': return 8;
+    case 'SOCA': return 6;
+    default: return 0;
+  }
+}
 
 /* Round a segment UP to the next standard length. A 22' run is bought as
    a 25'; there is no such thing as ordering 22 feet of socapex. Anything
@@ -474,6 +487,9 @@ function cableRow(c){
         + `placeholder="pos" style="font-size:10px;text-align:center;color:var(--ink-3)"></td>`).join('')
     + `<td class="num mono" style="color:var(--ink-3)">${feet||''}</td>
     <td class="tight" style="min-width:88px"><input data-c="${c.id}" data-f="loomId" value="${esc(c.loomId||'')}" placeholder="Loom/case"></td>
+    <td class="tight" style="min-width:62px"><select data-c="${c.id}" data-f="breakout">`
+      + BREAKOUT_OPTS.map(o=>`<option value="${o}"${o===(c.breakout||'')?' selected':''}>${o||'—'}</option>`).join('')
+      + `</select></td>
     <td class="tight" style="min-width:100px"><input data-c="${c.id}" data-f="notes" value="${esc(c.notes||'')}" placeholder="—"></td>
     <td><div class="rowbtns">`
       + (spare?'':`<button class="iconbtn" data-sp="${c.id}" title="Add a spare: same type, &quot; SP&quot; label, pink">+SP</button>`)
@@ -496,14 +512,14 @@ function viewCables(){
         const byGroup = {};
         cables.forEach(c=>(byGroup[groupOf(c.type)] = byGroup[groupOf(c.type)]||[]).push(c));
         const rows = order.filter(g=>byGroup[g]).map(g=>
-          `<tr class="grouphead"><td colspan="${SLOTS+7}">${g}</td></tr>`
+          `<tr class="grouphead"><td colspan="${SLOTS+8}">${g}</td></tr>`
           + byGroup[g].map(cableRow).join('')).join('');
         const hint = HINTS[(cables[0]||{}).type] || HINTS._;
         return `<div class="tablewrap"><table><thead><tr>
             <th>Label</th><th>Type</th><th>Colour</th><th>2nd</th>`
           + Array.from({length:SLOTS},(_,i)=>`<th class="num">Pt${i+1}</th>`).join('')
-          + `<th class="num">Feet</th><th>Loom</th><th>Notes</th><th></th></tr></thead>
-            <tbody>${rows || `<tr><td colspan="${SLOTS+7}" class="muted" style="padding:16px">No cables yet.</td></tr>`}</tbody>
+          + `<th class="num">Feet</th><th>Loom</th><th>Breakout</th><th>Notes</th><th></th></tr></thead>
+            <tbody>${rows || `<tr><td colspan="${SLOTS+8}" class="muted" style="padding:16px">No cables yet.</td></tr>`}</tbody>
             </table></div>
             <div class="muted" style="font-size:11.5px;margin-top:7px">${esc(hint)}. Second row of each segment is its position label.</div>`;
       })();
@@ -544,7 +560,7 @@ function wireCables(){
   $('addcable').onclick=()=>{
     sh.cables = sh.cables||[];
     sh.cables.push({id:uid(), label:'', type:S.types[0].id, color:'', secColor:'',
-                    parts:[], partPositions:[], loomId:'', notes:''});
+                    parts:[], partPositions:[], loomId:'', breakout:'', notes:''});
     S.dirty=true; render();
     const rows=$('root').querySelectorAll('[data-row]');
     const last=rows[rows.length-1]; if(last){ const i=last.querySelector('input'); if(i){i.focus();i.scrollIntoView({block:'center'});} }
@@ -571,6 +587,15 @@ function wireCables(){
         const sw = $('root').querySelector(`[data-sw="${c.id}-${f}"]`);
         if(sw){ const h=hex(e.target.value);
           sw.className = 'swatch'+(h?'':' none'); sw.style.background = h||''; }
+        if(f==='type' && !c.breakout){
+          const nm = (type(c.type)||{}).name||'';
+          if(nm.includes('CPC4')) c.breakout='CPC4';
+          else if(nm.includes('CPC8')) c.breakout='CPC8';
+          if(c.breakout){
+            const bo = $('root').querySelector(`select[data-c="${c.id}"][data-f="breakout"]`);
+            if(bo) bo.value = c.breakout;
+          }
+        }
       };
     } else {
       el.oninput = e => { write(e.target.value); e.target.classList.add('dirty'); };
@@ -768,17 +793,33 @@ function viewCut(){
 const csvCell = v => { const s=String(v??''); return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; };
 
 function cablesCSV(){
-  const rows = [['Sheet','Label','Type','Colour','2nd colour','Loom','Feet']
+  const rows = [['Sheet','Label','Type','Colour','2nd colour','Loom','Breakout','Feet']
     .concat(Array.from({length:SLOTS},(_,i)=>[`Pt${i+1} ft`,`Pt${i+1} pos`]).flat())
     .concat(['Notes'])];
   S.sheets.forEach(sh=>(sh.cables||[]).forEach(c=>{
     const seg = Array.from({length:SLOTS},(_,i)=>
       [(c.parts||[])[i]||'', (c.partPositions||[])[i]||'']).flat();
     rows.push([sh.name||sh.id, c.label||'', (type(c.type)||{}).name||c.type||'',
-               c.color||'', c.secColor||'', c.loomId||'', cableFeet(c)||'']
+               c.color||'', c.secColor||'', c.loomId||'', c.breakout||'', cableFeet(c)||'']
       .concat(seg).concat([c.notes||'']));
   }));
   return rows.map(r=>r.map(csvCell).join(',')).join('\n');
+}
+
+/* Pre-Pro compatible export: exact header/column shape their Loom Builder
+   wrote, so a file round-trips through both tools without translation. */
+function preproParts(c){
+  const p = c.parts||[];
+  return Array.from({length:SLOTS},(_,i)=>p[i]||'').join('+');
+}
+function preproCSV(){
+  const rows = ['Location,Label,Color,SecColor,Type,Parts,Breakout,LoomCase,Notes'];
+  S.sheets.forEach(sh=>(sh.cables||[]).forEach(c=>{
+    rows.push([sh.name||sh.id, c.label||'', c.color||'', c.secColor||'',
+        (type(c.type)||{}).name||c.type||'', preproParts(c), c.breakout||'', c.loomId||'', c.notes||'']
+      .map(csvCell).join(','));
+  }));
+  return rows.join('\n');
 }
 
 /* Lightwright cable strings, in the format the legacy exporter produced —
@@ -809,10 +850,30 @@ async function put(name, text, mime){
 const slug = s => String(s||'looms').replace(/[^\w.-]+/g,'-');
 
 $('csvbtn').onclick  = () => put(slug(S.showName)+'-cables.csv', cablesCSV(), 'text/csv');
+$('csvprepbtn').onclick = () => put('loom-list-prepro.csv', preproCSV(), 'text/csv');
 $('lwbtn').onclick   = () => put(slug(S.showName)+'-lightwright-strings.txt', lightwright(), 'text/plain');
 $('printbtn').onclick= () => { setTimeout(()=>window.print(),120); };
 $('savebtn').onclick = save;
 
+if(location.hash==='#selftest'){
+  const savedSheets = S.sheets;
+  S.sheets = [
+    {id:'s1', name:'Upstage', cables:[
+      {id:'c1', label:'B1', color:'RED', secColor:'', type:'socapex',
+        parts:['25','50','','','',''], partPositions:[], loomId:'CASE1', breakout:'', notes:''}
+    ]},
+    {id:'s2', name:'Downstage', cables:[
+      {id:'c2', label:'B2', color:'BLUE', secColor:'WHITE', type:'cpc4',
+        parts:['10','10','10','10','10','10'], partPositions:[], loomId:'CASE2', breakout:'CPC4', notes:'x'}
+    ]},
+  ];
+  const out = preproCSV();
+  console.log(out);
+  const lines = out.split('\n');
+  console.log('header ok:', lines[0]==='Location,Label,Color,SecColor,Type,Parts,Breakout,LoomCase,Notes');
+  console.log('parts join ok:', lines[1].includes('25+50++++'));
+  S.sheets = savedSheets;
+}
 (async()=>{ render(); await load(); render(); })();
 </script>
 </body></html>
