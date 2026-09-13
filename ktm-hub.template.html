@@ -211,7 +211,7 @@ const KTM = (() => {
   const OWNERS = {
     fixtures:'hub', gear:'hub', meta:'hub', shows:'hub', positions:'hub', derived:'hub',
     power:'distro', patch:'patch', racks:'rack', looms:'loom',
-    network:'net', cases:'pull', trucks:'truck', orders:'order'
+    network:'net', cases:'pull', trucks:'truck', orders:'order', truss:'trusslist'
   };
 
   const LS = 'ktm:';
@@ -318,6 +318,8 @@ const TOOLS = [
     blurb:'Cable and loom list with real segment lengths.' },
   { key:'net',    name:'Net Plot',    color:'var(--s8)', status:'ready', writes:'network',
     blurb:'Switch fabric, VLANs, IP scheme, fiber runs.' },
+  { key:'trusslist', name:'Truss List', color:'var(--s4)', status:'ready', writes:'truss',
+    blurb:'Truss inventory by run — type, length, pieces, colours, ends, weight roll-up.' },
   { key:'truck',  name:'Truck Plot',  color:'var(--s7)', status:'ready', writes:'trucks',
     blurb:'Trailer pack planning — truck count, layout, weight and cube.' },
   { key:'label',  name:'Label Plot',  color:'var(--s0)', status:'ready', writes:'—',
@@ -326,7 +328,7 @@ const TOOLS = [
     blurb:'What you send the vendor — fixtures, cable by length, adapters, hardware.' }
 ];
 
-const SHOW_COLLECTIONS = ['positions','power','patch','racks','looms','network','cases','trucks','orders','derived'];
+const SHOW_COLLECTIONS = ['positions','power','patch','racks','looms','network','truss','cases','trucks','orders','derived'];
 const DOC_BUDGET = 5000;
 
 /* ═════════════════════════════════════════════════════════════════════

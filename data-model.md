@@ -42,6 +42,7 @@ shows/{showId}/patch/{docId}                                               owner
 shows/{showId}/racks/{rackId}                                              owner: rack
 shows/{showId}/looms/{loomId}                                              owner: loom
 shows/{showId}/network/{docId}                                             owner: net
+shows/{showId}/truss/{trussId}     truss inventory by run                  owner: trusslist
 shows/{showId}/cases/{caseId}                                              owner: pull
 shows/{showId}/trucks/{truckId}                                            owner: truck
 shows/{showId}/derived/{docId}     roll-ups                                owner: hub
@@ -266,3 +267,35 @@ Three things worth keeping:
   bug that made Pre-Pro's rack patching unusable for entering forty ports in a row.
 
 Bundle after the port: 454 KB of a 16 MB cap. **51 of 5,000 documents used.**
+
+## Truss List and the Pre-Pro port — 2026-09-13
+
+Truss Plot is rigging-load math and never carried a truss *inventory*; Pre-Pro's Truss Builder
+did (named runs, type, length, piece breakdown, colours, end labelling). That concept now lives
+in **Truss List**, a native tool writing `shows/{showId}/truss/{trussId}`, one document per run:
+
+```
+{ name:"B1", typeName:"TYLER GT TRUSS", lengthFt:40, pieces:{"10":4},
+  colors:["RED"], endType:"uds"|"srsl"|"custom", customEnds:["",""], notes, sort }
+```
+
+`typeName` points at an item in `gear/truss`; weight is derived (`lengthFt × weightPerFt`),
+never stored. Label Plot reads this collection to print joint and end labels; Truss Plot may
+later read it to seed positions. `pieces` is keyed by section length so a type with 20 ft
+sections and one with 3 m sections both fit.
+
+**Rack port links.** A rack port entry may carry `link`:
+`{kind:'rack', rackId, itemKey, portId}` (reciprocal, both ends written by Rack Plot) or
+`{kind:'loom', sheetId, cableId, line}` (one-way; Rack Plot reads looms, never writes them).
+This replaces Pre-Pro's `connRackId/connItemId/connPortId` and `snakeId/snakeLineId` pairs and
+is the source Label Plot uses to print a universe on a snake-line label.
+
+**Loom cable `breakout`** (`CPC4 | CPC8 | SOCA | OTHER | ''`) decides how many lines a cable has
+(4 / 8 / 6) and therefore how many snake-line labels it gets.
+
+**Label media added:** `ol285` (1.25×0.75 in, 6×12) and `ol875` (2.625×1 in, 3×10) in
+`gear/label-formats`, both with `colGapMm`/`rowGapMm`; older entries keep the single `gapMm`.
+
+**Import.** The shell can now import a `ktm-show` bundle (identity doc plus every row in
+`collections`), replacing or copying an existing show. `fixtures` and `gear` inside a bundle are
+skipped on import: the library belongs to the Hub, not the show.

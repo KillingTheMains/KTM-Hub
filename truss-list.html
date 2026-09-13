@@ -1,0 +1,549 @@
+<!doctype html><html><head><meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Truss List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#E3E5E0; --surface:#F8F8F6; --surface-2:#EBEDE8; --sunken:#DDDFD9;
+  --line:#C8CBC3; --line-strong:#A6AAA0;
+  --ink:#15181B; --ink-2:#4C5257; --ink-3:#5C636A;
+  --accent:#1C7566; --accent-soft:#D3E5E0; --on-accent:#FFFFFF;
+  --warn:#A56A12; --warn-soft:#F0E2C6;
+  --crit:#A93A28; --crit-soft:#F2D9D3;
+  --s1:#2A5CA0; --s2:#D0611E; --s3:#1E8F7A; --s4:#A0662A; --s5:#8B4FBF;
+  --s6:#7F8C1E; --s7:#C43A5E; --s8:#2F8FBF; --s0:#71787F;
+  --shadow:0 1px 2px rgba(20,25,30,.10), 0 6px 18px -10px rgba(20,25,30,.22);
+  --sel:#D3E5E0;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}}
+:root[data-theme="dark"]{
+  --ground:#0E1113; --surface:#171B1E; --surface-2:#1F2427; --sunken:#121618;
+  --line:#2B3136; --line-strong:#404850;
+  --ink:#E7EAE7; --ink-2:#AAB2B7; --ink-3:#8A939B;
+  --accent:#45BFA7; --accent-soft:#173630; --on-accent:#08110F;
+  --warn:#D9A341; --warn-soft:#382C13; --crit:#E2705F; --crit-soft:#3A1E19;
+  --s1:#4F86DA; --s2:#D9743C; --s3:#2FA88E; --s4:#B98546; --s5:#A47ADF;
+  --s6:#889A2E; --s7:#D95C7E; --s8:#38A2C8; --s0:#6E777F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px -12px rgba(0,0,0,.8);
+  --sel:#173630;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);overflow:hidden;
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;
+  line-height:1.45;display:flex;flex-direction:column}
+button,input,select,textarea{font:inherit;color:var(--ink)}
+option{color:var(--ink);background:var(--surface)}
+table,.card,.note,.stat{color:var(--ink)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+.bar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:9px 15px;background:var(--surface);
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.bar h1{font-family:"Archivo",sans-serif;font-size:15px;font-weight:700;margin:0;letter-spacing:.03em;white-space:nowrap}
+.grow{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--surface);border:0;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--sel);color:var(--ink);font-weight:600}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:8px;padding:7px 13px;
+  font-size:12.5px;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--ink-2);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink);filter:none}
+.btn.danger{background:none;color:var(--crit);border:1px solid var(--line)}
+.btn.danger:hover{background:var(--crit-soft);filter:none}
+.btn.sm{padding:4px 9px;font-size:11.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+input[type=text],input[type=number],select{background:var(--surface-2);border:1px solid var(--line);
+  border-radius:7px;padding:6px 9px}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}
+input.dirty{border-color:var(--accent)}
+
+main{flex:1;overflow-y:auto;padding:16px 18px 70px}
+.wrap{max-width:1400px;margin:0 auto}
+h3{font-family:"Archivo",sans-serif;font-size:12px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--accent);margin:20px 0 8px}
+h4{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700;margin:0 0 8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:9px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.stat .v{font-family:"Archivo",sans-serif;font-size:21px;font-weight:700;line-height:1.15;margin-top:1px}
+.stat .v small{font-size:10.5px;font-weight:500;color:var(--ink-3)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 15px;
+  box-shadow:var(--shadow);margin-bottom:12px}
+.note{border-radius:10px;padding:11px 14px;font-size:12.5px;border:1px solid var(--line);
+  background:var(--surface);margin-bottom:13px}
+.note.warn{background:var(--warn-soft);border-color:transparent}
+.note.crit{background:var(--crit-soft);border-color:transparent}
+.muted{color:var(--ink-3)}
+.chip{display:inline-block;padding:1px 6px;border-radius:5px;font-size:10px;font-weight:600;white-space:nowrap}
+.chip.ok{background:var(--accent-soft);color:var(--accent)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.crit{background:var(--crit-soft);color:var(--crit)}
+.chip.dim{background:var(--sunken);color:var(--ink-3)}
+.empty{text-align:center;padding:40px 20px;color:var(--ink-3)}
+.empty .big{font-family:"Archivo",sans-serif;font-size:15px;font-weight:600;color:var(--ink-2);margin-bottom:4px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th{text-align:left;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;padding:7px 9px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:5px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+tfoot td{font-weight:700;background:var(--surface-2)}
+
+/* truss row bits */
+.pcs{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.pcs label{display:flex;flex-direction:column;align-items:center;font-size:9px;color:var(--ink-3)}
+.pcs input{width:44px;padding:3px 4px;text-align:center}
+.colorrow{display:flex;gap:4px;align-items:center}
+.sw{width:11px;height:11px;border-radius:3px;border:1px solid var(--line-strong);flex:0 0 auto}
+.endscustom{display:flex;gap:4px;margin-top:4px}
+.endscustom input{width:64px}
+input.name{width:110px}
+select.type{width:150px}
+input.len{width:64px}
+input.notes{width:150px}
+
+@media print{
+  .bar{display:none} main{overflow:visible;padding:0}
+  body{overflow:visible;background:#fff}
+  .card{box-shadow:none;border:0}
+  .tablewrap{overflow:visible;border:0}
+  table{font-size:10px}
+  @page{size:landscape}
+}
+</style></head><body>
+
+<div class="bar">
+  <h1>Truss&nbsp;List</h1>
+  <div class="seg" id="tabs"></div>
+  <div class="grow"></div>
+  <button class="btn ghost sm" id="csvbtn">CSV</button>
+  <button class="btn ghost sm" id="printbtn">Print</button>
+  <button class="btn sm" id="savebtn">Save truss</button>
+</div>
+<main><div class="wrap" id="root"></div></main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   Truss List — per-show truss inventory: named runs (B1, M3, W7…), their
+   type, length, piece breakdown, colours, end labelling and notes, with a
+   weight roll-up by type. Rebuilds Pre-Pro's "Truss Builder" concept
+   against the Hub's shared data.
+
+   Truss Plot (rigging loads) is a different tool and is not touched here.
+   Label generation is not in this tool either — Label Plot reads this
+   collection and derives labels itself.
+
+   Two conventions carried over verbatim from Rack Plot / Loom Plot:
+   1. NEVER re-render on an input event. Text and number fields write to
+      the model and toggle a "dirty" class; nothing calls render() from
+      an oninput handler. Only structural changes (add/remove row, type
+      change, colour count, ends mode) go through render().
+   2. Colours are stored as TOKEN NAMES (RED, BLUE…) and resolved to hex
+      at render time from meta/tokens, never stored as hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+const $   = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const num = v => { const n=parseFloat(v); return isFinite(n)?n:0; };
+const slug = s => (String(s||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-+|-+$)/g,'')) || 'truss';
+/* Stable ids, never positional (data-model rule). One helper, used at Add,
+   Duplicate and Save alike, so an id is never built two different ways. A
+   blank-name row gets no id at all yet — assigning one from an empty name
+   would be a slug nobody chose — and once a row HAS an id (has been saved
+   once) that id is never regenerated, here or anywhere else. */
+const trussId = name => slug(name)+'-'+uid().slice(0,5);
+
+const ENDS = { uds:'Up/Down', srsl:'SR/SL', custom:'Custom' };
+
+const S = { tab:'list', loaded:false, show:null, showName:'',
+            types:[], colors:{}, trusses:[], dirty:false };
+
+async function load(){
+  const K = window.KTM;
+  if(!K){ S.loaded=true; return; }
+  const gear = await K.list('gear');
+  const tg = gear.find(g=>g.kind==='truss');
+  S.types = (tg && tg.items) || [];
+
+  const meta = await K.list('meta');
+  const tok = meta.find(m=>m.id==='tokens' || m.colors);
+  if(tok && tok.colors) S.colors = tok.colors;
+
+  S.show = K.activeShow ? K.activeShow() : null;
+  if(S.show){
+    const sh = await K.get(K.P.show(S.show));
+    S.showName = (sh && sh.name) || S.show;
+    S.trusses = await K.list(K.P.sub(S.show,'truss'));
+    S.trusses.sort((a,b)=>(a.sort||0)-(b.sort||0) || String(a.name||'').localeCompare(String(b.name||'')));
+  }
+  S.loaded = true;
+}
+
+async function save(){
+  const K = window.KTM;
+  if(!K) return alert('No store available.');
+  if(!S.show) return alert('Pick a show in the Hub first — truss runs belong to a show.');
+  const b=$('savebtn'); b.disabled=true; b.textContent='Saving…';
+  try{
+    let skipped = 0;
+    for(const t of S.trusses){
+      /* Stable ids: assigned once, on the row's first save, from whatever
+         name it has right then — never rebuilt afterward, and never built
+         from a blank name. A still-unnamed row is skipped, not written
+         under a slug nobody chose — and the button says so. */
+      if(!t.id){
+        if(!String(t.name||'').trim()){ skipped++; continue; }
+        t.id = trussId(t.name);
+      }
+      const {id, ...body} = t;
+      await K.set(K.P.subDoc(S.show,'truss',id), body);
+    }
+    S.dirty = skipped > 0;
+    b.textContent = skipped ? `Saved · ${skipped} unnamed not saved` : 'Saved';
+    document.querySelectorAll('input.dirty').forEach(i=>i.classList.remove('dirty'));
+    setTimeout(()=>{b.textContent='Save truss'; b.disabled=false;}, skipped ? 3200 : 1400);
+  }catch(e){ b.textContent='Save truss'; b.disabled=false; alert('Could not save: '+e.message); }
+}
+
+/* ── model helpers ─────────────────────────────────────────────────────── */
+const typeOf = name => S.types.find(t=>t.name===name);
+const hex    = tok  => S.colors[tok] || null;
+
+/* Greedy largest-piece-first. Sort the type's sections descending; for each,
+   count = floor(remaining/len), subtract; stop once remaining < 0.01 ft. */
+function autoPieces(lengthFt, sections){
+  const secs = (sections||[]).filter(n=>n>0).slice().sort((a,b)=>b-a);
+  let remaining = num(lengthFt);
+  const pieces = {};
+  for(const len of secs){
+    if(remaining < 0.01) break;
+    const count = Math.floor(remaining/len + 1e-9);
+    if(count > 0){ pieces[String(len)] = count; remaining -= count*len; }
+  }
+  return pieces;
+}
+
+function piecesFt(pieces){
+  return Object.entries(pieces||{}).reduce((a,[len,c])=>a+Number(len)*Number(c||0),0);
+}
+function piecesLabel(pieces){
+  const e = Object.entries(pieces||{}).filter(([,c])=>c>0).sort((a,b)=>Number(b[0])-Number(a[0]));
+  return e.length ? e.map(([len,c])=>`${c}x${len}`).join(' + ') : '';
+}
+function weightOf(t){
+  const ty = typeOf(t.typeName);
+  return ty && ty.weightPerFt ? num(t.lengthFt)*ty.weightPerFt : 0;
+}
+
+/* ── render ───────────────────────────────────────────────────────────── */
+function render(){
+  $('tabs').innerHTML=[['list','List'],['summary','Summary']]
+    .map(([k,l])=>`<button data-tab="${k}"${S.tab===k?' class="on"':''}>${l}</button>`).join('');
+  $('tabs').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();});
+
+  const r=$('root');
+  if(!S.loaded){ r.innerHTML='<div class="empty"><div class="big">Loading…</div></div>'; return; }
+  if(!window.KTM){
+    r.innerHTML='<div class="note crit"><b>No shared data layer.</b> Truss List reads the truss '
+      +'catalog from the Hub. Open it from inside the KTM Hub rather than on its own.</div>';
+    return;
+  }
+  if(!S.types.length){
+    r.innerHTML='<div class="empty"><div class="big">Truss catalog is empty</div>'
+      +'<div>Seed <span class="mono">gear/truss</span> in the Hub first.</div></div>';
+    return;
+  }
+  if(!S.show) r.innerHTML='<div class="note warn"><b>No show selected.</b> You can build the list '
+    +'freely, but saving needs a show — pick one at the top of the Hub.</div>';
+  else r.innerHTML='';
+
+  r.innerHTML += S.tab==='list' ? viewList() : viewSummary();
+  if(S.tab==='list') wireList();
+}
+
+function viewList(){
+  let h = '<div style="display:flex;gap:8px;margin-bottom:10px">'
+    + '<button class="btn sm" id="addtruss">Add truss</button></div>';
+
+  if(!S.trusses.length){
+    h += '<div class="empty"><div class="big">No truss runs yet</div>'
+      + '<div>Add one above.</div></div>';
+    return h;
+  }
+
+  h += '<div class="tablewrap"><table><thead><tr>'
+    + '<th>Name</th><th>Type</th><th class="num">Length ft</th><th>Pieces</th>'
+    + '<th class="num">Weight lb</th><th>Colours</th><th>Ends</th><th>Notes</th><th></th>'
+    + '</tr></thead><tbody>'
+    + S.trusses.map((t,i)=>rowHtml(t,i)).join('')
+    + '</tbody></table></div>';
+  return h;
+}
+
+function rowHtml(t,i){
+  const ty = typeOf(t.typeName);
+  const secs = (ty && ty.sections) || [];
+  const wt = weightOf(t);
+  const declared = piecesFt(t.pieces);
+  const mismatch = Math.abs(declared - num(t.lengthFt)) > 0.01;
+  const colors = t.colors || [];
+
+  const typeOpts = '<option value="">—</option>' + S.types.map(x=>
+    `<option value="${esc(x.name)}"${t.typeName===x.name?' selected':''}>${esc(x.name)}</option>`).join('');
+
+  const pieceInputs = secs.length
+    ? '<div class="pcs">' + secs.slice().sort((a,b)=>b-a).map(len=>
+        `<label>${len}'<input type="number" min="0" step="1" data-pc="${i}|${len}" `
+        + `value="${(t.pieces||{})[String(len)]||''}"></label>`).join('')
+      + `<button class="btn ghost sm" data-auto="${i}" style="margin-left:4px">Auto</button></div>`
+    : '<span class="muted" style="font-size:11px">Pick a type</span>';
+
+  const colorSelect = (idx,val) => `<select data-col="${i}|${idx}" style="width:78px">`
+    + '<option value="">—</option>'
+    + Object.keys(S.colors).sort().concat(val && !S.colors[val] ? [val] : [])
+        .filter((v,pos,arr)=>arr.indexOf(v)===pos)
+        .map(tok=>`<option value="${esc(tok)}"${val===tok?' selected':''}>${esc(tok)}</option>`).join('')
+    + '</select>';
+
+  let colorsHtml = '<div class="colorrow">'
+    + `<span class="sw" style="background:${esc(hex(colors[0])||'transparent')}"></span>`
+    + colorSelect(0, colors[0]||'')
+    + `<span class="sw" style="background:${esc(hex(colors[1])||'transparent')}"></span>`
+    + colorSelect(1, colors[1]||'');
+  if(colors[1]){
+    colorsHtml += `<span class="sw" style="background:${esc(hex(colors[2])||'transparent')}"></span>`
+      + colorSelect(2, colors[2]||'');
+  }
+  colorsHtml += '</div>';
+
+  const endType = t.endType || 'uds';
+  const endsHtml = '<select data-ends="'+i+'">'
+    + Object.entries(ENDS).map(([k,l])=>`<option value="${k}"${endType===k?' selected':''}>${l}</option>`).join('')
+    + '</select>'
+    + (endType==='custom'
+      ? '<div class="endscustom">'
+        + `<input type="text" data-ce="${i}|0" value="${esc((t.customEnds||[])[0]||'')}" placeholder="End A">`
+        + `<input type="text" data-ce="${i}|1" value="${esc((t.customEnds||[])[1]||'')}" placeholder="End B">`
+        + '</div>'
+      : '');
+
+  return `<tr data-row="${i}">`
+    + `<td><input type="text" class="name" data-name="${i}" value="${esc(t.name||'')}"></td>`
+    + `<td><select class="type" data-type="${i}">${typeOpts}</select></td>`
+    + `<td class="num"><input type="number" class="len" min="0" step="0.1" data-len="${i}" value="${t.lengthFt||''}"></td>`
+    + `<td>${pieceInputs}`
+    + (mismatch ? `<div class="chip warn" data-chip="${i}" style="margin-top:3px">pieces ≠ length</div>`
+                : `<div class="chip dim" style="margin-top:3px;display:none" data-chip="${i}">pieces ≠ length</div>`)
+    + `</td>`
+    + `<td class="num mono" data-weight="${i}">${wt?wt.toFixed(1):'—'}</td>`
+    + `<td>${colorsHtml}</td>`
+    + `<td>${endsHtml}</td>`
+    + `<td><input type="text" class="notes" data-notes="${i}" value="${esc(t.notes||'')}"></td>`
+    + `<td style="white-space:nowrap">`
+    + `<button class="btn ghost sm" data-dup="${i}" title="Duplicate">⧉</button> `
+    + `<button class="btn danger sm" data-del="${i}" title="Delete">✕</button></td>`
+    + `</tr>`;
+}
+
+function wireList(){
+  const add=$('addtruss');
+  if(add) add.onclick=()=>{
+    const n = S.trusses.length;
+    /* No id yet — a blank row has no name to slug, and the id is not
+       assigned until Save gives it a real name to work from. */
+    const t = { id:null, name:'', typeName:'', lengthFt:0,
+                pieces:{}, colors:[], endType:'uds', customEnds:['',''], notes:'', sort:n, updatedAt:Date.now() };
+    S.trusses.push(t); S.dirty=true; render();
+    const inp=document.querySelector(`[data-name="${n}"]`); if(inp) inp.focus();
+  };
+
+  document.querySelectorAll('[data-dup]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.dup, src=S.trusses[i]; if(!src) return;
+    const copy = JSON.parse(JSON.stringify(src));
+    /* A duplicate is a new document, not the same one twice — it gets its
+       own id the same way Add's blank row does: assigned at Save, from
+       whatever name it carries then, never reusing the source's id. */
+    copy.id = null;
+    copy.sort = S.trusses.length;
+    copy.updatedAt = Date.now();
+    S.trusses.splice(i+1,0,copy); S.dirty=true; render();
+  });
+
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.del, t=S.trusses[i]; if(!t) return;
+    if(!confirm('Delete "'+(t.name||'this truss')+'"?')) return;
+    S.trusses.splice(i,1);
+    if(S.show && window.KTM && t.id){
+      window.KTM.del(window.KTM.P.subDoc(S.show,'truss',t.id)).catch(()=>{});
+    }
+    S.dirty=true; render();
+  });
+
+  document.querySelectorAll('[data-name]').forEach(inp=>inp.oninput=()=>{
+    const t=S.trusses[+inp.dataset.name]; if(!t) return;
+    t.name=inp.value; inp.classList.add('dirty'); S.dirty=true;
+  });
+
+  document.querySelectorAll('[data-type]').forEach(sel=>sel.onchange=()=>{
+    const t=S.trusses[+sel.dataset.type]; if(!t) return;
+    t.typeName=sel.value;
+    /* A section length from the old type is not a section of the new one —
+       drop any piece key the new type does not offer, rather than shipping
+       a stale count to the chip, the CSV and the saved doc. render() below
+       redraws this row's piece inputs (and the mismatch chip) from the
+       pruned object, so both stay in sync with the new type in one pass. */
+    const ty=typeOf(t.typeName), valid=new Set(((ty&&ty.sections)||[]).map(String));
+    t.pieces=t.pieces||{};
+    Object.keys(t.pieces).forEach(k=>{ if(!valid.has(k)) delete t.pieces[k]; });
+    S.dirty=true; render();
+  });
+
+  document.querySelectorAll('[data-len]').forEach(inp=>inp.oninput=()=>{
+    const i=+inp.dataset.len, t=S.trusses[i]; if(!t) return;
+    t.lengthFt=num(inp.value); inp.classList.add('dirty'); S.dirty=true;
+    updateRowComputed(i);
+  });
+
+  document.querySelectorAll('[data-pc]').forEach(inp=>inp.oninput=()=>{
+    const [i,len]=inp.dataset.pc.split('|'); const t=S.trusses[+i]; if(!t) return;
+    t.pieces=t.pieces||{};
+    const v=parseInt(inp.value||'0',10);
+    if(v>0) t.pieces[len]=v; else delete t.pieces[len];
+    inp.classList.add('dirty'); S.dirty=true;
+    updateRowComputed(+i);
+  });
+
+  document.querySelectorAll('[data-auto]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.auto, t=S.trusses[i]; if(!t) return;
+    const ty=typeOf(t.typeName);
+    t.pieces = autoPieces(t.lengthFt, ty && ty.sections);
+    S.dirty=true; render();
+  });
+
+  document.querySelectorAll('[data-col]').forEach(sel=>sel.onchange=()=>{
+    const [i,idx]=sel.dataset.col.split('|'); const t=S.trusses[+i]; if(!t) return;
+    /* Read all three pickers for this row (not just the one that changed)
+       and compact, rather than writing into t.colors[+idx] directly — an
+       unset picker 0 with picker 1 set would otherwise leave a hole at
+       index 0, which JSON.stringify and CSV both render as "" / a stray
+       slash. filter(Boolean) is the compaction; order is preserved. */
+    const vals=[0,1,2].map(n=>{
+      if(+idx===n) return sel.value||'';
+      const other=document.querySelector(`[data-col="${i}|${n}"]`);
+      return other ? (other.value||'') : '';
+    });
+    t.colors = vals.filter(Boolean);
+    S.dirty=true; render();
+  });
+
+  document.querySelectorAll('[data-ends]').forEach(sel=>sel.onchange=()=>{
+    const t=S.trusses[+sel.dataset.ends]; if(!t) return;
+    t.endType=sel.value; S.dirty=true; render();
+  });
+  document.querySelectorAll('[data-ce]').forEach(inp=>inp.oninput=()=>{
+    const [i,idx]=inp.dataset.ce.split('|'); const t=S.trusses[+i]; if(!t) return;
+    t.customEnds=t.customEnds||['',''];
+    t.customEnds[+idx]=inp.value;
+    inp.classList.add('dirty'); S.dirty=true;
+  });
+
+  document.querySelectorAll('[data-notes]').forEach(inp=>inp.oninput=()=>{
+    const t=S.trusses[+inp.dataset.notes]; if(!t) return;
+    t.notes=inp.value; inp.classList.add('dirty'); S.dirty=true;
+  });
+}
+
+/* No full render() from an input handler — recompute the weight cell and the
+   mismatch chip for one row in place, same pattern as Rack Plot's port
+   "used" toggle. */
+function updateRowComputed(i){
+  const t=S.trusses[i]; if(!t) return;
+  const w=$('root').querySelector(`[data-weight="${i}"]`);
+  if(w){ const wt=weightOf(t); w.textContent = wt ? wt.toFixed(1) : '—'; }
+  const chip=$('root').querySelector(`[data-chip="${i}"]`);
+  if(chip){
+    const mismatch = Math.abs(piecesFt(t.pieces) - num(t.lengthFt)) > 0.01;
+    chip.style.display = mismatch ? '' : 'none';
+  }
+}
+
+/* ── summary ──────────────────────────────────────────────────────────── */
+function viewSummary(){
+  const by={};
+  S.trusses.forEach(t=>{
+    const key=t.typeName||'(no type)';
+    const g=by[key]=by[key]||{typeName:key,runs:0,ft:0,lb:0,pieces:{}};
+    g.runs++; g.ft+=num(t.lengthFt); g.lb+=weightOf(t);
+    Object.entries(t.pieces||{}).forEach(([len,c])=>{ g.pieces[len]=(g.pieces[len]||0)+num(c); });
+  });
+  const groups=Object.values(by).sort((a,b)=>b.ft-a.ft);
+  if(!groups.length) return '<div class="empty"><div class="big">Nothing to summarise yet</div>'
+    +'<div>Add truss runs on the List tab.</div></div>';
+
+  const grand={runs:0,ft:0,lb:0,pieces:{}};
+  groups.forEach(g=>{ grand.runs+=g.runs; grand.ft+=g.ft; grand.lb+=g.lb;
+    Object.entries(g.pieces).forEach(([len,c])=>{ grand.pieces[len]=(grand.pieces[len]||0)+c; }); });
+
+  return '<div class="tablewrap"><table><thead><tr>'
+    + '<th>Type</th><th class="num">Runs</th><th class="num">Total ft</th>'
+    + '<th class="num">Total lb</th><th>Pieces</th></tr></thead><tbody>'
+    + groups.map(g=>`<tr><td>${esc(g.typeName)}</td><td class="num">${g.runs}</td>`
+        + `<td class="num">${g.ft.toFixed(1)}</td><td class="num">${g.lb.toFixed(1)}</td>`
+        + `<td class="mono">${esc(piecesLabel(g.pieces)||'—')}</td></tr>`).join('')
+    + '</tbody><tfoot><tr>'
+    + `<td>Grand total</td><td class="num">${grand.runs}</td>`
+    + `<td class="num">${grand.ft.toFixed(1)}</td><td class="num">${grand.lb.toFixed(1)}</td>`
+    + `<td class="mono">${esc(piecesLabel(grand.pieces)||'—')}</td></tr></tfoot></table></div>`;
+}
+
+/* ── CSV / print ──────────────────────────────────────────────────────── */
+function endsLabel(t){
+  if((t.endType||'uds')==='custom') return 'custom ('+(t.customEnds||[]).filter(Boolean).join('/')+')';
+  return ENDS[t.endType||'uds']||t.endType||'';
+}
+function toCSV(){
+  const out=[['Name','Type','Length ft','Pieces','Weight lb','Colours','Ends','Notes']];
+  S.trusses.forEach(t=>{
+    out.push([t.name||'', t.typeName||'', t.lengthFt||0, piecesLabel(t.pieces),
+      weightOf(t).toFixed(1), (t.colors||[]).join('/'), endsLabel(t), t.notes||'']);
+  });
+  return out.map(r=>r.map(v=>{const s=String(v??'');
+    return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');
+}
+async function downloadCSV(){
+  const csv=toCSV(), name=((S.showName||'truss-list')+'.csv').replace(/[^\w.-]+/g,'-');
+  try{ const dl=await claude.use('downloads'); if(dl){ await dl.save({filename:name,data:csv}); return; } }catch(e){}
+  try{ await navigator.clipboard.writeText(csv); alert('CSV copied to the clipboard.'); }
+  catch(e){ alert('Could not export: '+e.message); }
+}
+
+$('csvbtn').onclick=downloadCSV;
+$('printbtn').onclick=()=>{ if(S.tab!=='list'){S.tab='list';render();} setTimeout(()=>window.print(),120); };
+$('savebtn').onclick=save;
+
+(async()=>{ render(); await load(); render(); })();
+
+/* ── self-test ────────────────────────────────────────────────────────── */
+if(location.hash==='#selftest'){
+  console.log('autoPieces(40,[2,4,5,8,10,20]) =', autoPieces(40,[2,4,5,8,10,20]));
+  console.log('autoPieces(37,[2,5,8,10]) =', autoPieces(37,[2,5,8,10]));
+}
+</script>
+</body></html>

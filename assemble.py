@@ -21,6 +21,7 @@ TOOLS = [
     ("truss",  UPLOADS / "truss-plot.html",           True),
     ("pull",   UPLOADS / "pull-plot.html",            True),
     ("truck",  HERE    / "truck-plot.html",           False),
+    ("trusslist", HERE / "truss-list.html",         False),
     ("rack",   HERE    / "rack-plot.html",            False),
     ("loom",   HERE    / "loom-plot.html",            False),
     ("net",    HERE    / "net-plot.html",             False),
