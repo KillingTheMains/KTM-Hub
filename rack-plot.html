@@ -179,6 +179,12 @@ svg{display:block;width:100%;height:auto}
   45deg,var(--line-strong) 0 1.5px,transparent 1.5px 4px)}
 .legend .sw.solid{background:var(--s0);opacity:.42;border-style:dashed}
 .port .pf{margin-left:auto;font-size:8.5px;letter-spacing:.06em;color:var(--ink-3);font-weight:600}
+.linkbtn{padding:1px 6px;font-size:10px;margin-left:auto;line-height:1.4}
+.linkbadge{font-size:10px;color:var(--ink-3);margin-top:3px}
+.linkbadge.cross{color:var(--accent);font-weight:600}
+.linkpop{position:absolute;z-index:40;top:100%;left:0;background:var(--surface);border:1px solid var(--line);
+  border-radius:8px;box-shadow:var(--shadow);padding:8px;width:230px;margin-top:4px}
+.linkpop select{width:100%;margin-bottom:6px;font-size:11.5px}
 
 @media print{
   .bar,.side{display:none} main{overflow:visible;padding:0}
@@ -263,8 +269,8 @@ const WIDTH_LABEL = { full:'Full 19″', half:'Half rack', third:'Third rack' };
 const FILL_LIMIT = 0.80;   /* F502-derived: 80 % of rack space used, blanks fill the rest */
 
 const S = { tab:'build', face:'front', loaded:false, show:null, showName:'',
-            equip:[], cases:[], racks:[], cur:null, dirty:false,
-            place:null, placeQ:'', sel:null };
+            equip:[], cases:[], racks:[], looms:[], cur:null, dirty:false,
+            place:null, placeQ:'', sel:null, linkPop:null, sparePop:null, staleLinks:0 };
 
 async function load(){
   const K = window.KTM;
@@ -285,9 +291,143 @@ async function load(){
     S.showName = (sh && sh.name) || S.show;
     S.racks = await K.list(K.P.sub(S.show,'racks'));
     S.racks.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
+    S.looms = await K.list(K.P.sub(S.show,'looms'));
   }
   S.cur = S.racks[0] ? S.racks[0].id : null;
+  S.staleLinks = pruneStaleLinks();
   S.loaded = true;
+}
+
+/* ── port links ───────────────────────────────────────────────────────────
+   A port entry can carry an optional `link` to another physical port —
+   another rack's gear port, or a break-in line on a loom cable. Loom-side
+   links are one-way: Rack Plot reads looms, never writes them. */
+function lineCount(cable){
+  const c=cable||{}, b=c.breakout;
+  if(b==='CPC4') return 4;
+  if(b==='CPC8') return 8;
+  if(b==='SOCA') return 6;
+  const t=String(c.type||'');
+  if(/CPC8/i.test(t)) return 8;
+  if(/CPC4/i.test(t)) return 4;
+  return 0;
+}
+function allCables(){
+  const out=[];
+  (S.looms||[]).forEach(sh=>(sh.cables||[]).forEach(c=>{
+    if(lineCount(c)>0) out.push({sheetId:sh.id, sheetName:sh.name||sh.id, cable:c});
+  }));
+  return out;
+}
+function findRackItemPort(rackId,itemKey,portId){
+  const r=S.racks.find(x=>x.id===rackId); if(!r) return null;
+  const it=(r.items||[]).find(x=>x.key===itemKey); if(!it) return null;
+  const e=eq(it.gearId); if(!e) return null;
+  const p=(e.ports||[]).find(x=>x.id===portId); if(!p) return null;
+  return {rack:r, item:it, port:p};
+}
+function lineClaimedBy(sheetId,cableId,line,exRackId,exItemKey,exPortId){
+  for(const rr of S.racks) for(const ii of (rr.items||[])) for(const pid in (ii.ports||{})){
+    if(rr.id===exRackId && ii.key===exItemKey && pid===exPortId) continue;
+    const l=(ii.ports[pid]||{}).link;
+    if(l && l.kind==='loom' && l.sheetId===sheetId && l.cableId===cableId && l.line===line) return true;
+  }
+  return false;
+}
+function linkText(link){
+  if(!link) return '';
+  if(link.kind==='rack'){
+    const t=findRackItemPort(link.rackId, link.itemKey, link.portId);
+    if(!t) return '→ (missing)';
+    return `→ ${t.rack.name||'Rack'} · ${t.item.label||(eq(t.item.gearId)||{}).name||''} · ${t.port.name||t.port.id}`;
+  }
+  if(link.kind==='loom'){
+    const sh=(S.looms||[]).find(s=>s.id===link.sheetId);
+    const c=sh && (sh.cables||[]).find(x=>x.id===link.cableId);
+    if(!c) return '→ (missing)';
+    return `→ ${c.label||c.id}-${link.line} · ${sh.name||sh.id}`;
+  }
+  return '';
+}
+/* Drop links whose target no longer exists. Runs once on load; nothing is
+   saved until the user saves. */
+function pruneStaleLinks(){
+  let n=0;
+  S.racks.forEach(r=>(r.items||[]).forEach(it=>{
+    Object.keys(it.ports||{}).forEach(pid=>{
+      const link=(it.ports[pid]||{}).link; if(!link) return;
+      let ok=false;
+      if(link.kind==='rack') ok=!!findRackItemPort(link.rackId, link.itemKey, link.portId);
+      else if(link.kind==='loom'){
+        const sh=(S.looms||[]).find(s=>s.id===link.sheetId);
+        const c=sh && (sh.cables||[]).find(x=>x.id===link.cableId);
+        ok = !!(c && link.line>=1 && link.line<=lineCount(c));
+      }
+      if(!ok){ delete it.ports[pid].link; n++; }
+    });
+  }));
+  return n;
+}
+
+/* ── splitter propagation ─────────────────────────────────────────────────
+   Pure: apply the "blank or unchanged" rule to every OUTPUT port of an item
+   given the input port that was just typed on. Never touches inputs. */
+function propagate(item, gearPorts, inputPortId, oldVal, newVal){
+  const outs=(gearPorts||[]).filter(p=>p.type==='output');
+  outs.forEach(p=>{
+    item.ports=item.ports||{};
+    const cur=(item.ports[p.id]||{}).universe||'';
+    if(cur===''||cur===oldVal) item.ports[p.id]=Object.assign({}, item.ports[p.id], {universe:newVal});
+  });
+}
+
+/* ── copy universes to spare ──────────────────────────────────────────────
+   Target resolution: a same-gear item in this rack named "<label> SP" /
+   "-SP" / " SPARE" / "(SP)"; else the only other same-gear item in this
+   rack; else the caller must prompt across all racks. */
+function findSpareTarget(r, it){
+  const label=(it.label||(eq(it.gearId)||{}).name||'').toUpperCase();
+  const suffixes=[' SP','-SP',' SPARE','(SP)'];
+  const sameRack=(r.items||[]).filter(x=>x.key!==it.key && x.gearId===it.gearId);
+  const bySuffix=sameRack.find(x=>{
+    const xl=(x.label||'').toUpperCase();
+    return suffixes.some(sfx=>xl===label+sfx);
+  });
+  if(bySuffix) return {kind:'item', item:bySuffix, rack:r};
+  if(sameRack.length===1) return {kind:'item', item:sameRack[0], rack:r};
+  const all=[];
+  S.racks.forEach(rr=>(rr.items||[]).forEach(ii=>{
+    if(ii.gearId===it.gearId && !(rr.id===r.id && ii.key===it.key)) all.push({item:ii, rack:rr});
+  }));
+  if(!all.length) return {kind:'none'};
+  return {kind:'choose', options:all};
+}
+/* Copy universe + label port-by-port by port id; never the link. */
+function copyToSpare(it, target){
+  const e=eq(it.gearId); if(!e) return;
+  (e.ports||[]).forEach(p=>{
+    const src=(it.ports||{})[p.id]||{};
+    target.ports=target.ports||{};
+    const cur=target.ports[p.id]||{};
+    target.ports[p.id]=Object.assign({}, cur.link?{link:cur.link}:{}, {universe:src.universe||'', label:src.label||''});
+  });
+  S.dirty=true;
+}
+/* Applies the copy and, if the target is on the rack currently on screen,
+   patches its DOM inputs directly instead of triggering a render(). */
+function doCopy(it, targetItem, targetRack){
+  copyToSpare(it, targetItem);
+  if(targetRack.id!==S.cur) return;
+  const e=eq(it.gearId); if(!e) return;
+  (e.ports||[]).forEach(p=>{
+    const tp=(targetItem.ports||{})[p.id]||{};
+    const pu=document.querySelector('[data-pu="'+CSS.escape(targetItem.key+'|'+p.id)+'"]');
+    if(pu) pu.value=tp.universe||'';
+    const pl=document.querySelector('[data-pl="'+CSS.escape(targetItem.key+'|'+p.id)+'"]');
+    if(pl) pl.value=tp.label||'';
+    const portDiv=(pu&&pu.closest('.port'))||(pl&&pl.closest('.port'));
+    if(portDiv) portDiv.classList.toggle('used', !!(tp.universe||tp.label||tp.link));
+  });
 }
 
 async function save(){
@@ -520,6 +660,8 @@ function viewBuild(){
   let h='';
   if(!S.show) h+='<div class="note warn"><b>No show selected.</b> You can lay racks out freely, '
     +'but saving needs a show — pick one at the top of the Hub.</div>';
+  if(S.staleLinks) h+=`<div class="note">${S.staleLinks} stale link${S.staleLinks===1?'':'s'} cleared `
+    +`(target no longer exists). Save to keep this.</div>`;
 
   h+='<div class="stats">'
    + st('Racks',c.racks) + st('Devices',c.items)
@@ -608,7 +750,21 @@ function viewBuild(){
       .sort((a,b)=> (h0Of(b)-h0Of(a)) || (colOf(a)-colOf(b)))
       .forEach(it=>{ h+=deviceCard(r,it); });
   }
-  return h+'</div></div>'+placeModal();
+  return h+'</div></div>'+placeModal()+sparePopModal();
+}
+
+function sparePopModal(){
+  const sp=S.sparePop; if(!sp) return '';
+  return '<div class="scrim" id="sparescrim"><div class="picker" style="max-width:380px">'
+   + '<div class="pickhead"><b>Copy universes to which item?</b><span class="grow"></span>'
+   + '<button class="btn ghost sm" id="sparecancel">Close</button></div>'
+   + '<div style="padding:0 16px 16px">'
+   + '<select id="sparesel" style="width:100%">'
+   + sp.options.map((o,i)=>`<option value="${i}">`
+      + `${esc(o.item.label||(eq(o.item.gearId)||{}).name||o.item.key)} — ${esc(o.rack.name||o.rack.id)}</option>`).join('')
+   + '</select>'
+   + '<div style="margin-top:10px"><button class="btn sm" id="sparego">Copy</button></div>'
+   + '</div></div></div>';
 }
 
 
@@ -887,20 +1043,100 @@ function deviceCard(r,it){
       + `<button class="btn ghost sm" data-sl="${esc(it.key)}" data-d="1" title="Slide right">▶</button>`:'')
    + `<button class="btn ghost sm" data-mv="${esc(it.key)}" data-d="1" title="Up a half U">▲</button>`
    + `<button class="btn ghost sm" data-mv="${esc(it.key)}" data-d="-1" title="Down a half U">▼</button>`
+   + `<button class="btn ghost sm" data-cpspare="${esc(it.key)}" title="Copy universes and labels to a spare">Copy → spare</button>`
    + `<button class="btn danger sm" data-rm="${esc(it.key)}">Remove</button></div>`
    + `<div class="ports">`
    + outs.map(p=>{
       const pp=(it.ports||{})[p.id]||{};
-      const used=!!(pp.universe||pp.label);
-      return `<div class="port${used?' used':''}">`
+      const used=!!(pp.universe||pp.label||pp.link);
+      const popOpen = S.linkPop && S.linkPop.itemKey===it.key && S.linkPop.portId===p.id;
+      const cross = pp.link && pp.link.kind==='rack' && pp.link.rackId!==r.id;
+      return `<div class="port${used?' used':''}" style="position:relative">`
        + `<div class="pn"><span class="pdot ${esc(p.type||'output')}"></span>${esc(p.name||p.id)}`
-       + (p.face?`<span class="pf">${esc(p.face)}</span>`:'')+`</div>`
+       + (p.face?`<span class="pf">${esc(p.face)}</span>`:'')
+       + `<button type="button" class="btn ghost sm linkbtn" data-lk="${esc(it.key)}|${esc(p.id)}" title="Link this port">⇄</button>`
+       + `</div>`
        + (p.type==='output'||p.type==='input'
-          ? `<input type="text" data-pu="${esc(it.key)}|${esc(p.id)}" value="${esc(pp.universe||'')}" placeholder="Universe" class="mono">` : '')
+          ? `<input type="text" data-pu="${esc(it.key)}|${esc(p.id)}" data-prev="${esc(pp.universe||'')}" value="${esc(pp.universe||'')}" placeholder="Universe" class="mono">` : '')
        + `<input type="text" data-pl="${esc(it.key)}|${esc(p.id)}" value="${esc(pp.label||'')}" placeholder="Goes to…">`
+       + (pp.link ? `<div class="linkbadge${cross?' cross':''}">${esc(linkText(pp.link))}</div>` : '')
+       + (popOpen ? linkPopover(r,it,p) : '')
        + `</div>`;
      }).join('')
    + `</div></div>`;
+}
+
+/* Fills in the first available choice for whichever selects are still
+   unset (or point at something no longer valid) so a single-option select —
+   which never fires change — still has a live target by the time Set is
+   read. Called on open, on kind toggle, and after every cascade reset. */
+function seedLinkPop(r,it){
+  const lp=S.linkPop; if(!lp) return;
+  if(lp.kind==='rack'){
+    if(!lp.rackId || !S.racks.some(x=>x.id===lp.rackId)) lp.rackId=(S.racks[0]||{}).id||null;
+    const tr=S.racks.find(x=>x.id===lp.rackId);
+    const titems=((tr&&tr.items)||[]).filter(x=>!(tr && tr.id===r.id && x.key===it.key));
+    if(!lp.itemKey2 || !titems.some(x=>x.key===lp.itemKey2)) lp.itemKey2=titems[0]?titems[0].key:null;
+    const ti=titems.find(x=>x.key===lp.itemKey2);
+    const te=ti && eq(ti.gearId);
+    const tports=(te&&te.ports)||[];
+    if(!lp.portId2 || !tports.some(x=>x.id===lp.portId2)) lp.portId2=tports[0]?tports[0].id:null;
+  }else{
+    const cabs=allCables();
+    if(!lp.sheetId || !lp.cableId || !cabs.some(cc=>cc.sheetId===lp.sheetId && cc.cable.id===lp.cableId)){
+      const first=cabs[0];
+      lp.sheetId=first?first.sheetId:null; lp.cableId=first?first.cable.id:null; lp.line=null;
+    }
+    const sel=cabs.find(cc=>cc.sheetId===lp.sheetId && cc.cable.id===lp.cableId);
+    const n=sel?lineCount(sel.cable):0;
+    if(!lp.line || lp.line<1 || lp.line>n) lp.line = n>=1 ? 1 : null;
+  }
+}
+
+/* Compact popover for setting/clearing a port link — a positioned div, not a
+   full modal re-render. */
+function linkPopover(r,it,p){
+  const lp=S.linkPop;
+  let h='<div class="linkpop" onclick="event.stopPropagation()">';
+  h+='<div class="seg" style="margin-bottom:6px">'
+   + `<button type="button" data-lkkind="rack"${lp.kind==='rack'?' class="on"':''}>Rack port</button>`
+   + `<button type="button" data-lkkind="loom"${lp.kind==='loom'?' class="on"':''}>Loom line</button></div>`;
+  if(lp.kind==='rack'){
+    const racks=S.racks;
+    h+='<select id="lkrack">'+racks.map(rr=>`<option value="${esc(rr.id)}"${lp.rackId===rr.id?' selected':''}>${esc(rr.name||rr.id)}</option>`).join('')+'</select>';
+    const tr=racks.find(x=>x.id===lp.rackId)||racks[0];
+    const titems=((tr&&tr.items)||[]).filter(x=>!(tr.id===r.id && x.key===it.key));
+    h+='<select id="lkitem">'+titems.map(ti=>{
+      const te=eq(ti.gearId)||{};
+      return `<option value="${esc(ti.key)}"${lp.itemKey2===ti.key?' selected':''}>${esc(ti.label||te.name||ti.key)}</option>`;
+    }).join('')+'</select>';
+    const ti=titems.find(x=>x.key===lp.itemKey2)||titems[0];
+    const te=ti && eq(ti.gearId);
+    const tports=(te&&te.ports)||[];
+    h+='<select id="lkport">'+tports.map(tp=>{
+      const already = ti && (ti.ports||{})[tp.id] && (ti.ports[tp.id]||{}).link;
+      return `<option value="${esc(tp.id)}"${lp.portId2===tp.id?' selected':''}>${esc(tp.name||tp.id)}${already?' (linked)':''}</option>`;
+    }).join('')+'</select>';
+  }else{
+    const cabs=allCables();
+    h+='<select id="lkcable">'+cabs.map(cc=>{
+      const val=cc.sheetId+'|'+cc.cable.id, sel=(lp.sheetId+'|'+lp.cableId)===val;
+      return `<option value="${esc(val)}"${sel?' selected':''}>${esc(cc.cable.label||cc.cable.id)} · ${esc(cc.sheetName)}</option>`;
+    }).join('')+'</select>';
+    const sel=cabs.find(cc=>cc.sheetId===lp.sheetId && cc.cable.id===lp.cableId)||cabs[0];
+    const n=sel?lineCount(sel.cable):0;
+    let opts='';
+    for(let i=1;i<=n;i++){
+      const claimed = sel && lineClaimedBy(sel.sheetId, sel.cable.id, i, r.id, it.key, p.id);
+      opts+=`<option value="${i}"${lp.line===i?' selected':''}>${i}${claimed?' (linked)':''}</option>`;
+    }
+    h+=`<select id="lkline">${opts}</select>`;
+  }
+  h+='<div style="display:flex;gap:6px;margin-top:6px">'
+   + '<button type="button" class="btn sm" id="lkset">Set</button>'
+   + '<button type="button" class="btn ghost sm" id="lkclear">Clear</button>'
+   + '<button type="button" class="btn ghost sm" id="lkcancel">Cancel</button></div></div>';
+  return h;
 }
 
 function wireBuild(){
@@ -984,6 +1220,118 @@ function wireBuild(){
     S.racks=S.racks.filter(x=>x.id!==r.id); S.cur=S.racks[0]?S.racks[0].id:null; S.dirty=true; render();
   };
 
+  /* ── port links: open/close, kind toggle, selects, set/clear ─────────── */
+  document.querySelectorAll('[data-lk]').forEach(b=>b.onclick=()=>{
+    const [k,pid]=b.dataset.lk.split('|');
+    if(S.linkPop && S.linkPop.itemKey===k && S.linkPop.portId===pid){ S.linkPop=null; render(); return; }
+    const r=rack(), it=(r.items||[]).find(x=>x.key===k); if(!it) return;
+    const existing=((it.ports||{})[pid]||{}).link;
+    if(existing && existing.kind==='rack')
+      S.linkPop={itemKey:k,portId:pid,kind:'rack',rackId:existing.rackId,itemKey2:existing.itemKey,portId2:existing.portId};
+    else if(existing && existing.kind==='loom')
+      S.linkPop={itemKey:k,portId:pid,kind:'loom',sheetId:existing.sheetId,cableId:existing.cableId,line:existing.line};
+    else
+      S.linkPop={itemKey:k,portId:pid,kind:'rack',rackId:r.id,itemKey2:null,portId2:null};
+    seedLinkPop(r,it); render();
+  });
+  document.querySelectorAll('[data-lkkind]').forEach(b=>b.onclick=()=>{
+    if(!S.linkPop) return;
+    const r=rack(), it=(r.items||[]).find(x=>x.key===S.linkPop.itemKey); if(!it) return;
+    S.linkPop.kind=b.dataset.lkkind; seedLinkPop(r,it); render();
+  });
+  const lkrack=$('lkrack'); if(lkrack) lkrack.onchange=()=>{
+    const r=rack(), it=(r.items||[]).find(x=>x.key===S.linkPop.itemKey); if(!it) return;
+    S.linkPop.rackId=lkrack.value; S.linkPop.itemKey2=null; S.linkPop.portId2=null; seedLinkPop(r,it); render();
+  };
+  const lkitem=$('lkitem'); if(lkitem) lkitem.onchange=()=>{
+    const r=rack(), it=(r.items||[]).find(x=>x.key===S.linkPop.itemKey); if(!it) return;
+    S.linkPop.itemKey2=lkitem.value; S.linkPop.portId2=null; seedLinkPop(r,it); render();
+  };
+  const lkport=$('lkport'); if(lkport) lkport.onchange=()=>{ S.linkPop.portId2=lkport.value; };
+  const lkcable=$('lkcable'); if(lkcable) lkcable.onchange=()=>{
+    const r=rack(), it=(r.items||[]).find(x=>x.key===S.linkPop.itemKey); if(!it) return;
+    const [sid,cid]=lkcable.value.split('|'); S.linkPop.sheetId=sid; S.linkPop.cableId=cid; S.linkPop.line=null;
+    seedLinkPop(r,it); render();
+  };
+  const lkline=$('lkline'); if(lkline) lkline.onchange=()=>{ S.linkPop.line=parseInt(lkline.value,10); };
+  const lkcancel=$('lkcancel'); if(lkcancel) lkcancel.onclick=()=>{ S.linkPop=null; render(); };
+  const lkclear=$('lkclear'); if(lkclear) lkclear.onclick=()=>{
+    const lp=S.linkPop, r=rack(), it=(r.items||[]).find(x=>x.key===lp.itemKey);
+    const pp=it && (it.ports||{})[lp.portId];
+    const link=pp && pp.link;
+    if(link && link.kind==='rack'){
+      const tr=S.racks.find(x=>x.id===link.rackId), ti=tr&&(tr.items||[]).find(x=>x.key===link.itemKey);
+      if(ti && ti.ports && ti.ports[link.portId]) delete ti.ports[link.portId].link;
+    }
+    if(pp) delete pp.link;
+    S.dirty=true; S.linkPop=null; render();
+  };
+  const lkset=$('lkset'); if(lkset) lkset.onclick=()=>{
+    const lp=S.linkPop, r=rack(), it=(r.items||[]).find(x=>x.key===lp.itemKey); if(!it) return;
+    /* Read the live selects, not the cached popover state — a select with a
+       single option never fires change, so the cached value can still be
+       null even though something is visibly chosen. */
+    let rackId2, itemKey2, portId2, sheetId2, cableId2, line2;
+    if(lp.kind==='rack'){
+      const elR=$('lkrack'), elI=$('lkitem'), elP=$('lkport');
+      rackId2 = (elR && elR.value) || lp.rackId;
+      itemKey2 = (elI && elI.value) || lp.itemKey2;
+      portId2 = (elP && elP.value) || lp.portId2;
+      if(!rackId2||!itemKey2||!portId2){ alert('Choose a rack, item and port.'); return; }
+    }else{
+      const elC=$('lkcable'), elL=$('lkline');
+      if(elC && elC.value){ const parts=elC.value.split('|'); sheetId2=parts[0]; cableId2=parts[1]; }
+      else { sheetId2=lp.sheetId; cableId2=lp.cableId; }
+      line2 = parseInt((elL && elL.value) || lp.line, 10);
+      if(!sheetId2||!cableId2||!line2){ alert('Choose a cable and line.'); return; }
+    }
+    /* Validated — now it is safe to unwind the old reciprocal. */
+    it.ports=it.ports||{}; it.ports[lp.portId]=it.ports[lp.portId]||{};
+    const oldLink=it.ports[lp.portId].link;
+    if(oldLink && oldLink.kind==='rack'){
+      const otr=S.racks.find(x=>x.id===oldLink.rackId), oti=otr&&(otr.items||[]).find(x=>x.key===oldLink.itemKey);
+      if(oti && oti.ports && oti.ports[oldLink.portId]) delete oti.ports[oldLink.portId].link;
+    }
+    if(lp.kind==='rack'){
+      it.ports[lp.portId].link={kind:'rack', rackId:rackId2, itemKey:itemKey2, portId:portId2};
+      const tr=S.racks.find(x=>x.id===rackId2), ti=tr&&(tr.items||[]).find(x=>x.key===itemKey2);
+      if(ti){
+        ti.ports=ti.ports||{};
+        /* The target port may already belong to a different pair — clear
+           that partner's link too, or this write leaves it one-way. */
+        const prev=(ti.ports[portId2]||{}).link;
+        if(prev && prev.kind==='rack'){
+          const ptr=S.racks.find(x=>x.id===prev.rackId), pti=ptr&&(ptr.items||[]).find(x=>x.key===prev.itemKey);
+          if(pti && pti.ports && pti.ports[prev.portId]) delete pti.ports[prev.portId].link;
+        }
+        ti.ports[portId2]=Object.assign({}, ti.ports[portId2],
+          {link:{kind:'rack', rackId:r.id, itemKey:it.key, portId:lp.portId}});
+      }
+    }else{
+      it.ports[lp.portId].link={kind:'loom', sheetId:sheetId2, cableId:cableId2, line:line2};
+    }
+    S.dirty=true; S.linkPop=null; render();
+  };
+
+  /* ── copy universes to spare ───────────────────────────────────────────
+     Direct hit: update only the affected DOM inputs, no render(). A choice
+     among several candidates opens a small picker instead. */
+  document.querySelectorAll('[data-cpspare]').forEach(b=>b.onclick=()=>{
+    const r=rack(), it=(r.items||[]).find(x=>x.key===b.dataset.cpspare); if(!it) return;
+    const res=findSpareTarget(r, it);
+    if(res.kind==='none'){ alert('No other item with the same gear was found.'); return; }
+    if(res.kind==='choose'){ S.sparePop={itemKey:it.key, rackId:r.id, options:res.options}; render(); return; }
+    doCopy(it, res.item, res.rack);
+  });
+  const spc=$('sparecancel'); if(spc) spc.onclick=()=>{ S.sparePop=null; render(); };
+  const sps=$('sparescrim'); if(sps) sps.onclick=ev=>{ if(ev.target===sps){ S.sparePop=null; render(); } };
+  const spg=$('sparego'); if(spg) spg.onclick=()=>{
+    const sp=S.sparePop, sel=$('sparesel'), opt=sp.options[parseInt(sel.value,10)];
+    const r=S.racks.find(x=>x.id===sp.rackId), it=r && (r.items||[]).find(x=>x.key===sp.itemKey);
+    if(it && opt) doCopy(it, opt.item, opt.rack);
+    S.sparePop=null; render();
+  };
+
   document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{
     const r=rack(); r.items=r.items.filter(x=>x.key!==b.dataset.rm); S.dirty=true; render();
   });
@@ -1015,11 +1363,29 @@ function wireBuild(){
     const isU=inp.hasAttribute('data-pu');
     const [k,pid]=(isU?inp.dataset.pu:inp.dataset.pl).split('|');
     const r=rack(), it=(r.items||[]).find(x=>x.key===k); if(!it) return;
+    const oldVal = isU ? (inp.dataset.prev||'') : null;
     it.ports=it.ports||{}; it.ports[pid]=Object.assign({},it.ports[pid],
       isU?{universe:inp.value}:{label:inp.value});
     inp.closest('.port').classList.toggle('used',
-      !!((it.ports[pid].universe||'')||(it.ports[pid].label||'')));
+      !!((it.ports[pid].universe||'')||(it.ports[pid].label||'')||(it.ports[pid].link)));
     S.dirty=true;
+    /* Splitter propagation: typing on an INPUT port whose item has 2+ OUTPUT
+       ports pushes the value onto any output that is blank or unchanged.
+       DOM only — no repaint, same rule as the rest of this block. */
+    if(isU){
+      const e=eq(it.gearId), gp=(e&&e.ports)||[];
+      const portDef=gp.find(p=>p.id===pid);
+      const outs=gp.filter(p=>p.type==='output');
+      if(portDef && portDef.type==='input' && outs.length>=2){
+        propagate(it, gp, pid, oldVal, inp.value);
+        outs.forEach(p=>{
+          const el=document.querySelector('[data-pu="'+CSS.escape(k+'|'+p.id)+'"]');
+          if(el){ el.value=(it.ports[p.id]||{}).universe||''; el.dataset.prev=el.value;
+            el.closest('.port').classList.toggle('used', !!(el.value||(it.ports[p.id]||{}).label||(it.ports[p.id]||{}).link)); }
+        });
+      }
+      inp.dataset.prev = inp.value;
+    }
   });
   document.querySelectorAll('[data-ip]').forEach(inp=>inp.oninput=()=>{
     const r=rack(), it=(r.items||[]).find(x=>x.key===inp.dataset.ip);
@@ -1034,10 +1400,10 @@ function viewPatch(){
     const e=eq(it.gearId); if(!e) return;
     (e.ports||[]).forEach(p=>{
       const pp=(it.ports||{})[p.id]||{};
-      if(!pp.universe && !pp.label) return;
+      if(!pp.universe && !pp.label && !pp.link) return;
       rows.push({rack:r.name, device:it.label||e.name, model:e.name, ip:it.ip,
                  ru:ruLabel(it), face:faceOf(it),
-                 port:p.name||p.id, type:p.type, universe:pp.universe||'', dest:pp.label||''});
+                 port:p.name||p.id, type:p.type, universe:pp.universe||'', dest:pp.label||'', link:pp.link||null});
     });
   }));
   if(!rows.length) return '<div class="empty"><div class="big">Nothing patched yet</div>'
@@ -1048,7 +1414,7 @@ function viewPatch(){
    + `<span class="m">${esc(S.showName||'no show')}</span>`
    + `<span class="m">${rows.length} ports</span></div>`;
   h+='<div class="tablewrap"><table><thead><tr><th>Rack</th><th class="num">RU</th><th>Face</th>'
-   + '<th>Device</th><th>IP</th><th>Port</th><th>Universe</th><th>Goes to</th></tr></thead><tbody>'
+   + '<th>Device</th><th>IP</th><th>Port</th><th>Universe</th><th>Goes to</th><th>Link</th></tr></thead><tbody>'
    + rows.map(r=>{
       const dup=r.universe && (idx[r.universe.trim()]||[]).length>1;
       return `<tr><td>${esc(r.rack)}</td><td class="num">${esc(r.ru)}</td>`
@@ -1058,7 +1424,8 @@ function viewPatch(){
        + `<td class="mono" style="font-size:11.5px">${esc(r.port)}</td>`
        + `<td class="mono"><b>${esc(r.universe||'—')}</b>`
        + (dup?' <span class="chip warn">dup</span>':'')+`</td>`
-       + `<td>${esc(r.dest||'—')}</td></tr>`;
+       + `<td>${esc(r.dest||'—')}</td>`
+       + `<td style="font-size:11.5px">${esc(linkText(r.link))}</td></tr>`;
      }).join('')
    + '</tbody></table></div></div>';
   return h;
@@ -1067,14 +1434,14 @@ function viewPatch(){
 const st=(k,v,cls)=>`<div class="stat${cls?' '+cls:''}"><div class="k">${esc(k)}</div><div class="v">${v}</div></div>`;
 
 function toCSV(){
-  const out=[['Rack','RU','Face','Device','Model','IP','Port','Type','Universe','Goes to']];
+  const out=[['Rack','RU','Face','Device','Model','IP','Port','Type','Universe','Goes to','Link']];
   S.racks.forEach(r=>(r.items||[]).forEach(it=>{
     const e=eq(it.gearId); if(!e) return;
     (e.ports||[]).forEach(p=>{
       const pp=(it.ports||{})[p.id]||{};
-      if(!pp.universe && !pp.label) return;
+      if(!pp.universe && !pp.label && !pp.link) return;
       out.push([r.name, ruLabel(it), faceOf(it), it.label||e.name, e.name, it.ip||'',
-                p.name||p.id, p.type||'', pp.universe||'', pp.label||'']);
+                p.name||p.id, p.type||'', pp.universe||'', pp.label||'', linkText(pp.link)]);
     });
   }));
   return out.map(r=>r.map(v=>{const s=String(v??'');
@@ -1090,6 +1457,22 @@ async function downloadCSV(){
 $('csvbtn').onclick=downloadCSV;
 $('printbtn').onclick=()=>{ setTimeout(()=>window.print(),120); };
 $('savebtn').onclick=save;
+
+if(location.hash==='#selftest'){
+  const r=[];
+  r.push(['lineCount CPC8 breakout', lineCount({breakout:'CPC8'})===8]);
+  r.push(['lineCount cpc4 type', lineCount({type:'cpc4 loom'})===4]);
+  r.push(['lineCount Socapex', lineCount({type:'Socapex'})===0]);
+  const item={ports:{in:{universe:'5'},o1:{universe:''},o2:{universe:'5'},o3:{universe:'7'}}};
+  const gearPorts=[{id:'in',type:'input'},{id:'o1',type:'output'},{id:'o2',type:'output'},{id:'o3',type:'output'}];
+  propagate(item, gearPorts, 'in', '5', '6');
+  r.push(['propagate o1', item.ports.o1.universe==='6']);
+  r.push(['propagate o2', item.ports.o2.universe==='6']);
+  r.push(['propagate o3 unchanged', item.ports.o3.universe==='7']);
+  const pass=r.every(x=>x[1]);
+  console.log('SELFTEST', pass?'PASS':'FAIL', r);
+  document.title='selftest:'+(pass?'PASS':'FAIL');
+}
 
 (async()=>{ render(); await load(); render(); })();
 </script>
