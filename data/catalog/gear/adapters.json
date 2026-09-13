@@ -1,0 +1,75 @@
+{
+  "items": [
+    {
+      "class": "power",
+      "id": "cube-tap",
+      "name": "Cube Tap",
+      "note": "Edison 1-to-3"
+    },
+    {
+      "class": "power",
+      "id": "edison-breakout",
+      "name": "Edison Break Out",
+      "note": "Socapex to 6x Edison"
+    },
+    {
+      "class": "power",
+      "id": "true1-breakout",
+      "name": "True1 Break Out",
+      "note": "Socapex to 6x TRUE1"
+    },
+    {
+      "class": "power",
+      "id": "true1-twofer",
+      "name": "True1 Two-fer",
+      "note": "One circuit, two fixtures — needed wherever a fixture has no pass-thru"
+    },
+    {
+      "class": "power",
+      "id": "edison-twofer",
+      "name": "Edison Two-fer",
+      "note": "One circuit, two fixtures"
+    },
+    {
+      "class": "power",
+      "id": "l6-20-to-edison",
+      "name": "L6-20 to Edison",
+      "note": ""
+    },
+    {
+      "class": "data",
+      "id": "dmx-3m-5f",
+      "name": "3-Pin M to 5-Pin F",
+      "note": ""
+    },
+    {
+      "class": "data",
+      "id": "dmx-5m-3f",
+      "name": "5-Pin M to 3-Pin F",
+      "note": ""
+    },
+    {
+      "class": "data",
+      "id": "dmx-term-3",
+      "name": "3-Pin Terminator",
+      "note": "120 ohm"
+    },
+    {
+      "class": "data",
+      "id": "dmx-term-5",
+      "name": "5-Pin Terminator",
+      "note": "120 ohm"
+    },
+    {
+      "class": "data",
+      "id": "ethercon-coupler",
+      "name": "EtherCON Coupler",
+      "note": ""
+    }
+  ],
+  "kind": "adapter",
+  "name": "Adapters",
+  "note": "The two-fer entries are the ones the fixture library now drives directly: 21 of 35 fixtures have no power pass-thru, and each of those needs its own home run or a two-fer.",
+  "source": "Shop-order practice; category adopted after seeing it as a first-class section in a colleague's tool",
+  "updatedAt": "2026-09-10T20:00:00.000Z"
+}

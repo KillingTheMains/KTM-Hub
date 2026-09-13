@@ -299,3 +299,12 @@ is the source Label Plot uses to print a universe on a snake-line label.
 **Import.** The shell can now import a `ktm-show` bundle (identity doc plus every row in
 `collections`), replacing or copying an existing show. `fixtures` and `gear` inside a bundle are
 skipped on import: the library belongs to the Hub, not the show.
+
+**Snake lines on a loom cable.** A CPC cable may carry `lines: [{n, position, universe,
+firstFixture}]`, one entry per conductor pair, imported from Pre-Pro's snake data. It is
+optional and Loom Plot does not edit it yet; Label Plot uses `lines[n-1].universe` for a snake
+line label when no rack port links to that line. `partPositions` stays the six-slot display
+array; a CPC8's lines 7 and 8 exist only in `lines`.
+
+**Catalog snapshot.** `data/catalog/` holds read-only copies of `gear/*` and `meta/*` so the
+import scripts can validate offline. The live store wins; refresh the snapshot from it.

@@ -1,0 +1,1034 @@
+{
+  "items": [
+    {
+      "caseType": "Eighth Standard",
+      "cubeFt": 2,
+      "hIn": 6,
+      "lIn": 24,
+      "name": "Case Unique 2.1 Eighth",
+      "wIn": 24,
+      "weightLb": 28
+    },
+    {
+      "caseType": "Quarter Standard",
+      "cubeFt": 4.25,
+      "hIn": 12.75,
+      "lIn": 24,
+      "name": "Case Motor Distro Quarter",
+      "wIn": 24,
+      "weightLb": 39
+    },
+    {
+      "caseType": "Quarter Standard",
+      "cubeFt": 4.25,
+      "hIn": 12.75,
+      "lIn": 24,
+      "name": "Case Utility Quarter",
+      "wIn": 24,
+      "weightLb": 40
+    },
+    {
+      "caseType": "Quarter Standard",
+      "cubeFt": 4.25,
+      "hIn": 12.75,
+      "lIn": 24,
+      "name": "Case Safety Quarter",
+      "wIn": 24,
+      "weightLb": 40
+    },
+    {
+      "caseType": "Quarter Standard",
+      "cubeFt": 4.25,
+      "hIn": 12.75,
+      "lIn": 24,
+      "name": "Case Tree Dimmer Quarter",
+      "wIn": 24,
+      "weightLb": 43
+    },
+    {
+      "caseType": "Quarter Standard",
+      "cubeFt": 4.25,
+      "hIn": 12.75,
+      "lIn": 24,
+      "name": "Case Leprecon 612 Quarter",
+      "wIn": 24,
+      "weightLb": 44
+    },
+    {
+      "caseType": "Quarter Standard",
+      "cubeFt": 4.25,
+      "hIn": 12.75,
+      "lIn": 24,
+      "name": "Case Com Quarter",
+      "wIn": 24,
+      "weightLb": 44
+    },
+    {
+      "caseType": "Quarter Standard",
+      "cubeFt": 4.25,
+      "hIn": 12.75,
+      "lIn": 24,
+      "name": "Case ION Quarter",
+      "wIn": 24,
+      "weightLb": 44
+    },
+    {
+      "caseType": "Quarter Standard",
+      "cubeFt": 4.25,
+      "hIn": 12.75,
+      "lIn": 24,
+      "name": "Case ION Xe Quarter",
+      "wIn": 24,
+      "weightLb": 44
+    },
+    {
+      "caseType": "Half Standard",
+      "cubeFt": 8.67,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case Utility Half",
+      "wIn": 24,
+      "weightLb": 64
+    },
+    {
+      "caseType": "Half Standard",
+      "cubeFt": 8.67,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case Snake Case Half",
+      "wIn": 24,
+      "weightLb": 64
+    },
+    {
+      "caseType": "Half Standard",
+      "cubeFt": 8.67,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case 504’ Fiber Spool Half",
+      "wIn": 24,
+      "weightLb": 68.5
+    },
+    {
+      "caseType": "Half Standard",
+      "cubeFt": 8.67,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case Chain Fall 4x1 Ton Half",
+      "wIn": 24,
+      "weightLb": 69
+    },
+    {
+      "caseType": "Half Standard",
+      "cubeFt": 8.67,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case Altman 703 Half",
+      "wIn": 24,
+      "weightLb": 69
+    },
+    {
+      "caseType": "Half Standard",
+      "cubeFt": 8.67,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case DF-50 x 2 Half",
+      "wIn": 24,
+      "weightLb": 78.5
+    },
+    {
+      "caseType": "Half Standard",
+      "cubeFt": 8.67,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case Motor CM 1/2 Ton Half",
+      "wIn": 24,
+      "weightLb": 82
+    },
+    {
+      "caseType": "Half Standard",
+      "cubeFt": 8.67,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case Motor TR 1/2 Ton Half",
+      "wIn": 24,
+      "weightLb": 82
+    },
+    {
+      "caseType": "Half Standard",
+      "cubeFt": 8.67,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case Motor CM 1/4 Ton Half",
+      "wIn": 24,
+      "weightLb": 83
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Snake Standard",
+      "wIn": 24,
+      "weightLb": 99
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case 3-way Carpeted Standard",
+      "wIn": 24,
+      "weightLb": 104
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case 5 Degree Leko Standard",
+      "wIn": 24,
+      "weightLb": 105
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case 4-way Carpeted Standard",
+      "wIn": 24,
+      "weightLb": 108
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case 2-way Cable Standard",
+      "wIn": 24,
+      "weightLb": 109
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Lycian M2 Standard",
+      "wIn": 24,
+      "weightLb": 109
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Monitor x 3 Standard",
+      "wIn": 24,
+      "weightLb": 110
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case MAC 3 Standard",
+      "wIn": 24,
+      "weightLb": 112
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case BMFL Followspot Standard",
+      "wIn": 24,
+      "weightLb": 115
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case RoboSpot Standard",
+      "wIn": 24,
+      "weightLb": 115
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case ZR33 Fogger Standard",
+      "wIn": 24,
+      "weightLb": 115
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case ZR44 Fogger Standard",
+      "wIn": 24,
+      "weightLb": 115
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case X4 Bar 10 Standard",
+      "wIn": 24,
+      "weightLb": 115
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case 24x2.4K Standard",
+      "wIn": 24,
+      "weightLb": 117
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Super Clubspot Standard",
+      "wIn": 24,
+      "weightLb": 117
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case MAC 401 Standard",
+      "wIn": 24,
+      "weightLb": 118
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Color Blast Standard",
+      "wIn": 24,
+      "weightLb": 119
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case EB Standard",
+      "wIn": 24,
+      "weightLb": 120
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Com Standard",
+      "wIn": 24,
+      "weightLb": 122
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Rigging Acc. Standard",
+      "wIn": 24,
+      "weightLb": 124
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case X4 Bar Standard",
+      "wIn": 24,
+      "weightLb": 124
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case ZW37 Standard",
+      "wIn": 24,
+      "weightLb": 124
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case MAC Aura Standard",
+      "wIn": 24,
+      "weightLb": 124.3
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case ZW 19 Standard",
+      "wIn": 24,
+      "weightLb": 124.5
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Sharpy Standard",
+      "wIn": 24,
+      "weightLb": 124.6
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Scroller Standard",
+      "wIn": 24,
+      "weightLb": 127
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case MDG Hazer Standard",
+      "wIn": 24,
+      "weightLb": 128
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Motor 1 Ton Standard",
+      "wIn": 24,
+      "weightLb": 134
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case TR DB 1 Ton Motor Standard",
+      "wIn": 24,
+      "weightLb": 140
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case Lycian 1271 Standard",
+      "wIn": 24,
+      "weightLb": 145
+    },
+    {
+      "caseType": "Standard",
+      "cubeFt": 17.33,
+      "hIn": 26,
+      "lIn": 48,
+      "name": "Case TourRig 1 Ton Motor C Standard",
+      "wIn": 24,
+      "weightLb": 147
+    },
+    {
+      "caseType": "Long Standard",
+      "cubeFt": 26,
+      "hIn": 26,
+      "lIn": 72,
+      "name": "Case Lycian 1271 Long Standard",
+      "wIn": 24,
+      "weightLb": 168
+    },
+    {
+      "caseType": "Long Standard",
+      "cubeFt": 26,
+      "hIn": 26,
+      "lIn": 72,
+      "name": "Case Color Blaze Long standard",
+      "wIn": 24,
+      "weightLb": 170
+    },
+    {
+      "caseType": "Double Standard",
+      "cubeFt": 34.67,
+      "hIn": 26,
+      "lIn": 96,
+      "name": "Case Zip Strip Double",
+      "wIn": 24,
+      "weightLb": 216
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Four-Way Tall",
+      "wIn": 24,
+      "weightLb": 142
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Expression 800 Tall",
+      "wIn": 24,
+      "weightLb": 144.5
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Insight Tall",
+      "wIn": 24,
+      "weightLb": 145
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Midget HP Tall",
+      "wIn": 24,
+      "weightLb": 146
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Eight Way Tall",
+      "wIn": 24,
+      "weightLb": 150
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case MAC 350 Tall",
+      "wIn": 24,
+      "weightLb": 152
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case ACL 360 Matrix Tall",
+      "wIn": 24,
+      "weightLb": 152
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Express 48/96 Tall",
+      "wIn": 24,
+      "weightLb": 154
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case MAC 600 Tall",
+      "wIn": 24,
+      "weightLb": 154
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case MAC 500/600 Tall",
+      "wIn": 24,
+      "weightLb": 154
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case MAC 5,6,7,TW1 Tall",
+      "wIn": 24,
+      "weightLb": 154
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case MAC Axiom Tall",
+      "wIn": 24,
+      "weightLb": 156
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case MAC 250+ Tall",
+      "wIn": 24,
+      "weightLb": 157
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case MAC 500 Tall",
+      "wIn": 24,
+      "weightLb": 159
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Sharpy Tall",
+      "wIn": 24,
+      "weightLb": 160
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Smarty Max Tall (SMX)",
+      "wIn": 24,
+      "weightLb": 185
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Quantum Wash Tall",
+      "wIn": 24,
+      "weightLb": 163
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Quantum Profile/Wash Tall",
+      "wIn": 24,
+      "weightLb": 163
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case MAC 250 Entour Tall",
+      "wIn": 24,
+      "weightLb": 164
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Viper Tall",
+      "wIn": 24,
+      "weightLb": 170
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Double Lycian 1295 Tall",
+      "wIn": 24,
+      "weightLb": 192
+    },
+    {
+      "caseType": "Tall Standard",
+      "cubeFt": 25.17,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case MAC 2000 Tall",
+      "wIn": 24,
+      "weightLb": 211
+    },
+    {
+      "caseType": "Tall Long Standard",
+      "cubeFt": 37.75,
+      "hIn": 37.75,
+      "lIn": 72,
+      "name": "Case Lycian M2 Tall Long",
+      "wIn": 24,
+      "weightLb": 189
+    },
+    {
+      "caseType": "Tall Long Standard",
+      "cubeFt": 37.75,
+      "hIn": 37.75,
+      "lIn": 72,
+      "name": "Case Lycian 1271 Tall Long",
+      "wIn": 24,
+      "weightLb": 189
+    },
+    {
+      "caseType": "Tall Double Standard",
+      "cubeFt": 50.33,
+      "hIn": 37.75,
+      "lIn": 96,
+      "name": "Work Box - Double",
+      "wIn": 24,
+      "weightLb": 160
+    },
+    {
+      "caseType": "Tall Wide Standard",
+      "cubeFt": 33.56,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case Cable Tall Wide",
+      "wIn": 32,
+      "weightLb": 234
+    },
+    {
+      "caseType": "Double Wide Double Tall Standard",
+      "cubeFt": 64,
+      "hIn": 48,
+      "lIn": 48,
+      "name": "Case Double Wide Double Tall Case",
+      "wIn": 48,
+      "weightLb": 376
+    },
+    {
+      "caseType": "Distro Eighth",
+      "cubeFt": 2,
+      "hIn": 6,
+      "lIn": 24,
+      "name": "Rack 3 space Eighth Case",
+      "wIn": 24,
+      "weightLb": 27
+    },
+    {
+      "caseType": "Distro Quarter",
+      "cubeFt": 4.25,
+      "hIn": 12.75,
+      "lIn": 24,
+      "name": "Rack 6 Space Quarter Case",
+      "wIn": 24,
+      "weightLb": 43
+    },
+    {
+      "caseType": "Distro Half",
+      "cubeFt": 15.73,
+      "hIn": 37.75,
+      "lIn": 30,
+      "name": "Rack Distro Half Case",
+      "wIn": 24,
+      "weightLb": 122
+    },
+    {
+      "caseType": "Distro Half",
+      "cubeFt": 15.73,
+      "hIn": 37.75,
+      "lIn": 30,
+      "name": "Rack HD Distro Half Case",
+      "wIn": 24,
+      "weightLb": 128
+    },
+    {
+      "caseType": "Distro Full",
+      "cubeFt": 21.25,
+      "hIn": 51,
+      "lIn": 30,
+      "name": "Rack Full Rack Case",
+      "wIn": 24,
+      "weightLb": 151
+    },
+    {
+      "caseType": "Distro Full",
+      "cubeFt": 21.25,
+      "hIn": 51,
+      "lIn": 30,
+      "name": "Rack HD Distro Full Case",
+      "wIn": 24,
+      "weightLb": 152
+    },
+    {
+      "caseType": "Work Box",
+      "cubeFt": 23.11,
+      "hIn": 52,
+      "lIn": 32,
+      "name": "Case Utility Work Box",
+      "wIn": 24,
+      "weightLb": 136
+    },
+    {
+      "caseType": "Dolly/Cart",
+      "hIn": "various",
+      "lIn": 48,
+      "name": "Dolly Truss Half",
+      "wIn": 41,
+      "weightLb": 69.09
+    },
+    {
+      "caseType": "Dolly/Cart",
+      "hIn": "various",
+      "lIn": 96,
+      "name": "Dolly Truss",
+      "wIn": 41,
+      "weightLb": 125
+    },
+    {
+      "caseType": "Dolly/Cart",
+      "cubeFt": 24.67,
+      "hIn": 37,
+      "lIn": 48,
+      "name": "Case Encore Dolly",
+      "wIn": 24,
+      "weightLb": 119
+    },
+    {
+      "caseType": "Dolly/Cart",
+      "cubeFt": 24.67,
+      "hIn": 37,
+      "lIn": 48,
+      "name": "Case Viper Dolly",
+      "wIn": 24,
+      "weightLb": 119
+    },
+    {
+      "caseType": "Dolly/Cart",
+      "cubeFt": 80.49,
+      "hIn": 76,
+      "lIn": 61,
+      "name": "Dolly 5' Lamp Rack Adjustable",
+      "wIn": 30,
+      "weightLb": 92
+    },
+    {
+      "caseType": "Dolly/Cart",
+      "cubeFt": 120.07,
+      "hIn": 76,
+      "lIn": 91,
+      "name": "Dolly 7.5' Lamp Rack Adjustable",
+      "wIn": 30,
+      "weightLb": 108
+    },
+    {
+      "caseType": "Dolly/Cart",
+      "cubeFt": 33.33,
+      "hIn": 50,
+      "lIn": 48,
+      "name": "Cart Pipe",
+      "wIn": 24,
+      "weightLb": 142
+    },
+    {
+      "caseType": "Dolly/Cart",
+      "cubeFt": 33.33,
+      "hIn": 50,
+      "lIn": 48,
+      "name": "Cart Truss Base Cart 3x3",
+      "wIn": 24,
+      "weightLb": 215
+    },
+    {
+      "caseType": "Fish Tote",
+      "cubeFt": 58.67,
+      "hIn": 48,
+      "lIn": 48,
+      "name": "Fish Tote",
+      "wIn": 44,
+      "weightLb": 181
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 0.97,
+      "hIn": 14,
+      "lIn": 15,
+      "name": "Case Bolt",
+      "wIn": 8,
+      "weightLb": 19
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 4.63,
+      "hIn": 20,
+      "lIn": 20,
+      "name": "Case Mirror Ball 16\"",
+      "wIn": 20,
+      "weightLb": 29
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 8,
+      "hIn": 24,
+      "lIn": 24,
+      "name": "Case Mirror Ball 20\"",
+      "wIn": 24,
+      "weightLb": 40
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 1.85,
+      "hIn": 10,
+      "lIn": 16,
+      "name": "Case DF-50 Single",
+      "wIn": 20,
+      "weightLb": 38
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 3.12,
+      "hIn": 10,
+      "lIn": 72,
+      "name": "Case CB72 Single",
+      "wIn": 7.5,
+      "weightLb": 45.6
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 4.58,
+      "hIn": 10,
+      "lIn": 33,
+      "name": "Case Fat Frog Single Console",
+      "wIn": 24,
+      "weightLb": 35
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 2.72,
+      "hIn": 8.25,
+      "lIn": 30,
+      "name": "Case Smartfade 24/96 Console",
+      "wIn": 19,
+      "weightLb": 37.4
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 10.67,
+      "hIn": 12,
+      "lIn": 48,
+      "name": "Case ETC 48/96 Express Console",
+      "wIn": 32,
+      "weightLb": 78.6
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 4.33,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case M2Go Quarter",
+      "wIn": 12,
+      "weightLb": 46.36
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 8,
+      "hIn": 24,
+      "lIn": 48,
+      "name": "Case Insight 3 Single Console",
+      "wIn": 12,
+      "weightLb": 56
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 4.6,
+      "hIn": 24,
+      "lIn": 26,
+      "name": "Case MA ONPC",
+      "wIn": 12.75,
+      "weightLb": 44.8
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 14.16,
+      "hIn": 37.75,
+      "lIn": 54,
+      "name": "Case MA2 Full-size Console",
+      "wIn": 12,
+      "weightLb": 120
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 12.58,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case MA2 Light/Ultra Light Console",
+      "wIn": 12,
+      "weightLb": 112
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 13.63,
+      "hIn": 37.75,
+      "lIn": 39,
+      "name": "Case MA3 Light Console",
+      "wIn": 16,
+      "weightLb": 105
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 16.78,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case EOS Console",
+      "wIn": 16,
+      "weightLb": 123
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 12.58,
+      "hIn": 37.75,
+      "lIn": 48,
+      "name": "Case EOS Ti Console",
+      "wIn": 12,
+      "weightLb": 123
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 4.33,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case ELO 22 Touchscreen x 2",
+      "wIn": 12,
+      "weightLb": 46
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 4.33,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case ELO 19 Touchscreen x 2",
+      "wIn": 12,
+      "weightLb": 46
+    },
+    {
+      "caseType": "Non Standard",
+      "cubeFt": 4.33,
+      "hIn": 26,
+      "lIn": 24,
+      "name": "Case Monitor 22\"x 2",
+      "wIn": 12,
+      "weightLb": 46
+    }
+  ],
+  "kind": "case",
+  "name": "Cases — Christie Lites",
+  "note": "Real weights and outside dimensions in inches. This is the data Truck Packer never read: it tracks neither weight nor cube, while this sheet sat unused in its own repo root. Truck Plot is built on it.",
+  "shop": "christie-lites",
+  "shopName": "Christie Lites",
+  "source": "Case Weights and Dims (2).xlsx — Truck Packer repo"
+}

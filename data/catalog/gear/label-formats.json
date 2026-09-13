@@ -1,0 +1,93 @@
+{
+ "items": [
+  {
+   "cols": 1,
+   "gapMm": 0,
+   "hMm": 50.8,
+   "id": "ol1159lp",
+   "kind": "sheet",
+   "marginSideMm": 6.35,
+   "marginTopMm": 12.7,
+   "name": "OL1159LP",
+   "note": "8\" x 2\", 5 per sheet. Truss end labels.",
+   "page": "letter",
+   "rows": 5,
+   "wMm": 203.2
+  },
+  {
+   "cols": 2,
+   "hMm": 50.8,
+   "id": "ol125",
+   "kind": "sheet",
+   "name": "OL125",
+   "note": "4\" x 2\", 10 per sheet.",
+   "page": "letter",
+   "rows": 5,
+   "wMm": 101.6
+  },
+  {
+   "cols": 2,
+   "hMm": 25.4,
+   "id": "ol75",
+   "kind": "sheet",
+   "name": "OL75",
+   "note": "4\" x 1\", 20 per sheet.",
+   "page": "letter",
+   "rows": 10,
+   "wMm": 101.6
+  },
+  {
+   "dpi": 96,
+   "hPx": 384,
+   "id": "rollo-6x4",
+   "kind": "thermal",
+   "name": "Rollo 6x4 thermal",
+   "note": "One label per page at @page{size:6in 4in;margin:0}. Case, shipping and rack labels.",
+   "padPx": 20,
+   "previewScale": 0.551,
+   "wPx": 576
+  },
+  {
+   "id": "ol285",
+   "kind": "sheet",
+   "name": "OL285",
+   "page": "letter",
+   "wMm": 31.75,
+   "hMm": 19.05,
+   "cols": 6,
+   "rows": 12,
+   "marginTopMm": 25.4,
+   "marginSideMm": 12.7,
+   "gapMm": 0,
+   "colGapMm": 0,
+   "rowGapMm": 0,
+   "note": "1.25\" x 0.75\", 72 per sheet. CPC snake line labels and rack port labels. Pre-Pro Rack Builder laid these out one column per snake, columns interleaved so each sheet reads top to bottom."
+  },
+  {
+   "id": "ol875",
+   "kind": "sheet",
+   "name": "OL875",
+   "page": "letter",
+   "wMm": 66.675,
+   "hMm": 25.4,
+   "cols": 3,
+   "rows": 10,
+   "marginTopMm": 12.7,
+   "marginSideMm": 4.7625,
+   "gapMm": 0,
+   "colGapMm": 3.175,
+   "rowGapMm": 0,
+   "note": "2.625\" x 1\", 30 per sheet, 0.125\" column gap. Rack equipment labels."
+  }
+ ],
+ "kind": "label-format",
+ "name": "Label media",
+ "note": "Sheet formats are millimetres on US Letter. The Rollo format is a 6x4in thermal label expressed at 96dpi CSS pixels, which is how the generator lays it out.",
+ "source": "LABEL_FORMATS in Pre-Pro Truss Builder; LW/LH/LP constants in Pre-Pro Label Builder; OL285 and OL875 geometry from Pre-Pro Rack Builder exportCPCLabelsPDF / exportRackLabelsPDF (2026-09-13)",
+ "techniques": {
+  "fontFit": "Binary search 6-520px over canvas measureText, 32 iterations, result x0.91 for safety margin. jsPDF cannot measure text, so PDF output sizes analytically from Helvetica-Bold's ~0.62em average advance instead.",
+  "multiColourInk": "Ink and halo are computed from the SPAN between the lightest and darkest colour band on a label, not from a single colour's luminance. Halo stroke widens as the span grows. A single-colour luminance test fails as soon as a label carries two bands.",
+  "seams": "Colour bands are painted with a 0.15mm inner-edge overlap to kill hairline seams from coordinate rounding."
+ },
+ "updatedAt": "2026-09-13T00:00:00.000Z"
+}

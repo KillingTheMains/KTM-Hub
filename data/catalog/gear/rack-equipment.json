@@ -1,0 +1,2440 @@
+{
+  "items": [
+    {
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "ma3_npu",
+      "manufacturer": "grandMA",
+      "model": "NPU 3",
+      "name": "MA3 NPU",
+      "note": "Two different devices answer to this name and the research could not settle which this record is. MA NPU (grandMA2 era): 485 x 332 x 126 mm, 9 kg, 150 VA, powerCON. grandMA3 processing unit L: 482 x 372 x 87 mm (2U), 5 kg, 200 VA, powerCON TRUE1. No depth or weight asserted until the unit is identified, so the fit and payload checks stay quiet for it rather than using the wrong number. PARTLY RESOLVED 2026-09-11: MA's current line is the grandMA3 processing unit M / L / XL (all 372 mm deep); the grandMA2-era MA NPU is 332 mm. Both are now separate records — ma3_pu_m/l/xl and ma_npu_gma2. Retire this record once the unit on the truck is identified. PARTLY RESOLVED 2026-09-11: MA's current line is the grandMA3 processing unit M / L / XL (all 372 mm deep); the grandMA2-era MA NPU is 332 mm. Both are now separate records — ma3_pu_m/l/xl and ma_npu_gma2. Retire this record once the unit on the truck is identified.",
+      "portCount": 8,
+      "portSummary": "8x output",
+      "ports": [
+        {
+          "id": "port_a",
+          "name": "Port A",
+          "type": "output"
+        },
+        {
+          "id": "port_b",
+          "name": "Port B",
+          "type": "output"
+        },
+        {
+          "id": "port_c",
+          "name": "Port C",
+          "type": "output"
+        },
+        {
+          "id": "port_d",
+          "name": "Port D",
+          "type": "output"
+        },
+        {
+          "id": "port_e",
+          "name": "Port E",
+          "type": "output"
+        },
+        {
+          "id": "port_f",
+          "name": "Port F",
+          "type": "output"
+        },
+        {
+          "id": "port_g",
+          "name": "Port G",
+          "type": "output"
+        },
+        {
+          "id": "port_h",
+          "name": "Port H",
+          "type": "output"
+        }
+      ],
+      "rackWidth": "full",
+      "ruHeight": 2,
+      "status": "conflicting"
+    },
+    {
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "proplex_iq2",
+      "manufacturer": "Entertainment Technology",
+      "model": "Proplex IQ II",
+      "name": "Proplex IQ II",
+      "portCount": 16,
+      "portSummary": "8x network, 8x output",
+      "ports": [
+        {
+          "id": "port_a",
+          "name": "Port A",
+          "type": "output"
+        },
+        {
+          "id": "port_b",
+          "name": "Port B",
+          "type": "output"
+        },
+        {
+          "id": "port_c",
+          "name": "Port C",
+          "type": "output"
+        },
+        {
+          "id": "port_d",
+          "name": "Port D",
+          "type": "output"
+        },
+        {
+          "id": "port_e",
+          "name": "Port E",
+          "type": "output"
+        },
+        {
+          "id": "port_f",
+          "name": "Port F",
+          "type": "output"
+        },
+        {
+          "id": "port_g",
+          "name": "Port G",
+          "type": "output"
+        },
+        {
+          "id": "port_h",
+          "name": "Port H",
+          "type": "output"
+        },
+        {
+          "id": "port_i",
+          "name": "Port I",
+          "type": "network"
+        },
+        {
+          "id": "port_j",
+          "name": "Port J",
+          "type": "network"
+        },
+        {
+          "id": "port_k",
+          "name": "Port K",
+          "type": "network"
+        },
+        {
+          "id": "port_l",
+          "name": "Port L",
+          "type": "network"
+        },
+        {
+          "id": "port_m",
+          "name": "Port M",
+          "type": "network"
+        },
+        {
+          "id": "port_n",
+          "name": "Port N",
+          "type": "network"
+        },
+        {
+          "id": "port_o",
+          "name": "Port O",
+          "type": "network"
+        },
+        {
+          "id": "port_p",
+          "name": "Port P",
+          "type": "network"
+        }
+      ],
+      "rackWidth": "full",
+      "ruHeight": 1
+    },
+    {
+      "fullDepth": true,
+      "hasIp": false,
+      "id": "optosplitter",
+      "manufacturer": "Elation / Various",
+      "model": "1×5 DMX",
+      "name": "Optosplitter (1×5)",
+      "portCount": 7,
+      "portSummary": "1x input, 6x output",
+      "ports": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "input"
+        },
+        {
+          "id": "pass_thru",
+          "name": "Pass-Thru",
+          "type": "output"
+        },
+        {
+          "id": "out_1",
+          "name": "Out 1",
+          "type": "output"
+        },
+        {
+          "id": "out_2",
+          "name": "Out 2",
+          "type": "output"
+        },
+        {
+          "id": "out_3",
+          "name": "Out 3",
+          "type": "output"
+        },
+        {
+          "id": "out_4",
+          "name": "Out 4",
+          "type": "output"
+        },
+        {
+          "id": "out_5",
+          "name": "Out 5",
+          "type": "output"
+        }
+      ],
+      "rackWidth": "full",
+      "ruHeight": 1
+    },
+    {
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "proplex_iq1616",
+      "manufacturer": "ProPlex / TMB",
+      "model": "IQ Two 1616",
+      "name": "Proplex IQ Two 1616",
+      "portCount": 18,
+      "portSummary": "2x network, 16x output",
+      "ports": [
+        {
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "output"
+        },
+        {
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "output"
+        },
+        {
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "output"
+        },
+        {
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "output"
+        },
+        {
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "output"
+        },
+        {
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "output"
+        },
+        {
+          "id": "dmx_7",
+          "name": "DMX 7",
+          "type": "output"
+        },
+        {
+          "id": "dmx_8",
+          "name": "DMX 8",
+          "type": "output"
+        },
+        {
+          "id": "dmx_9",
+          "name": "DMX 9",
+          "type": "output"
+        },
+        {
+          "id": "dmx_10",
+          "name": "DMX 10",
+          "type": "output"
+        },
+        {
+          "id": "dmx_11",
+          "name": "DMX 11",
+          "type": "output"
+        },
+        {
+          "id": "dmx_12",
+          "name": "DMX 12",
+          "type": "output"
+        },
+        {
+          "id": "dmx_13",
+          "name": "DMX 13",
+          "type": "output"
+        },
+        {
+          "id": "dmx_14",
+          "name": "DMX 14",
+          "type": "output"
+        },
+        {
+          "id": "dmx_15",
+          "name": "DMX 15",
+          "type": "output"
+        },
+        {
+          "id": "dmx_16",
+          "name": "DMX 16",
+          "type": "output"
+        },
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        }
+      ],
+      "rackWidth": "full",
+      "ruHeight": 2
+    },
+    {
+      "airflow": "side-vented",
+      "depthIn": 13,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "gigacore10",
+      "manufacturer": "Luminex",
+      "model": "GigaCore 10",
+      "name": "GigaCore 10 (discontinued)",
+      "note": "RESOLVED 2026-09-11: GigaCore 10 and 10t are different products, not a rename. The 10 is discontinued; the 10t is current and its datasheet documents exactly this 4-front + 4-rear etherCON + 2-fiber layout, so this record is the 10t. Both share the 220 x 330 x 44 mm chassis; the 10 is 2.8 kg and the 10t 3.6 kg. Kept as its own record because rental stock still carries the 10 — see gigacore10t for the current unit.",
+      "portCount": 10,
+      "portSummary": "10x network",
+      "ports": [
+        {
+          "id": "eth_f1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_f2",
+          "name": "ETH 2",
+          "type": "network"
+        },
+        {
+          "id": "eth_f3",
+          "name": "ETH 3",
+          "type": "network"
+        },
+        {
+          "id": "eth_f4",
+          "name": "ETH 4",
+          "type": "network"
+        },
+        {
+          "id": "eth_r1",
+          "name": "ETH 5",
+          "type": "network"
+        },
+        {
+          "id": "eth_r2",
+          "name": "ETH 6",
+          "type": "network"
+        },
+        {
+          "id": "eth_r3",
+          "name": "ETH 7",
+          "type": "network"
+        },
+        {
+          "id": "eth_r4",
+          "name": "ETH 8",
+          "type": "network"
+        },
+        {
+          "id": "fiber1",
+          "name": "Fiber 1",
+          "type": "network"
+        },
+        {
+          "id": "fiber2",
+          "name": "Fiber 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON TRUE1",
+      "rackWidth": "half",
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Half-19in, 220 x 330 x 44 mm, 2.8 kg, powerCON TRUE1, max 20 W",
+      "sourceUrl": "https://www.luminex.be/products/gigacore/gigacore-10/",
+      "status": "verified",
+      "weightLb": 6.2
+    },
+    {
+      "airflow": "convection",
+      "depthIn": 6.9,
+      "fullDepth": false,
+      "hasIp": true,
+      "id": "luminode12",
+      "manufacturer": "Luminex",
+      "model": "LumiNode 12",
+      "name": "LumiNode 12",
+      "portCount": 14,
+      "portSummary": "2x network, 12x output",
+      "ports": [
+        {
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "output"
+        },
+        {
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "output"
+        },
+        {
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "output"
+        },
+        {
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "output"
+        },
+        {
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "output"
+        },
+        {
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "output"
+        },
+        {
+          "id": "dmx_7",
+          "name": "DMX 7",
+          "type": "output"
+        },
+        {
+          "id": "dmx_8",
+          "name": "DMX 8",
+          "type": "output"
+        },
+        {
+          "id": "dmx_9",
+          "name": "DMX 9",
+          "type": "output"
+        },
+        {
+          "id": "dmx_10",
+          "name": "DMX 10",
+          "type": "output"
+        },
+        {
+          "id": "dmx_11",
+          "name": "DMX 11",
+          "type": "output"
+        },
+        {
+          "id": "dmx_12",
+          "name": "DMX 12",
+          "type": "output"
+        },
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON TRUE1 + PoE 802.3af",
+      "powerW": 13,
+      "rackWidth": "half",
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Dimensions 220 x 175.3 x 44 mm; Weight 1.42 kg; Power consumption 13 W max",
+      "sourceUrl": "https://www.luminex.be/wp-content/uploads/2022/05/Product-specification-sheet-LumiNode-12-RJ45.pdf",
+      "status": "verified",
+      "weightLb": 3.1
+    },
+    {
+      "depthIn": 8.1,
+      "fullDepth": true,
+      "hasIp": false,
+      "id": "lumisplit210",
+      "manufacturer": "Luminex",
+      "model": "LumiSplit 2.10",
+      "name": "LumiSplit 2.10",
+      "portCount": 14,
+      "portSummary": "4x input, 10x output",
+      "ports": [
+        {
+          "id": "in_f1",
+          "name": "In 1 (Front)",
+          "type": "input"
+        },
+        {
+          "id": "in_f2",
+          "name": "In 2 (Front)",
+          "type": "input"
+        },
+        {
+          "id": "in_r1",
+          "name": "In 3 (Rear)",
+          "type": "input"
+        },
+        {
+          "id": "in_r2",
+          "name": "In 4 (Rear)",
+          "type": "input"
+        },
+        {
+          "id": "out_1",
+          "name": "Out 1",
+          "type": "output"
+        },
+        {
+          "id": "out_2",
+          "name": "Out 2",
+          "type": "output"
+        },
+        {
+          "id": "out_3",
+          "name": "Out 3",
+          "type": "output"
+        },
+        {
+          "id": "out_4",
+          "name": "Out 4",
+          "type": "output"
+        },
+        {
+          "id": "out_5",
+          "name": "Out 5",
+          "type": "output"
+        },
+        {
+          "id": "out_6",
+          "name": "Out 6",
+          "type": "output"
+        },
+        {
+          "id": "out_7",
+          "name": "Out 7",
+          "type": "output"
+        },
+        {
+          "id": "out_8",
+          "name": "Out 8",
+          "type": "output"
+        },
+        {
+          "id": "out_9",
+          "name": "Out 9",
+          "type": "output"
+        },
+        {
+          "id": "out_10",
+          "name": "Out 10",
+          "type": "output"
+        }
+      ],
+      "powerIn": "powerCON TRUE1 in/out",
+      "powerW": 15,
+      "rackWidth": "full",
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "482 x 204.85 x 44 mm; 2.54 kg; 15 W max",
+      "sourceUrl": "https://www.luminex.be/wp-content/uploads/doccenter/Product-specification-sheet-LumiSplit-v1.0.1-2.pdf",
+      "status": "verified",
+      "weightLb": 5.6
+    },
+    {
+      "fullDepth": true,
+      "hasIp": false,
+      "id": "swisson_xsr",
+      "manufacturer": "Swisson",
+      "model": "XSR-5 / XSP-5",
+      "name": "Swisson XSR",
+      "portCount": 7,
+      "portSummary": "1x input, 6x output",
+      "ports": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "input"
+        },
+        {
+          "id": "thru",
+          "name": "Thru",
+          "type": "output"
+        },
+        {
+          "id": "out_1",
+          "name": "Out 1",
+          "type": "output"
+        },
+        {
+          "id": "out_2",
+          "name": "Out 2",
+          "type": "output"
+        },
+        {
+          "id": "out_3",
+          "name": "Out 3",
+          "type": "output"
+        },
+        {
+          "id": "out_4",
+          "name": "Out 4",
+          "type": "output"
+        },
+        {
+          "id": "out_5",
+          "name": "Out 5",
+          "type": "output"
+        }
+      ],
+      "rackWidth": "full",
+      "ruHeight": 1
+    },
+    {
+      "depthIn": 7.5,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "etc_response_mk2_4",
+      "manufacturer": "ETC",
+      "model": "Response Mk2 4-Port Gateway (RSN-DMX4 family)",
+      "name": "ETC Response Mk2 4-Port",
+      "portCount": 5,
+      "portSummary": "1x RJ45; 4x DMX (XLR5/RJ45-DMX/terminal, per variant)",
+      "ports": [
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "input"
+        },
+        {
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "input"
+        },
+        {
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "input"
+        },
+        {
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "input"
+        }
+      ],
+      "powerIn": "PoE 802.3af or 12–24VDC external",
+      "powerW": 7,
+      "rackWidth": "half",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "ETC datasheet",
+      "sourceUrl": "https://www.christielites.com/file_uploads/Response_Mk2_Four-Port_Gateways_Datasheet_revD.pdf",
+      "status": "verified",
+      "weightLb": 1.8
+    },
+    {
+      "depthIn": 7.5,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "etc_response_mk2_8o",
+      "manufacturer": "ETC",
+      "model": "Response Mk2 8-Port Gateway Output (RSN-DMX8-O)",
+      "name": "ETC Response Mk2 8-Port Output",
+      "portCount": 9,
+      "portSummary": "1x RJ45; 8x DMX/RDM",
+      "ports": [
+        {
+          "face": "front",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "output"
+        },
+        {
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "output"
+        },
+        {
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "output"
+        },
+        {
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "output"
+        },
+        {
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "output"
+        },
+        {
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "output"
+        },
+        {
+          "id": "dmx_7",
+          "name": "DMX 7",
+          "type": "output"
+        },
+        {
+          "id": "dmx_8",
+          "name": "DMX 8",
+          "type": "output"
+        }
+      ],
+      "powerIn": "PoE 802.3af or 12–24VDC external",
+      "powerW": 7,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "ETC datasheet",
+      "sourceUrl": "https://www.ecm-sa.ch/media/response_mk2_eightport_gateways_datasheet_reva.pdf",
+      "status": "verified",
+      "weightLb": 3.4
+    },
+    {
+      "depthIn": 8.2,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "etc_net3_4port",
+      "manufacturer": "ETC",
+      "model": "Net3 Four-Port Gateway",
+      "name": "ETC Net3 Four-Port Gateway",
+      "portCount": 5,
+      "portSummary": "1x RJ45; 4x DMX (modular: XLR5/RJ45-DMX/terminal)",
+      "ports": [
+        {
+          "face": "front",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "input"
+        },
+        {
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "input"
+        },
+        {
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "input"
+        },
+        {
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "input"
+        }
+      ],
+      "powerIn": "PoE 802.3af or 8–28VDC external",
+      "powerW": 5,
+      "rackWidth": "half",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "ETC datasheet",
+      "sourceUrl": "https://www.christielites.com/file_uploads/spec_652_Net3_4Port_Gateway.pdf",
+      "status": "verified",
+      "weightLb": 6
+    },
+    {
+      "depthIn": 7.5,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "etc_net3_showcontrol",
+      "manufacturer": "ETC",
+      "model": "Net3 Show Control Gateway",
+      "name": "ETC Net3 Show Control Gateway",
+      "portCount": 5,
+      "portSummary": "1x RJ45; 3x MIDI In/Out/Thru; 1x SMPTE In (3-pin XLR F)",
+      "ports": [
+        {
+          "face": "front",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "midi_1",
+          "name": "MIDI 1",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "midi_2",
+          "name": "MIDI 2",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "midi_3",
+          "name": "MIDI 3",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "smpt_1",
+          "name": "SMPT 1",
+          "type": "network"
+        }
+      ],
+      "powerIn": "PoE 802.3af or 8–28VDC external",
+      "powerW": 5,
+      "rackWidth": "half",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "ETC datasheet",
+      "sourceUrl": "https://www.christielites.com/file_uploads/spec_653_Net3_Show_Control_Spec.pdf",
+      "status": "verified",
+      "weightLb": 5.5
+    },
+    {
+      "depthIn": 6.5,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "elc_nodegbx8",
+      "manufacturer": "ELC Lighting",
+      "model": "dmXLAN nodeGBx 8 (DLN8GBX)",
+      "name": "ELC dmXLAN nodeGBx 8",
+      "portCount": 10,
+      "portSummary": "8x DMX 5-pin XLR(F); 2x Gigabit ethernet",
+      "ports": [
+        {
+          "face": "front",
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_7",
+          "name": "DMX 7",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_8",
+          "name": "DMX 8",
+          "type": "input"
+        },
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "NAC3FX-W (powerCON-style)",
+      "powerW": null,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Canford (retailer) datasheet",
+      "sourceUrl": "https://www.canford.co.uk/Products/70-1018_ELC-LIGHTING-DMXLAN-NODEGBX8-DMX-NODE-8x-DMX-ports-2x-Ethernet-ports-5-pin-XLR-touch-display",
+      "status": "interpreted",
+      "weightLb": null
+    },
+    {
+      "airflow": "front-to-rear",
+      "depthIn": 6.5,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "elc_switchgbx18",
+      "manufacturer": "ELC Lighting",
+      "model": "dmXLAN switchGBx 18 (ELC-DLS18GBX)",
+      "name": "ELC dmXLAN switchGBx 18",
+      "portCount": 18,
+      "portSummary": "8x etherCON PoE; 8x etherCON (no PoE); 2x SFP+/opticalCON DUO/Fiberfox",
+      "ports": [
+        {
+          "face": "front",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_3",
+          "name": "ETH 3",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_4",
+          "name": "ETH 4",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_5",
+          "name": "ETH 5",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_6",
+          "name": "ETH 6",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_7",
+          "name": "ETH 7",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_8",
+          "name": "ETH 8",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_9",
+          "name": "ETH 9",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_10",
+          "name": "ETH 10",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_11",
+          "name": "ETH 11",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_12",
+          "name": "ETH 12",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_13",
+          "name": "ETH 13",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_14",
+          "name": "ETH 14",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_15",
+          "name": "ETH 15",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_16",
+          "name": "ETH 16",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "fiber_1",
+          "name": "FIBER 1",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "fiber_2",
+          "name": "FIBER 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON TRUE1 in + loop out",
+      "powerW": null,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Canford (retailer) datasheet",
+      "sourceUrl": "https://www.canford.co.uk/Products/70-1032_ELC-LIGHTING-DLS18GBX-DMXLAN-SWITCHGBX-18-ETHERNET-SWITCH-16x-network-ports-2x-SFP-cages",
+      "status": "interpreted",
+      "weightLb": null
+    },
+    {
+      "depthIn": 8,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "netron_en6ip",
+      "manufacturer": "Obsidian Control Systems",
+      "model": "NETRON EN6 IP",
+      "name": "Obsidian NETRON EN6 IP",
+      "portCount": 8,
+      "portSummary": "6x 5-pin IP66 DMX/RDM; 2x locking IP66 RJ45",
+      "ports": [
+        {
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "input"
+        },
+        {
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "input"
+        },
+        {
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "input"
+        },
+        {
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "input"
+        },
+        {
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "input"
+        },
+        {
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "input"
+        },
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "AC100-240V or PoE 802.3af",
+      "powerW": 6,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Obsidian Control Systems datasheet",
+      "sourceUrl": "https://akeneo-asset-proxy.adj-group.workers.dev/dl/files/EN6IP_SpecificationSheet.pdf",
+      "status": "verified",
+      "weightLb": 4
+    },
+    {
+      "airflow": "convection",
+      "depthIn": 5.8,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "netron_ns8",
+      "manufacturer": "Obsidian Control Systems",
+      "model": "NETRON NS8 (managed switch)",
+      "name": "Obsidian NETRON NS8",
+      "portCount": 8,
+      "portSummary": "6x locking RJ45; 2x locking RJ45",
+      "ports": [
+        {
+          "face": "front",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_3",
+          "name": "ETH 3",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_4",
+          "name": "ETH 4",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_5",
+          "name": "ETH 5",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_6",
+          "name": "ETH 6",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_7",
+          "name": "ETH 7",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_8",
+          "name": "ETH 8",
+          "type": "network"
+        }
+      ],
+      "powerIn": "locking power in/thru, 100-240V",
+      "powerW": 109,
+      "rackWidth": "half",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Obsidian Control Systems datasheet",
+      "sourceUrl": "https://www.obsidiancontrol.com/products/ns8",
+      "status": "verified",
+      "weightLb": 2.4
+    },
+    {
+      "depthIn": 5.2,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "netron_rp2",
+      "manufacturer": "Obsidian Control Systems",
+      "model": "NETRON RP2",
+      "name": "Obsidian NETRON RP2",
+      "portCount": 1,
+      "portSummary": "1x 5-pin DMX; 2x switched power out",
+      "ports": [
+        {
+          "face": "front",
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "input"
+        }
+      ],
+      "powerIn": "100-240V, 16A",
+      "powerW": null,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Obsidian Control Systems datasheet",
+      "sourceUrl": "https://obsidiancontrol.com/rp2",
+      "status": "verified",
+      "weightLb": 1.3
+    },
+    {
+      "depthIn": 7.7,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "chamsys_magicq_rack",
+      "manufacturer": "ChamSys",
+      "model": "MagicQ Rack",
+      "name": "ChamSys MagicQ Rack",
+      "portCount": 3,
+      "portSummary": "2x 5-pin RDM DMX; 1x network; 2x USB",
+      "ports": [
+        {
+          "face": "rear",
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "input"
+        },
+        {
+          "face": "rear",
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "input"
+        },
+        {
+          "face": "rear",
+          "id": "netw_1",
+          "name": "NETW 1",
+          "type": "network"
+        }
+      ],
+      "powerIn": "TrueCon (powerCON-style), 90-250VAC",
+      "powerW": 60,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "ChamSys datasheet",
+      "sourceUrl": "https://chamsyslighting.com/product/magicq-rack/",
+      "status": "verified",
+      "weightLb": 6.8
+    },
+    {
+      "depthIn": null,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "ma3_pu_m",
+      "manufacturer": "MA Lighting",
+      "model": "grandMA3 processing unit M",
+      "name": "grandMA3 processing unit M",
+      "note": "Depth, weight and draw NOT asserted. MA's M, L and XL product pages all return an identical 482 x 372 x 87 mm, 5 kg, 200 VA and the same port list, which is not credible for three differently-sized units — it reads as one page's figures repeated. Only the L is independently corroborated. Measure before trusting.",
+      "portCount": 10,
+      "portSummary": "8x DMX512-A XLR5F out; 2x etherCON/RJ45; 3x USB2 Type-A",
+      "ports": [
+        {
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "output"
+        },
+        {
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "output"
+        },
+        {
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "output"
+        },
+        {
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "output"
+        },
+        {
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "output"
+        },
+        {
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "output"
+        },
+        {
+          "id": "dmx_7",
+          "name": "DMX 7",
+          "type": "output"
+        },
+        {
+          "id": "dmx_8",
+          "name": "DMX 8",
+          "type": "output"
+        },
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON TRUE1 (NAC3FX-W-TOP)",
+      "powerW": null,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 2,
+      "sourceLabel": "MA Lighting datasheet",
+      "sourceUrl": "https://www.malighting.com/product/grandma3-processing-unit-m-4010510/",
+      "status": "conflicting",
+      "weightLb": null
+    },
+    {
+      "depthIn": 15,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "ma3_pu_l",
+      "manufacturer": "MA Lighting",
+      "model": "grandMA3 processing unit L",
+      "name": "grandMA3 processing unit L",
+      "portCount": 10,
+      "portSummary": "8x DMX512-A XLR5F out; 2x etherCON/RJ45; 3x USB2 Type-A",
+      "ports": [
+        {
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "output"
+        },
+        {
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "output"
+        },
+        {
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "output"
+        },
+        {
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "output"
+        },
+        {
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "output"
+        },
+        {
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "output"
+        },
+        {
+          "id": "dmx_7",
+          "name": "DMX 7",
+          "type": "output"
+        },
+        {
+          "id": "dmx_8",
+          "name": "DMX 8",
+          "type": "output"
+        },
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON TRUE1 (NAC3FX-W-TOP)",
+      "powerW": 200,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 2,
+      "sourceLabel": "MA Lighting datasheet",
+      "sourceUrl": "https://www.malighting.com/product/grandma3-processing-unit-l-4010509/",
+      "status": "verified",
+      "weightLb": 12
+    },
+    {
+      "depthIn": null,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "ma3_pu_xl",
+      "manufacturer": "MA Lighting",
+      "model": "grandMA3 processing unit XL",
+      "name": "grandMA3 processing unit XL",
+      "note": "Same as the M: MA's three processing-unit pages return identical figures. Not asserted.",
+      "portCount": 10,
+      "portSummary": "8x DMX512-A XLR5F out; 2x etherCON/RJ45; 3x USB2 Type-A",
+      "ports": [
+        {
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "output"
+        },
+        {
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "output"
+        },
+        {
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "output"
+        },
+        {
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "output"
+        },
+        {
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "output"
+        },
+        {
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "output"
+        },
+        {
+          "id": "dmx_7",
+          "name": "DMX 7",
+          "type": "output"
+        },
+        {
+          "id": "dmx_8",
+          "name": "DMX 8",
+          "type": "output"
+        },
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON TRUE1 (NAC3FX-W-TOP)",
+      "powerW": null,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 2,
+      "sourceLabel": "MA Lighting datasheet",
+      "sourceUrl": "https://www.tsllighting.com/wp-content/uploads/2019/07/4010508_en.pdf",
+      "status": "conflicting",
+      "weightLb": null
+    },
+    {
+      "depthIn": 13,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "ma_npu_gma2",
+      "manufacturer": "MA Lighting",
+      "model": "MA NPU (Network Processing Unit, grandMA2-era, archived)",
+      "name": "MA NPU (grandMA2 era)",
+      "portCount": 9,
+      "portSummary": "8x XLR5 DMX out; 1x USB; 1x etherCON",
+      "ports": [
+        {
+          "face": "rear",
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmx_7",
+          "name": "DMX 7",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmx_8",
+          "name": "DMX 8",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON, 120/230V auto",
+      "powerW": 150,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "MA Lighting datasheet",
+      "sourceUrl": "https://www.christielites.com/file_uploads/spec_599_130032-MA-NPU-(Network-Processing-Unit).pdf",
+      "status": "verified",
+      "weightLb": 19.9
+    },
+    {
+      "airflow": "front-to-rear",
+      "depthIn": 13,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "gigacore10t",
+      "manufacturer": "Luminex",
+      "model": "GigaCore 10t",
+      "name": "Luminex GigaCore 10t",
+      "portCount": 10,
+      "portSummary": "4x Gigabit etherCON; 2x rugged fiber 10G/1G (optional); 4x Gigabit etherCON; 1x powerCON True1",
+      "ports": [
+        {
+          "face": "front",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_3",
+          "name": "ETH 3",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_4",
+          "name": "ETH 4",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "fiber_1",
+          "name": "FIBER 1",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "fiber_2",
+          "name": "FIBER 2",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_5",
+          "name": "ETH 5",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_6",
+          "name": "ETH 6",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_7",
+          "name": "ETH 7",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_8",
+          "name": "ETH 8",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON True1 in (rear)",
+      "powerW": null,
+      "rackWidth": "half",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Luminex datasheet",
+      "sourceUrl": "https://www.luminex.be/wp-content/uploads/2025/06/Product-specification-sheet-GigaCore-10t-v1.0.2.pdf",
+      "status": "verified",
+      "weightLb": 7.9
+    },
+    {
+      "depthIn": 12,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "pathway_via_touring",
+      "manufacturer": "Pathway Connectivity",
+      "model": "PWVIA Touring Ethernet Switch (VIAT)",
+      "name": "Pathway VIA 12 Touring",
+      "portCount": 14,
+      "portSummary": "10x RJ45 etherCON; 2x RJ45 etherCON; 2x opticalCON (DUO/QUAD); 2x powerCON in/thru",
+      "ports": [
+        {
+          "face": "front",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_3",
+          "name": "ETH 3",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_4",
+          "name": "ETH 4",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_5",
+          "name": "ETH 5",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_6",
+          "name": "ETH 6",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_7",
+          "name": "ETH 7",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_8",
+          "name": "ETH 8",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_9",
+          "name": "ETH 9",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_10",
+          "name": "ETH 10",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_11",
+          "name": "ETH 11",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_12",
+          "name": "ETH 12",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "fiber_1",
+          "name": "FIBER 1",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "fiber_2",
+          "name": "FIBER 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON AC in + thru",
+      "powerW": 125,
+      "rackWidth": "full",
+      "redundantPsu": true,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Pathway Connectivity datasheet",
+      "sourceUrl": "https://16500.com/wp-content/uploads/2021/09/PWVIA-Touring-Ethernet-Switch.pdf",
+      "status": "verified",
+      "weightLb": 5.3
+    },
+    {
+      "airflow": "convection",
+      "depthIn": 7,
+      "fullDepth": true,
+      "hasIp": false,
+      "id": "pathport_octo",
+      "manufacturer": "Pathway Connectivity",
+      "model": "Pathport Octo",
+      "name": "Pathway Pathport Octo",
+      "note": "Depth corrected 2026-09-11. The research JSON carried 40 mm as depth; that is the HEIGHT (1.7 in, i.e. 1U) from the 432 x 43 x 178 mm triplet. Real depth is 178 mm / 7.0 in. Exactly the labelling trap that put nine wrong wattages in Distro Plot's first pass.",
+      "portCount": 9,
+      "portSummary": "8x DMX512 (XLR5F or terminal or RJ45, per model); 1x 10/100 Ethernet",
+      "ports": [
+        {
+          "face": "front",
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_7",
+          "name": "DMX 7",
+          "type": "input"
+        },
+        {
+          "face": "front",
+          "id": "dmx_8",
+          "name": "DMX 8",
+          "type": "input"
+        },
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        }
+      ],
+      "powerIn": "AC inlet, 85-264VAC",
+      "powerW": null,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Pathway Connectivity datasheet",
+      "sourceUrl": "https://shop.bmisupply.com/Resources/en/ItemDocuments/36690012/BMI.Pathway.Octo.Datasheet.pdf",
+      "status": "verified",
+      "weightLb": 5.2
+    },
+    {
+      "depthIn": 10,
+      "fullDepth": true,
+      "hasIp": false,
+      "id": "pathway_edin_panel",
+      "manufacturer": "Pathway Connectivity",
+      "model": "eDIN Rack Mount Panel (P/N 1103)",
+      "name": "Pathway eDIN Rack Mount Panel",
+      "portCount": 0,
+      "ports": [],
+      "powerIn": null,
+      "powerW": null,
+      "rackWidth": "full",
+      "redundantPsu": false,
+      "retrieved": "2026-09-11",
+      "ruHeight": 2,
+      "sourceLabel": "Full Compass (retailer) datasheet",
+      "sourceUrl": "https://www.fullcompass.com/prod/532783-pathway-connectivity-1103-edin-rack-mount-panel-2-rack-units",
+      "status": "interpreted",
+      "weightLb": 5.1
+    },
+    {
+      "depthIn": 23.3,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "disguise_vx4",
+      "manufacturer": "disguise",
+      "model": "vx 4",
+      "name": "disguise vx 4",
+      "note": "Needs a 28 in or 30 in case. Will not go in a 20 in or 24 in touring rack.",
+      "portCount": 5,
+      "portSummary": "16x SDI in; 2x 10GbE; 2x 25GbE; 1x GbE",
+      "ports": [
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        },
+        {
+          "id": "eth_3",
+          "name": "ETH 3",
+          "type": "network"
+        },
+        {
+          "id": "eth_4",
+          "name": "ETH 4",
+          "type": "network"
+        },
+        {
+          "id": "eth_5",
+          "name": "ETH 5",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON TRUE1",
+      "powerW": 900,
+      "rackWidth": "full",
+      "retrieved": "2026-09-11",
+      "ruHeight": 4,
+      "sourceLabel": "445 x 593 x 178 mm; 21 kg; 900 VA max at 240 V",
+      "sourceUrl": "https://www.disguise.one/media/4097/disguise-vx4_specsheet_q2_2019.pdf",
+      "status": "verified",
+      "weightLb": 46.3
+    },
+    {
+      "depthIn": 24.8,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "hippo_boreal",
+      "manufacturer": "Green Hippo",
+      "model": "Boreal+",
+      "name": "Hippotizer Boreal+",
+      "note": "Needs a 28 in or 30 in case.",
+      "portCount": 2,
+      "portSummary": "4x video out; 10Gb etherCON; 1Gb etherCON",
+      "ports": [
+        {
+          "id": "eth_1",
+          "name": "ETH 1 (10Gb)",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2 (1Gb)",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON TRUE1",
+      "powerW": 1100,
+      "rackWidth": "full",
+      "retrieved": "2026-09-11",
+      "ruHeight": 4,
+      "sourceLabel": "630 x 425 x 175 mm; 24 kg; 1100 VA",
+      "sourceUrl": "http://www.green-hippo.com/wp-content/uploads/2016/09/Hippotizer-Boreal-Datasheet_July-2017.pdf",
+      "status": "verified",
+      "weightLb": 52.9
+    },
+    {
+      "depthIn": 24.5,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "barco_e2",
+      "manufacturer": "Barco",
+      "model": "E2",
+      "name": "Barco E2",
+      "note": "Dual redundant hot-swap supplies — both feeds must carry the whole load.",
+      "portCount": 1,
+      "portSummary": "8 input card slots; 4 output card slots; 1x GbE",
+      "ports": [
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        }
+      ],
+      "powerIn": "IEC",
+      "powerW": 826,
+      "rackWidth": "full",
+      "redundantPsu": true,
+      "retrieved": "2026-09-11",
+      "ruHeight": 4,
+      "sourceLabel": "432 mm (17 in) W without handles, 569-622 mm D; 31 kg; 826 W; dual redundant hot-swap PSU",
+      "sourceUrl": "https://assets.barco.com/m/753c2b29df077031/original/E2-en-Spec-sheet.pdf",
+      "status": "verified",
+      "weightLb": 68
+    },
+    {
+      "ctPid": "NETRONEN12",
+      "depthIn": 5.7,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "netron_en12",
+      "manufacturer": "Obsidian Control Systems",
+      "model": "NETRON EN12",
+      "name": "Obsidian NETRON EN12",
+      "note": "A NODE, not a switch — 12 DMX ports off the network, and only 2 network ports. Obsidian's actual switch is the NS8. Depth CONFLICT: Obsidian say 146 mm / 5.7 in and 1.82 kg; Thomann list 161 mm and 1.5 kg, which looks like the EN12i's figures (165.8 mm) — Obsidian's own number is used here. Note Obsidian label the 19in axis 'Length' on the EN12 page and 'Width' on the EN12i page, the same wrong-axis trap that mis-set the Pathport Octo.",
+      "portCount": 14,
+      "portSummary": "12x DMX 5-pin XLR (front); 2x RJ45 GigE (rear); 10x contact closure (rear)",
+      "ports": [
+        {
+          "face": "front",
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_5",
+          "name": "DMX 5",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_6",
+          "name": "DMX 6",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_7",
+          "name": "DMX 7",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_8",
+          "name": "DMX 8",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_9",
+          "name": "DMX 9",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_10",
+          "name": "DMX 10",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_11",
+          "name": "DMX 11",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "dmx_12",
+          "name": "DMX 12",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "IP65 locking power in/thru, or PoE 802.3af",
+      "powerW": 9,
+      "rackWidth": "full",
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Length 482.5mm (19in) / Width 146mm (5.7in); 1.82 kg; 9 W",
+      "sourceUrl": "https://www.obsidiancontrol.com/products/en12",
+      "status": "verified",
+      "weightLb": 4
+    },
+    {
+      "depthIn": 6.5,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "netron_en12i",
+      "manufacturer": "Obsidian Control Systems",
+      "model": "NETRON EN12i",
+      "name": "Obsidian NETRON EN12i",
+      "note": "Install variant: rear wiring backplates (RJ45/terminal/IDC) instead of front XLR, and 20 mm deeper.",
+      "portCount": 16,
+      "portSummary": "1x DMX + 1x RJ45 front; 2x RJ45 GigE + 12 DMX backplate + 10 contact closure rear",
+      "ports": [
+        {
+          "face": "front",
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "output"
+        },
+        {
+          "face": "front",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_1",
+          "name": "DMXR 1",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_2",
+          "name": "DMXR 2",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_3",
+          "name": "DMXR 3",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_4",
+          "name": "DMXR 4",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_5",
+          "name": "DMXR 5",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_6",
+          "name": "DMXR 6",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_7",
+          "name": "DMXR 7",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_8",
+          "name": "DMXR 8",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_9",
+          "name": "DMXR 9",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_10",
+          "name": "DMXR 10",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_11",
+          "name": "DMXR 11",
+          "type": "output"
+        },
+        {
+          "face": "rear",
+          "id": "dmxr_12",
+          "name": "DMXR 12",
+          "type": "output"
+        }
+      ],
+      "powerIn": "IP65 locking power in/thru, or PoE 802.3af",
+      "powerW": 9,
+      "rackWidth": "full",
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Length 165.8mm (6.5in); 1.8 kg; 9 W",
+      "sourceUrl": "https://www.obsidiancontrol.com/products/en12i",
+      "status": "verified",
+      "weightLb": 4
+    },
+    {
+      "airflow": "convection",
+      "depthIn": 5.8,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "netron_ns8",
+      "manufacturer": "Obsidian Control Systems",
+      "model": "NETRON NS8",
+      "name": "Obsidian NETRON NS8",
+      "note": "This is the NETRON switch, as distinct from the EN nodes. Half-rack — Obsidian ship it with a NET Shelf to rack-mount, so the shelf is a separate line on an order. CT do not appear to stock it.",
+      "portCount": 8,
+      "portSummary": "6x RJ45 GigE front; 2x RJ45 GigE rear; PoE+ 100 W budget",
+      "ports": [
+        {
+          "face": "front",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_3",
+          "name": "ETH 3",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_4",
+          "name": "ETH 4",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_5",
+          "name": "ETH 5",
+          "type": "network"
+        },
+        {
+          "face": "front",
+          "id": "eth_6",
+          "name": "ETH 6",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "face": "rear",
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        }
+      ],
+      "powerIn": "locking power in/thru",
+      "powerW": 109,
+      "rackWidth": "half",
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "147mm (5.8in); 1.1 kg; 109 W max, 100 W PoE budget; convection cooled",
+      "sourceUrl": "https://www.obsidiancontrol.com/products/ns8",
+      "status": "verified",
+      "weightLb": 2.4
+    },
+    {
+      "ctPid": "SWISSART",
+      "depthIn": 5.35,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "swisson_xnd4r",
+      "manufacturer": "Swisson",
+      "model": "XND-4R",
+      "name": "Swisson XND-4R",
+      "note": "This is CT's SWISSART, 'Swisson 4 Port EtherCON to DMX Node'. A node, not a switch. Swisson label the depth axis 'W' on the node pages and 'D' on the switch pages — the middle number of a 19in triplet is the depth either way.",
+      "portCount": 5,
+      "portSummary": "4x DMX (in/out configurable); network RJ45",
+      "ports": [
+        {
+          "id": "dmx_1",
+          "name": "DMX 1",
+          "type": "output"
+        },
+        {
+          "id": "dmx_2",
+          "name": "DMX 2",
+          "type": "output"
+        },
+        {
+          "id": "dmx_3",
+          "name": "DMX 3",
+          "type": "output"
+        },
+        {
+          "id": "dmx_4",
+          "name": "DMX 4",
+          "type": "output"
+        },
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON in/out",
+      "powerW": 7,
+      "rackWidth": "full",
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "136mm; 1.6 kg; 7 W",
+      "sourceUrl": "https://www.swisson.com/en/products/data-distribution/ethernet-dmx-node/",
+      "status": "verified",
+      "weightLb": 3.53
+    },
+    {
+      "depthIn": 5.35,
+      "fullDepth": true,
+      "hasIp": false,
+      "id": "swisson_xes8g",
+      "manufacturer": "Swisson",
+      "model": "XES-8G",
+      "name": "Swisson XES-8G",
+      "note": "Swisson DO make switches — this and the XES-2T6 — they are just not what CT stock. One of the very few entertainment switches with genuinely redundant supplies, each on its own powerCON.",
+      "portCount": 8,
+      "portSummary": "8x etherCON GbE; 2x powerCON in + 2x thru (redundant)",
+      "ports": [
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        },
+        {
+          "id": "eth_3",
+          "name": "ETH 3",
+          "type": "network"
+        },
+        {
+          "id": "eth_4",
+          "name": "ETH 4",
+          "type": "network"
+        },
+        {
+          "id": "eth_5",
+          "name": "ETH 5",
+          "type": "network"
+        },
+        {
+          "id": "eth_6",
+          "name": "ETH 6",
+          "type": "network"
+        },
+        {
+          "id": "eth_7",
+          "name": "ETH 7",
+          "type": "network"
+        },
+        {
+          "id": "eth_8",
+          "name": "ETH 8",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON in+out, dual redundant PSU",
+      "powerW": 6.5,
+      "rackWidth": "full",
+      "redundantPsu": true,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "8-Port Gigabit Ethernet Switch; 136mm; 1.7 kg; dual switch-mode PSU",
+      "sourceUrl": "https://www.swisson.com/en/products/data-distribution/8-port-gigabit-ethernet-switch/",
+      "status": "verified",
+      "weightLb": 3.75
+    },
+    {
+      "depthIn": 5.35,
+      "fullDepth": true,
+      "hasIp": true,
+      "id": "swisson_xes2t6",
+      "manufacturer": "Swisson",
+      "model": "XES-2T6",
+      "name": "Swisson XES-2T6",
+      "note": "2 aggregated trunk ports + 6 VLAN-assignable ports, OLED and encoder on the front.",
+      "portCount": 8,
+      "portSummary": "2x aggregated trunk + 6x VLAN etherCON; redundant powerCON",
+      "ports": [
+        {
+          "id": "eth_1",
+          "name": "ETH 1",
+          "type": "network"
+        },
+        {
+          "id": "eth_2",
+          "name": "ETH 2",
+          "type": "network"
+        },
+        {
+          "id": "eth_3",
+          "name": "ETH 3",
+          "type": "network"
+        },
+        {
+          "id": "eth_4",
+          "name": "ETH 4",
+          "type": "network"
+        },
+        {
+          "id": "eth_5",
+          "name": "ETH 5",
+          "type": "network"
+        },
+        {
+          "id": "eth_6",
+          "name": "ETH 6",
+          "type": "network"
+        },
+        {
+          "id": "eth_7",
+          "name": "ETH 7",
+          "type": "network"
+        },
+        {
+          "id": "eth_8",
+          "name": "ETH 8",
+          "type": "network"
+        }
+      ],
+      "powerIn": "powerCON in+out, dual redundant PSU",
+      "powerW": 10,
+      "rackWidth": "full",
+      "redundantPsu": true,
+      "retrieved": "2026-09-11",
+      "ruHeight": 1,
+      "sourceLabel": "Premanaged Gigabit Ethernet Switch; 136mm; 1.7 kg",
+      "sourceUrl": "https://www.swisson.com/en/products/data-distribution/premanaged-gigabit-ethernet-switch/",
+      "status": "verified",
+      "weightLb": 3.75
+    }
+  ],
+  "kind": "rack-equipment",
+  "name": "Rack equipment",
+  "note": "RU heights, widths, depths and full port maps. ruHeight is a multiple of 0.5. rackWidth is full | half | third. fullDepth false means the device leaves the other face of its U free. depthIn is checked against the case's rackable depth, which in touring is the constraint that actually bites. Devices without depthIn or weightLb were not reached by the 2026-09-11 research pass and are deliberately left unasserted — an absent figure runs no check, a wrong figure fails a load-in.",
+  "schema": {
+    "airflow": "front-to-rear|rear-to-front|side-vented|convection",
+    "depthIn": "inches, chassis",
+    "fullDepth": "bool — occupies both faces",
+    "powerIn": "connector",
+    "powerW": "watts max",
+    "rackWidth": "full|half|third",
+    "ruHeight": "U, multiple of 0.5",
+    "status": "verified|interpreted|conflicting|observed",
+    "weightLb": "pounds"
+  },
+  "source": "BUILTIN_TYPES — Pre-Pro Rack Builder, extended 2026-09-11 with a manufacturer research pass"
+}

@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "id": "safety",
+      "name": "Safety Cable",
+      "note": "Required on every hung fixture"
+    },
+    {
+      "id": "trigger-clamp",
+      "name": "Trigger Clamp",
+      "note": ""
+    },
+    {
+      "id": "cheeseborough",
+      "name": "Cheeseborough",
+      "note": "Right-angle clamp"
+    },
+    {
+      "id": "half-coupler",
+      "name": "Half Coupler",
+      "note": ""
+    },
+    {
+      "id": "mega-clamp",
+      "name": "Mega Clamp",
+      "note": ""
+    },
+    {
+      "id": "omega-bracket",
+      "name": "Omega Bracket",
+      "note": "Usually ships with the fixture"
+    },
+    {
+      "id": "truss-hook",
+      "name": "Truss Hook",
+      "note": ""
+    },
+    {
+      "id": "drop-arm",
+      "name": "Drop Arm",
+      "note": ""
+    }
+  ],
+  "kind": "hardware",
+  "name": "Rigging hardware",
+  "note": "A fixture's own `hang` field says what it ships with. This is what a particular show hangs it with, which is a per-order decision and often differs.",
+  "source": "Shop-order practice",
+  "updatedAt": "2026-09-10T20:00:00.000Z"
+}

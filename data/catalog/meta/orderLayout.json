@@ -1,0 +1,42 @@
+{
+  "name": "Shop order layout — defaults",
+  "note": "Every order copies this and can override it. Reorder, retitle or hide a section without re-authoring the order.",
+  "sections": [
+    {
+      "key": "fixtures",
+      "title": "Fixtures",
+      "visible": true
+    },
+    {
+      "key": "cable",
+      "title": "Power / Data Cable",
+      "visible": true
+    },
+    {
+      "key": "adapters",
+      "title": "Adapters",
+      "visible": true
+    },
+    {
+      "key": "hardware",
+      "title": "Rigging Hardware",
+      "visible": true
+    },
+    {
+      "key": "control",
+      "title": "Control & Distro",
+      "visible": true
+    },
+    {
+      "key": "truss",
+      "title": "Truss",
+      "visible": false
+    },
+    {
+      "key": "totals",
+      "title": "Totals",
+      "visible": true
+    }
+  ],
+  "updatedAt": "2026-09-10T20:00:00.000Z"
+}

@@ -1,0 +1,119 @@
+{
+  "ipConventions": {
+    "common": [
+      "2.x.x.x / 255.0.0.0 (Art-Net legacy)",
+      "10.x.x.x / 255.0.0.0",
+      "192.168.x.x / 255.255.255.0"
+    ],
+    "note": "Placeholder for the show-level IP plan Net Plot will own. Not asserted here because it is a per-show decision, not a product fact."
+  },
+  "items": [
+    {
+      "id": "gigacore-10",
+      "manufacturer": "Luminex",
+      "name": "GigaCore 10",
+      "note": "Verified against Pre-Pro's own roster.",
+      "poe": null,
+      "ports": {
+        "etherconFront": 4,
+        "etherconRear": 4,
+        "fiberSfp": 2
+      },
+      "ru": 1
+    },
+    {
+      "id": "gigacore-14r",
+      "manufacturer": "Luminex",
+      "name": "GigaCore 14R",
+      "note": "Port count to verify.",
+      "poe": null,
+      "ports": {
+        "ethercon": 12,
+        "fiberSfp": 2
+      },
+      "ru": 1
+    },
+    {
+      "id": "gigacore-16xt",
+      "manufacturer": "Luminex",
+      "name": "GigaCore 16Xt",
+      "note": "Port count to verify.",
+      "poe": null,
+      "ports": {
+        "ethercon": 12,
+        "fiberSfp": 4
+      },
+      "ru": 1
+    },
+    {
+      "id": "luminode-12",
+      "manufacturer": "Luminex",
+      "name": "LumiNode 12",
+      "note": "Verified against Pre-Pro's own roster.",
+      "ports": {
+        "dmxOut": 12,
+        "ethercon": 2
+      },
+      "ru": 1
+    },
+    {
+      "id": "luminode-4",
+      "manufacturer": "Luminex",
+      "name": "LumiNode 4",
+      "note": "To verify.",
+      "ports": {
+        "dmxOut": 4,
+        "ethercon": 2
+      },
+      "ru": 1
+    },
+    {
+      "id": "proplex-iq-two-1616",
+      "manufacturer": "TMB",
+      "name": "ProPlex IQ Two 1616",
+      "note": "Verified: 16 bidirectional XLR5 plus 2 etherCON.",
+      "ports": {
+        "dmxBidirectional": 16,
+        "ethercon": 2
+      },
+      "ru": 2
+    },
+    {
+      "id": "ma3-npu",
+      "manufacturer": "MA Lighting",
+      "name": "MA3 NPU",
+      "note": "Ports A-H. Verified against Pre-Pro's own roster.",
+      "ports": {
+        "dmxOut": 8
+      },
+      "ru": 2
+    },
+    {
+      "id": "swisson-xnd-8",
+      "manufacturer": "Swisson",
+      "name": "Swisson XND-8",
+      "note": "To verify.",
+      "ports": {
+        "dmxOut": 8,
+        "ethercon": 2
+      },
+      "ru": 1
+    },
+    {
+      "id": "media-converter",
+      "manufacturer": "—",
+      "name": "Fiber media converter",
+      "note": "Generic; note the fiber type per show.",
+      "ports": {
+        "ethercon": 1,
+        "fiberSfp": 1
+      },
+      "ru": 0
+    }
+  ],
+  "kind": "network",
+  "name": "Network devices",
+  "note": "Port counts here are physical ports. Universe capacity is a property of the node's licence and firmware, not the connector count, and is deliberately not asserted — that is a per-device figure a researcher pass should source.",
+  "source": "Pre-Pro Rack Builder BUILTIN_TYPES for the port counts already verified there, plus the switches in common use on these rigs",
+  "updatedAt": "2026-09-10T21:00:00.000Z"
+}

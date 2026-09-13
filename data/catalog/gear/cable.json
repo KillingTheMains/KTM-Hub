@@ -1,0 +1,94 @@
+{
+  "items": [
+    {
+      "class": "power",
+      "connector": "powerCON TRUE1",
+      "id": "true1-jumper",
+      "name": "True1 Jumper",
+      "note": ""
+    },
+    {
+      "class": "power",
+      "connector": "powerCON TRUE1",
+      "id": "true1-tail",
+      "name": "True1 Tail (bare)",
+      "note": "For fixtures shipped with bare-ended tails"
+    },
+    {
+      "class": "power",
+      "connector": "powerCON A-type",
+      "id": "powercon-blue",
+      "name": "powerCON Blue Jumper",
+      "note": "NOT interchangeable with TRUE1"
+    },
+    {
+      "class": "power",
+      "connector": "NEMA 5-15",
+      "id": "edison-uground",
+      "name": "Edison U-Ground",
+      "note": ""
+    },
+    {
+      "class": "power",
+      "connector": "Socapex",
+      "id": "socapex",
+      "name": "Socapex 19-pin",
+      "note": "6 circuits per run"
+    },
+    {
+      "class": "power",
+      "connector": "CPC8",
+      "id": "cpc8",
+      "name": "CPC8",
+      "note": "8 circuits"
+    },
+    {
+      "class": "power",
+      "connector": "CPC4",
+      "id": "cpc4",
+      "name": "CPC4",
+      "note": "4 circuits"
+    },
+    {
+      "class": "data",
+      "connector": "XLR-5",
+      "id": "dmx-5pin",
+      "name": "5-Pin DMX",
+      "note": ""
+    },
+    {
+      "class": "data",
+      "connector": "XLR-3",
+      "id": "dmx-3pin",
+      "name": "3-Pin DMX",
+      "note": ""
+    },
+    {
+      "class": "data",
+      "connector": "etherCON RJ45",
+      "id": "ethercon",
+      "name": "EtherCON Cat5e",
+      "note": ""
+    },
+    {
+      "class": "data",
+      "connector": "LC",
+      "id": "fiber",
+      "name": "Fiber (LC duplex)",
+      "note": ""
+    }
+  ],
+  "kind": "cable",
+  "lengths": [
+    5,
+    10,
+    15,
+    25,
+    50,
+    100
+  ],
+  "name": "Cable types",
+  "note": "Standard lengths are the shop-order matrix columns. A shop order is mostly cable by line count, which is why it gets its own catalog rather than living in notes.",
+  "source": "Pre-Pro Loom Builder cable types plus the shop-order conventions in use",
+  "updatedAt": "2026-09-10T20:00:00.000Z"
+}

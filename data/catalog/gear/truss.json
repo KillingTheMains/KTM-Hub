@@ -1,0 +1,84 @@
+{
+  "items": [
+    {
+      "chord": "2\" OD × 0.125\" wall 6061-T6",
+      "manufacturer": "Tyler Truss Systems",
+      "name": "TYLER GT TRUSS",
+      "notes": "Industry-standard 12\" aluminum box truss. Widely used in touring, corporate, and concert production. Conforms to BS EN 1090 and ANSI E1.2.",
+      "profile": "12\" × 12\" (305mm × 305mm)",
+      "sections": [
+        2,
+        4,
+        5,
+        8,
+        10,
+        20
+      ],
+      "weightPerFt": 3.1
+    },
+    {
+      "chord": "2\" OD × 0.118\" wall 6061-T6",
+      "manufacturer": "Various (Global Truss, Prolyte, etc.)",
+      "name": "12\" BOX",
+      "notes": "Generic 12\" box truss available from multiple manufacturers. Metric equivalents common (0.5m, 1m, 2m, 3m). Verify compatibility between manufacturers before mixing.",
+      "profile": "12\" × 12\" (305mm × 305mm)",
+      "sections": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        10
+      ],
+      "weightPerFt": 2.8
+    },
+    {
+      "chord": "2\" OD × 0.125\" wall 6061-T6",
+      "manufacturer": "Various (Tyler, Tomcat, Prolyte, etc.)",
+      "name": "20.5\" BOX",
+      "notes": "Heavy-duty touring truss for long spans and high-load applications. Common in large-scale arena and stadium production.",
+      "profile": "20.5\" × 20.5\" (521mm × 521mm)",
+      "sections": [
+        2,
+        5,
+        8,
+        10
+      ],
+      "weightPerFt": 5.2
+    },
+    {
+      "chord": "2\" OD × 0.125\" wall 6061-T6",
+      "manufacturer": "Various (Tomcat, Prolyte, Global, etc.)",
+      "name": "16\" BOX",
+      "notes": "Mid-size aluminum box truss. Good balance of capacity and weight for medium-span applications. Popular for corporate touring and mid-size event production.",
+      "profile": "16\" × 16\" (406mm × 406mm)",
+      "sections": [
+        2,
+        5,
+        8,
+        10
+      ],
+      "weightPerFt": 3.8
+    },
+    {
+      "chord": "2\" OD aluminum 6061-T6",
+      "manufacturer": "Christie Lites",
+      "name": "CHRISTIE F-TYPE",
+      "notes": "Christie Lites' proprietary rental truss system with F-type connector pins. Common on Christie rental packages. Not interchangeable with other manufacturer's connectors — verify availability with Christie.",
+      "profile": "12\" × 12\" (305mm × 305mm)",
+      "sections": [
+        2,
+        4,
+        5,
+        8,
+        10
+      ],
+      "weightPerFt": 3
+    }
+  ],
+  "kind": "truss",
+  "name": "Truss products",
+  "note": "weightPerFt is real per-manufacturer data and was dead in Pre-Pro — defined once and never read anywhere. Truss Plot needs exactly this.",
+  "source": "TRUSS_LIBRARY — Pre-Pro Truss Builder"
+}

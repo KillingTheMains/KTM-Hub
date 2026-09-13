@@ -1,0 +1,256 @@
+{
+  "items": [
+    {
+      "cat": "General",
+      "hFt": 8,
+      "name": "TRUCK STRAP",
+      "wFt": 0.1
+    },
+    {
+      "cat": "General",
+      "hFt": 8,
+      "name": "LOAD BAR",
+      "wFt": 0.2
+    },
+    {
+      "cat": "Truss",
+      "hFt": 2,
+      "name": "CL F-TYPE 4'",
+      "wFt": 4
+    },
+    {
+      "cat": "Truss",
+      "hFt": 2,
+      "name": "CL F-TYPE 8'",
+      "wFt": 8
+    },
+    {
+      "cat": "Truss",
+      "hFt": 2,
+      "name": "CL F-TYPE 16'",
+      "wFt": 16
+    },
+    {
+      "cat": "Truss",
+      "hFt": 2,
+      "name": "CL F-TYPE 20'",
+      "wFt": 20
+    },
+    {
+      "cat": "Truss",
+      "hFt": 2,
+      "name": "CL F-TYPE 24'",
+      "wFt": 24
+    },
+    {
+      "cat": "Truss",
+      "hFt": 2.66,
+      "name": "CL B-TYPE DOLLY HALF",
+      "wFt": 4
+    },
+    {
+      "cat": "Truss",
+      "hFt": 2.66,
+      "name": "CL B-TYPE DOLLY",
+      "wFt": 8
+    },
+    {
+      "cat": "Motors",
+      "hFt": 2,
+      "name": "CL MTR CUBE",
+      "wFt": 2
+    },
+    {
+      "cat": "Motors",
+      "hFt": 2,
+      "name": "CL MTR S2W",
+      "wFt": 4
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 2,
+      "name": "CL S2W",
+      "wFt": 4
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 2,
+      "name": "CL S3W",
+      "wFt": 4
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 2,
+      "name": "CL S4W",
+      "wFt": 4
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 2.5,
+      "name": "CL T2W",
+      "wFt": 4
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 2,
+      "name": "CL UTIL CUBE",
+      "wFt": 2
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 5.08,
+      "name": "CL DOLLY 5FT LAMP RACK ADJUSTABLE",
+      "wFt": 2.5
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 7.58,
+      "name": "CL DOLLY 7.5FT LAMP RACK ADJUSTABLE",
+      "wFt": 2.5
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 4,
+      "name": "CL CART PIPE",
+      "wFt": 2
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 4,
+      "name": "CL CART TRUSS BASE CART 3X3",
+      "wFt": 2
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 1.25,
+      "name": "CL CASE BOLT",
+      "wFt": 0.67
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 2.17,
+      "name": "CL CASE MA ONPC",
+      "wFt": 1.08
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 4.5,
+      "name": "CL CASE MA2 FULL-SIZE CONSOLE",
+      "wFt": 1
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 4,
+      "name": "CL CASE MA2 LIGHT/ULTRA LIGHT CONSOLE",
+      "wFt": 1
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 3.25,
+      "name": "CL CASE MA3 LIGHT CONSOLE",
+      "wFt": 1.33
+    },
+    {
+      "cat": "Road Case",
+      "hFt": 2,
+      "name": "CL CASE MONITOR 22IN X 2",
+      "wFt": 1
+    },
+    {
+      "cat": "Fixtures",
+      "hFt": 2,
+      "name": "CL S2W FIXTURE CASE",
+      "wFt": 4
+    },
+    {
+      "cat": "Fixtures",
+      "hFt": 2,
+      "name": "CL 4-WAY TALL",
+      "wFt": 4
+    },
+    {
+      "cat": "Fixtures",
+      "hFt": 2,
+      "name": "CL 8-WAY TALL",
+      "wFt": 4
+    },
+    {
+      "cat": "Fixtures",
+      "hFt": 2,
+      "name": "CL TALL FIXTURE CASE",
+      "wFt": 4
+    },
+    {
+      "cat": "Fixtures",
+      "hFt": 2,
+      "name": "CL FIXTURE CART",
+      "wFt": 4
+    },
+    {
+      "cat": "Fixtures",
+      "hFt": 2,
+      "name": "CL CF FIXTURE CASE",
+      "wFt": 6
+    },
+    {
+      "cat": "Cable",
+      "hFt": 2.5,
+      "name": "CL T2W CABLE",
+      "wFt": 4
+    },
+    {
+      "cat": "Cable",
+      "hFt": 4,
+      "name": "CL FISH TOTE",
+      "wFt": 3.67
+    },
+    {
+      "cat": "Dimmer/Distro",
+      "hFt": 2.5,
+      "name": "CL FULL DISTRO",
+      "wFt": 2
+    },
+    {
+      "cat": "Dimmer/Distro",
+      "hFt": 2.5,
+      "name": "CL HALF DISTRO",
+      "wFt": 2
+    },
+    {
+      "cat": "Workbox",
+      "hFt": 2.67,
+      "name": "CL WORKBOX",
+      "wFt": 2
+    },
+    {
+      "cat": "Other",
+      "hFt": 2.66,
+      "name": "CL MAC ONE CART",
+      "wFt": 21
+    },
+    {
+      "cat": "Truss",
+      "hFt": 2,
+      "name": "RANDO 12\" TRUSS CART",
+      "wFt": 8
+    },
+    {
+      "cat": "Fixtures",
+      "hFt": 2.25,
+      "name": "VOLUX PHYSOS SMALL",
+      "wFt": 2.24
+    },
+    {
+      "cat": "Fixtures",
+      "hFt": 2.17,
+      "name": "VOLUX PHYSOS LARGE",
+      "wFt": 3.5
+    }
+  ],
+  "kind": "pack-item",
+  "name": "Pack footprints — Christie Lites",
+  "note": "Deck footprints in feet on a 53 x 8.5 ft trailer, 2-inch snap grid. Used in production at SAP Sapphire 2026.",
+  "shop": "christie-lites",
+  "shopName": "Christie Lites",
+  "source": "DEFAULT_LIBRARY — Truck Packer src/data/library.js"
+}
