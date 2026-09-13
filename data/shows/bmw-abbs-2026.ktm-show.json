@@ -1,0 +1,5223 @@
+{
+  "_format": "ktm-show",
+  "_version": 1,
+  "exported": "2026-09-13T22:40:31.775195Z",
+  "show": {
+    "id": "bmw-abbs-2026",
+    "name": "BMW ABBS 2026",
+    "client": "BMW",
+    "venue": "",
+    "date": "2026",
+    "notes": "Imported from LOOM LIST - BMW 2026.xlsx"
+  },
+  "fixtures": [],
+  "gear": [],
+  "collections": {
+    "racks": [
+      {
+        "id": "rack_blue-pit",
+        "name": "BLUE PIT",
+        "ru": 21,
+        "color": "--s1",
+        "items": [
+          {
+            "key": "i-00",
+            "gearId": "ma3_npu",
+            "ru": 1,
+            "col": 0,
+            "face": "front",
+            "label": "BLUE NPU 1",
+            "color": "--s1",
+            "ip": "192.168.1.111",
+            "ports": {
+              "port_a": {
+                "label": "FOR PARAMETERS ONLY"
+              }
+            }
+          },
+          {
+            "key": "i-01",
+            "gearId": "ma3_npu",
+            "ru": 3,
+            "col": 0,
+            "face": "front",
+            "label": "BLUE NPU 2",
+            "color": "--s1",
+            "ip": "192.168.1.112",
+            "ports": {
+              "port_a": {
+                "label": "FOR PARAMETERS ONLY"
+              }
+            }
+          },
+          {
+            "key": "i-02",
+            "gearId": "proplex_iq2",
+            "ru": 5,
+            "col": 0,
+            "face": "front",
+            "label": "BLUE PIT",
+            "color": "--s1",
+            "ip": "192.168.1.121",
+            "ports": {
+              "port_a": {
+                "label": "UNIV 8",
+                "universe": "8"
+              },
+              "port_b": {
+                "label": "UNIV 9",
+                "universe": "9"
+              },
+              "port_c": {
+                "label": "UNIV 10",
+                "universe": "10"
+              },
+              "port_d": {
+                "label": "UNIV 11",
+                "universe": "11"
+              },
+              "port_e": {
+                "label": "UNIV 12",
+                "universe": "12"
+              },
+              "port_f": {
+                "label": "UNIV 13",
+                "universe": "13"
+              },
+              "port_g": {
+                "label": "UNIV 14",
+                "universe": "14"
+              },
+              "port_i": {
+                "label": "UNIV 29",
+                "universe": "29"
+              },
+              "port_j": {
+                "label": "UNIV 30",
+                "universe": "30"
+              },
+              "port_k": {
+                "label": "UNIV 31",
+                "universe": "31"
+              },
+              "port_m": {
+                "label": "UNIV 41",
+                "universe": "41"
+              },
+              "port_n": {
+                "label": "UNIV 42",
+                "universe": "42"
+              }
+            }
+          },
+          {
+            "key": "i-03",
+            "gearId": "optosplitter",
+            "ru": 6,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 1",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "DD (8)"
+              }
+            }
+          },
+          {
+            "key": "i-04",
+            "gearId": "optosplitter",
+            "ru": 7,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 2",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "E (9)"
+              }
+            }
+          },
+          {
+            "key": "i-05",
+            "gearId": "optosplitter",
+            "ru": 8,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 3",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "E (10)"
+              }
+            }
+          },
+          {
+            "key": "i-06",
+            "gearId": "optosplitter",
+            "ru": 9,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 4",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "F (11)"
+              }
+            }
+          },
+          {
+            "key": "i-07",
+            "gearId": "optosplitter",
+            "ru": 10,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 5",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "F (12)"
+              }
+            }
+          },
+          {
+            "key": "i-08",
+            "gearId": "optosplitter",
+            "ru": 11,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 6",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "F (13)"
+              }
+            }
+          },
+          {
+            "key": "i-09",
+            "gearId": "optosplitter",
+            "ru": 12,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 7",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "F (14)"
+              }
+            }
+          },
+          {
+            "key": "i-10",
+            "gearId": "optosplitter",
+            "ru": 13,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 8",
+            "color": "--s1",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-11",
+            "gearId": "optosplitter",
+            "ru": 14,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 9",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "M (29)"
+              }
+            }
+          },
+          {
+            "key": "i-12",
+            "gearId": "optosplitter",
+            "ru": 15,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 10",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "M (30)"
+              }
+            }
+          },
+          {
+            "key": "i-13",
+            "gearId": "optosplitter",
+            "ru": 16,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 11",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "M (31)"
+              }
+            }
+          },
+          {
+            "key": "i-14",
+            "gearId": "optosplitter",
+            "ru": 17,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 12",
+            "color": "--s1",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-15",
+            "gearId": "optosplitter",
+            "ru": 18,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 13",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "DRAPE"
+              }
+            }
+          },
+          {
+            "key": "i-16",
+            "gearId": "optosplitter",
+            "ru": 19,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 14",
+            "color": "--s1",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "USL FLR"
+              },
+              "out_2": {
+                "label": "USL FLR"
+              },
+              "out_3": {
+                "label": "USL FLR"
+              },
+              "out_4": {
+                "label": "USL FLR"
+              }
+            }
+          },
+          {
+            "key": "i-17",
+            "gearId": "optosplitter",
+            "ru": 20,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 15",
+            "color": "--s1",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-18",
+            "gearId": "optosplitter",
+            "ru": 21,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 16",
+            "color": "--s1",
+            "ip": null,
+            "ports": {}
+          }
+        ]
+      },
+      {
+        "id": "rack_green-pit",
+        "name": "GREEN PIT",
+        "ru": 19,
+        "color": "--s3",
+        "items": [
+          {
+            "key": "i-00",
+            "gearId": "ma3_npu",
+            "ru": 1,
+            "col": 0,
+            "face": "front",
+            "label": "GREEN NPU 1",
+            "color": "--s3",
+            "ip": "192.168.1.112",
+            "ports": {
+              "port_a": {
+                "label": "FOR PARAMETERS ONLY"
+              }
+            }
+          },
+          {
+            "key": "i-01",
+            "gearId": "proplex_iq2",
+            "ru": 3,
+            "col": 0,
+            "face": "front",
+            "label": "GREEN PIT",
+            "color": "--s3",
+            "ip": "192.168.1.122",
+            "ports": {
+              "port_a": {
+                "label": "UNIV 15",
+                "universe": "15"
+              },
+              "port_b": {
+                "label": "UNIV 16",
+                "universe": "16"
+              },
+              "port_c": {
+                "label": "UNIV 17",
+                "universe": "17"
+              },
+              "port_d": {
+                "label": "UNIV 18",
+                "universe": "18"
+              },
+              "port_e": {
+                "label": "UNIV 19",
+                "universe": "19"
+              },
+              "port_f": {
+                "label": "UNIV 20",
+                "universe": "20"
+              },
+              "port_g": {
+                "label": "UNIV 21",
+                "universe": "21"
+              },
+              "port_h": {
+                "label": "UNIV 22",
+                "universe": "22"
+              },
+              "port_i": {
+                "label": "UNIV 23",
+                "universe": "23"
+              },
+              "port_j": {
+                "label": "UNIV 24",
+                "universe": "24"
+              },
+              "port_k": {
+                "label": "UNIV 25",
+                "universe": "25"
+              },
+              "port_l": {
+                "label": "UNIV 26",
+                "universe": "26"
+              }
+            }
+          },
+          {
+            "key": "i-02",
+            "gearId": "optosplitter",
+            "ru": 4,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 1",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "G (15)"
+              }
+            }
+          },
+          {
+            "key": "i-03",
+            "gearId": "optosplitter",
+            "ru": 5,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 2",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "G (16)"
+              }
+            }
+          },
+          {
+            "key": "i-04",
+            "gearId": "optosplitter",
+            "ru": 6,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 3",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "G (17)"
+              }
+            }
+          },
+          {
+            "key": "i-05",
+            "gearId": "optosplitter",
+            "ru": 7,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 4",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "H (18)"
+              }
+            }
+          },
+          {
+            "key": "i-06",
+            "gearId": "optosplitter",
+            "ru": 8,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 5",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "H (19)"
+              }
+            }
+          },
+          {
+            "key": "i-07",
+            "gearId": "optosplitter",
+            "ru": 9,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 6",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "H (20)"
+              }
+            }
+          },
+          {
+            "key": "i-08",
+            "gearId": "optosplitter",
+            "ru": 10,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 7",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "H (21)"
+              }
+            }
+          },
+          {
+            "key": "i-09",
+            "gearId": "optosplitter",
+            "ru": 11,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 8",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "J (22)"
+              }
+            }
+          },
+          {
+            "key": "i-10",
+            "gearId": "optosplitter",
+            "ru": 12,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 9",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "J (23)"
+              }
+            }
+          },
+          {
+            "key": "i-11",
+            "gearId": "optosplitter",
+            "ru": 13,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 10",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "J (24)"
+              }
+            }
+          },
+          {
+            "key": "i-12",
+            "gearId": "optosplitter",
+            "ru": 14,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 11",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "K (25)"
+              }
+            }
+          },
+          {
+            "key": "i-13",
+            "gearId": "optosplitter",
+            "ru": 15,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 12",
+            "color": "--s3",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "K (26)"
+              }
+            }
+          },
+          {
+            "key": "i-14",
+            "gearId": "optosplitter",
+            "ru": 16,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 13",
+            "color": "--s3",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-15",
+            "gearId": "optosplitter",
+            "ru": 17,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 14",
+            "color": "--s3",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-16",
+            "gearId": "optosplitter",
+            "ru": 18,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 15",
+            "color": "--s3",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-17",
+            "gearId": "optosplitter",
+            "ru": 19,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 16",
+            "color": "--s3",
+            "ip": null,
+            "ports": {}
+          }
+        ]
+      },
+      {
+        "id": "rack_purple-pit",
+        "name": "PURPLE PIT",
+        "ru": 19,
+        "color": "--s5",
+        "items": [
+          {
+            "key": "i-00",
+            "gearId": "proplex_iq2",
+            "ru": 1,
+            "col": 0,
+            "face": "front",
+            "label": "PURPLE PIT",
+            "color": "--s5",
+            "ip": "192.168.1.123",
+            "ports": {
+              "port_a": {
+                "label": "UNIV 1",
+                "universe": "1"
+              },
+              "port_b": {
+                "label": "UNIV 2",
+                "universe": "2"
+              },
+              "port_c": {
+                "label": "UNIV 3",
+                "universe": "3"
+              },
+              "port_d": {
+                "label": "UNIV 4",
+                "universe": "4"
+              },
+              "port_e": {
+                "label": "UNIV 5",
+                "universe": "5"
+              },
+              "port_f": {
+                "label": "UNIV 6",
+                "universe": "6"
+              },
+              "port_g": {
+                "label": "UNIV 7",
+                "universe": "7"
+              },
+              "port_i": {
+                "label": "UNIV 27",
+                "universe": "27"
+              },
+              "port_j": {
+                "label": "UNIV 28",
+                "universe": "28"
+              },
+              "port_l": {
+                "label": "UNIV 41",
+                "universe": "41"
+              },
+              "port_m": {
+                "label": "UNIV 42",
+                "universe": "42"
+              }
+            }
+          },
+          {
+            "key": "i-01",
+            "gearId": "ma3_npu",
+            "ru": 2,
+            "col": 0,
+            "face": "front",
+            "label": "PURPLE NPU 1",
+            "color": "--s5",
+            "ip": "192.168.1.113",
+            "ports": {
+              "port_a": {
+                "label": "UNIV 61 \u2014 WALL 1",
+                "universe": "61"
+              },
+              "port_b": {
+                "label": "UNIV 62 \u2014 WALL 2",
+                "universe": "62"
+              },
+              "port_c": {
+                "label": "UNIV 63 \u2014 WALL 3",
+                "universe": "63"
+              },
+              "port_d": {
+                "label": "UNIV 64 \u2014 WALL 4",
+                "universe": "64"
+              },
+              "port_e": {
+                "label": "UNIV 65 \u2014 WALL 5",
+                "universe": "65"
+              },
+              "port_f": {
+                "label": "UNIV 66 \u2014 WALL 6",
+                "universe": "66"
+              }
+            }
+          },
+          {
+            "key": "i-02",
+            "gearId": "optosplitter",
+            "ru": 4,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 1",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "A (1)"
+              }
+            }
+          },
+          {
+            "key": "i-03",
+            "gearId": "optosplitter",
+            "ru": 5,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 2",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "B (2)"
+              }
+            }
+          },
+          {
+            "key": "i-04",
+            "gearId": "optosplitter",
+            "ru": 6,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 3",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "B (3)"
+              }
+            }
+          },
+          {
+            "key": "i-05",
+            "gearId": "optosplitter",
+            "ru": 7,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 4",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "C (4)"
+              }
+            }
+          },
+          {
+            "key": "i-06",
+            "gearId": "optosplitter",
+            "ru": 8,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 5",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "C (5)"
+              }
+            }
+          },
+          {
+            "key": "i-07",
+            "gearId": "optosplitter",
+            "ru": 9,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 6",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "D (6)"
+              }
+            }
+          },
+          {
+            "key": "i-08",
+            "gearId": "optosplitter",
+            "ru": 10,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 7",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "D (7)"
+              }
+            }
+          },
+          {
+            "key": "i-09",
+            "gearId": "optosplitter",
+            "ru": 11,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 8",
+            "color": "--s5",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-10",
+            "gearId": "optosplitter",
+            "ru": 12,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 9",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "L (27)"
+              }
+            }
+          },
+          {
+            "key": "i-11",
+            "gearId": "optosplitter",
+            "ru": 13,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 10",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "L (28)"
+              }
+            }
+          },
+          {
+            "key": "i-12",
+            "gearId": "optosplitter",
+            "ru": 14,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 11",
+            "color": "--s5",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-13",
+            "gearId": "optosplitter",
+            "ru": 15,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 12",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "DRAPE"
+              }
+            }
+          },
+          {
+            "key": "i-14",
+            "gearId": "optosplitter",
+            "ru": 16,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 13",
+            "color": "--s5",
+            "ip": null,
+            "ports": {
+              "out_1": {
+                "label": "USR FLR"
+              },
+              "out_2": {
+                "label": "USR FLR"
+              },
+              "out_3": {
+                "label": "USR FLR"
+              },
+              "out_4": {
+                "label": "USR FLR"
+              }
+            }
+          },
+          {
+            "key": "i-15",
+            "gearId": "optosplitter",
+            "ru": 17,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 14",
+            "color": "--s5",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-16",
+            "gearId": "optosplitter",
+            "ru": 18,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 15",
+            "color": "--s5",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-17",
+            "gearId": "optosplitter",
+            "ru": 19,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 16",
+            "color": "--s5",
+            "ip": null,
+            "ports": {}
+          }
+        ]
+      },
+      {
+        "id": "rack_osa-12-universe-rack",
+        "name": "OSA 12 Universe Rack",
+        "ru": 6,
+        "color": "--s8",
+        "items": [
+          {
+            "key": "i-00",
+            "gearId": "gigacore10",
+            "ru": 1,
+            "col": 0,
+            "face": "front",
+            "label": "GigaCore 10 \u2014 A",
+            "color": "--s8",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-01",
+            "gearId": "gigacore10",
+            "ru": 2,
+            "col": 0,
+            "face": "front",
+            "label": "GigaCore 10 \u2014 B",
+            "color": "--s8",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-02",
+            "gearId": "luminode12",
+            "ru": 3,
+            "col": 0,
+            "face": "front",
+            "label": "LumiNode 12 \u2014 A",
+            "color": "--s8",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-03",
+            "gearId": "luminode12",
+            "ru": 4,
+            "col": 0,
+            "face": "front",
+            "label": "LumiNode 12 \u2014 B",
+            "color": "--s8",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-04",
+            "gearId": "lumisplit210",
+            "ru": 5,
+            "col": 0,
+            "face": "front",
+            "label": "LumiSplit 2.10 \u2014 A",
+            "color": "--s8",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-05",
+            "gearId": "lumisplit210",
+            "ru": 6,
+            "col": 0,
+            "face": "front",
+            "label": "LumiSplit 2.10 \u2014 B",
+            "color": "--s8",
+            "ip": null,
+            "ports": {}
+          }
+        ]
+      },
+      {
+        "id": "rack_upstage-left",
+        "name": "UPSTAGE LEFT",
+        "ru": 17,
+        "color": "--s6",
+        "items": [
+          {
+            "key": "i-00",
+            "gearId": "proplex_iq2",
+            "ru": 1,
+            "col": 0,
+            "face": "front",
+            "label": "UPSTAGE LEFT",
+            "color": "--s6",
+            "ip": "192.168.1.TBD",
+            "ports": {}
+          },
+          {
+            "key": "i-01",
+            "gearId": "optosplitter",
+            "ru": 2,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 1",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-02",
+            "gearId": "optosplitter",
+            "ru": 3,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 2",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-03",
+            "gearId": "optosplitter",
+            "ru": 4,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 3",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-04",
+            "gearId": "optosplitter",
+            "ru": 5,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 4",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-05",
+            "gearId": "optosplitter",
+            "ru": 6,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 5",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-06",
+            "gearId": "optosplitter",
+            "ru": 7,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 6",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-07",
+            "gearId": "optosplitter",
+            "ru": 8,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 7",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-08",
+            "gearId": "optosplitter",
+            "ru": 9,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 8",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-09",
+            "gearId": "optosplitter",
+            "ru": 10,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 9",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-10",
+            "gearId": "optosplitter",
+            "ru": 11,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 10",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-11",
+            "gearId": "optosplitter",
+            "ru": 12,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 11",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-12",
+            "gearId": "optosplitter",
+            "ru": 13,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 12",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-13",
+            "gearId": "optosplitter",
+            "ru": 14,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 13",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-14",
+            "gearId": "optosplitter",
+            "ru": 15,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 14",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-15",
+            "gearId": "optosplitter",
+            "ru": 16,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 15",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          },
+          {
+            "key": "i-16",
+            "gearId": "optosplitter",
+            "ru": 17,
+            "col": 0,
+            "face": "front",
+            "label": "OPTO 16",
+            "color": "--s6",
+            "ip": null,
+            "ports": {}
+          }
+        ]
+      }
+    ],
+    "looms": [
+      {
+        "id": "sheet_loc_1777642677604",
+        "name": "TRUSS B1",
+        "cables": [
+          {
+            "id": "cable_c_1777642678604",
+            "label": "B1.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREEN",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "10",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678605",
+            "label": "B1.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREEN",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678606",
+            "label": "B1.3",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREEN",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "50",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678607",
+            "label": "B1",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "GREEN",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678608",
+            "label": "B1 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677605",
+        "name": "TRUSS B2",
+        "cables": [
+          {
+            "id": "cable_c_1777642678609",
+            "label": "B2.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "YELLOW",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "125",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678610",
+            "label": "B2.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "YELLOW",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "125",
+              "25",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678611",
+            "label": "B2.3",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "YELLOW",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "125",
+              "75",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678612",
+            "label": "B2",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "YELLOW",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "125",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678613",
+            "label": "B2 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "125",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677606",
+        "name": "TRUSS B3",
+        "cables": [
+          {
+            "id": "cable_c_1777642678614",
+            "label": "B3.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "RED",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "125",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678615",
+            "label": "B3.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "RED",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "125",
+              "25",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678616",
+            "label": "B3.3",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "RED",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "125",
+              "75",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678617",
+            "label": "B3",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "RED",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "125",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678618",
+            "label": "B3 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "125",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677607",
+        "name": "TRUSS B4",
+        "cables": [
+          {
+            "id": "cable_c_1777642678619",
+            "label": "B4.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "BLUE",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "10",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678620",
+            "label": "B4.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "BLUE",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678621",
+            "label": "B4.3",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "BLUE",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "50",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "TRUSS M",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678622",
+            "label": "B4",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "BLUE",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678623",
+            "label": "B4 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "TRUSS M",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677608",
+        "name": "TRUSS M1",
+        "cables": [
+          {
+            "id": "cable_c_1777642678624",
+            "label": "M1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREY",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677609",
+        "name": "TRUSS M2",
+        "cables": [
+          {
+            "id": "cable_c_1777642678625",
+            "label": "M2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREY",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677610",
+        "name": "TRUSS M3",
+        "cables": [
+          {
+            "id": "cable_c_1777642678626",
+            "label": "M3",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREY",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "50",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677611",
+        "name": "TRUSS M4",
+        "cables": [
+          {
+            "id": "cable_c_1777642678627",
+            "label": "M4",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREY",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "75",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677612",
+        "name": "TRUSS M5",
+        "cables": [
+          {
+            "id": "cable_c_1777642678628",
+            "label": "M5",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREY",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "50",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677613",
+        "name": "TRUSS M6",
+        "cables": [
+          {
+            "id": "cable_c_1777642678629",
+            "label": "M6",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREY",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677614",
+        "name": "TRUSS M7",
+        "cables": [
+          {
+            "id": "cable_c_1777642678630",
+            "label": "M7",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREY",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677615",
+        "name": "TRUSS M8",
+        "cables": [
+          {
+            "id": "cable_c_1777642678631",
+            "label": "M8",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREY",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677616",
+        "name": "TRUSS M",
+        "cables": [
+          {
+            "id": "cable_c_1777642678632",
+            "label": "MA",
+            "type": "cpc8",
+            "breakout": "CPC8",
+            "color": "GREY",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678633",
+            "label": "MA SP",
+            "type": "cpc8",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678634",
+            "label": "MB",
+            "type": "cpc8",
+            "breakout": "CPC8",
+            "color": "GREY",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678635",
+            "label": "MB SP",
+            "type": "cpc8",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677617",
+        "name": "TRUSS W",
+        "cables": [
+          {
+            "id": "cable_c_1777642678636",
+            "label": "W1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "TEAL",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "10",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678637",
+            "label": "W2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "TEAL",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678638",
+            "label": "W3",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "TEAL",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "10",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678639",
+            "label": "W4",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "TEAL",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678640",
+            "label": "W",
+            "type": "cpc8",
+            "breakout": "CPC8",
+            "color": "TEAL",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678641",
+            "label": "W SP",
+            "type": "cpc8",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677618",
+        "name": "ORCHESTRA",
+        "cables": [
+          {
+            "id": "cable_c_1777642678642",
+            "label": "O1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "ORANGE",
+            "secColor": "",
+            "parts": [
+              "75",
+              "75",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678643",
+            "label": "O2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "ORANGE",
+            "secColor": "",
+            "parts": [
+              "75",
+              "75",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678644",
+            "label": "O3",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "ORANGE",
+            "secColor": "",
+            "parts": [
+              "75",
+              "75",
+              "50",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678645",
+            "label": "O4",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "ORANGE",
+            "secColor": "",
+            "parts": [
+              "75",
+              "75",
+              "75",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678646",
+            "label": "O",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "ORANGE",
+            "secColor": "",
+            "parts": [
+              "75",
+              "75",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678647",
+            "label": "O SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "75",
+              "75",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677619",
+        "name": "CAR SALON",
+        "cables": [
+          {
+            "id": "cable_c_1777642678648",
+            "label": "C1.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "BROWN",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678649",
+            "label": "C1.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "BROWN",
+            "parts": [
+              "75",
+              "50",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678650",
+            "label": "C1",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "WHITE",
+            "secColor": "BROWN",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678651",
+            "label": "C1 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678652",
+            "label": "C2.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "RED",
+            "parts": [
+              "50",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678653",
+            "label": "C2.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "RED",
+            "parts": [
+              "50",
+              "50",
+              "50",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678654",
+            "label": "C2",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "WHITE",
+            "secColor": "RED",
+            "parts": [
+              "50",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678655",
+            "label": "C2 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678656",
+            "label": "C3.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "ORANGE",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678657",
+            "label": "C3.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "ORANGE",
+            "parts": [
+              "75",
+              "50",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678658",
+            "label": "C3.3",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "ORANGE",
+            "parts": [
+              "75",
+              "50",
+              "50",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678659",
+            "label": "C3",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "WHITE",
+            "secColor": "ORANGE",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678660",
+            "label": "C3 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678661",
+            "label": "C4.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "YELLOW",
+            "parts": [
+              "75",
+              "75",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678662",
+            "label": "C4.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "YELLOW",
+            "parts": [
+              "75",
+              "75",
+              "50",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678663",
+            "label": "C4",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "WHITE",
+            "secColor": "YELLOW",
+            "parts": [
+              "75",
+              "75",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678664",
+            "label": "C4 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "75",
+              "75",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678665",
+            "label": "C5.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "GREEN",
+            "parts": [
+              "50",
+              "100",
+              "50",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678666",
+            "label": "C5.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "GREEN",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678667",
+            "label": "C5",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "WHITE",
+            "secColor": "GREEN",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678668",
+            "label": "C5 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "100",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678669",
+            "label": "C6.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "BLUE",
+            "parts": [
+              "75",
+              "50",
+              "10",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678670",
+            "label": "C6.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "BLUE",
+            "parts": [
+              "75",
+              "50",
+              "75",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678671",
+            "label": "C6",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "WHITE",
+            "secColor": "BLUE",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678672",
+            "label": "C6 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678673",
+            "label": "C7.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "PURPLE",
+            "parts": [
+              "50",
+              "75",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678674",
+            "label": "C7.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "PURPLE",
+            "parts": [
+              "50",
+              "75",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678675",
+            "label": "C7",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "WHITE",
+            "secColor": "PURPLE",
+            "parts": [
+              "50",
+              "75",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678676",
+            "label": "C7 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "75",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678677",
+            "label": "C8.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "GREY",
+            "parts": [
+              "50",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678678",
+            "label": "C8.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "GREY",
+            "parts": [
+              "50",
+              "50",
+              "50",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678679",
+            "label": "C8",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "WHITE",
+            "secColor": "GREY",
+            "parts": [
+              "50",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678680",
+            "label": "C8 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "50",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678681",
+            "label": "C9.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "TEAL",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678682",
+            "label": "C9.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "TEAL",
+            "parts": [
+              "75",
+              "50",
+              "25",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678683",
+            "label": "C9",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "WHITE",
+            "secColor": "TEAL",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678684",
+            "label": "C9 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "75",
+              "50",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678685",
+            "label": "C0.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "BLACK",
+            "parts": [
+              "75",
+              "25",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678686",
+            "label": "CO",
+            "type": "dmx-5pin",
+            "breakout": "",
+            "color": "WHITE",
+            "secColor": "BLACK",
+            "parts": [
+              "75",
+              "25",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678687",
+            "label": "CO SP",
+            "type": "dmx-5pin",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "75",
+              "25",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677620",
+        "name": "FOH WRX",
+        "cables": [
+          {
+            "id": "cable_c_1777642678688",
+            "label": "WRX",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "BLACK",
+            "secColor": "",
+            "parts": [
+              "75",
+              "25",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677621",
+        "name": "Q1 FLOOR",
+        "cables": [
+          {
+            "id": "cable_c_1777642678689",
+            "label": "Q1.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREEN",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678690",
+            "label": "Q1.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "GREEN",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678691",
+            "label": "Q1",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "GREEN",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678692",
+            "label": "Q1 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677622",
+        "name": "Q2 FLOOR",
+        "cables": [
+          {
+            "id": "cable_c_1777642678693",
+            "label": "Q2.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "YELLOW",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678694",
+            "label": "Q2.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "YELLOW",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678695",
+            "label": "Q2",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "YELLOW",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678696",
+            "label": "Q2 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677623",
+        "name": "Q3 FLOOR",
+        "cables": [
+          {
+            "id": "cable_c_1777642678697",
+            "label": "Q3.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "RED",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678698",
+            "label": "Q3.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "RED",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678699",
+            "label": "Q3",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "RED",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678700",
+            "label": "Q3 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677624",
+        "name": "Q4 FLOOR",
+        "cables": [
+          {
+            "id": "cable_c_1777642678701",
+            "label": "Q4.1",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "BLUE",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678702",
+            "label": "Q4.2",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "BLUE",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678703",
+            "label": "Q4",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "BLUE",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678704",
+            "label": "Q4 SP",
+            "type": "cpc4",
+            "breakout": "",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677625",
+        "name": "FOH",
+        "cables": [
+          {
+            "id": "cable_c_1777642678705",
+            "label": "FOH",
+            "type": "socapex",
+            "breakout": "OTHER",
+            "color": "WHITE",
+            "secColor": "TEAL",
+            "parts": [
+              "100",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_loc_1777642677626",
+        "name": "CROSS STAGE",
+        "cables": [
+          {
+            "id": "cable_c_1777642678706",
+            "label": "CS1",
+            "type": "fiber",
+            "breakout": "",
+            "color": "GREEN",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678707",
+            "label": "CS2",
+            "type": "fiber",
+            "breakout": "",
+            "color": "YELLOW",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678708",
+            "label": "CS3",
+            "type": "fiber",
+            "breakout": "",
+            "color": "RED",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          },
+          {
+            "id": "cable_c_1777642678709",
+            "label": "CS4",
+            "type": "fiber",
+            "breakout": "",
+            "color": "BLUE",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": ""
+          }
+        ]
+      },
+      {
+        "id": "sheet_snakes",
+        "name": "SNAKES",
+        "cables": [
+          {
+            "id": "cable_snake_grid",
+            "label": "GRID",
+            "type": "cpc8",
+            "breakout": "CPC8",
+            "color": "ORANGE",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_j",
+            "label": "J",
+            "type": "cpc8",
+            "breakout": "CPC8",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_m",
+            "label": "M",
+            "type": "cpc8",
+            "breakout": "CPC8",
+            "color": "CYAN",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_f",
+            "label": "F",
+            "type": "cpc8",
+            "breakout": "CPC8",
+            "color": "YELLOW",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_g",
+            "label": "G",
+            "type": "cpc8",
+            "breakout": "CPC8",
+            "color": "GREEN",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_h",
+            "label": "H",
+            "type": "cpc8",
+            "breakout": "CPC8",
+            "color": "PURPLE",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_wall",
+            "label": "WALL",
+            "type": "cpc8",
+            "breakout": "CPC8",
+            "color": "RED",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_d",
+            "label": "D",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "BLUE",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_usr",
+            "label": "USR",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "ORANGE",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_l",
+            "label": "L",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "PINK",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_e",
+            "label": "E",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "CYAN",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_k",
+            "label": "K",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "YELLOW",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          },
+          {
+            "id": "cable_snake_usl",
+            "label": "USL",
+            "type": "cpc4",
+            "breakout": "CPC4",
+            "color": "GREEN",
+            "secColor": "",
+            "parts": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "partPositions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "loomId": "",
+            "notes": "added: rack-builder snake with no matching loom cable"
+          }
+        ]
+      }
+    ],
+    "truss": [
+      {
+        "id": "truss_b1",
+        "name": "B1",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 90,
+        "pieces": {
+          "10": 9,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "RED"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 0
+      },
+      {
+        "id": "truss_b2",
+        "name": "B2",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 90,
+        "pieces": {
+          "10": 9,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "RED"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 1
+      },
+      {
+        "id": "truss_b3",
+        "name": "B3",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 90,
+        "pieces": {
+          "10": 9,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "RED"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 2
+      },
+      {
+        "id": "truss_b4",
+        "name": "B4",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 90,
+        "pieces": {
+          "10": 9,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "RED"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 3
+      },
+      {
+        "id": "truss_m1",
+        "name": "M1",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 25,
+        "pieces": {
+          "10": 2,
+          "8": 0,
+          "5": 1,
+          "2": 0
+        },
+        "colors": [
+          "ORANGE"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 4
+      },
+      {
+        "id": "truss_m2",
+        "name": "M2",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 25,
+        "pieces": {
+          "10": 2,
+          "8": 0,
+          "5": 1,
+          "2": 0
+        },
+        "colors": [
+          "ORANGE"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 5
+      },
+      {
+        "id": "truss_m3",
+        "name": "M3",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 25,
+        "pieces": {
+          "10": 2,
+          "8": 0,
+          "5": 1,
+          "2": 0
+        },
+        "colors": [
+          "ORANGE"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 6
+      },
+      {
+        "id": "truss_m4",
+        "name": "M4",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 25,
+        "pieces": {
+          "10": 2,
+          "8": 0,
+          "5": 1,
+          "2": 0
+        },
+        "colors": [
+          "ORANGE"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 7
+      },
+      {
+        "id": "truss_m5",
+        "name": "M5",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 25,
+        "pieces": {
+          "10": 2,
+          "8": 0,
+          "5": 1,
+          "2": 0
+        },
+        "colors": [
+          "ORANGE"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 8
+      },
+      {
+        "id": "truss_m6",
+        "name": "M6",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 25,
+        "pieces": {
+          "10": 2,
+          "8": 0,
+          "5": 1,
+          "2": 0
+        },
+        "colors": [
+          "ORANGE"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 9
+      },
+      {
+        "id": "truss_m7",
+        "name": "M7",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 25,
+        "pieces": {
+          "10": 2,
+          "8": 0,
+          "5": 1,
+          "2": 0
+        },
+        "colors": [
+          "ORANGE"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 10
+      },
+      {
+        "id": "truss_m8",
+        "name": "M8",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 25,
+        "pieces": {
+          "10": 2,
+          "8": 0,
+          "5": 1,
+          "2": 0
+        },
+        "colors": [
+          "ORANGE"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 11
+      },
+      {
+        "id": "truss_w1",
+        "name": "W1",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 10,
+        "pieces": {
+          "10": 1,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "CYAN"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 12
+      },
+      {
+        "id": "truss_w2",
+        "name": "W2",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 10,
+        "pieces": {
+          "10": 1,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "CYAN"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 13
+      },
+      {
+        "id": "truss_w3",
+        "name": "W3",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 10,
+        "pieces": {
+          "10": 1,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "CYAN"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 14
+      },
+      {
+        "id": "truss_w4",
+        "name": "W4",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 10,
+        "pieces": {
+          "10": 1,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "CYAN"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 15
+      },
+      {
+        "id": "truss_w5",
+        "name": "W5",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 10,
+        "pieces": {
+          "10": 1,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "CYAN"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 16
+      },
+      {
+        "id": "truss_w6",
+        "name": "W6",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 10,
+        "pieces": {
+          "10": 1,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "CYAN"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 17
+      },
+      {
+        "id": "truss_w7",
+        "name": "W7",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 10,
+        "pieces": {
+          "10": 1,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "CYAN"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 18
+      },
+      {
+        "id": "truss_w8",
+        "name": "W8",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 10,
+        "pieces": {
+          "10": 1,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "CYAN"
+        ],
+        "endType": "usds",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 19
+      },
+      {
+        "id": "truss_o1",
+        "name": "O1",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 10,
+        "pieces": {
+          "10": 1,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "PURPLE"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 20
+      },
+      {
+        "id": "truss_o2",
+        "name": "O2",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 40,
+        "pieces": {
+          "10": 4,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "PURPLE"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 21
+      },
+      {
+        "id": "truss_o3",
+        "name": "O3",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 10,
+        "pieces": {
+          "10": 1,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "PURPLE"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 22
+      },
+      {
+        "id": "truss_c0",
+        "name": "C0",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 50,
+        "pieces": {
+          "10": 5,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "YELLOW"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 23
+      },
+      {
+        "id": "truss_c1",
+        "name": "C1",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 70,
+        "pieces": {
+          "10": 7,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "YELLOW"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 24
+      },
+      {
+        "id": "truss_c2",
+        "name": "C2",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 70,
+        "pieces": {
+          "10": 7,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "YELLOW"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 25
+      },
+      {
+        "id": "truss_c3",
+        "name": "C3",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 70,
+        "pieces": {
+          "10": 7,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "YELLOW"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 26
+      },
+      {
+        "id": "truss_c4",
+        "name": "C4",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 70,
+        "pieces": {
+          "10": 7,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "YELLOW"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 27
+      },
+      {
+        "id": "truss_c5",
+        "name": "C5",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 70,
+        "pieces": {
+          "10": 7,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "YELLOW"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 28
+      },
+      {
+        "id": "truss_c6",
+        "name": "C6",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 70,
+        "pieces": {
+          "10": 7,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "YELLOW"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 29
+      },
+      {
+        "id": "truss_c7",
+        "name": "C7",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 70,
+        "pieces": {
+          "10": 7,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "YELLOW"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 30
+      },
+      {
+        "id": "truss_c8",
+        "name": "C8",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 70,
+        "pieces": {
+          "10": 7,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "YELLOW"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 31
+      },
+      {
+        "id": "truss_c9",
+        "name": "C9",
+        "typeName": "TYLER GT TRUSS",
+        "lengthFt": 70,
+        "pieces": {
+          "10": 7,
+          "8": 0,
+          "5": 0,
+          "2": 0
+        },
+        "colors": [
+          "YELLOW"
+        ],
+        "endType": "srsl",
+        "customEnds": [
+          "",
+          ""
+        ],
+        "notes": "",
+        "sort": 32
+      }
+    ]
+  }
+}

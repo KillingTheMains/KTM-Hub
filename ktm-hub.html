@@ -785,6 +785,8 @@ function viewStore(){
   h += '<div class="row" style="margin-bottom:16px">'
      + '<button class="btn ghost" id="countbtn">Count documents</button>'
      + '<button class="btn ghost" id="exportbtn"'+(S.activeShow?'':' disabled')+'>Export active show</button>'
+     + '<button class="btn ghost" id="importbtn">Import show…</button>'
+     + '<input type="file" id="importfile" accept=".json,application/json" style="display:none">'
      + '</div>';
 
   if (c){
@@ -861,6 +863,112 @@ function wireStore(){
     }
     eb.disabled = false; eb.textContent = 'Export active show';
   };
+
+  const ib = $('importbtn');
+  if (ib) ib.onclick = () => $('importfile').click();
+  const ifile = $('importfile');
+  if (ifile) ifile.onchange = async () => {
+    const file = ifile.files[0];
+    ifile.value = '';
+    await handleImportFile(file);
+  };
+}
+
+/* ── Import show ───────────────────────────────────────────────────── */
+
+// Pure: no I/O, no store access. `existingIds` is whatever ids might collide
+// (usually just [bundle.show.id] when a lookup already found one, or [] when
+// none exists). `mode` only matters when a collision is present — it decides
+// between 'replace' (keep the id) and 'copy' (mint a new one and rewrite every
+// path under it). Returns the exact write plan the importer executes.
+function planImport(bundle, existingIds, mode){
+  const ids = existingIds || [];
+  const collides = ids.indexOf(bundle.show.id) !== -1;
+  const finalMode = collides ? (mode === 'copy' ? 'copy' : 'replace') : 'direct';
+  const showId = finalMode === 'copy'
+    ? (bundle.show.id + '-' + Math.random().toString(36).slice(2,7))
+    : bundle.show.id;
+
+  const writes = [ { path: 'shows/'+showId, body: Object.assign({}, bundle.show, { id: showId }) } ];
+  const counts = {};
+  const collections = bundle.collections || {};
+  Object.keys(collections).forEach(cn => {
+    /* Only the show's own collections are imported. A bundle that smuggles
+       a top-level collection name in here does not get to write it. */
+    if (SHOW_COLLECTIONS.indexOf(cn) === -1) return;
+    const rows = collections[cn] || [];
+    counts[cn] = rows.length;
+    rows.forEach(row => {
+      writes.push({ path: 'shows/'+showId+'/'+cn+'/'+row.id, body: row });
+    });
+  });
+
+  return { showId, mode: finalMode, writes, counts };
+}
+
+async function handleImportFile(file){
+  if (!file) return;
+  let bundle;
+  try { bundle = JSON.parse(await file.text()); }
+  catch(e){
+    S.modal = { type:'importError', msg:'Could not parse that file as JSON: '+e.message };
+    render(); return;
+  }
+  if (!bundle || bundle._format !== 'ktm-show' || bundle._version !== 1 || !bundle.show || !bundle.show.id){
+    S.modal = { type:'importError',
+      msg:'Not a ktm-show bundle — expected _format "ktm-show", _version 1, and a show.id.' };
+    render(); return;
+  }
+  const existing = await KTM.get(KTM.P.show(bundle.show.id));
+  if (existing){ S.modal = { type:'importMode', bundle }; render(); return; }
+  const plan = planImport(bundle, []);
+  await beginImportPreview(bundle, plan);
+}
+
+async function chooseImportMode(bundle, mode){
+  const plan = planImport(bundle, [bundle.show.id], mode);
+  await beginImportPreview(bundle, plan);
+}
+
+// Counts the store the way the Count button does, so the projected total
+// (baseline + this bundle's writes) is checked against DOC_BUDGET before
+// anything is written.
+async function beginImportPreview(bundle, plan){
+  const rows = [];
+  for (const p of ['shows','fixtures','gear','meta']){
+    rows.push({ n:(await KTM.list(p)).length });
+  }
+  let baseline = rows.reduce((a,r)=>a+r.n, 0);
+  if (S.activeShow){
+    for (const cn of SHOW_COLLECTIONS){
+      baseline += (await KTM.list(KTM.P.sub(S.activeShow.id, cn))).length;
+    }
+  }
+  S.modal = { type:'importPreview', bundle, plan, baseline,
+              projected: baseline + plan.writes.length, progress:null, error:null, done:false };
+  render();
+}
+
+async function runImport(){
+  const modal = S.modal;
+  const plan = modal.plan;
+  if (modal.projected > DOC_BUDGET) return; // refused
+  modal.progress = { n:0, total: plan.writes.length };
+  render();
+  for (let i=0; i<plan.writes.length; i++){
+    const w = plan.writes[i];
+    try { await KTM.set(w.path, w.body); }
+    catch(e){ modal.error = { path:w.path, message:e.message }; render(); return; }
+    modal.progress = { n:i+1, total: plan.writes.length };
+    render();
+  }
+  modal.done = true;
+  KTM.setActive(plan.showId);
+  await refresh();
+  toast('Imported "'+(modal.bundle.show.name||plan.showId)+'"');
+  S.modal = null;
+  S.section = 'shows';
+  render();
 }
 
 function stat(k, v){
@@ -915,13 +1023,70 @@ function applyThemeAll(){ Object.values(mounted).forEach(applyThemeTo); }
 function renderModal(){
   const root = $('modalroot');
   if (!S.modal){ root.innerHTML = ''; return; }
-  if (S.modal.type === 'show')    root.innerHTML = modalShow(S.modal.data);
-  if (S.modal.type === 'fixture') root.innerHTML = modalFixture(S.modal.data);
+  if (S.modal.type === 'show')          root.innerHTML = modalShow(S.modal.data);
+  if (S.modal.type === 'fixture')       root.innerHTML = modalFixture(S.modal.data);
+  if (S.modal.type === 'importError')   root.innerHTML = modalImportError(S.modal.msg);
+  if (S.modal.type === 'importMode')    root.innerHTML = modalImportMode(S.modal.bundle);
+  if (S.modal.type === 'importPreview') root.innerHTML = modalImportPreview(S.modal);
   root.querySelectorAll('[data-close]').forEach(b => b.onclick = () => { S.modal = null; render(); });
   root.querySelector('.scrim').onclick = e => {
     if (e.target === root.querySelector('.scrim')){ S.modal = null; render(); } };
   const save = root.querySelector('[data-save]');
   if (save) save.onclick = () => (S.modal.type==='show' ? saveShow() : saveFixture());
+  root.querySelectorAll('[data-importmode]').forEach(b => b.onclick = () =>
+    chooseImportMode(S.modal.bundle, b.dataset.importmode));
+  const doImportBtn = root.querySelector('[data-doimport]');
+  if (doImportBtn) doImportBtn.onclick = () => runImport();
+}
+
+function modalImportError(msg){
+  return '<div class="scrim"><div class="modal"><h2>Import failed</h2>'
+    + '<div class="note crit">'+esc(msg)+'</div>'
+    + '<div class="modalfoot"><button class="btn ghost" data-close>Close</button></div></div></div>';
+}
+
+function modalImportMode(bundle){
+  return '<div class="scrim"><div class="modal"><h2>Show already exists</h2>'
+    + '<p>"'+esc(bundle.show.name||bundle.show.id)+'" (<span class="mono">'+esc(bundle.show.id)
+    + '</span>) is already in the store.</p>'
+    + '<div class="modalfoot">'
+    + '<button class="btn ghost" data-close>Cancel</button>'
+    + '<button class="btn ghost" data-importmode="replace">Replace</button>'
+    + '<button class="btn" data-importmode="copy">Import as copy</button>'
+    + '</div></div></div>';
+}
+
+function modalImportPreview(modal){
+  const bundle = modal.bundle, plan = modal.plan;
+  const overBudget = modal.projected > DOC_BUDGET;
+  let h = '<div class="scrim"><div class="modal"><h2>Import preview</h2>'
+    + '<p>Importing "'+esc(bundle.show.name||plan.showId)+'" as <span class="mono">'+esc(plan.showId)
+    + '</span> ('+esc(plan.mode)+').</p>'
+    + '<div class="tablewrap"><table><thead><tr><th>Collection</th>'
+    + '<th style="text-align:right">Rows</th></tr></thead><tbody>'
+    + Object.keys(plan.counts).map(cn =>
+        '<tr><td>'+esc(cn)+'</td><td class="num">'+plan.counts[cn]+'</td></tr>').join('')
+    + '<tr><td class="muted">fixtures (skipped)</td><td class="num muted">'
+      + ((bundle.fixtures||[]).length)+'</td></tr>'
+    + '<tr><td class="muted">gear (skipped)</td><td class="num muted">'
+      + ((bundle.gear||[]).length)+'</td></tr>'
+    + '</tbody></table></div>'
+    + '<p>Docs to write: <b>'+plan.writes.length+'</b>. Projected store total: <b>'+modal.projected
+      + '</b> / '+DOC_BUDGET+'.</p>';
+  if (overBudget)
+    h += '<div class="note crit">This would push the store over the '+DOC_BUDGET
+      + ' document budget. Import refused.</div>';
+  if (modal.progress)
+    h += '<p class="mono">Writing '+modal.progress.n+' / '+modal.progress.total+'…</p>';
+  if (modal.error)
+    h += '<div class="note crit">Failed writing <span class="mono">'+esc(modal.error.path)
+      + '</span>: '+esc(modal.error.message)+'. What was written before this stays written.</div>';
+  h += '<div class="modalfoot"><button class="btn ghost" data-close>'
+     + (modal.done ? 'Close' : 'Cancel')+'</button>'
+     + (modal.done || overBudget || modal.error ? '' :
+        '<button class="btn" data-doimport'+(modal.progress?' disabled':'')+'>Import</button>')
+     + '</div></div></div>';
+  return h;
 }
 
 function modalShow(d){
@@ -1034,6 +1199,26 @@ function fld(label, id, val, type, ph){
   return '<div class="fld"><label>'+esc(label)+'</label>'
     + '<input type="'+(type||'text')+'" id="'+id+'" value="'+esc(val)+'"'
     + (ph?' placeholder="'+esc(ph)+'"':'')+'></div>';
+}
+
+/* ── Self-test (planImport) ───────────────────────────────────────────
+   Guarded by #selftest so it never runs for real users. Pure — no store,
+   no DOM beyond console output. */
+if (location.hash === '#selftest'){
+  (function selftestImport(){
+    const bundleA = { show:{id:'showA'}, collections:{
+      racks:[{id:'r1'},{id:'r2'}], looms:[{id:'l1'}] } };
+    const planA = planImport(bundleA, []);
+    console.log('selftest planImport 4-writes:',
+      planA.writes.length === 4 ? 'PASS' : 'FAIL ('+planA.writes.length+')');
+
+    const bundleB = { show:{id:'showB'}, collections:{ racks:[{id:'r1'}] } };
+    const planB = planImport(bundleB, ['showB'], 'copy');
+    const prefixOk = planB.writes.every(w =>
+      w.path === 'shows/'+planB.showId || w.path.indexOf('shows/'+planB.showId+'/') === 0);
+    console.log('selftest planImport copy-mode-rewrites-prefix:',
+      (planB.mode === 'copy' && planB.showId !== 'showB' && prefixOk) ? 'PASS' : 'FAIL');
+  })();
 }
 
 start();
