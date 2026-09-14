@@ -331,3 +331,20 @@ show's pull is one document, `shows/{showId}/cases/pull`:
 Named variants save beside it as `cases/<slug>-<id>`. Label Plot's **Pull cases** source prints one
 label per case; Truck Plot's **Load from pull** seeds its load list from the same document and
 keeps the resolved rows inside the plan. Distro and Patch are the last two ported frames.
+
+**Patch Plot native — 2026-09-14.** Fixture modes come from the library's `dmx.footprints`
+(GDTF-derived, what the console loads); a fixture with no modes cannot be patched and is
+counted in the tool's note. Rows persist the mode by NAME and re-resolve to an index on load, so
+a library revision that inserts a mode does not silently shift a saved rig. The show's patch is
+one document, `shows/{showId}/patch/plan`:
+
+```
+{ name:'Patch', kind:'patch', savedAt, input:{…snapshot…},
+  universes:[{num, posId, posName, used, fillPct, addr:{main,sub}, units:[{fixtureId,name,mode,ch,addr,end}]}],
+  nodes:{model,name,ports,nodesTotal,portsTotal,switchPorts,fiberDrops},
+  positions:[{id,name,dist,nUni,nodes,lineFt}], totals:{…} }
+```
+
+Named variants save beside it as `patch/<slug>-<id>`. Rack Plot reads the plan to suggest
+universes on port inputs and to flag plan universes not yet on a port. Distro Plot is the last
+ported frame.

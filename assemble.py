@@ -17,7 +17,7 @@ SHIM    = (HERE / "ktm-shim.js").read_text()
 #      key       source path                          legacy
 TOOLS = [
     ("distro", UPLOADS / "distro-plot.html",          True),
-    ("patch",  UPLOADS / "patch-plot.html",           True),
+    ("patch",  HERE    / "patch-plot.html",           False),
     ("truss",  HERE    / "truss-plot.html",           False),
     ("pull",   HERE    / "pull-plot.html",            False),
     ("truck",  HERE    / "truck-plot.html",           False),

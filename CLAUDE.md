@@ -10,8 +10,8 @@ HTML tools in same-origin frames, sharing one store through the `KTM` data layer
 Distro Plot · Patch Plot · Truss Plot · Pull Plot · Rack Plot · Loom Plot · Net Plot ·
 Truss List · Truck Plot · Label Plot · Shop Order.
 
-Distro and Patch are still ported frames (own fixture lists, rigs namespaced under
-`tools/<tool>/`); every other tool is native and reads the shared `fixtures`, `gear`, `meta` and
+Distro Plot is the last ported frame (own fixture list, rigs namespaced under
+`tools/distro/`); every other tool is native and reads the shared `fixtures`, `gear`, `meta` and
 `shows/{id}/*` collections. The schema and its three rules live in `data-model.md`; read it first.
 
 ## Where things live
