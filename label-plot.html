@@ -248,7 +248,7 @@ const MM_PX = 96/25.4;              // CSS pixels per millimetre at 96dpi
 
 const S = { tab:'build', loaded:false, show:null, showName:'',
             formats:[], colors:{}, fmt:null, src:'manual', fmtAuto:true,
-            racks:[], looms:[], nets:[], trusses:[], positions:[], equipment:[],
+            racks:[], looms:[], nets:[], trusses:[], positions:[], equipment:[], pull:null,
             labels:[], groups:null, dirty:false, manualType:'free', manual:{} };
 
 const fmt = () => S.formats.find(f=>f.id===S.fmt) || S.formats[0];
@@ -276,6 +276,7 @@ async function load(){
     S.nets      = await K.list(K.P.sub(S.show,'network'));
     S.trusses   = await K.list(K.P.sub(S.show,'truss'));
     S.positions = await K.list(K.P.sub(S.show,'positions'));
+    S.pull      = await K.get(K.P.subDoc(S.show,'cases','pull'));
   }
   S.loaded = true;
 }
@@ -393,7 +394,10 @@ const SOURCES = [
     },0),0)},
   {key:'rackeq',   name:'Rack equipment', fmt:'ol875',    count:()=>S.racks.reduce((a,r)=>a+(r.items||[]).length,0)},
   {key:'fixtures', name:'Fixture IDs',    fmt:'rollo-6x4',count:()=>fixtureGroups().length},
+  {key:'pullcase', name:'Pull cases',     fmt:'rollo-6x4',count:()=>(S.pull&&S.pull.cases||[]).reduce((a,c)=>a+(c.qty||0),0)},
 ];
+const DEPT_LABEL = {fx:'Fixtures', rig:'Rigging', pwr:'Power', data:'Data', ctl:'Control', exp:'Expendables'};
+const DEPT_COLOR = {fx:'--s1', rig:'--s4', pwr:'--s2', data:'--s8', ctl:'--s5', exp:'--s6'};
 function loomCases(){
   const m={};
   S.looms.forEach(s=>(s.cables||[]).forEach(c=>{
@@ -523,6 +527,15 @@ function pull(src){
         ? (nums.length===1 ? String(asNum[0]) : `${Math.min(...asNum)}–${Math.max(...asNum)}`)
         : (nums.length===1 ? String(nums[0]) : nums.join(', '));
       mk(fname, sub, [], posName);
+    });
+  }
+  if(src==='pullcase'){
+    (S.pull && S.pull.cases || []).forEach(c=>{
+      const qty = c.qty||0;
+      for(let i=1;i<=qty;i++){
+        mk(c.name, c.contents, DEPT_COLOR[c.dept] ? [resolveBand(DEPT_COLOR[c.dept])] : [],
+          `${DEPT_LABEL[c.dept] || c.dept || 'Case'} · ${i} of ${qty}`);
+      }
     });
   }
   return out;
@@ -706,7 +719,9 @@ function rail(){
       <button class="btn ghost sm" id="pullbtn" style="margin-top:10px;width:100%"
         ${S.src==='manual'?'disabled':''}>Load ${S.src==='manual'?'—':esc((SOURCES.find(s=>s.key===S.src)||{}).name)}</button>
       <div class="muted" style="font-size:11px;margin-top:7px">Loading replaces the list. Edit freely
-        afterwards — labels are not saved back to the source.</div></div>
+        afterwards — labels are not saved back to the source.</div>
+      ${S.src==='pullcase' && !S.pull ? '<div class="note" style="margin-top:7px">No pull saved '
+        +'for this show yet — save one in Pull Plot</div>' : ''}</div>
     ${S.src==='manual' ? manualCard() : ''}`;
 }
 
