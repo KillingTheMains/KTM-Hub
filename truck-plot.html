@@ -164,7 +164,7 @@ const fmt = v => (v==null || isNaN(v)) ? '—' : Number(v).toLocaleString(undefi
 
 const S = {
   tab: 'list', catalog: [], list: {}, query: '', capLb: DEFAULT_CAP_LB,
-  show: null, packed: null, loaded: false, dirty: false
+  show: null, packed: null, loaded: false, dirty: false, pullNote: null
 };
 
 /* ── catalog ──────────────────────────────────────────────────────────
@@ -214,6 +214,15 @@ async function loadPlan(){
     if (doc){
       S.list = doc.list || {};
       if (doc.capLb) S.capLb = doc.capLb;
+      /* The plan stores only keys + qty, not resolved item fields, so
+         pull-sourced catalog rows (which don't live in the gear catalog)
+         are rebuilt here from the fields saved alongside the plan. */
+      if (doc.pullItems){
+        doc.pullItems.forEach(item => {
+          const idx = S.catalog.findIndex(c => c.key === item.key);
+          if (idx >= 0) S.catalog[idx] = item; else S.catalog.push(item);
+        });
+      }
     }
   } catch(e){}
 }
@@ -226,6 +235,7 @@ async function savePlan(){
   try {
     await K.set(K.P.subDoc(S.show, 'trucks', 'plan'), {
       list: S.list, capLb: S.capLb,
+      pullItems: S.catalog.filter(c => c.src === 'pull'),
       summary: summarise(), packedAt: new Date().toISOString()
     });
     S.dirty = false; btn.textContent = 'Saved';
@@ -234,6 +244,39 @@ async function savePlan(){
     btn.textContent = 'Save plan'; btn.disabled = false;
     alert('Could not save: ' + e.message);
   }
+}
+
+/* ── load from pull ───────────────────────────────────────────────────
+   Pull Plot's saved doc (shows/{show}/cases/pull) is read-only here —
+   this tool never writes cases. Each case becomes (or refreshes) a
+   catalog row keyed pull:<case.key>; S.list is set (not added to) so a
+   second click doesn't double the qty, and pull rows whose key no
+   longer appears in the pull are dropped from both catalog and list. */
+async function loadFromPull(){
+  const K = window.KTM;
+  if (!K || !S.show) return;
+  let doc = null;
+  try { doc = await K.get(K.P.subDoc(S.show, 'cases', 'pull')); } catch(e){}
+  if (!doc){ S.pullNote = 'No pull saved for this show yet'; render(); return; }
+  S.pullNote = null;
+
+  const cases = doc.cases || [];
+  const keep = new Set();
+  cases.forEach(c => {
+    const key = 'pull:' + c.key;
+    keep.add(key);
+    const item = { key, name: c.name, group: 'Pull', shop: 'Pull Plot',
+      wFt: n2(c.wIn/12), dFt: n2(c.lIn/12), lb: c.lbEach,
+      cubeFt: (c.lIn*c.wIn*c.hIn)/1728, src: 'pull' };
+    const idx = S.catalog.findIndex(x => x.key === key);
+    if (idx >= 0) S.catalog[idx] = item; else S.catalog.push(item);
+    S.list[key] = c.qty;
+  });
+  S.catalog = S.catalog.filter(c => c.src !== 'pull' || keep.has(c.key));
+  Object.keys(S.list).forEach(k => { if (k.indexOf('pull:')===0 && !keep.has(k)) delete S.list[k]; });
+
+  S.dirty = true; S.packed = null;
+  render();
 }
 
 /* ── placement, from Truck Packer ─────────────────────────────────────
@@ -374,9 +417,13 @@ function viewList(){
        + 'never tracked weight, so there is nothing to import. Those pieces are packed by size and '
        + 'excluded from every weight total rather than being guessed at.</div>';
 
+  if (S.pullNote)
+    h += '<div class="note" style="margin-top:12px">' + esc(S.pullNote) + '</div>';
+
   h += '<div class="bar" style="background:none;border:0;padding:12px 0;gap:9px">'
      + '<input type="text" id="q" placeholder="Search the catalog…" value="'+esc(S.query)+'" style="width:260px">'
      + '<div class="grow"></div>'
+     + '<button class="btn ghost sm" id="pullbtn">Load from pull</button>'
      + '<button class="btn ghost sm" id="clearbtn">Clear list</button></div>';
 
   h += '<div class="tablewrap"><table><thead><tr>'
@@ -386,7 +433,8 @@ function viewList(){
      + rows.map(c => {
         const q = S.list[c.key] || 0;
         return '<tr'+(q?' style="background:var(--sel)"':'')+'>'
-        + '<td>'+esc(c.name)+(c.lb==null?' <span class="chip warn">no weight</span>':'')+'</td>'
+        + '<td>'+esc(c.name)+(c.lb==null?' <span class="chip warn">no weight</span>':'')
+        + (c.src==='pull'?' <span class="chip" style="background:var(--accent-soft);color:var(--accent)">Pull</span>':'')+'</td>'
         + '<td class="muted">'+esc(c.group)
         + (c.shop ? ' <span class="muted" style="font-size:10px">· '+esc(c.shop)+'</span>' : '')+'</td>'
         + '<td class="num">'+c.wFt+'</td><td class="num">'+c.dFt+'</td>'
@@ -412,6 +460,8 @@ function wireList(){
   const c = $('clearbtn');
   if (c) c.onclick = () => { if (!confirm('Clear the whole load list?')) return;
     S.list = {}; S.packed = null; S.dirty = true; render(); };
+  const p = $('pullbtn');
+  if (p) p.onclick = loadFromPull;
 }
 
 function viewPack(){
