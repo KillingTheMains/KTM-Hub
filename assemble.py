@@ -18,7 +18,7 @@ SHIM    = (HERE / "ktm-shim.js").read_text()
 TOOLS = [
     ("distro", UPLOADS / "distro-plot.html",          True),
     ("patch",  UPLOADS / "patch-plot.html",           True),
-    ("truss",  UPLOADS / "truss-plot.html",           True),
+    ("truss",  HERE    / "truss-plot.html",           False),
     ("pull",   UPLOADS / "pull-plot.html",            True),
     ("truck",  HERE    / "truck-plot.html",           False),
     ("trusslist", HERE / "truss-list.html",         False),

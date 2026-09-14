@@ -5,7 +5,8 @@ Running list. Added to as things come up; nothing here is committed to a date.
 ## Built
 
 - **The Hub** — shows, fixture library, gear library, store browser.
-- **Distro / Patch / Truss / Pull Plot** — ported in as frames, unmodified.
+- **Distro / Patch / Pull Plot** — ported in as frames, unmodified.
+- **Truss Plot** — native since 2026-09-13: shared fixtures, rigs under the show, seed from Truss List.
 - **Truck Plot** — trailer pack planning: load list, first-fit pack onto 53 × 8.5 ft decks,
   per-truck weight and cube, deck plan SVG, CSV and print.
 - **Truss List** (2026-09-13) — per-show truss inventory: runs, type, length, piece auto-fill,

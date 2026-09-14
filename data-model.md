@@ -308,3 +308,11 @@ array; a CPC8's lines 7 and 8 exist only in `lines`.
 
 **Catalog snapshot.** `data/catalog/` holds read-only copies of `gear/*` and `meta/*` so the
 import scripts can validate offline. The live store wins; refresh the snapshot from it.
+
+**Truss Plot native — 2026-09-13.** No longer a legacy frame. Fixtures come from the shared
+`fixtures` collection (legacy `L<n>` ids map by name through `LEGACY_LIB`), rigs save at
+`shows/{showId}/rigging/{rigId}` (owner: truss), positions can be seeded from Truss List. The
+statics tables stay in the tool: `gear/truss` carries no allowable-load rows, and a catalog
+`weightPerFt` only replaces a table weight when the two agree within 0.05 lb/ft — the Tyler GT
+catalog figure (3.1) does not match the Tomcat LD 12″ table (6.2), so the table wins and the
+note says so. Every ported tool is now native; the `LEGACY` shim path applies to none.
