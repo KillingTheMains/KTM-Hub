@@ -225,6 +225,12 @@ footer.fine a{color:var(--ink-2)}
     </div>
   </header>
 
+  <div class="panel" id="noktm" hidden>
+    <div class="body"><div class="note crit"><b>No shared data layer.</b> Pull Plot reads the fixture
+      library from the Hub and writes the pull under the active show. Open it from inside the KTM Hub rather than on its own.</div></div>
+  </div>
+
+  <div id="app" hidden>
   <section class="tiles" id="tiles"></section>
   <div class="notes" id="notes"></div>
 
@@ -259,6 +265,7 @@ footer.fine a{color:var(--ink-2)}
   <section class="panel">
     <div class="head">
       <h2>Positions</h2><span class="spacer"></span>
+      <button id="seedtruss" class="noprint">Seed from Truss List</button>
       <button id="addpos" class="noprint">Add position</button>
     </div>
     <div class="body">
@@ -297,10 +304,13 @@ footer.fine a{color:var(--ink-2)}
       <div class="head"><h2>Load &amp; saved rigs</h2></div>
       <div class="body" style="display:flex;flex-direction:column;gap:12px">
         <div class="rows" id="loadrows"></div>
-        <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;border-top:1px solid var(--line);padding-top:11px">
-          <div class="field" style="flex:1 1 150px"><label for="signame">Save this rig as</label>
+        <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:11px">
+          <button class="primary" id="savebtn">Save</button>
+        </div>
+        <div class="noprint" style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end">
+          <div class="field" style="flex:1 1 150px"><label for="signame">Save as…</label>
             <input type="text" id="signame" placeholder="Arena A — main truss"></div>
-          <button id="savebtn">Save</button>
+          <button id="saveasbtn">Save as…</button>
         </div>
         <div class="saved noprint" id="saved"></div>
       </div>
@@ -336,6 +346,7 @@ footer.fine a{color:var(--ink-2)}
     <div><b>Expendables</b> follow a conventional touring list: one safety per fixture plus ten percent, gaff by fixture
     count, haze fluid by hazer-shows, spare lamps at ten percent of conventionals. Nothing here is a code.</div>
   </footer>
+  </div>
 </div>
 
 <script>
@@ -343,9 +354,16 @@ footer.fine a{color:var(--ink-2)}
 "use strict";
 
 /* ============================ REFERENCE DATA ============================ */
-/* va: published nominal draw · ch: touring-default DMX footprint · lb: published weight · ln: 120 V line-to-neutral load
+/* LEGACY_LIB: the tool's original 27-entry hardcoded fixture library. Kept only
+   to resolve an old rig's "L#" fixture ids and DEFAULT_ROWS into the shared
+   fixtures collection (see mapLegacyFid()), and to supply the two flags the
+   store does not carry — ln (120 V line-to-neutral load) and haze — onto a
+   matching fixtures-collection doc (see mapFixtureDoc()). Not used for the
+   math directly any more; the live picker comes from LIB, built from
+   K.list('fixtures').
+   va: published nominal draw · ch: touring-default DMX footprint · lb: published weight · ln: 120 V line-to-neutral load
    cs: case key from CASES · per: fixtures per case (rental-house "typically ships as") */
-const LIB = [
+const LEGACY_LIB = [
   {c:"Moving light", b:"Robe",     n:"BMFL Blade",              va:2000, ch:49, lb:83.6, cs:"tall", per:2},
   {c:"Moving light", b:"Robe",     n:"MegaPointe",              va:670,  ch:39, lb:48.5, cs:"dual", per:2},
   {c:"Moving light", b:"Robe",     n:"Pointe",                  va:470,  ch:24, lb:33.0, cs:"quad", per:4},
@@ -374,7 +392,78 @@ const LIB = [
   {c:"Atmospherics", b:"Look",   n:"Viper NT fogger",           va:1300, ch:1,  lb:30,   cs:"half", per:2, ln:true, haze:true},
   {c:"Atmospherics", b:"Martin", n:"JEM ZR45 fogger",           va:1800, ch:1,  lb:50,   cs:"std",  per:2, ln:true, haze:true}
 ];
-LIB.forEach(function(f,i){ f.id = "L"+i; });
+LEGACY_LIB.forEach(function(f,i){ f.id = "L"+i; });
+const LB_PER_KG = 2.20462;
+
+/* LIB: the live fixture picker, built from the shared fixtures collection. */
+let LIB = [];
+/* Find the LEGACY_LIB entry (if any) matching a fixtures-collection doc by
+   name + manufacturer, case-insensitively — used to backfill ln/haze and,
+   when the doc itself has none, cs/per. */
+function findLegacyMatch(doc){
+  const nameLc = String((doc && doc.name)||"").toLowerCase(), brandLc = String((doc && doc.manufacturer)||"").toLowerCase();
+  return LEGACY_LIB.find(function(f){ return String(f.b||"").toLowerCase()===brandLc && String(f.n||"").toLowerCase()===nameLc; }) || null;
+}
+function mapFixtureDoc(doc){
+  let lb = null;
+  if(doc && doc.weight && typeof doc.weight.value === "number"){
+    lb = doc.weight.unit === "kg" ? doc.weight.value * LB_PER_KG : doc.weight.value;
+  }
+  let va = null;
+  if(doc && doc.power && typeof doc.power.value === "number") va = doc.power.value;
+  let ch = null;
+  if(doc && doc.dmx && typeof doc.dmx.default === "number") ch = doc.dmx.default;
+  let cs = (doc && doc.case && doc.case.family) || null;
+  let per = (doc && doc.case && doc.case.perCase) || null;
+  const leg = findLegacyMatch(doc);
+  if(leg){ if(cs == null) cs = leg.cs; if(per == null) per = leg.per; }
+  const ln = leg ? !!leg.ln : true;
+  const haze = doc.category === "Atmospherics" || (leg ? !!leg.haze : false);
+  return {id:doc.id, c:doc.category, b:doc.manufacturer, n:doc.name, aliases:doc.aliases||[], va:va, ch:ch, lb:lb, cs:cs, per:per, ln:ln, haze:haze};
+}
+/* A fixture the math can actually pull: weight, power and a case family. */
+function usable(f){ return !!f && f.lb != null && f.va != null && f.cs != null; }
+/* Resolve a legacy "L<n>" fixture id to a fixtures-collection id: match
+   LEGACY_LIB[n]'s name (or an alias) and manufacturer, case-insensitively,
+   against a usable LIB entry. Returns null if unmappable. */
+function mapLegacyFid(fid){
+  const m = /^L(\d+)$/.exec(fid);
+  if(!m) return null;
+  const leg = LEGACY_LIB[+m[1]];
+  if(!leg) return null;
+  const nameLc = String(leg.n).toLowerCase(), brandLc = String(leg.b).toLowerCase();
+  const hit = LIB.find(function(f){
+    if(!usable(f)) return false;
+    if(String(f.b||"").toLowerCase() !== brandLc) return false;
+    if(String(f.n||"").toLowerCase() === nameLc) return true;
+    return (f.aliases||[]).some(function(a){ return String(a).toLowerCase() === nameLc; });
+  });
+  return hit ? hit.id : null;
+}
+/* Resolve a row's fid through the legacy mapping when it looks legacy;
+   modern fixtures-collection ids pass through untouched. Logs and returns
+   null (drop the row) when a legacy id can't be resolved. */
+function resolveFid(fid){
+  if(fid == null) return fid;
+  if(/^L\d+$/.test(fid)){
+    const mapped = mapLegacyFid(fid);
+    if(!mapped) console.warn('Pull Plot: could not map legacy fixture id "'+fid+'" to a fixtures-collection entry — dropping the row.');
+    return mapped;
+  }
+  return fid;
+}
+/* Convert a rows array (DEFAULT_ROWS or a loaded rig's rows) through the fid
+   mapping, assigning a fresh uid to each surviving row. */
+function convertRows(rows){
+  const out = [];
+  (rows||[]).forEach(function(r){
+    if(r.custom){ out.push(Object.assign({}, r, {uid:uid()})); return; }
+    const fid = resolveFid(r.fid);
+    if(fid == null) return;
+    out.push(Object.assign({}, r, {uid:uid(), fid:fid}));
+  });
+  return out;
+}
 
 /* Case family: exterior inches, empty lb, stackable, department colour key */
 const CASES = {
@@ -437,9 +526,10 @@ const DEFAULT_ROWS = [
 let S = {
   truck:"t53", feed:100, hoist:"1t", stack:2, shows:12,
   positions: DEFAULT_POS.map(function(p){ return Object.assign({}, p); }),
-  rows: DEFAULT_ROWS.map(function(r){ return Object.assign({uid:uid()}, r); })
+  rows: [],
+  show:null
 };
-let DB = null, DOWNLOADS = null, savedRigs = [];
+let DOWNLOADS = null, savedRigs = [], fixturesExcludedNote = "";
 
 function uid(){ return "r" + Math.random().toString(36).slice(2,9); }
 function fx(id){ return LIB.find(function(f){ return f.id===id; }); }
@@ -620,6 +710,8 @@ const n1 = function(v){ return v.toFixed(1); };
 const plural = function(n, s){ return n+" "+s+(n===1?"":"s"); };
 
 function render(){
+  if(!window.KTM){ $("noktm").hidden = false; $("app").hidden = true; return; }
+  $("noktm").hidden = true; $("app").hidden = false;
   const R = compute(), T = R.truck;
   const payPct = R.gross/T.pay*100, lenPct = R.usedIn/T.L*100;
   const payFlag = payPct>100 ? "flag-crit" : payPct>85 ? "flag-warn" : "flag-ok";
@@ -643,6 +735,7 @@ function render(){
   if(R.heavy.length) notes.push(note("warn","Heavy", R.heavy.map(function(c){ return CASES[c.key].n+" ("+n0(c.lbEach)+" lb)"; }).join(", ")+
     " over 400 lb — two people on the ramp, and a liftgate is rated around 3,000 lb."));
   if(T.id==="bus") notes.push(note("warn","Bus trailer", "Most coach companies cap the trailer at 10,000 lb and it comes out of the bus's braking, not the driver's opinion."));
+  if(fixturesExcludedNote) notes.push(note("","Fixture data", fixturesExcludedNote));
   $("notes").innerHTML = notes.join("");
 
   /* rig */
@@ -752,9 +845,9 @@ function row(k,v,cls){ const col = cls==="crit"?"color:var(--crit)":cls==="warn"
 /* ============================== CONTROLS ============================== */
 function fillPicker(){
   let html = "", cat = null;
-  LIB.forEach(function(f){ if(f.c!==cat){ if(cat!==null) html += "</optgroup>"; html += '<optgroup label="'+f.c+'">'; cat = f.c; }
+  LIB.filter(usable).forEach(function(f){ if(f.c!==cat){ if(cat!==null) html += "</optgroup>"; html += '<optgroup label="'+f.c+'">'; cat = f.c; }
     html += '<option value="'+f.id+'">'+esc(f.b)+" "+esc(f.n)+"</option>"; });
-  $("pick").innerHTML = html + "</optgroup>";
+  $("pick").innerHTML = html + (cat!==null ? "</optgroup>" : "");
 }
 function fillPositions(){
   const keep = $("pickpos").value;
@@ -779,6 +872,7 @@ function bind(){
     S.positions.push({id:"p"+Math.random().toString(36).slice(2,7), name:"Position "+(S.positions.length+1), dist:100, truss:"t12", len:40, hoists:2});
     fillPositions(); render();
   });
+  $("seedtruss").addEventListener("click", seedFromTrussList);
   $("rigbody").addEventListener("input", function(e){ const q = e.target.getAttribute("data-q"); if(!q) return;
     const r = S.rows.find(function(x){ return x.uid===q; }); if(r){ r.qty = Math.max(1, Math.min(999, +e.target.value||1)); soft(e.target); } });
   $("rigbody").addEventListener("change", function(e){ const p = e.target.getAttribute("data-p"); if(!p) return;
@@ -802,6 +896,25 @@ function bind(){
     S.rows.forEach(function(r){ if(r.pos===id) r.pos = S.positions[0].id; }); fillPositions(); render(); });
   $("csv").addEventListener("click", exportCSV);
   $("savebtn").addEventListener("click", saveRig);
+  $("saveasbtn").addEventListener("click", saveAsRig);
+}
+/* Seed truss positions from the show's Truss List runs. One position per run
+   not already seeded (id "tl-"+trussId); runs already present are left alone. */
+async function seedFromTrussList(){
+  const K = window.KTM;
+  if(!K || !S.show) return;
+  let runs;
+  try{ runs = await K.list(K.P.sub(S.show,"truss")); }catch(e){ return; }
+  const have = {}; S.positions.forEach(function(p){ have[p.id] = true; });
+  let added = 0;
+  (runs||[]).forEach(function(run){
+    const pid = "tl-" + run.id;
+    if(have[pid]) return;
+    const match = Object.keys(TRUSS).find(function(k){ return TRUSS[k].n && String(TRUSS[k].n).toLowerCase() === String(run.typeName||"").toLowerCase(); });
+    S.positions.push({id:pid, name:run.name, dist:100, truss: match || "t12", len:run.lengthFt, hoists:2});
+    have[pid] = true; added++;
+  });
+  if(added){ fillPositions(); render(); }
 }
 let softTimer = null;
 function soft(el){
@@ -835,55 +948,167 @@ function copyFallback(csv){
 }
 
 /* ============================== SAVED RIGS ============================== */
+/* The live pull is one document, shows/{show}/cases/pull, written by Save.
+   Save as… writes a second, named document in the same collection; those are
+   the only docs listed as chips (the pull doc is never a chip, never
+   removable from here). */
 function snapshot(){ return {truck:S.truck, feed:S.feed, hoist:S.hoist, stack:S.stack, shows:S.shows,
   positions:S.positions.map(function(p){ return {id:p.id, name:p.name, dist:p.dist, truss:p.truss, len:p.len, hoists:p.hoists}; }),
   rows:S.rows.map(function(r){ return {fid:r.fid, custom:r.custom, qty:r.qty, pos:r.pos}; })}; }
-function applySnapshot(d){
+function applyInput(d){
   if(!d || !Array.isArray(d.rows)) return;
   S.truck = d.truck||"t53"; S.feed = d.feed||100; S.hoist = d.hoist||"1t"; S.stack = d.stack||2; S.shows = d.shows||12;
   S.positions = (Array.isArray(d.positions) && d.positions.length) ? d.positions.map(function(p){ return {id:p.id, name:p.name, dist:p.dist||100, truss:p.truss||"none", len:p.len||0, hoists:p.hoists||0}; })
     : DEFAULT_POS.map(function(p){ return Object.assign({}, p); });
   const ids = S.positions.map(function(p){ return p.id; });
-  S.rows = d.rows.map(function(r){ return {uid:uid(), fid:r.fid, custom:r.custom, qty:r.qty||1, pos: ids.indexOf(r.pos)>=0 ? r.pos : ids[0]}; });
+  S.rows = convertRows(d.rows.map(function(r){ return {fid:r.fid, custom:r.custom, qty:r.qty||1, pos: ids.indexOf(r.pos)>=0 ? r.pos : ids[0]}; }));
+}
+/* Apply a saved input (chip click): update state, then the DOM controls and
+   re-render — used once the pickers are already populated. */
+function applySnapshot(d){
+  applyInput(d);
   $("truck").value = S.truck; $("feed").value = S.feed; $("hoist").value = S.hoist; $("stack").value = String(S.stack); $("shows").value = S.shows;
   fillPositions(); render();
 }
-function saveRig(){
-  const name = ($("signame").value||"").trim(); if(!name){ $("signame").focus(); return; }
-  const key = name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60) || ("rig-"+Date.now());
-  const rec = {name:name, saved:Date.now(), data:snapshot()};
-  savedRigs = savedRigs.filter(function(x){ return x.key!==key; }); savedRigs.push(Object.assign({key:key}, rec)); $("signame").value = "";
-  if(DB) DB.doc("rigs/"+key).set(rec).catch(function(){ localWrite(); }); else localWrite();
-  localWrite(); renderSaved();
+function buildPullBody(name){
+  const R = window.__R || compute();
+  return {
+    name: name || "Pull", kind:"pull", savedAt:Date.now(),
+    input: snapshot(),
+    /* key is unique per entry (family key + occurrence index, in compute()'s
+       emit order) — Truck Plot keys its load list by "pull:<key>", and the
+       raw family key repeats across entries (e.g. the default rig has 20
+       case entries sharing 15 distinct families), so a bare family key would
+       collide and overwrite. family carries the raw CASES key. */
+    cases: (function(){
+      const seen = {};
+      return R.cases.map(function(c){
+        const cs = CASES[c.key];
+        seen[c.key] = (seen[c.key]||0) + 1;
+        const key = seen[c.key] === 1 ? c.key : (c.key + "-" + seen[c.key]);
+        return {key:key, family:c.key, dept:c.dept, name:cs.n, qty:c.n, lbEach:c.lbEach, lIn:cs.L, wIn:cs.W, hIn:cs.H, stack:!!cs.stack, contents:c.label};
+      });
+    })(),
+    lines: R.lines,
+    totals: {pieces:R.pieces, grossLb:R.gross, cubeFt:R.cube, trucksNeeded:R.trucksNeeded, truck:R.truck.id, usedFt:R.usedFt}
+  };
 }
-function localWrite(){ try{ localStorage.setItem("pull-plot-rigs", JSON.stringify(savedRigs)); }catch(e){} }
-function removeRig(key){ savedRigs = savedRigs.filter(function(x){ return x.key!==key; }); if(DB) DB.doc("rigs/"+key).delete().catch(function(){}); localWrite(); renderSaved(); }
+function slugName(s){ return (String(s||"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")) || "rig"; }
+function makeRigId(name){ return slugName(name) + "-" + Math.random().toString(36).slice(2,7); }
+let saveFlashing = false;
+function updateSaveButton(){
+  if(saveFlashing) return;
+  const b1 = $("savebtn"), b2 = $("saveasbtn");
+  if(!S.show){ b1.disabled = true; b1.textContent = "Pick a show in the Hub first"; b2.disabled = true; b2.textContent = "Pick a show in the Hub first"; }
+  else { b1.disabled = false; b1.textContent = "Save"; b2.disabled = false; b2.textContent = "Save as…"; }
+}
+async function saveRig(){
+  const K = window.KTM;
+  if(!K || !S.show) return;
+  const body = buildPullBody("Pull");
+  const b = $("savebtn");
+  saveFlashing = true; b.disabled = true; b.textContent = "Saving…";
+  try{
+    await K.set(K.P.subDoc(S.show,"cases","pull"), body);
+    b.textContent = "Saved";
+    setTimeout(function(){ saveFlashing = false; updateSaveButton(); }, 1400);
+  }catch(e){
+    saveFlashing = false; updateSaveButton();
+    alert("Could not save: "+e.message);
+  }
+}
+async function saveAsRig(){
+  const name = ($("signame").value||"").trim(); if(!name){ $("signame").focus(); return; }
+  const K = window.KTM;
+  if(!K || !S.show) return;
+  const existing = savedRigs.find(function(x){ return x.name===name; });
+  const id = existing ? existing.id : makeRigId(name);
+  const body = buildPullBody(name);
+  const b = $("saveasbtn");
+  saveFlashing = true; b.disabled = true; b.textContent = "Saving…";
+  try{
+    await K.set(K.P.subDoc(S.show,"cases",id), body);
+    savedRigs = savedRigs.filter(function(x){ return x.id!==id; });
+    savedRigs.push(Object.assign({id:id}, body));
+    $("signame").value = "";
+    b.textContent = "Saved";
+    renderSaved();
+    setTimeout(function(){ saveFlashing = false; updateSaveButton(); }, 1400);
+  }catch(e){
+    saveFlashing = false; updateSaveButton();
+    alert("Could not save: "+e.message);
+  }
+}
+async function removeRig(id){
+  const K = window.KTM;
+  savedRigs = savedRigs.filter(function(x){ return x.id!==id; });
+  renderSaved();
+  if(K && S.show){ try{ await K.del(K.P.subDoc(S.show,"cases",id)); }catch(e){} }
+}
 function renderSaved(){
+  updateSaveButton();
   const el = $("saved");
   if(!savedRigs.length){ el.innerHTML = '<span style="font-size:12px;color:var(--ink-3)">No saved rigs yet — save one and it comes back next time you open this.</span>'; return; }
-  el.innerHTML = savedRigs.slice().sort(function(a,b){ return b.saved-a.saved; }).map(function(r){
-    return '<span class="chip"><span class="load-b" data-load="'+esc(r.key)+'" role="button" tabindex="0">'+esc(r.name)+'</span><button data-del="'+esc(r.key)+'" aria-label="Delete '+esc(r.name)+'">✕</button></span>'; }).join("");
+  el.innerHTML = savedRigs.slice().sort(function(a,b){ return (b.savedAt||0)-(a.savedAt||0); }).map(function(r){
+    return '<span class="chip"><span class="load-b" data-load="'+esc(r.id)+'" role="button" tabindex="0">'+esc(r.name)+'</span><button data-del="'+esc(r.id)+'" aria-label="Delete '+esc(r.name)+'">✕</button></span>'; }).join("");
 }
 document.addEventListener("click", function(e){
-  const l = e.target.closest("[data-load]"); if(l){ const r = savedRigs.find(function(x){ return x.key===l.getAttribute("data-load"); }); if(r) applySnapshot(r.data); return; }
+  const l = e.target.closest("[data-load]"); if(l){ const r = savedRigs.find(function(x){ return x.id===l.getAttribute("data-load"); }); if(r) applySnapshot(r.input); return; }
   const d = e.target.closest("[data-del]"); if(d) removeRig(d.getAttribute("data-del"));
 });
 document.addEventListener("keydown", function(e){ if(e.key!=="Enter" && e.key!==" ") return; const l = e.target.closest && e.target.closest("[data-load]"); if(!l) return; e.preventDefault(); l.click(); });
 
 /* ============================== BOOT ============================== */
-fillPicker(); fillPositions(); fillTrucks(); bind();
-try{ const raw = localStorage.getItem("pull-plot-rigs"); if(raw) savedRigs = JSON.parse(raw)||[]; } catch(e){ savedRigs = []; }
-render();
-if(window.claude && typeof window.claude.use === "function"){
-  window.claude.use("downloads").then(function(d){ DOWNLOADS = d; }).catch(function(){});
-  window.claude.use("db").then(function(db){
-    if(!db) return; DB = db;
-    return db.collection("rigs").get().then(function(snap){
-      const docs = (snap && snap.docs) ? snap.docs : [];
-      const remote = docs.map(function(doc){ const v = typeof doc.data === "function" ? doc.data() : doc.data; return Object.assign({key:doc.id}, v||{}); }).filter(function(x){ return x.name && x.data; });
-      if(remote.length){ const seen = {}; savedRigs = remote.concat(savedRigs).filter(function(x){ if(seen[x.key]) return false; seen[x.key]=1; return true; }); renderSaved(); }
-    });
-  }).catch(function(){});
+async function load(){
+  const K = window.KTM;
+  if(!K) return;
+  const fixDocs = await K.list("fixtures");
+  LIB = fixDocs.map(mapFixtureDoc);
+  const excluded = LIB.filter(function(f){ return !usable(f); }).length;
+  fixturesExcludedNote = excluded ? (excluded+" fixtures lack weight / power / case family and cannot be pulled.") : "";
+  S.show = K.activeShow ? K.activeShow() : null;
+  if(S.show){
+    try{ savedRigs = (await K.list(K.P.sub(S.show,"cases"))).filter(function(x){ return x.id !== "pull"; }); }catch(e){ savedRigs = []; }
+    let pullDoc = null;
+    try{ pullDoc = await K.get(K.P.subDoc(S.show,"cases","pull")); }catch(e){}
+    if(pullDoc && pullDoc.input) applyInput(pullDoc.input); else S.rows = convertRows(DEFAULT_ROWS);
+  } else {
+    S.rows = convertRows(DEFAULT_ROWS);
+  }
+}
+(async function(){
+  bind();
+  await load();
+  if(window.KTM){
+    fillPicker(); fillTrucks(); fillPositions();
+    $("truck").value = S.truck; $("feed").value = S.feed; $("hoist").value = S.hoist; $("stack").value = String(S.stack); $("shows").value = S.shows;
+  }
+  render();
+  if(window.claude && typeof window.claude.use === "function"){
+    try{ DOWNLOADS = await window.claude.use("downloads"); }catch(e){}
+  }
+})();
+
+/* ── self-test ────────────────────────────────────────────────────────── */
+if(location.hash==="#selftest"){
+  LIB = [mapFixtureDoc({id:"ayrton-diablo-s", name:"Diablo-S", manufacturer:"Ayrton", category:"Moving light", weight:{value:48.5,unit:"lb"}, power:{value:550,unit:"W"}, dmx:{default:36}, case:{family:"dual", perCase:2}})];
+  console.log('mapLegacyFid("L14") =', mapLegacyFid("L14"), '(expect ayrton-diablo-s)');
+  console.log('kg convert (10 kg) =', mapFixtureDoc({id:"x", name:"Test", manufacturer:"T", weight:{value:10,unit:"kg"}}).lb.toFixed(4));
+
+  /* Regression: default rig, every legacy fid resolvable via a fixtures stub
+     mirroring LEGACY_LIB, no active show — must reproduce the original
+     hardcoded-LIB tool's numbers exactly. */
+  LIB = LEGACY_LIB.map(function(f,i){
+    return mapFixtureDoc({id:"fix-"+i, name:f.n, manufacturer:f.b, category:f.c,
+      weight:{value:f.lb,unit:"lb"}, power:{value:f.va,unit:"W"}, dmx:{default:f.ch}, case:{family:f.cs, perCase:f.per}});
+  });
+  S.rows = convertRows(DEFAULT_ROWS);
+  const RT = compute();
+  console.log('regression pieces =', RT.pieces);
+  console.log('regression gross =', Math.round(RT.gross));
+  console.log('regression cube =', Math.round(RT.cube));
+  console.log('regression trucksNeeded =', RT.trucksNeeded);
+  console.log('regression usedFt =', RT.usedFt.toFixed(2));
 }
 })();
 </script>

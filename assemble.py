@@ -19,7 +19,7 @@ TOOLS = [
     ("distro", UPLOADS / "distro-plot.html",          True),
     ("patch",  UPLOADS / "patch-plot.html",           True),
     ("truss",  HERE    / "truss-plot.html",           False),
-    ("pull",   UPLOADS / "pull-plot.html",            True),
+    ("pull",   HERE    / "pull-plot.html",            False),
     ("truck",  HERE    / "truck-plot.html",           False),
     ("trusslist", HERE / "truss-list.html",         False),
     ("rack",   HERE    / "rack-plot.html",            False),

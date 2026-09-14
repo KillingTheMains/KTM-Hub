@@ -316,3 +316,18 @@ statics tables stay in the tool: `gear/truss` carries no allowable-load rows, an
 `weightPerFt` only replaces a table weight when the two agree within 0.05 lb/ft — the Tyler GT
 catalog figure (3.1) does not match the Tomcat LD 12″ table (6.2), so the table wins and the
 note says so. Every ported tool is now native; the `LEGACY` shim path applies to none.
+
+**Pull Plot native — 2026-09-14.** Fixtures from the shared library (`L<n>` ids map by name;
+`ln`/`haze` flags still come from the legacy list because the store does not carry them). The
+show's pull is one document, `shows/{showId}/cases/pull`:
+
+```
+{ name:'Pull', kind:'pull', savedAt, input:{…snapshot…},
+  cases:[{key, family, dept, name, qty, lbEach, lIn, wIn, hIn, stack, contents}],
+  lines:{fx,rig,pwr,data,ctl,exp}, totals:{pieces, grossLb, cubeFt, trucksNeeded, truck, usedFt} }
+```
+
+`key` is unique per entry (family plus occurrence index); `family` is the CASES estimator key.
+Named variants save beside it as `cases/<slug>-<id>`. Label Plot's **Pull cases** source prints one
+label per case; Truck Plot's **Load from pull** seeds its load list from the same document and
+keeps the resolved rows inside the plan. Distro and Patch are the last two ported frames.
