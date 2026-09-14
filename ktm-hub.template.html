@@ -211,7 +211,7 @@ const KTM = (() => {
   const OWNERS = {
     fixtures:'hub', gear:'hub', meta:'hub', shows:'hub', positions:'hub', derived:'hub',
     power:'distro', patch:'patch', racks:'rack', looms:'loom',
-    network:'net', cases:'pull', trucks:'truck', orders:'order', truss:'trusslist'
+    network:'net', cases:'pull', trucks:'truck', orders:'order', truss:'trusslist', rigging:'truss'
   };
 
   const LS = 'ktm:';
@@ -308,7 +308,7 @@ const TOOLS = [
     blurb:'Three-phase power — leg balance, circuit packing, Soca cuts, voltage drop.' },
   { key:'patch',  name:'Patch Plot',  color:'var(--s1)', status:'ready', writes:'patch',
     blurb:'DMX universe packing and node planning.' },
-  { key:'truss',  name:'Truss Plot',  color:'var(--s4)', status:'ready', writes:'derived',
+  { key:'truss',  name:'Truss Plot',  color:'var(--s4)', status:'ready', writes:'rigging',
     blurb:'Rigging loads and point weights.' },
   { key:'pull',   name:'Pull Plot',   color:'var(--s5)', status:'ready', writes:'cases',
     blurb:'Pull sheet, case counts, shop order.' },
@@ -328,7 +328,7 @@ const TOOLS = [
     blurb:'What you send the vendor — fixtures, cable by length, adapters, hardware.' }
 ];
 
-const SHOW_COLLECTIONS = ['positions','power','patch','racks','looms','network','truss','cases','trucks','orders','derived'];
+const SHOW_COLLECTIONS = ['positions','power','patch','racks','looms','network','truss','rigging','cases','trucks','orders','derived'];
 const DOC_BUDGET = 5000;
 
 /* ═════════════════════════════════════════════════════════════════════

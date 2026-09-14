@@ -1,7 +1,7 @@
 {
   "_format": "ktm-show",
   "_version": 1,
-  "exported": "2026-09-13T22:44:46.791078Z",
+  "exported": "2026-09-14T01:04:37.045592Z",
   "show": {
     "id": "bmw-abbs-2026",
     "name": "BMW ABBS 2026",
@@ -23,7 +23,7 @@
           {
             "key": "i-00",
             "gearId": "ma3_npu",
-            "ru": 1,
+            "ru": 1.0,
             "col": 0,
             "face": "front",
             "label": "BLUE NPU 1",
@@ -38,11 +38,11 @@
           {
             "key": "i-01",
             "gearId": "ma3_npu",
-            "ru": 3,
+            "ru": 3.0,
             "col": 0,
             "face": "front",
             "label": "BLUE NPU 2",
-            "color": "--s1",
+            "color": "--s2",
             "ip": "192.168.1.112",
             "ports": {
               "port_a": {
@@ -53,11 +53,11 @@
           {
             "key": "i-02",
             "gearId": "proplex_iq2",
-            "ru": 5,
+            "ru": 5.0,
             "col": 0,
             "face": "front",
             "label": "BLUE PIT",
-            "color": "--s1",
+            "color": "--s3",
             "ip": "192.168.1.121",
             "ports": {
               "port_a": {
@@ -113,11 +113,11 @@
           {
             "key": "i-03",
             "gearId": "optosplitter",
-            "ru": 6,
+            "ru": 6.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 1",
-            "color": "--s1",
+            "color": "--s4",
             "ip": null,
             "ports": {
               "out_1": {
@@ -128,11 +128,11 @@
           {
             "key": "i-04",
             "gearId": "optosplitter",
-            "ru": 7,
+            "ru": 7.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 2",
-            "color": "--s1",
+            "color": "--s5",
             "ip": null,
             "ports": {
               "out_1": {
@@ -143,11 +143,11 @@
           {
             "key": "i-05",
             "gearId": "optosplitter",
-            "ru": 8,
+            "ru": 8.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 3",
-            "color": "--s1",
+            "color": "--s6",
             "ip": null,
             "ports": {
               "out_1": {
@@ -158,11 +158,11 @@
           {
             "key": "i-06",
             "gearId": "optosplitter",
-            "ru": 9,
+            "ru": 9.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 4",
-            "color": "--s1",
+            "color": "--s7",
             "ip": null,
             "ports": {
               "out_1": {
@@ -173,11 +173,11 @@
           {
             "key": "i-07",
             "gearId": "optosplitter",
-            "ru": 10,
+            "ru": 10.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 5",
-            "color": "--s1",
+            "color": "--s8",
             "ip": null,
             "ports": {
               "out_1": {
@@ -188,11 +188,11 @@
           {
             "key": "i-08",
             "gearId": "optosplitter",
-            "ru": 11,
+            "ru": 11.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 6",
-            "color": "--s1",
+            "color": "--s0",
             "ip": null,
             "ports": {
               "out_1": {
@@ -203,7 +203,7 @@
           {
             "key": "i-09",
             "gearId": "optosplitter",
-            "ru": 12,
+            "ru": 12.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 7",
@@ -218,22 +218,22 @@
           {
             "key": "i-10",
             "gearId": "optosplitter",
-            "ru": 13,
+            "ru": 13.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 8",
-            "color": "--s1",
+            "color": "--s2",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-11",
             "gearId": "optosplitter",
-            "ru": 14,
+            "ru": 14.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 9",
-            "color": "--s1",
+            "color": "--s3",
             "ip": null,
             "ports": {
               "out_1": {
@@ -244,11 +244,11 @@
           {
             "key": "i-12",
             "gearId": "optosplitter",
-            "ru": 15,
+            "ru": 15.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 10",
-            "color": "--s1",
+            "color": "--s4",
             "ip": null,
             "ports": {
               "out_1": {
@@ -259,11 +259,11 @@
           {
             "key": "i-13",
             "gearId": "optosplitter",
-            "ru": 16,
+            "ru": 16.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 11",
-            "color": "--s1",
+            "color": "--s5",
             "ip": null,
             "ports": {
               "out_1": {
@@ -274,22 +274,22 @@
           {
             "key": "i-14",
             "gearId": "optosplitter",
-            "ru": 17,
+            "ru": 17.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 12",
-            "color": "--s1",
+            "color": "--s6",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-15",
             "gearId": "optosplitter",
-            "ru": 18,
+            "ru": 18.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 13",
-            "color": "--s1",
+            "color": "--s7",
             "ip": null,
             "ports": {
               "out_1": {
@@ -300,11 +300,11 @@
           {
             "key": "i-16",
             "gearId": "optosplitter",
-            "ru": 19,
+            "ru": 19.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 14",
-            "color": "--s1",
+            "color": "--s8",
             "ip": null,
             "ports": {
               "out_1": {
@@ -324,18 +324,18 @@
           {
             "key": "i-17",
             "gearId": "optosplitter",
-            "ru": 20,
+            "ru": 20.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 15",
-            "color": "--s1",
+            "color": "--s0",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-18",
             "gearId": "optosplitter",
-            "ru": 21,
+            "ru": 21.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 16",
@@ -354,11 +354,11 @@
           {
             "key": "i-00",
             "gearId": "ma3_npu",
-            "ru": 1,
+            "ru": 1.0,
             "col": 0,
             "face": "front",
             "label": "GREEN NPU 1",
-            "color": "--s3",
+            "color": "--s1",
             "ip": "192.168.1.112",
             "ports": {
               "port_a": {
@@ -369,11 +369,11 @@
           {
             "key": "i-01",
             "gearId": "proplex_iq2",
-            "ru": 3,
+            "ru": 3.0,
             "col": 0,
             "face": "front",
             "label": "GREEN PIT",
-            "color": "--s3",
+            "color": "--s2",
             "ip": "192.168.1.122",
             "ports": {
               "port_a": {
@@ -429,7 +429,7 @@
           {
             "key": "i-02",
             "gearId": "optosplitter",
-            "ru": 4,
+            "ru": 4.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 1",
@@ -444,11 +444,11 @@
           {
             "key": "i-03",
             "gearId": "optosplitter",
-            "ru": 5,
+            "ru": 5.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 2",
-            "color": "--s3",
+            "color": "--s4",
             "ip": null,
             "ports": {
               "out_1": {
@@ -459,11 +459,11 @@
           {
             "key": "i-04",
             "gearId": "optosplitter",
-            "ru": 6,
+            "ru": 6.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 3",
-            "color": "--s3",
+            "color": "--s5",
             "ip": null,
             "ports": {
               "out_1": {
@@ -474,11 +474,11 @@
           {
             "key": "i-05",
             "gearId": "optosplitter",
-            "ru": 7,
+            "ru": 7.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 4",
-            "color": "--s3",
+            "color": "--s6",
             "ip": null,
             "ports": {
               "out_1": {
@@ -489,11 +489,11 @@
           {
             "key": "i-06",
             "gearId": "optosplitter",
-            "ru": 8,
+            "ru": 8.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 5",
-            "color": "--s3",
+            "color": "--s7",
             "ip": null,
             "ports": {
               "out_1": {
@@ -504,11 +504,11 @@
           {
             "key": "i-07",
             "gearId": "optosplitter",
-            "ru": 9,
+            "ru": 9.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 6",
-            "color": "--s3",
+            "color": "--s8",
             "ip": null,
             "ports": {
               "out_1": {
@@ -519,11 +519,11 @@
           {
             "key": "i-08",
             "gearId": "optosplitter",
-            "ru": 10,
+            "ru": 10.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 7",
-            "color": "--s3",
+            "color": "--s0",
             "ip": null,
             "ports": {
               "out_1": {
@@ -534,11 +534,11 @@
           {
             "key": "i-09",
             "gearId": "optosplitter",
-            "ru": 11,
+            "ru": 11.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 8",
-            "color": "--s3",
+            "color": "--s1",
             "ip": null,
             "ports": {
               "out_1": {
@@ -549,11 +549,11 @@
           {
             "key": "i-10",
             "gearId": "optosplitter",
-            "ru": 12,
+            "ru": 12.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 9",
-            "color": "--s3",
+            "color": "--s2",
             "ip": null,
             "ports": {
               "out_1": {
@@ -564,7 +564,7 @@
           {
             "key": "i-11",
             "gearId": "optosplitter",
-            "ru": 13,
+            "ru": 13.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 10",
@@ -579,11 +579,11 @@
           {
             "key": "i-12",
             "gearId": "optosplitter",
-            "ru": 14,
+            "ru": 14.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 11",
-            "color": "--s3",
+            "color": "--s4",
             "ip": null,
             "ports": {
               "out_1": {
@@ -594,11 +594,11 @@
           {
             "key": "i-13",
             "gearId": "optosplitter",
-            "ru": 15,
+            "ru": 15.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 12",
-            "color": "--s3",
+            "color": "--s5",
             "ip": null,
             "ports": {
               "out_1": {
@@ -609,44 +609,44 @@
           {
             "key": "i-14",
             "gearId": "optosplitter",
-            "ru": 16,
+            "ru": 16.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 13",
-            "color": "--s3",
+            "color": "--s6",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-15",
             "gearId": "optosplitter",
-            "ru": 17,
+            "ru": 17.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 14",
-            "color": "--s3",
+            "color": "--s7",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-16",
             "gearId": "optosplitter",
-            "ru": 18,
+            "ru": 18.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 15",
-            "color": "--s3",
+            "color": "--s8",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-17",
             "gearId": "optosplitter",
-            "ru": 19,
+            "ru": 19.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 16",
-            "color": "--s3",
+            "color": "--s0",
             "ip": null,
             "ports": {}
           }
@@ -661,11 +661,11 @@
           {
             "key": "i-00",
             "gearId": "proplex_iq2",
-            "ru": 1,
+            "ru": 1.0,
             "col": 0,
             "face": "front",
             "label": "PURPLE PIT",
-            "color": "--s5",
+            "color": "--s1",
             "ip": "192.168.1.123",
             "ports": {
               "port_a": {
@@ -717,11 +717,11 @@
           {
             "key": "i-01",
             "gearId": "ma3_npu",
-            "ru": 2,
+            "ru": 2.0,
             "col": 0,
             "face": "front",
             "label": "PURPLE NPU 1",
-            "color": "--s5",
+            "color": "--s2",
             "ip": "192.168.1.113",
             "ports": {
               "port_a": {
@@ -753,11 +753,11 @@
           {
             "key": "i-02",
             "gearId": "optosplitter",
-            "ru": 4,
+            "ru": 4.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 1",
-            "color": "--s5",
+            "color": "--s3",
             "ip": null,
             "ports": {
               "out_1": {
@@ -768,11 +768,11 @@
           {
             "key": "i-03",
             "gearId": "optosplitter",
-            "ru": 5,
+            "ru": 5.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 2",
-            "color": "--s5",
+            "color": "--s4",
             "ip": null,
             "ports": {
               "out_1": {
@@ -783,7 +783,7 @@
           {
             "key": "i-04",
             "gearId": "optosplitter",
-            "ru": 6,
+            "ru": 6.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 3",
@@ -798,11 +798,11 @@
           {
             "key": "i-05",
             "gearId": "optosplitter",
-            "ru": 7,
+            "ru": 7.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 4",
-            "color": "--s5",
+            "color": "--s6",
             "ip": null,
             "ports": {
               "out_1": {
@@ -813,11 +813,11 @@
           {
             "key": "i-06",
             "gearId": "optosplitter",
-            "ru": 8,
+            "ru": 8.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 5",
-            "color": "--s5",
+            "color": "--s7",
             "ip": null,
             "ports": {
               "out_1": {
@@ -828,11 +828,11 @@
           {
             "key": "i-07",
             "gearId": "optosplitter",
-            "ru": 9,
+            "ru": 9.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 6",
-            "color": "--s5",
+            "color": "--s8",
             "ip": null,
             "ports": {
               "out_1": {
@@ -843,11 +843,11 @@
           {
             "key": "i-08",
             "gearId": "optosplitter",
-            "ru": 10,
+            "ru": 10.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 7",
-            "color": "--s5",
+            "color": "--s0",
             "ip": null,
             "ports": {
               "out_1": {
@@ -858,22 +858,22 @@
           {
             "key": "i-09",
             "gearId": "optosplitter",
-            "ru": 11,
+            "ru": 11.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 8",
-            "color": "--s5",
+            "color": "--s1",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-10",
             "gearId": "optosplitter",
-            "ru": 12,
+            "ru": 12.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 9",
-            "color": "--s5",
+            "color": "--s2",
             "ip": null,
             "ports": {
               "out_1": {
@@ -884,11 +884,11 @@
           {
             "key": "i-11",
             "gearId": "optosplitter",
-            "ru": 13,
+            "ru": 13.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 10",
-            "color": "--s5",
+            "color": "--s3",
             "ip": null,
             "ports": {
               "out_1": {
@@ -899,18 +899,18 @@
           {
             "key": "i-12",
             "gearId": "optosplitter",
-            "ru": 14,
+            "ru": 14.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 11",
-            "color": "--s5",
+            "color": "--s4",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-13",
             "gearId": "optosplitter",
-            "ru": 15,
+            "ru": 15.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 12",
@@ -925,11 +925,11 @@
           {
             "key": "i-14",
             "gearId": "optosplitter",
-            "ru": 16,
+            "ru": 16.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 13",
-            "color": "--s5",
+            "color": "--s6",
             "ip": null,
             "ports": {
               "out_1": {
@@ -949,33 +949,33 @@
           {
             "key": "i-15",
             "gearId": "optosplitter",
-            "ru": 17,
+            "ru": 17.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 14",
-            "color": "--s5",
+            "color": "--s7",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-16",
             "gearId": "optosplitter",
-            "ru": 18,
+            "ru": 18.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 15",
-            "color": "--s5",
+            "color": "--s8",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-17",
             "gearId": "optosplitter",
-            "ru": 19,
+            "ru": 19.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 16",
-            "color": "--s5",
+            "color": "--s0",
             "ip": null,
             "ports": {}
           }
@@ -984,72 +984,72 @@
       {
         "id": "rack_osa-12-universe-rack",
         "name": "OSA 12 Universe Rack",
-        "ru": 6,
+        "ru": 4,
         "color": "--s8",
         "items": [
           {
             "key": "i-00",
             "gearId": "gigacore10",
-            "ru": 1,
+            "ru": 1.0,
             "col": 0,
             "face": "front",
             "label": "GigaCore 10 \u2014 A",
-            "color": "--s8",
+            "color": "--s1",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-01",
             "gearId": "gigacore10",
-            "ru": 2,
-            "col": 0,
+            "ru": 1.0,
+            "col": 3,
             "face": "front",
             "label": "GigaCore 10 \u2014 B",
-            "color": "--s8",
+            "color": "--s2",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-02",
             "gearId": "luminode12",
-            "ru": 3,
+            "ru": 2.0,
             "col": 0,
             "face": "front",
             "label": "LumiNode 12 \u2014 A",
-            "color": "--s8",
+            "color": "--s3",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-03",
             "gearId": "luminode12",
-            "ru": 4,
-            "col": 0,
+            "ru": 2.0,
+            "col": 3,
             "face": "front",
             "label": "LumiNode 12 \u2014 B",
-            "color": "--s8",
+            "color": "--s4",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-04",
             "gearId": "lumisplit210",
-            "ru": 5,
+            "ru": 3.0,
             "col": 0,
             "face": "front",
             "label": "LumiSplit 2.10 \u2014 A",
-            "color": "--s8",
+            "color": "--s5",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-05",
             "gearId": "lumisplit210",
-            "ru": 6,
+            "ru": 4.0,
             "col": 0,
             "face": "front",
             "label": "LumiSplit 2.10 \u2014 B",
-            "color": "--s8",
+            "color": "--s6",
             "ip": null,
             "ports": {}
           }
@@ -1064,62 +1064,62 @@
           {
             "key": "i-00",
             "gearId": "proplex_iq2",
-            "ru": 1,
+            "ru": 1.0,
             "col": 0,
             "face": "front",
             "label": "UPSTAGE LEFT",
-            "color": "--s6",
+            "color": "--s1",
             "ip": "192.168.1.TBD",
             "ports": {}
           },
           {
             "key": "i-01",
             "gearId": "optosplitter",
-            "ru": 2,
+            "ru": 2.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 1",
-            "color": "--s6",
+            "color": "--s2",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-02",
             "gearId": "optosplitter",
-            "ru": 3,
+            "ru": 3.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 2",
-            "color": "--s6",
+            "color": "--s3",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-03",
             "gearId": "optosplitter",
-            "ru": 4,
+            "ru": 4.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 3",
-            "color": "--s6",
+            "color": "--s4",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-04",
             "gearId": "optosplitter",
-            "ru": 5,
+            "ru": 5.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 4",
-            "color": "--s6",
+            "color": "--s5",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-05",
             "gearId": "optosplitter",
-            "ru": 6,
+            "ru": 6.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 5",
@@ -1130,95 +1130,95 @@
           {
             "key": "i-06",
             "gearId": "optosplitter",
-            "ru": 7,
+            "ru": 7.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 6",
-            "color": "--s6",
+            "color": "--s7",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-07",
             "gearId": "optosplitter",
-            "ru": 8,
+            "ru": 8.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 7",
-            "color": "--s6",
+            "color": "--s8",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-08",
             "gearId": "optosplitter",
-            "ru": 9,
+            "ru": 9.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 8",
-            "color": "--s6",
+            "color": "--s0",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-09",
             "gearId": "optosplitter",
-            "ru": 10,
+            "ru": 10.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 9",
-            "color": "--s6",
+            "color": "--s1",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-10",
             "gearId": "optosplitter",
-            "ru": 11,
+            "ru": 11.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 10",
-            "color": "--s6",
+            "color": "--s2",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-11",
             "gearId": "optosplitter",
-            "ru": 12,
+            "ru": 12.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 11",
-            "color": "--s6",
+            "color": "--s3",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-12",
             "gearId": "optosplitter",
-            "ru": 13,
+            "ru": 13.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 12",
-            "color": "--s6",
+            "color": "--s4",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-13",
             "gearId": "optosplitter",
-            "ru": 14,
+            "ru": 14.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 13",
-            "color": "--s6",
+            "color": "--s5",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-14",
             "gearId": "optosplitter",
-            "ru": 15,
+            "ru": 15.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 14",
@@ -1229,22 +1229,22 @@
           {
             "key": "i-15",
             "gearId": "optosplitter",
-            "ru": 16,
+            "ru": 16.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 15",
-            "color": "--s6",
+            "color": "--s7",
             "ip": null,
             "ports": {}
           },
           {
             "key": "i-16",
             "gearId": "optosplitter",
-            "ru": 17,
+            "ru": 17.0,
             "col": 0,
             "face": "front",
             "label": "OPTO 16",
-            "color": "--s6",
+            "color": "--s8",
             "ip": null,
             "ports": {}
           }

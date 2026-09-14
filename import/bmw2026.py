@@ -208,6 +208,8 @@ def normalize_breakout(v):
     return u if u in BREAKOUT_ENUM else "OTHER"
 
 
+WIDTHS = {"full": 6, "half": 3, "third": 2}   # sixths of a rack face (rack-plot.html WIDTHS)
+COLORS = ["--s1","--s2","--s3","--s4","--s5","--s6","--s7","--s8","--s0"]  # rack-plot.html COLORS
 UNIV_RE = re.compile(r"UNIV\s*(\d+)", re.IGNORECASE)
 
 
@@ -348,7 +350,8 @@ def main():
 
         rack_id = f"rack_{slug(rack['name'])}"
         items_out = []
-        ru_cursor = 1  # RU 1 is bottom; place Pre-Pro's listed order bottom-up
+        occ = set()   # (half-U row, sixth column) cells taken on the front face
+        top_hu = 0
 
         for idx, item in enumerate(rack.get("equipment", [])):
             type_id = item.get("typeId")
@@ -358,6 +361,25 @@ def main():
                 continue
             total_items += 1
             ru_height = gear.get("ruHeight", 1)
+            # Rack Plot geometry: RU 1 is the bottom, a face is 6 sixths wide
+            # (full=6, half=3, third=2), heights count in half-U. First fit:
+            # lowest RU, then leftmost column, so two half-width devices share
+            # a row the way they do in a real rack.
+            w = WIDTHS.get(gear.get("rackWidth") or "full", 6)
+            h = max(1, round(ru_height * 2))
+            placed = None
+            for hu in range(0, 400):
+                if placed:
+                    break
+                for col in range(0, 7 - w):
+                    if all((hu + dh, col + dc) not in occ for dh in range(h) for dc in range(w)):
+                        placed = (hu, col)
+                        break
+            hu0, col0 = placed
+            for dh in range(h):
+                for dc in range(w):
+                    occ.add((hu0 + dh, col0 + dc))
+            top_hu = max(top_hu, hu0 + h)
 
             ports_out = {}
             for pid, pl in (item.get("portLabels") or {}).items():
@@ -387,20 +409,19 @@ def main():
             items_out.append({
                 "key": f"i-{idx:02d}",
                 "gearId": type_id,
-                "ru": ru_cursor,
-                "col": 0,  # simplification: single-column bottom-up stack; see report
+                "ru": hu0 / 2 + 1,
+                "col": col0,
                 "face": "front",
                 "label": item.get("label") or None,
-                "color": rack_cssvar,
+                "color": COLORS[idx % len(COLORS)],
                 "ip": item.get("ip") or None,
                 "ports": ports_out,
             })
-            ru_cursor += ru_height
 
         racks_out.append({
             "id": rack_id,
             "name": rack["name"],
-            "ru": ru_cursor - 1,
+            "ru": max(1, -(-top_hu // 2)),
             "color": rack_cssvar,
             "items": items_out,
         })
