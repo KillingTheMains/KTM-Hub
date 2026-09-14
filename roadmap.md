@@ -385,3 +385,11 @@ What is left is no longer construction:
   Ayrton Rivale TRUE1 variant, Zonda 9 FX modes, Claypaky pass-thru ×3).
 - **Vendor catalogues** from BOM sheets and past orders.
 - **A 4Wall location field** before its catalogue is real.
+
+## BMW ABBS 2026 is in the store — 2026-09-13
+
+Written straight into the artifact database from `data/shows/bmw-abbs-2026.ktm-show.json`
+(63 documents; store at 138 of 5,000). Pick "BMW ABBS 2026" in the show selector: Rack Plot
+shows the five pits with 41 universes, Loom Plot 24 sheets and 119 cables, Truss List 33 runs,
+Label Plot can print all of it. The bundle stays in the repo as the reproducible source; re-run
+`import/bmw2026.py` and import through the Hub if the store is ever reset.
