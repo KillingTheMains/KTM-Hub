@@ -1,18 +1,29 @@
-# Rig Plot Suite — project rules
+# KTM Hub — project rules
 
 Inherits `~/.claude/CLAUDE.md`. This file adds what is specific to the suite.
 
 ## What this is
 
-Four single-file, self-contained HTML rig-planning tools, published as Claude artifacts:
+One published Claude artifact (KTM Hub, url in `~/.claude` memory) holding eleven single-file
+HTML tools in same-origin frames, sharing one store through the `KTM` data layer:
 
-- **Distro Plot** — three-phase power: leg balance, circuit packing, Soca cuts, branch voltage drop
-- **Patch Plot** — DMX universe packing and node planning
-- **Truss Plot** — rigging loads
-- **Pull Plot** — pull sheet, cases, truck pack
+Distro Plot · Patch Plot · Truss Plot · Pull Plot · Rack Plot · Loom Plot · Net Plot ·
+Truss List · Truck Plot · Label Plot · Shop Order.
 
-They share a fixture library and a body of reference constants. That sharing is the project's
-main risk: the same fixture appears in all four with different attributes attached.
+Distro, Patch and Pull are still ported frames (own fixture lists, rigs namespaced under
+`tools/<tool>/`); every other tool is native and reads the shared `fixtures`, `gear`, `meta` and
+`shows/{id}/*` collections. The schema and its three rules live in `data-model.md`; read it first.
+
+## Where things live
+
+- Canonical clone: `~/Developer/KTM-Hub`, GitHub `KillingTheMains/KTM-Hub`. Commit and push here.
+- Drive mirror: `Cowork Playground/RigPlot/` — rsync from the clone (no `.git`), so Cowork
+  sessions see current sources. Never run git inside the Drive folder.
+- `python3 assemble.py` builds `ktm-hub.html` from `ktm-hub.template.html` + the tool files.
+- Before republishing, read the artifact and diff it against the local bundle: a Cowork
+  session once published without syncing back. Republish the existing URL, never a new one.
+- `data/catalog/` is a read-only snapshot of the store's `gear/*` and `meta/*` for offline
+  validation; `import/` holds show converters; `data/shows/` holds `ktm-show` bundles.
 
 ## The verification standard
 
@@ -32,18 +43,22 @@ So, on top of the global researcher rules:
 
 ## Canonical data
 
-`data/fixtures.json` is the single source of truth for the fixture library — every attribute, with
-a source URL per attribute. `data/constants.json` holds the shared reference constants.
-
-A tool never carries a figure the data files don't have. Adding a fixture means: researcher →
-refuter → update `fixtures.json` → auditor confirms all four tools pick it up → builder patches
-each tool, sequentially.
+The store's `fixtures/{id}` documents are the fixture library — every attribute carries a source
+label, url, retrieval date and status (`verified` / `interpreted` / `conflicting` / `observed`).
+`gear/*` holds product catalogs, `meta/tokens` the colour tokens. A native tool never carries a
+figure the store does not have. Adding a fixture means: researcher → refuter → write the
+document → the tools pick it up on next load.
 
 ## Build conventions
 
-- Builders edit `<tool>.working.html`. I diff against the live file and promote after ACCEPT.
-- Each tool stays a single self-contained file. No external assets, no build step.
-- Publishing means republishing the tool's existing artifact — same URL, never a new one.
+- Builders edit `<tool>.working.html`. I diff against the live file and promote after ACCEPT,
+  then assemble, commit, push, rsync to Drive, republish.
+- Each tool stays a single self-contained file. No external assets beyond the shared Google
+  Fonts link, no build step, no jsPDF. Print is `window.print()` with `@page`.
+- A native tool uses `window.KTM` only (`boot, P, list, get, set, del, activeShow, setActive,
+  cacheGet, cacheSet`), writes only the collection it owns (`OWNERS`), stores colour tokens not
+  hex, and never calls a full `render()` from an `oninput` handler.
+- New tool = the file + one `TOOLS` entry in the template + one line in `assemble.py`.
 
 ## What the refuter checks here
 
@@ -58,6 +73,7 @@ Beyond re-deriving the math from `constants.json`:
 
 ## Handoff
 
-Every session ends with the tool's doc updated in the Cowork project (`claude/<tool>.md`) and
-mirrored to `docs/`. Reference constants, known limits, and default state all live there. A new
-session starts by reading it, not by re-deriving it.
+Every session ends with `data-model.md` and `roadmap.md` updated and committed. Known limits and
+default state live there. A new session starts by reading them, not by re-deriving them.
+`docs/prepro-port-map.md` records what was taken from the legacy Pre-Pro suite and what was
+deliberately left behind.
