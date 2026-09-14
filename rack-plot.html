@@ -270,7 +270,8 @@ const FILL_LIMIT = 0.80;   /* F502-derived: 80 % of rack space used, blanks fill
 
 const S = { tab:'build', face:'front', loaded:false, show:null, showName:'',
             equip:[], cases:[], racks:[], looms:[], cur:null, dirty:false,
-            place:null, placeQ:'', sel:null, linkPop:null, sparePop:null, staleLinks:0 };
+            place:null, placeQ:'', sel:null, linkPop:null, sparePop:null, staleLinks:0,
+            patch:null };
 
 async function load(){
   const K = window.KTM;
@@ -292,6 +293,10 @@ async function load(){
     S.racks = await K.list(K.P.sub(S.show,'racks'));
     S.racks.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
     S.looms = await K.list(K.P.sub(S.show,'looms'));
+    /* Read-only: Rack Plot never writes the patch. Missing or unreadable
+       degrades silently to null — the panel and datalist just go quiet. */
+    try{ S.patch = await K.get(K.P.subDoc(S.show,'patch','plan')) || null; }
+    catch(e){ S.patch = null; }
   }
   S.cur = S.racks[0] ? S.racks[0].id : null;
   S.staleLinks = pruneStaleLinks();
@@ -612,6 +617,52 @@ function universeIndex(){
   return idx;
 }
 
+/* ── the patch, read only ─────────────────────────────────────────────────
+   Rack Plot never writes shows/{show}/patch/plan; it only reads it, to offer
+   universe numbers and to flag drift between the two documents. */
+function patchUniverses(){ return (S.patch && S.patch.universes) || []; }
+function rackUniverseSet(){
+  const set=new Set();
+  S.racks.forEach(r=>(r.items||[]).forEach(it=>{
+    Object.values(it.ports||{}).forEach(p=>{
+      const u=(p.universe||'').trim(); if(u) set.add(u);
+    });
+  }));
+  return set;
+}
+function univDatalist(){
+  const opts=patchUniverses().map(u=>
+    `<option value="${esc(u.num)}">${esc(u.posName||'')} · ${esc(u.used!=null?u.used:'')} ch</option>`).join('');
+  return `<datalist id="univlist">${opts}</datalist>`;
+}
+/* "From the patch": universes the plan calls for that no rack port carries
+   yet, and universes on rack ports that the plan never mentioned — both
+   findings, not errors, same tone as the duplicate-universe flag. */
+function fromPatchPanel(){
+  let inner;
+  if(!S.patch){
+    inner='<div class="note">No patch saved for this show yet.</div>';
+  }else{
+    const puns=patchUniverses(), onRack=rackUniverseSet();
+    const missing=puns.filter(u=>!onRack.has(String(u.num).trim()));
+    const planSet=new Set(puns.map(u=>String(u.num).trim()));
+    const extraSet=new Set();
+    S.racks.forEach(r=>(r.items||[]).forEach(it=>{
+      Object.values(it.ports||{}).forEach(p=>{
+        const u=(p.universe||'').trim(); if(!u) return;
+        if(!planSet.has(u)) extraSet.add(u);
+      });
+    }));
+    const bits=[];
+    if(missing.length) bits.push(missing.length+' from the plan not yet on a rack port: '
+      +missing.map(u=>esc(u.num)+' · '+esc(u.posName||'')).join(', '));
+    else if(puns.length) bits.push('every patched universe is on a rack port');
+    if(extraSet.size) bits.push(extraSet.size+' hand-typed universe'+(extraSet.size===1?'':'s')+' not in the plan');
+    inner='<div class="note warn">'+(bits.length?bits.join(' · '):'Nothing to flag.')+'</div>';
+  }
+  return '<div class="card"><h4>From the patch</h4>'+inner+'</div>';
+}
+
 function counts(){
   let items=0, ru=0, usedCells=0, totalCells=0, ports=0, patched=0, halfw=0, rear=0;
   S.racks.forEach(r=>{
@@ -750,7 +801,7 @@ function viewBuild(){
       .sort((a,b)=> (h0Of(b)-h0Of(a)) || (colOf(a)-colOf(b)))
       .forEach(it=>{ h+=deviceCard(r,it); });
   }
-  return h+'</div></div>'+placeModal()+sparePopModal();
+  return h+'</div></div>'+placeModal()+sparePopModal()+univDatalist();
 }
 
 function sparePopModal(){
@@ -1057,7 +1108,7 @@ function deviceCard(r,it){
        + `<button type="button" class="btn ghost sm linkbtn" data-lk="${esc(it.key)}|${esc(p.id)}" title="Link this port">⇄</button>`
        + `</div>`
        + (p.type==='output'||p.type==='input'
-          ? `<input type="text" data-pu="${esc(it.key)}|${esc(p.id)}" data-prev="${esc(pp.universe||'')}" value="${esc(pp.universe||'')}" placeholder="Universe" class="mono">` : '')
+          ? `<input type="text" data-pu="${esc(it.key)}|${esc(p.id)}" data-prev="${esc(pp.universe||'')}" value="${esc(pp.universe||'')}" placeholder="Universe" list="univlist" class="mono">` : '')
        + `<input type="text" data-pl="${esc(it.key)}|${esc(p.id)}" value="${esc(pp.label||'')}" placeholder="Goes to…">`
        + (pp.link ? `<div class="linkbadge${cross?' cross':''}">${esc(linkText(pp.link))}</div>` : '')
        + (popOpen ? linkPopover(r,it,p) : '')
@@ -1406,11 +1457,12 @@ function viewPatch(){
                  port:p.name||p.id, type:p.type, universe:pp.universe||'', dest:pp.label||'', link:pp.link||null});
     });
   }));
-  if(!rows.length) return '<div class="empty"><div class="big">Nothing patched yet</div>'
+  const panel=fromPatchPanel();
+  if(!rows.length) return panel+'<div class="empty"><div class="big">Nothing patched yet</div>'
     +'<div>Assign universes to ports on the Racks tab.</div></div>';
 
   const idx=universeIndex();
-  let h=`<div class="elev"><div class="elevhead"><b>Patch sheet</b>`
+  let h=panel+`<div class="elev"><div class="elevhead"><b>Patch sheet</b>`
    + `<span class="m">${esc(S.showName||'no show')}</span>`
    + `<span class="m">${rows.length} ports</span></div>`;
   h+='<div class="tablewrap"><table><thead><tr><th>Rack</th><th class="num">RU</th><th>Face</th>'
